@@ -532,6 +532,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@supabase/auth-helpers-shared@npm:0.6.3":
+  version: 0.6.3
+  resolution: "@supabase/auth-helpers-shared@npm:0.6.3"
+  dependencies:
+    jose: "npm:^4.14.4"
+  peerDependencies:
+    "@supabase/supabase-js": ^2.19.0
+  checksum: 10c0/8220ceba8e6418df9779464a43d4801bf1758764350335b3dc5d0ad88785e7b6b428b473a639b249a4f83f694e880fc2713b3b8d753df1cac9104dd7e5935f13
+  languageName: node
+  linkType: hard
+
+"@supabase/auth-helpers-sveltekit@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@supabase/auth-helpers-sveltekit@npm:0.12.0"
+  dependencies:
+    "@supabase/auth-helpers-shared": "npm:0.6.3"
+  peerDependencies:
+    "@supabase/supabase-js": ^2.19.0
+    "@sveltejs/kit": ^1.30.3 || ^2.0.0
+  checksum: 10c0/e5aaccd8021f3beeb5347e61a3218e7b9ba76abc3771080c61704b35d9782a6adb1fdeac3047a8347273a0ad2c9a1c822cc3810a2c4911744b57790e7f88717c
+  languageName: node
+  linkType: hard
+
 "@supabase/auth-js@npm:2.63.0":
   version: 2.63.0
   resolution: "@supabase/auth-js@npm:2.63.0"
@@ -2017,6 +2040,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jose@npm:^4.14.4":
+  version: 4.15.5
+  resolution: "jose@npm:4.15.5"
+  checksum: 10c0/9f208492f55ae9c547fd407c36f67ec3385051b5ca390e24f5449740f17359640b3f96fabfd38bc132cc4292b964c31b921bf356253373b1bd3eb6df799b7433
+  languageName: node
+  linkType: hard
+
 "js-yaml@npm:^4.1.0":
   version: 4.1.0
   resolution: "js-yaml@npm:4.1.0"
@@ -3128,6 +3158,7 @@ __metadata:
   resolution: "timeline@workspace:."
   dependencies:
     "@prisma/client": "npm:5.11.0"
+    "@supabase/auth-helpers-sveltekit": "npm:^0.12.0"
     "@supabase/ssr": "npm:^0.1.0"
     "@supabase/supabase-js": "npm:^2.41.1"
     "@sveltejs/adapter-auto": "npm:^3.0.0"
