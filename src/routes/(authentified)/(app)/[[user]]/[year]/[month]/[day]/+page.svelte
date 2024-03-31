@@ -20,7 +20,7 @@
   {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
     <div style:top="{hour * 100}px">
       <span
-        >{Temporal.PlainTime.from({ hour }).toLocaleString("fr-FR", {
+        >{Temporal.PlainTime.from({ hour }).toLocaleString(data.language, {
           hour: "numeric",
           minute: "numeric",
         })}</span
@@ -31,7 +31,7 @@
     <article style:top="{toPixels(fixDate(date))}px">
       @{author.username}<br />
       {body}<br />
-      {fixDate(date).toLocaleString("fr-FR", {
+      {fixDate(date).toLocaleString(data.language, {
         hour: "numeric",
         minute: "numeric",
       })}
@@ -51,7 +51,7 @@
     background: skyblue;
     padding: 0.5em;
     border-radius: 0.5em;
-    left: 2.5em;
+    left: 1em;
   }
 
   div {
