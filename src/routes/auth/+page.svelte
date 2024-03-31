@@ -1,1 +1,1 @@
-<a href="/auth/google">Sign in with google</a>
+<a href="/auth/google" data-sveltekit-reload>Sign in with google</a>

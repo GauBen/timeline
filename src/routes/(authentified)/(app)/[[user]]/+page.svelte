@@ -7,14 +7,19 @@
 
   export let form;
 
-  $: ({ events } = data);
+  $: ({ user, events } = data);
 </script>
 
-<h1>Events</h1>
+<h1>
+  {#if user}{user.displayName}'s{:else}Latest{/if} events
+</h1>
 
 <ul>
   {#each events as event}
-    <li>{event.body} (@{event.author.username})</li>
+    <li>
+      {event.body}
+      (<a href="/{event.author.username}">@{event.author.username}</a>)
+    </li>
   {/each}
 </ul>
 
@@ -47,5 +52,3 @@
     <Button type="submit" color="success">Create</Button>
   </p>
 </form>
-
-<a href="/auth/logout">Logout</a>
