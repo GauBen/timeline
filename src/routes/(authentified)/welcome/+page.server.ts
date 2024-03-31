@@ -30,7 +30,7 @@ export const actions = {
           // Make the user follow themselves
           followers: {
             create: {
-              followingId: locals.session.id,
+              followerId: locals.session.id,
             },
           },
         },

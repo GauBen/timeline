@@ -35,7 +35,12 @@
   <p>
     <label>
       <span>Date</span>
-      <input required type="datetime-local" name="date" />
+      <input
+        required
+        type="datetime-local"
+        name="date"
+        value={new Date().toISOString().slice(0, 16)}
+      />
     </label>
   </p>
   <p>
