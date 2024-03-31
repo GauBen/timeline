@@ -320,8 +320,37 @@ model User {
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  authUser AuthUser @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authUser  AuthUser @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followers Follow[] @relation("following")
+  following Follow[] @relation("follower")
+  events    Event[]
 
   @@map("users")
+  @@schema("public")
+}
+
+model Follow {
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  followerId  String   @map("follower_id") @db.Uuid
+  follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followingId String   @map("following_id") @db.Uuid
+  following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followingId])
+  @@map("follows")
+  @@schema("public")
+}
+
+model Event {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  date      DateTime @db.Timestamptz(6)
+  duration  Int      @db.Integer // Prisma does not support `interval` type yet
+  body      String   @db.VarChar(1024)
+  authorId  String   @map("author_id") @db.Uuid
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("events")
   @@schema("public")
 }

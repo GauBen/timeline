@@ -2,6 +2,9 @@
   import { enhance } from "$app/forms";
 
   export let form;
+
+  let username = form?.input?.username ?? "";
+  let displayName = form?.input?.displayName ?? "";
 </script>
 
 {#if form}
@@ -13,14 +16,29 @@
   <h2>Complete your registration</h2>
   <p>
     <label>
-      <span>Username</span>
-      <input type="text" name="username" required />
+      <span>Username (a-z A-Z 0-9 or _, 3 to 20 characters)</span>
+      <input
+        required
+        type="text"
+        maxlength="20"
+        name="username"
+        bind:value={username}
+        pattern={"[a-zA-Z0-9_]{3,20}"}
+      />
     </label>
+    {(form?.validationErrors?.fieldErrors?.username ?? []).join(", ")}
   </p>
   <p>
     <label>
       <span>Display name</span>
-      <input type="text" name="display_name" required />
+      <input
+        required
+        type="text"
+        maxlength="255"
+        name="display_name"
+        bind:value={displayName}
+      />
+      {(form?.validationErrors?.fieldErrors?.displayName ?? []).join(", ")}
     </label>
   </p>
   <p>
