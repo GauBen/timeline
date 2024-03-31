@@ -3177,6 +3177,7 @@ __metadata:
     svelte-check: "npm:^3.6.8"
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.4.3"
+    uistiti: ../uistiti
     vite: "npm:^5.2.7"
     zod: "npm:^3.22.4"
   languageName: unknown
@@ -3264,6 +3265,15 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/6e51f8b7e6ec55b897b9e56b67e864fe8f44e30f4a14357aad5dc0f7432db2f01efc0522df0b6c36d361c51f2dc3dcac5c832efd96a404cfabf884e915d38828
+  languageName: node
+  linkType: hard
+
+"uistiti@file:../uistiti::locator=timeline%40workspace%3A.":
+  version: 0.0.1
+  resolution: "uistiti@file:../uistiti#../uistiti::hash=fc008e&locator=timeline%40workspace%3A."
+  peerDependencies:
+    svelte: ^4.0.0
+  checksum: 10c0/aee40ba2ef813c168c5e50592d7b28d75b13489856ceedfbe8b86773f6634a0caa7922521a4d8e234e991b1933844061bed0aeeaed73266922a2b4843df7d134
   languageName: node
   linkType: hard
 

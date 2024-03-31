@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { Button } from "uistiti";
+  import "uistiti/global.css";
+
   export let data;
 
   $: ({ session, users } = data);
@@ -15,3 +18,5 @@
 <pre>{JSON.stringify(session, null, 2)}</pre>
 
 <a href="/auth/logout">Logout</a>
+
+<Button>OMG!</Button>
