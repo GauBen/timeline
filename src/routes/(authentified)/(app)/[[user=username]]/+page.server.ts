@@ -1,14 +1,9 @@
 import { prisma } from "$lib/server/prisma.js";
-import { error, fail } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import { z } from "zod";
 
-export const load = async ({ params, parent }) => {
-  const { me } = await parent();
-  const user =
-    params.user &&
-    (await prisma.user.findUnique({ where: { username: params.user } }));
-
-  if (params.user && !user) error(404, "User not found");
+export const load = async ({ parent }) => {
+  const { me, user } = await parent();
 
   return {
     user,

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import "uistiti/global.css";
 
@@ -15,10 +16,10 @@
 </h1>
 
 <ul>
-  {#each events as event}
+  {#each events as { author, body }}
     <li>
-      {event.body}
-      (<a href="/{event.author.username}">@{event.author.username}</a>)
+      {body}
+      (<a href="/@{author.username}">@{author.username}</a>)
     </li>
   {/each}
 </ul>
@@ -44,7 +45,9 @@
         required
         type="datetime-local"
         name="date"
-        value={new Date().toISOString().slice(0, 16)}
+        value={Temporal.Now.zonedDateTime("iso8601", "Europe/Paris")
+          .toString()
+          .slice(0, 16)}
       />
     </label>
   </p>

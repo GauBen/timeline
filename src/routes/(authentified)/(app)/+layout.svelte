@@ -11,6 +11,7 @@
   <a href="/">Latest</a>
   <a href="/{yesterday.toString().replaceAll('-', '/')}"> Yesterday </a>
   <a href="/{today.toString().replaceAll('-', '/')}"> Today </a>
+  <a href="/{today.toString().replaceAll('-', '/').slice(0, 7)}"> Month </a>
   <a href="/{tomorrow.toString().replaceAll('-', '/')}"> Tomorrow </a>
   <a href="/auth/logout" data-sveltekit-reload>Logout</a>
 </nav>
