@@ -1,13 +1,10 @@
 <script lang="ts">
-  import { languageTag } from "$paraglide/runtime.js";
   import { Temporal } from "@js-temporal/polyfill";
   const { children } = $props();
 
   const today = Temporal.Now.plainDateISO();
   const yesterday = today.subtract({ days: 1 });
   const tomorrow = today.add({ days: 1 });
-
-  console.log(languageTag());
 </script>
 
 <nav>
