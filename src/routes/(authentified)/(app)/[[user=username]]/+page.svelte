@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { m } from "$lib/i18n.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import "uistiti/global.css";
@@ -12,8 +13,12 @@
 </script>
 
 <h1>
-  {#if user}{user.displayName}'s{:else}Latest{/if} events
+  {m.latest_events()}
 </h1>
+
+{#if user}
+  <h2>from {user.displayName}</h2>
+{/if}
 
 <ul>
   {#each events as { author, body }}
