@@ -2,8 +2,9 @@
   import { enhance } from "$app/forms";
   import { m } from "$lib/i18n.js";
   import { Temporal } from "@js-temporal/polyfill";
-  import { Button } from "uistiti";
-  import "uistiti/global.css";
+  // TODO: add uistiti
+  // import { Button } from "uistiti";
+  // import "uistiti/global.css";
 
   export let data;
 
@@ -57,6 +58,6 @@
     </label>
   </p>
   <p>
-    <Button type="submit" color="success">Create</Button>
+    <button type="submit" color="success">Create</button>
   </p>
 </form>

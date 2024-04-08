@@ -8,7 +8,6 @@
     "@supabase/ssr": "^0.2.0",
     "@supabase/supabase-js": "^2.42.0",
     "modern-normalize": "^2.0.0",
-    "uistiti": "file:../uistiti#../uistiti::hash=61d3ca&locator=timeline%40workspace%3A.",
     "zod": "^3.22.4"
   },
   "devDependencies": {

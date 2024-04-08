@@ -3473,7 +3473,6 @@ __metadata:
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.4.4"
     typescript-eslint: "npm:^7.6.0"
-    uistiti: "file:../uistiti#../uistiti::hash=61d3ca&locator=timeline%40workspace%3A."
     vite: "npm:^5.2.8"
     zod: "npm:^3.22.4"
   languageName: unknown
@@ -3590,15 +3589,6 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/1fa41b9964a9ff0ed913b339c90b46031b2d2da3cb1a192af516610733f7f1d5f7f9754a8e22b9ac7076d3d8aedd2c4f84db3f113bad060eac3a95962443a1bf
-  languageName: node
-  linkType: hard
-
-"uistiti@file:../uistiti#../uistiti::hash=61d3ca&locator=timeline%40workspace%3A.":
-  version: 0.0.1
-  resolution: "uistiti@file:../uistiti#../uistiti::hash=61d3ca&locator=timeline%40workspace%3A."
-  peerDependencies:
-    svelte: ^4.0.0
-  checksum: 10c0/eb3ce4aff2bf8500c8464cb4d88e4db95abef36594651de18db2cfdf52c4302122efa1295e96ed2204df2f9305e445760e9a8ae8f9aaf11e51168e114552ced5
   languageName: node
   linkType: hard
 
