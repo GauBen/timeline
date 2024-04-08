@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Temporal } from "@js-temporal/polyfill";
-  const { children } = $props();
+  const { children, data } = $props();
 
   const today = Temporal.Now.plainDateISO();
 </script>
@@ -11,6 +11,7 @@
   <a href="/{today.toString().replaceAll('-', '/').slice(0, 7)}">Month</a>
   <a href="/auth/logout" data-sveltekit-reload>Logout</a>
   <select
+    value={data.language}
     on:change={function () {
       document.cookie = `language=${this.value}; path=/; max-age=31536000`;
       location.reload();
