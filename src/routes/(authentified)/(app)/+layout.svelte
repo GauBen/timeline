@@ -3,16 +3,12 @@
   const { children } = $props();
 
   const today = Temporal.Now.plainDateISO();
-  const yesterday = today.subtract({ days: 1 });
-  const tomorrow = today.add({ days: 1 });
 </script>
 
 <nav>
   <a href="/">Latest</a>
-  <a href="/{yesterday.toString().replaceAll('-', '/')}"> Yesterday </a>
-  <a href="/{today.toString().replaceAll('-', '/')}"> Today </a>
-  <a href="/{today.toString().replaceAll('-', '/').slice(0, 7)}"> Month </a>
-  <a href="/{tomorrow.toString().replaceAll('-', '/')}"> Tomorrow </a>
+  <a href="/{today.toString().replaceAll('-', '/')}">Day</a>
+  <a href="/{today.toString().replaceAll('-', '/').slice(0, 7)}">Month</a>
   <a href="/auth/logout" data-sveltekit-reload>Logout</a>
   <select
     on:change={function () {

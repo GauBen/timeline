@@ -4,6 +4,11 @@
 
   const start = $derived(Temporal.ZonedDateTime.from(data.date));
 
+  const previous = $derived(
+    Temporal.PlainDate.from(data.date).subtract({ months: 1 }),
+  );
+  const next = $derived(Temporal.PlainDate.from(data.date).add({ months: 1 }));
+
   const paddingDaysStart = $derived(start.dayOfWeek - 1);
   const numberOfWeeks = $derived(
     Math.ceil((start.dayOfWeek + start.daysInMonth - 1) / 7),
@@ -21,6 +26,13 @@
     ),
   );
 </script>
+
+<p style="display: flex; justify-content: space-between">
+  <a href="../{previous.toString().slice(0, 7).replaceAll('-', '/')}"
+    >Previous</a
+  >
+  <a href="../{next.toString().slice(0, 7).replaceAll('-', '/')}">Next</a>
+</p>
 
 <table>
   <thead>
@@ -83,7 +95,7 @@
     height: 6rem;
   }
 
-  a {
+  td a {
     position: absolute;
     color: #888;
     font-size: 0.8em;

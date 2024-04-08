@@ -4,6 +4,11 @@
 
   const start = $derived(Temporal.ZonedDateTime.from(data.date));
 
+  const previous = $derived(
+    Temporal.PlainDate.from(data.date).subtract({ days: 1 }),
+  );
+  const next = $derived(Temporal.PlainDate.from(data.date).add({ days: 1 }));
+
   const fixDate = (date: Date) =>
     toTemporalInstant.call(date).toZonedDateTime({
       calendar: "iso8601",
@@ -15,6 +20,13 @@
     date.toPlainTime().since(start.toPlainTime()).total({ unit: "hours" }) *
     100;
 </script>
+
+<p style="display: flex; justify-content: space-between">
+  <a href="../../{previous.toString().slice(0, 10).replaceAll('-', '/')}"
+    >Previous</a
+  >
+  <a href="../../{next.toString().slice(0, 10).replaceAll('-', '/')}">Next</a>
+</p>
 
 <section>
   {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
