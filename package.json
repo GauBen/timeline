@@ -2,13 +2,12 @@
   "name": "timeline",
   "packageManager": "yarn@4.1.1",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
     "@eslint/js": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.6.0",
-    "@typescript-eslint/parser": "^7.6.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.36.0",

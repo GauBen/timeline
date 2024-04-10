@@ -1,5 +1,4 @@
 import js from "@eslint/js";
-import tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginSvelte from "eslint-plugin-svelte";
 import globals from "globals";
@@ -19,10 +18,20 @@ export default tsEslint.config(
       globals: { ...globals.node, ...globals.browser },
       parser: svelteParser,
       parserOptions: {
-        parser: tsParser,
+        parser: tsEslint.parser,
         extraFileExtensions: [".svelte"],
       },
     },
   },
-  { ignores: [".svelte-kit", "build", "package"] },
+  {
+    ignores: [
+      "**/.svelte-kit",
+      "**/.vercel",
+      "**/.yarn",
+      "**/build",
+      "**/node_modules",
+      "**/package",
+      "**/src/paraglide",
+    ],
+  },
 );
