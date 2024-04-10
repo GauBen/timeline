@@ -20,7 +20,8 @@
     "typescript-eslint": "^7.6.0"
   },
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint ."
   }
