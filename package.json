@@ -1,22 +1,12 @@
 {
   "name": "timeline",
-  "version": "0.0.1",
-  "dependencies": {
-    "@js-temporal/polyfill": "^0.4.4",
-    "@prisma/client": "5.12.1",
-    "@supabase/auth-helpers-sveltekit": "^0.12.0",
-    "@supabase/ssr": "^0.2.0",
-    "@supabase/supabase-js": "^2.42.0",
-    "modern-normalize": "^2.0.0",
-    "zod": "^3.22.4"
-  },
+  "packageManager": "yarn@4.1.1",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@eslint/js": "^9.0.0",
-    "@inlang/paraglide-js": "1.4.0",
-    "@sveltejs/adapter-auto": "^3.2.0",
-    "@sveltejs/kit": "^2.5.5",
-    "@sveltejs/vite-plugin-svelte": "^3.0.2",
-    "@types/eslint": "^8.56.7",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
@@ -24,27 +14,14 @@
     "globals": "^15.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.2",
-    "prisma": "^5.12.1",
-    "sass": "^1.74.1",
     "supabase": "1.155.2",
     "svelte": "^5.0.0-next.95",
-    "svelte-check": "^3.6.9",
-    "tslib": "^2.6.2",
-    "typescript": "^5.4.4",
-    "typescript-eslint": "^7.6.0",
-    "vite": "^5.2.8"
+    "turbo": "^1.13.2",
+    "typescript-eslint": "^7.6.0"
   },
-  "packageManager": "yarn@4.1.1",
-  "private": true,
   "scripts": {
-    "build": "prisma generate && paraglide-js compile --project ./project.inlang --outdir ./src/paraglide && vite build",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev": "vite dev",
+    "build": "turbo build",
     "format": "prettier --write .",
-    "lint": "prettier --check . && eslint .",
-    "preview": "vite preview",
-    "postinstall": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide"
-  },
-  "type": "module"
+    "lint": "prettier --check . && eslint ."
+  }
 }
