@@ -8,14 +8,15 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.36.0",
     "globals": "^15.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.2",
-    "supabase": "1.155.2",
-    "svelte": "^5.0.0-next.95",
+    "supabase": "1.156.0",
+    "svelte": "^5.0.0-next.97",
     "turbo": "^1.13.2",
     "typescript-eslint": "^7.6.0"
   },
