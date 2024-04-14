@@ -4,7 +4,7 @@ import { error, redirect } from "@sveltejs/kit";
 export const GET = async ({ cookies, params, url }) => {
   if (params.provider !== "google") error(404, "Not found");
 
-  const authUrl = new URL("authorize", authAPI);
+  const authUrl = authAPI("authorize");
 
   // Basic OAuth2 params
   authUrl.searchParams.set("provider", params.provider);

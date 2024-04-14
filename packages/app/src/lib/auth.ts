@@ -2,7 +2,12 @@ import { env } from "$env/dynamic/public";
 import type { Session, User } from "@supabase/supabase-js";
 import type { RequestEvent } from "@sveltejs/kit";
 
-export const authAPI = new URL("auth/v1/", env.PUBLIC_SUPABASE_URL);
+/**
+ * Resolves a Supabase Auth API route. This used to be a static variable but it
+ * cannot work with a dynamic environment.
+ */
+export const authAPI = (route: string) =>
+  new URL("auth/v1/" + route, env.PUBLIC_SUPABASE_URL);
 
 export const fetchAndPersistSession = async ({
   cookies,
@@ -12,7 +17,7 @@ export const fetchAndPersistSession = async ({
   const refreshToken = cookies.get("refresh_token");
 
   if (accessToken) {
-    const response = await fetch(new URL("user", authAPI), {
+    const response = await fetch(authAPI("user"), {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         ApiKey: env.PUBLIC_SUPABASE_ANON_KEY,
@@ -28,19 +33,16 @@ export const fetchAndPersistSession = async ({
   }
 
   if (refreshToken) {
-    const response = await fetch(
-      new URL("token?grant_type=refresh_token", authAPI),
-      {
-        method: "POST",
-        headers: {
-          "ApiKey": env.PUBLIC_SUPABASE_ANON_KEY,
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify({
-          refresh_token: refreshToken,
-        }),
+    const response = await fetch(authAPI("token?grant_type=refresh_token"), {
+      method: "POST",
+      headers: {
+        "ApiKey": env.PUBLIC_SUPABASE_ANON_KEY,
+        "Content-Type": "application/json;charset=UTF-8",
       },
-    );
+      body: JSON.stringify({
+        refresh_token: refreshToken,
+      }),
+    });
 
     if (response.ok) {
       const data = (await response.json()) as Session;

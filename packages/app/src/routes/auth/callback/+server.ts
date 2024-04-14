@@ -11,7 +11,7 @@ export const GET = async ({ cookies, fetch, url }) => {
 
   if (!challenge) error(400, "Missing login integrity check");
 
-  const response = await fetch(new URL("token?grant_type=pkce", authAPI), {
+  const response = await fetch(authAPI("token?grant_type=pkce"), {
     method: "POST",
     headers: {
       "ApiKey": env.PUBLIC_SUPABASE_ANON_KEY,
