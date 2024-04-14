@@ -17,5 +17,7 @@ jobs:
       - uses: pkgxdev/dev@v0
       - run: yarn install --immutable
       - run: yarn build
-      - run: yarn vercel --cwd packages/app pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - run: yarn vercel --cwd packages/app deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - run: yarn vercel --cwd packages/app --token=${{ secrets.VERCEL_TOKEN }} pull --yes --environment=production
+      - run: yarn vercel --cwd packages/app --token=${{ secrets.VERCEL_TOKEN }} deploy --prebuilt > deployment-url.txt
+      - run: yarn prisma migrate deploy
+      - run: yarn vercel --cwd packages/app --token=${{ secrets.VERCEL_TOKEN }} promote $(cat deployment-url.txt)
