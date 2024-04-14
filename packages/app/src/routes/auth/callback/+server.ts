@@ -1,6 +1,6 @@
 import { authAPI } from "$lib/auth.js";
 import { error, redirect } from "@sveltejs/kit";
-import { PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
+import { env } from "$env/dynamic/public";
 import type { Session } from "@supabase/supabase-js";
 
 export const GET = async ({ cookies, fetch, url }) => {
@@ -14,7 +14,7 @@ export const GET = async ({ cookies, fetch, url }) => {
   const response = await fetch(new URL("token?grant_type=pkce", authAPI), {
     method: "POST",
     headers: {
-      "ApiKey": PUBLIC_SUPABASE_ANON_KEY,
+      "ApiKey": env.PUBLIC_SUPABASE_ANON_KEY,
       "Content-Type": "application/json;charset=UTF-8",
     },
     body: JSON.stringify({
