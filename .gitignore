@@ -4,7 +4,7 @@ build
 dist
 .svelte-kit
 .turbo
-**/.vercel/output
+.vercel
 .env
 .env.*
 !.env.example
