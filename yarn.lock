@@ -420,9 +420,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inlang/paraglide-js@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@inlang/paraglide-js@npm:1.5.0"
+"@inlang/paraglide-js@npm:1.6.1":
+  version: 1.6.1
+  resolution: "@inlang/paraglide-js@npm:1.6.1"
   dependencies:
     "@inlang/detect-json-formatting": "npm:1.0.0"
     commander: "npm:11.1.0"
@@ -432,7 +432,7 @@ __metadata:
     posthog-node: "npm:3.1.3"
   bin:
     paraglide-js: bin/run.js
-  checksum: 10c0/9b7379e16fac928be18b500db0d696f7bb1b03df0d6ad642d948d188179de7f08600f2ecc56e4377c3e5bf12116c8984b1c2e8b9f3a7f8990424f9cc201573f8
+  checksum: 10c0/7e4e7c9ce866ed36609289508743a7a6ec5c4a157f4757c5b547453d2c019f1b57983ddd15271358e3e845cf30cdf2435c639e36503d1295805f7247d36d178d
   languageName: node
   linkType: hard
 
@@ -807,24 +807,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@supabase/postgrest-js@npm:1.15.0"
+"@supabase/postgrest-js@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@supabase/postgrest-js@npm:1.15.2"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 10c0/9b53609c58f28ad908107413c4526b09ccfcb309b34a0ea3c29bab24a28e8b26e51111e75ebf4280a845739eb08e76643c8fa71419feef246641ac5e836f9c35
+  checksum: 10c0/a7dd2ef25a9b73f6fcd374b84c45ce610cfd9c2e565cb7a1c978601b62a6ec6cffa32751ef0857f850dc212acc9971aa6f0612aa9f8c0c0cb54cfb8b4d9a3cdb
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:2.9.3":
-  version: 2.9.3
-  resolution: "@supabase/realtime-js@npm:2.9.3"
+"@supabase/realtime-js@npm:2.9.4":
+  version: 2.9.4
+  resolution: "@supabase/realtime-js@npm:2.9.4"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
     "@types/phoenix": "npm:^1.5.4"
     "@types/ws": "npm:^8.5.10"
     ws: "npm:^8.14.2"
-  checksum: 10c0/321c98237e3255cad221ed16b54739ce327d395b80faba1416ba81577f043681ae0dde10e0ac1b7e3427412d1dbb35cb4b66d8466c21239932aa3dca6b9cc87c
+  checksum: 10c0/2c8499ef332d1214c8dda2cabac362034d3e0a38c5941b8a8ffc9bc4666b40d4525c0b5064c17a05468cc4472aa5507c14cb69581a1077f902ece0493ef92cd3
   languageName: node
   linkType: hard
 
@@ -849,17 +849,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:^2.42.0":
-  version: 2.42.0
-  resolution: "@supabase/supabase-js@npm:2.42.0"
+"@supabase/supabase-js@npm:^2.42.3":
+  version: 2.42.3
+  resolution: "@supabase/supabase-js@npm:2.42.3"
   dependencies:
     "@supabase/auth-js": "npm:2.63.0"
     "@supabase/functions-js": "npm:2.2.2"
     "@supabase/node-fetch": "npm:2.6.15"
-    "@supabase/postgrest-js": "npm:1.15.0"
-    "@supabase/realtime-js": "npm:2.9.3"
+    "@supabase/postgrest-js": "npm:1.15.2"
+    "@supabase/realtime-js": "npm:2.9.4"
     "@supabase/storage-js": "npm:2.5.5"
-  checksum: 10c0/eb8fa612a07c843ce544253e2b18efe6cd8ea3957d70809d75a1d3e382b93b76840db4b2b9005ed302d89141ea038dffbf46d31d9d3737ea8b82744473d81494
+  checksum: 10c0/a548539e8888eb13e2b162bd2da63a47f9653779bca8c3be5e0a0c94c8bfcd8b9a174d2348be57919703c115106ff5e4fefb4686ddbb72a1c02f4eac9d22926e
   languageName: node
   linkType: hard
 
@@ -875,7 +875,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.0.0, @sveltejs/kit@npm:^2.5.5":
+"@sveltejs/kit@npm:^2.5.5":
   version: 2.5.5
   resolution: "@sveltejs/kit@npm:2.5.5"
   dependencies:
@@ -901,7 +901,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/package@npm:^2.0.0":
+"@sveltejs/package@npm:^2.3.1":
   version: 2.3.1
   resolution: "@sveltejs/package@npm:2.3.1"
   dependencies:
@@ -931,7 +931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^3.0.0, @sveltejs/vite-plugin-svelte@npm:^3.1.0":
+"@sveltejs/vite-plugin-svelte@npm:^3.1.0":
   version: 3.1.0
   resolution: "@sveltejs/vite-plugin-svelte@npm:3.1.0"
   dependencies:
@@ -953,19 +953,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@timeline/app@workspace:packages/app"
   dependencies:
-    "@inlang/paraglide-js": "npm:1.5.0"
+    "@inlang/paraglide-js": "npm:1.6.1"
     "@js-temporal/polyfill": "npm:^0.4.4"
     "@prisma/client": "npm:5.12.1"
     "@supabase/auth-helpers-sveltekit": "npm:^0.13.0"
     "@supabase/ssr": "npm:^0.3.0"
-    "@supabase/supabase-js": "npm:^2.42.0"
+    "@supabase/supabase-js": "npm:^2.42.3"
     "@sveltejs/adapter-vercel": "npm:^5.2.0"
     "@sveltejs/kit": "npm:^2.5.5"
     "@sveltejs/vite-plugin-svelte": "npm:^3.1.0"
     modern-normalize: "npm:^2.0.0"
     prisma: "npm:^5.12.1"
-    sass: "npm:^1.74.1"
-    svelte: "npm:^5.0.0-next.97"
+    sass: "npm:^1.75.0"
+    svelte: "npm:^5.0.0-next.102"
     svelte-check: "npm:^3.6.9"
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.4.5"
@@ -996,7 +996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.11.25":
+"@types/node@npm:*, @types/node@npm:^20.12.7":
   version: 20.12.7
   resolution: "@types/node@npm:20.12.7"
   dependencies:
@@ -1984,9 +1984,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.36.0":
-  version: 2.36.0
-  resolution: "eslint-plugin-svelte@npm:2.36.0"
+"eslint-plugin-svelte@npm:^2.37.0":
+  version: 2.37.0
+  resolution: "eslint-plugin-svelte@npm:2.37.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -2006,7 +2006,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10c0/2e47ef1a691f43a4209f24b9dfb64312b8d642bf01155424a98f12953cf3e74cc7df0a389bf0a2c759732c7242919c231ec3166c1425e3835f27db06e4618882
+  checksum: 10c0/4aa72d38969e7dc3f7c489530c8bea271d033aae8b692cdb808717d3a5f45875e1f2b8f983f20b927337c587475994f268446623f03daff02485346446024a19
   languageName: node
   linkType: hard
 
@@ -3508,13 +3508,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "prettier-plugin-svelte@npm:3.2.2"
+"prettier-plugin-svelte@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "prettier-plugin-svelte@npm:3.2.3"
   peerDependencies:
     prettier: ^3.0.0
     svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-  checksum: 10c0/5c21c87a197a129d1f98eaf05db4638a4180da463617027fde1cc63c710e4bd71e91ef71dfad19c51438273e13644955c5bf42ff93f836329f826b24e27eab37
+  checksum: 10c0/9905bc1c719b73c1241719b5b6ce487dd64a6e527274a903cb390ddca431ae1712e03a8ad009b2f0bbfbbaadee6c998a4ddcace7a125b4c1668f919b825ba8e1
   languageName: node
   linkType: hard
 
@@ -3562,16 +3562,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"publint@npm:^0.1.9":
-  version: 0.1.16
-  resolution: "publint@npm:0.1.16"
+"publint@npm:^0.2.7":
+  version: 0.2.7
+  resolution: "publint@npm:0.2.7"
   dependencies:
     npm-packlist: "npm:^5.1.3"
     picocolors: "npm:^1.0.0"
     sade: "npm:^1.8.1"
   bin:
     publint: lib/cli.js
-  checksum: 10c0/88549af1e8211e86c7f076a50f11577bdd8ada7c7afb7f317c4d80a5f5b14a62ee27327be9d7acc685ca280f7983a6c902f532fe60bbe0d71f7d931c5dd3d26b
+  checksum: 10c0/dfa476c77c2644de6986ef94616780cc44398bbfe6f56a790aadbfa0ec9d41a136c8a0c5a0a999ceb8bcee0d5736c3e93a5f28662c515c47ad6eba03244edea0
   languageName: node
   linkType: hard
 
@@ -3784,16 +3784,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.71.1, sass@npm:^1.74.1":
-  version: 1.74.1
-  resolution: "sass@npm:1.74.1"
+"sass@npm:^1.75.0":
+  version: 1.75.0
+  resolution: "sass@npm:1.75.0"
   dependencies:
     chokidar: "npm:>=3.0.0 <4.0.0"
     immutable: "npm:^4.0.0"
     source-map-js: "npm:>=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 10c0/4610257ee27823276ce4998a534b4ee9f313e5a0b3d3899e70e0f87096feeae4cd8dd3c2f765b52f57dd87f5dab22370ef63f95a837a189fbb9401396d5ce717
+  checksum: 10c0/1564ab2c8041c99a330cec93127fe8abcf65ac63eecb471610ed7f3126a2599a58b788a3a98eb8719f7f40b9b04e00c92bc9e11a9c2180ad582b8cba9fb030b0
   languageName: node
   linkType: hard
 
@@ -4009,9 +4009,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supabase@npm:1.156.0":
-  version: 1.156.0
-  resolution: "supabase@npm:1.156.0"
+"supabase@npm:^1.156.5":
+  version: 1.156.5
+  resolution: "supabase@npm:1.156.5"
   dependencies:
     bin-links: "npm:^4.0.3"
     https-proxy-agent: "npm:^7.0.2"
@@ -4019,7 +4019,7 @@ __metadata:
     tar: "npm:6.2.1"
   bin:
     supabase: bin/supabase
-  checksum: 10c0/287c52a3a0d94e922afc92fc09f9a74df3fe1ef7460abf61d5f221418b0450b8926e691e20d24f7ef90fa022028e938a2cd9db662798e1182c3680587a7200e8
+  checksum: 10c0/ec4f246a370b38c7f80a4d58a36876c4cb18761f3accd74ab1b623c37b7b53cee3c236105d3d3acf188bf9ff46ee993437930495b9fc8d31b4a94efb25b205d4
   languageName: node
   linkType: hard
 
@@ -4032,7 +4032,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^3.6.0, svelte-check@npm:^3.6.9":
+"svelte-check@npm:^3.6.9":
   version: 3.6.9
   resolution: "svelte-check@npm:3.6.9"
   dependencies:
@@ -4138,9 +4138,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.0.0-next.1, svelte@npm:^5.0.0-next.97":
-  version: 5.0.0-next.97
-  resolution: "svelte@npm:5.0.0-next.97"
+"svelte@npm:^5.0.0-next.102":
+  version: 5.0.0-next.102
+  resolution: "svelte@npm:5.0.0-next.102"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.1"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -4155,7 +4155,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.5"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10c0/114e5d85819b2284ec0d2bdc6513fdda1f9e2c0608935f774c2286615a0dbbc03509237aabf460210142814e7e8d40e0bd263d4843b80eb1f5a5a772c9e55ffa
+  checksum: 10c0/f64f4addd705dbdb3b26d185b6f8d52d16df3c662ee958260f97828bb6f1cb8c5f982b999c0aa10fb845f6a53665f09469a9d5ccf01477678ceaacbd0f8e5354
   languageName: node
   linkType: hard
 
@@ -4187,12 +4187,12 @@ __metadata:
     "@eslint/js": "npm:^9.0.0"
     eslint: "npm:^9.0.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^2.36.0"
+    eslint-plugin-svelte: "npm:^2.37.0"
     globals: "npm:^15.0.0"
     prettier: "npm:^3.2.5"
-    prettier-plugin-svelte: "npm:^3.2.2"
-    supabase: "npm:1.156.0"
-    svelte: "npm:^5.0.0-next.97"
+    prettier-plugin-svelte: "npm:^3.2.3"
+    supabase: "npm:^1.156.5"
+    svelte: "npm:^5.0.0-next.102"
     turbo: "npm:^1.13.2"
     typescript-eslint: "npm:^7.6.0"
   languageName: unknown
@@ -4343,7 +4343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0.0, typescript@npm:^5.0.3, typescript@npm:^5.4.5":
+"typescript@npm:^5.0.3, typescript@npm:^5.4.5":
   version: 5.4.5
   resolution: "typescript@npm:5.4.5"
   bin:
@@ -4353,7 +4353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.0.0#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.0.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.0.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
   version: 5.4.5
   resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"
   bin:
@@ -4367,20 +4367,20 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "uistiti@workspace:packages/uistiti"
   dependencies:
-    "@sveltejs/kit": "npm:^2.0.0"
-    "@sveltejs/package": "npm:^2.0.0"
-    "@sveltejs/vite-plugin-svelte": "npm:^3.0.0"
-    "@types/node": "npm:^20.11.25"
+    "@sveltejs/kit": "npm:^2.5.5"
+    "@sveltejs/package": "npm:^2.3.1"
+    "@sveltejs/vite-plugin-svelte": "npm:^3.1.0"
+    "@types/node": "npm:^20.12.7"
     colorjs.io: "npm:^0.5.0"
     modern-normalize: "npm:^2.0.0"
-    publint: "npm:^0.1.9"
-    sass: "npm:^1.71.1"
-    svelte: "npm:^5.0.0-next.1"
-    svelte-check: "npm:^3.6.0"
-    tslib: "npm:^2.4.1"
-    typescript: "npm:^5.0.0"
-    vite: "npm:^5.0.11"
-    vite-node: "npm:^1.3.1"
+    publint: "npm:^0.2.7"
+    sass: "npm:^1.75.0"
+    svelte: "npm:^5.0.0-next.102"
+    svelte-check: "npm:^3.6.9"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.4.5"
+    vite: "npm:^5.2.8"
+    vite-node: "npm:^1.5.0"
   peerDependencies:
     svelte: ^4.0.0
   languageName: unknown
@@ -4427,9 +4427,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-node@npm:^1.3.1":
-  version: 1.4.0
-  resolution: "vite-node@npm:1.4.0"
+"vite-node@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "vite-node@npm:1.5.0"
   dependencies:
     cac: "npm:^6.7.14"
     debug: "npm:^4.3.4"
@@ -4438,11 +4438,11 @@ __metadata:
     vite: "npm:^5.0.0"
   bin:
     vite-node: vite-node.mjs
-  checksum: 10c0/bc8eb01dd03c2cc306be2bf35efe789d6a3e8ca1d89d635d3154a9af0213f7609c94ef849f30a01f04535b31e729aee49468275e267693a42c32845fbd2a6721
+  checksum: 10c0/85f9e8616f3612c71193a2bbdfb00f610685108a65eaa7ac535655ca1bd65dda5436ee577465436f715966f34e4b25b54140bbd584fe2c95ea0726acf4ecd351
   languageName: node
   linkType: hard
 
-"vite@npm:^5.0.0, vite@npm:^5.0.11, vite@npm:^5.2.8":
+"vite@npm:^5.0.0, vite@npm:^5.2.8":
   version: 5.2.8
   resolution: "vite@npm:5.2.8"
   dependencies:

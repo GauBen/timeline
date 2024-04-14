@@ -2,20 +2,20 @@
   "name": "uistiti",
   "version": "0.0.1",
   "devDependencies": {
-    "@sveltejs/kit": "^2.0.0",
-    "@sveltejs/package": "^2.0.0",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
-    "@types/node": "^20.11.25",
+    "@sveltejs/kit": "^2.5.5",
+    "@sveltejs/package": "^2.3.1",
+    "@sveltejs/vite-plugin-svelte": "^3.1.0",
+    "@types/node": "^20.12.7",
     "colorjs.io": "^0.5.0",
     "modern-normalize": "^2.0.0",
-    "publint": "^0.1.9",
-    "sass": "^1.71.1",
-    "svelte": "^5.0.0-next.1",
-    "svelte-check": "^3.6.0",
-    "tslib": "^2.4.1",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.11",
-    "vite-node": "^1.3.1"
+    "publint": "^0.2.7",
+    "sass": "^1.75.0",
+    "svelte": "^5.0.0-next.102",
+    "svelte-check": "^3.6.9",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.8",
+    "vite-node": "^1.5.0"
   },
   "exports": {
     ".": {
