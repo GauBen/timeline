@@ -1,6 +1,8 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
+  // rhel (Red Hat Enterprise Linux) is for Vercel deployments
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
