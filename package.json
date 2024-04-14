@@ -14,8 +14,8 @@
     "globals": "^15.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.3",
-    "supabase": "^1.156.5",
-    "svelte": "^5.0.0-next.102",
+    "supabase": "^1.157.0",
+    "svelte": "^5.0.0-next.103",
     "turbo": "^1.13.2",
     "typescript-eslint": "^7.6.0",
     "vercel": "^34.0.0"

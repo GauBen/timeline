@@ -2,7 +2,7 @@
   <h1>Timeline</h1>
   <p>The social calendar</p>
   <p>
-    <a href="/auth/google" data-sveltekit-reload>Sign in with google</a>
+    <a href="/auth/google" rel="external">Sign in with google</a>
   </p>
   <h2>What is Timeline?</h2>
   <p>
