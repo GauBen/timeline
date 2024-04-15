@@ -27,7 +27,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "prisma generate && paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide && vite build",
+    "build": "(test -f .env || cp .env.example .env) && prisma generate && paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide && vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "dev": "vite dev",
