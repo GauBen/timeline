@@ -18,7 +18,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     transformPageChunk: ({ html }) => {
       // Replace the first %lang% of the response with the language tag
 
-      if (html.includes("%lang%") && !replacedLangAttribute) {
+      if (!replacedLangAttribute && html.includes("%lang%")) {
         replacedLangAttribute = true;
         return html.replace("%lang%", event.locals.language);
       }
