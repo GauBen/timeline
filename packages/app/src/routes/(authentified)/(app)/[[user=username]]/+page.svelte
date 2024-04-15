@@ -2,12 +2,36 @@
   import { enhance } from "$app/forms";
   import { m } from "$lib/i18n.js";
   import { Temporal } from "@js-temporal/polyfill";
-  import { Button } from "uistiti";
+  import { Button, Card } from "uistiti";
   import "uistiti/global.css";
 
   export let data;
 
   export let form;
+
+  const formatter = new Intl.RelativeTimeFormat(data.language, {
+    numeric: "auto",
+  });
+  const thresholds = {
+    seconds: 60,
+    minutes: 60,
+    hours: 24,
+    days: 30.4375,
+    months: 12,
+  };
+  const format = (date: Date) => {
+    let diff = (date.getTime() - Date.now()) / 1000;
+    for (const [unit, threshold] of Object.entries(thresholds)) {
+      if (Math.abs(diff) < threshold) {
+        return formatter.format(
+          Math.round(diff),
+          unit as Intl.RelativeTimeFormatUnit,
+        );
+      }
+      diff /= threshold;
+    }
+    return formatter.format(Math.round(diff), "years");
+  };
 
   $: ({ user, events, followed } = data);
 </script>
@@ -30,10 +54,13 @@
 {/if}
 
 <ul>
-  {#each events as { author, body }}
+  {#each events as { author, body, date }}
     <li>
-      {body}
-      (<a href="/@{author.username}">@{author.username}</a>)
+      <Card>
+        {body}<br />
+        (<a href="/@{author.username}">@{author.username}</a>)<br />
+        {format(date)}
+      </Card>
     </li>
   {/each}
 </ul>
