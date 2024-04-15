@@ -56,6 +56,7 @@
       />
     </label>
   </p>
+  <p>Visibility: Public (everyone can see it)</p>
   <p>
     <Button type="submit" color="success">Create</Button>
   </p>

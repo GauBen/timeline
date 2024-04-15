@@ -14,3 +14,10 @@
 </svelte:head>
 
 <slot />
+
+<footer style="font-size: .8em; text-align: center">
+  <p>
+    ⚠️ Timeline is in not production ready. Please don't use it for anything
+    important. ⚠️
+  </p>
+</footer>
