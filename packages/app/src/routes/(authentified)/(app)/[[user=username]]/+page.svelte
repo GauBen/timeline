@@ -9,7 +9,7 @@
 
   export let form;
 
-  $: ({ user, events } = data);
+  $: ({ user, events, followed } = data);
 </script>
 
 <h1>
@@ -18,6 +18,15 @@
 
 {#if user}
   <h2>from {user.displayName}</h2>
+  {#if followed}
+    <form method="POST" action="?/unfollow" use:enhance>
+      <Button color="danger">Unfollow</Button>
+    </form>
+  {:else}
+    <form method="POST" action="?/follow" use:enhance>
+      <Button>Follow</Button>
+    </form>
+  {/if}
 {/if}
 
 <ul>
@@ -35,7 +44,7 @@
   </p>
 {/if}
 
-<form method="POST" action="" use:enhance>
+<form method="POST" action="?/createEvent" use:enhance>
   <h2>Create a new event</h2>
   <p>
     <label>

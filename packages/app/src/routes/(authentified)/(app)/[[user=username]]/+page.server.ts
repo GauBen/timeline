@@ -17,12 +17,20 @@ export const load = async ({ parent }) => {
         author: true,
       },
     }),
+    followed:
+      user &&
+      (await prisma.follow.findUnique({
+        where: {
+          followerId_followingId: { followerId: me.id, followingId: user.id },
+        },
+      })),
   };
 };
 
 export const actions = {
-  default: async ({ request, locals }) => {
+  createEvent: async ({ request, locals }) => {
     if (!locals.session) return fail(401, { error: "Unauthorized" });
+
     const data = await request.formData();
     const input = {
       body: String(data.get("body")),
@@ -44,6 +52,34 @@ export const actions = {
         ...result.data,
         authorId: locals.session.id,
         duration: 0,
+      },
+    });
+  },
+
+  follow: async ({ locals, params }) => {
+    if (!locals.session) return fail(401, { error: "Unauthorized" });
+    if (!params.user) return fail(400, { error: "Missing user" });
+
+    try {
+      await prisma.follow.create({
+        data: {
+          follower: { connect: { id: locals.session.id } },
+          following: { connect: { username: params.user.slice(1) } },
+        },
+      });
+    } catch {
+      // Already following
+    }
+  },
+
+  unfollow: async ({ locals, params }) => {
+    if (!locals.session) return fail(401, { error: "Unauthorized" });
+    if (!params.user) return fail(400, { error: "Missing user" });
+
+    await prisma.follow.deleteMany({
+      where: {
+        followerId: locals.session.id,
+        following: { username: params.user.slice(1) },
       },
     });
   },
