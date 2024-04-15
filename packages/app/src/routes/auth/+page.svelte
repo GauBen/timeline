@@ -1,8 +1,15 @@
+<script lang="ts">
+  const { data } = $props();
+</script>
+
 <main>
   <h1>Timeline</h1>
   <p>The social calendar</p>
   <p>
     <a href="/auth/google" rel="external">Sign in with google</a>
+    {#if data.devMode}
+      <a href="/dev/impersonate" rel="external"> Impersonate </a>
+    {/if}
   </p>
   <h2>What is Timeline?</h2>
   <p>
