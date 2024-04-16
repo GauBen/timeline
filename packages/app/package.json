@@ -9,13 +9,16 @@
     "@supabase/supabase-js": "^2.42.4",
     "jose": "^5.2.4",
     "modern-normalize": "^2.0.0",
+    "object.groupby": "^1.0.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@iconify-json/ph": "^1.1.12",
     "@inlang/paraglide-js": "1.6.1",
     "@sveltejs/adapter-vercel": "^5.3.0",
     "@sveltejs/kit": "^2.5.6",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
+    "@types/object.groupby": "^1.0.4",
     "prisma": "^5.12.1",
     "sass": "^1.75.0",
     "svelte": "^5.0.0-next.104",
@@ -23,6 +26,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.4.5",
     "uistiti": "workspace:^",
+    "unplugin-icons": "^0.18.5",
     "vite": "^5.2.8"
   },
   "private": true,

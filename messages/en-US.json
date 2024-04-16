@@ -1,4 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "latest_events": "Latest events"
+  "latest_events": "Latest events",
+  "yesterday": "Yesterday",
+  "today": "Today",
+  "tomorrow": "Tomorrow"
 }

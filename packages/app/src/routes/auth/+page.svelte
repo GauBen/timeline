@@ -29,6 +29,13 @@
   <p>Timeline is the missing social calendar.</p>
 </main>
 
+<footer style="font-size: .8em; text-align: center">
+  <p>
+    ⚠️ Timeline is in not production ready. Please don't use it for anything
+    important. ⚠️
+  </p>
+</footer>
+
 <style lang="scss">
   main {
     max-width: 60rem;

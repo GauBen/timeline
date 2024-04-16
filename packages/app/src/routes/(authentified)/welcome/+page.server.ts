@@ -24,16 +24,7 @@ export const actions = {
 
     try {
       await prisma.user.create({
-        data: {
-          ...result.data,
-          id: locals.session.id,
-          // Make the user follow themselves
-          followers: {
-            create: {
-              followerId: locals.session.id,
-            },
-          },
-        },
+        data: { ...result.data, id: locals.session.id },
       });
     } catch (error) {
       if (

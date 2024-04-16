@@ -1,5 +1,6 @@
 import type { AvailableLanguageTag } from "$paraglide/runtime.js";
 import type { User } from "@supabase/supabase-js";
+import "unplugin-icons/types/svelte";
 
 declare global {
   namespace App {

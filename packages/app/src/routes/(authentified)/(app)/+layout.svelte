@@ -1,25 +1,46 @@
 <script lang="ts">
-  import { Temporal } from "@js-temporal/polyfill";
   const { children, data } = $props();
-
-  const today = Temporal.Now.plainDateISO();
 </script>
 
-<nav>
-  <a href="/">Latest</a>
-  <a href="/{today.toString().replaceAll('-', '/')}">Day</a>
-  <a href="/{today.toString().replaceAll('-', '/').slice(0, 7)}">Month</a>
-  <a href="/auth/logout" data-sveltekit-reload>Logout</a>
-  <select
-    value={data.language}
-    on:change={function () {
-      document.cookie = `language=${this.value}; path=/; max-age=31536000`;
-      location.reload();
-    }}
-  >
-    <option value="en-US">English</option>
-    <option value="fr-FR">Français</option>
-  </select>
-</nav>
+<div class="layout">
+  <header>
+    <h1>Timeline</h1>
+    <div>
+      <select
+        value={data.language}
+        on:change={function () {
+          document.cookie = `language=${this.value}; path=/; max-age=31536000`;
+          location.reload();
+        }}
+      >
+        <option value="en-US">English</option>
+        <option value="fr-FR">Français</option>
+      </select>
+      <a href="/auth/logout" rel="external">Logout</a>
+    </div>
+  </header>
 
-{@render children()}
+  {@render children()}
+</div>
+
+<style lang="scss">
+  header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 0.5rem;
+    background: #fff;
+    align-items: center;
+
+    > * {
+      margin: 0;
+    }
+  }
+
+  .layout {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: #19191a10;
+    gap: 1px;
+  }
+</style>
