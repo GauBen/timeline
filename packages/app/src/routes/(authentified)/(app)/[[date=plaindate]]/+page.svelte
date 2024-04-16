@@ -1,29 +1,30 @@
 <script lang="ts">
-  import { m } from "$lib/i18n.js";
-  import "uistiti/global.css";
+  import { enhance } from "$app/forms";
+  import { language, m } from "$lib/i18n.js";
+  import { Temporal } from "@js-temporal/polyfill";
+  import { Button } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
-  import { toTemporalInstant, Temporal } from "@js-temporal/polyfill";
-  import type { Action } from "svelte/action";
+  import Day, { cancel } from "./Day.svelte";
 
   const { data } = $props();
   const { latest, windows } = $derived(data);
+  const today = Temporal.Now.plainDateISO("Europe/Paris");
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   const formatDay = (day: string) => {
-    const today = Temporal.Now.plainDateISO("Europe/Paris");
     if (day === today.subtract({ days: 1 }).toString()) return m.yesterday();
     else if (day === today.toString()) return m.today();
     else if (day === today.add({ days: 1 }).toString()) return m.tomorrow();
 
-    return Temporal.PlainDate.from(day).toLocaleString(data.language, {
+    return Temporal.PlainDate.from(day).toLocaleString($language, {
       month: "short",
       day: "numeric",
     });
   };
 
-  const formatter = new Intl.RelativeTimeFormat(data.language, {
+  const formatter = new Intl.RelativeTimeFormat($language, {
     numeric: "auto",
   });
   const thresholds = {
@@ -47,30 +48,7 @@
     return formatter.format(Math.round(diff), "years");
   };
 
-  const fixDate = (date: Date) =>
-    toTemporalInstant.call(date).toZonedDateTime({
-      calendar: "iso8601",
-      timeZone: "Europe/Paris",
-    });
-
-  const time = Temporal.Now.plainTimeISO("Europe/Paris");
-  const toRems = (date: Temporal.PlainTime) =>
-    // We can't just use `date.since` because of DST!
-    date.since(new Temporal.PlainTime()).total({ unit: "hours" }) * 4;
-
-  const scrollToRelevant: Action<HTMLElement, Array<{ date: Date }>> = (
-    node,
-    events,
-  ) => {
-    const update = ([first]: typeof events) => {
-      let top = toRems(new Temporal.PlainTime(7, 30)) * 16;
-      if (first)
-        top = Math.max(top, toRems(fixDate(first.date).toPlainTime()) * 16);
-      node.scrollTo({ top });
-    };
-    update(events);
-    return { update };
-  };
+  let eventInCreation = $state<{ date: Temporal.PlainDateTime }>();
 </script>
 
 <main>
@@ -107,40 +85,69 @@
           </a>
         {/if}
       </h2>
-      <div class="scroll" use:scrollToRelevant={events}>
-        <div class="day">
-          {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
-            <div>
-              <span>
-                {Temporal.PlainTime.from({ hour }).toLocaleString(
-                  data.language,
-                  { hour: "numeric", minute: "numeric" },
-                )}
-              </span>
-            </div>
-          {/each}
-          <div style="border: 0" />
-          {#if i === 0}
-            <hr style:top="{toRems(time)}rem" />
-          {/if}
-          {#each events as { author, body, date }}
-            <article
-              style="background: #dcfaff"
-              style:top="{toRems(fixDate(date).toPlainTime())}rem"
-            >
-              @{author.username}<br />
-              {body}<br />
-              {fixDate(date).toLocaleString(data.language, {
-                hour: "numeric",
-                minute: "numeric",
-              })}
-            </article>
-          {/each}
-        </div>
-      </div>
+      <Day
+        {events}
+        today={day === today.toString()}
+        oncreatestart={({ time }) => {
+          eventInCreation = {
+            date: Temporal.PlainDate.from(day).toPlainDateTime(time),
+          };
+        }}
+        oncancel={() => {
+          eventInCreation = undefined;
+        }}
+      />
     </section>
   {/each}
 </main>
+
+{#if eventInCreation}
+  <dialog open>
+    <form
+      method="POST"
+      action="?/createEvent"
+      use:enhance={() =>
+        async ({ update }) => {
+          eventInCreation = undefined;
+          cancel();
+          return update();
+        }}
+    >
+      <h2>Create a new event</h2>
+      <p>
+        <label>
+          <span>Event</span>
+          <input required type="text" maxlength="1024" name="body" />
+        </label>
+      </p>
+      <p>
+        <label>
+          <span>Date</span>
+          <!-- TODO: bind:value -->
+          <input
+            required
+            type="datetime-local"
+            name="date"
+            value={eventInCreation.date.toString().slice(0, 16)}
+          />
+        </label>
+      </p>
+      <p>Visibility: Public (everyone can see it)</p>
+      <p>
+        <Button type="submit" color="success">Create</Button>
+        <Button
+          type="button"
+          color="danger"
+          variant="outline"
+          onclick={() => {
+            eventInCreation = undefined;
+            cancel();
+          }}>Cancel</Button
+        >
+      </p>
+    </form>
+  </dialog>
+{/if}
 
 <style lang="scss">
   main {
@@ -197,49 +204,6 @@
 
   .scroll {
     overflow-y: scroll;
-  }
-
-  .day {
-    contain: content;
-
-    > div {
-      width: 100%;
-      margin: 0;
-      border: 0;
-      border-top-width: 0px;
-      border-top-style: none;
-      border-top-color: currentcolor;
-      border-bottom: 1px solid #ccc;
-      line-height: 0;
-      color: #888;
-      user-select: none;
-      height: 4rem;
-
-      > span {
-        background: #fff;
-        font-size: 0.8em;
-        padding: 0.25em;
-        transform: translateY(calc(4rem - 100%));
-        display: inline-block;
-      }
-    }
-
-    > article {
-      position: absolute;
-      padding: 0.5em;
-      border-radius: 0.5em;
-      left: 1em;
-      margin-right: 1em;
-    }
-
-    > hr {
-      position: absolute;
-      margin: 0;
-      border: 0;
-      width: 100%;
-      height: 2px;
-      background: red;
-    }
   }
 
   ._row-2 {

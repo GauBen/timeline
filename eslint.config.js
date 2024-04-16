@@ -22,6 +22,10 @@ export default tsEslint.config(
         extraFileExtensions: [".svelte"],
       },
     },
+    rules: {
+      // Until https://github.com/sveltejs/eslint-plugin-svelte/issues/652 is fixed
+      "svelte/valid-compile": "off",
+    },
   },
   {
     ignores: [

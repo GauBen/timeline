@@ -8,8 +8,8 @@
     <div>
       <select
         value={data.language}
-        on:change={function () {
-          document.cookie = `language=${this.value}; path=/; max-age=31536000`;
+        onchange={({ currentTarget }) => {
+          document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
           location.reload();
         }}
       >
