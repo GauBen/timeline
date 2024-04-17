@@ -6,6 +6,7 @@
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
+  import Globe from "~icons/ph/globe-duotone";
   import Day from "./Day.svelte";
 
   const { data } = $props();
@@ -67,11 +68,16 @@
   <section>
     <h2>{m.latest_events()}</h2>
     <div class="scroll _stack-2" style="padding: .5rem">
-      {#each latest as { author, body, date, createdAt }}
+      {#each latest as { author, body, date, public: pub, createdAt }}
         <article style="background: #e8faef">
           <header>
             <h3><a href="/@{author.username}">@{author.username}</a></h3>
-            <p style="font-size: .75em">{format(createdAt)}</p>
+            <p style="font-size: .75em">
+              {#if pub}
+                <Globe />
+              {/if}
+              {format(createdAt)}
+            </p>
           </header>
           <p>{body}</p>
           <footer>
