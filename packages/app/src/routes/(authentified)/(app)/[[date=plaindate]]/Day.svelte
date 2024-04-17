@@ -1,27 +1,20 @@
-<script lang="ts" context="module">
-  /** Allows other Day instances to cancel another event creation. */
-  let cancelCreateEvent = $state<() => void>();
-
-  export const cancel = () => cancelCreateEvent?.();
-</script>
-
 <script lang="ts">
   import { language } from "$lib/i18n.js";
   import { toTemporalInstant, Temporal } from "@js-temporal/polyfill";
   import type { Event, User } from "@prisma/client";
   import type { Action } from "svelte/action";
 
-  const {
+  let {
     events,
-    today,
-    oncreatestart,
-    oncancel,
+    day,
+    eventInCreation = $bindable(),
   }: {
     events: Array<Event & { author: User }>;
-    today: boolean;
-    oncreatestart?: (event: NonNullable<typeof placedEvent>) => void;
-    oncancel?: () => void;
+    day: Temporal.PlainDate;
+    eventInCreation?: Temporal.PlainDateTime;
   } = $props();
+
+  const today = Temporal.Now.plainDateISO("Europe/Paris");
 
   const fixDate = (date: Date) =>
     toTemporalInstant
@@ -51,10 +44,8 @@
     return { update };
   };
 
-  let placedEvent = $state<{ time: Temporal.PlainTime }>();
   const placeEvent = (event: MouseEvent & { currentTarget: HTMLElement }) => {
     if (event.target !== event.currentTarget) return;
-    cancelCreateEvent?.();
 
     const { top } = event.currentTarget.getBoundingClientRect();
     const y = event.clientY + event.currentTarget.scrollTop - top;
@@ -63,23 +54,9 @@
       // Make minutes a multiple of 15
       Math.floor((y % 64) / 16) * 15,
     );
-    placedEvent = { time };
-    oncreatestart?.(placedEvent);
-    cancelCreateEvent = () => {
-      oncancel?.();
-      placedEvent = undefined;
-    };
+    eventInCreation = day.toPlainDateTime(time);
   };
 </script>
-
-<svelte:window
-  onkeydown={({ key }) => {
-    if (placedEvent && key === "Escape") {
-      oncancel?.();
-      placedEvent = undefined;
-    }
-  }}
-/>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
 <div class="scroll" use:scrollToRelevant={events}>
@@ -95,7 +72,7 @@
       </div>
     {/each}
     <div style="border: 0" />
-    {#if today}
+    {#if day.equals(today)}
       <hr style:top="{toRems(time)}rem" />
     {/if}
     {#each events as { author, body, date }}
@@ -111,10 +88,10 @@
         })}
       </article>
     {/each}
-    {#if placedEvent}
+    {#if eventInCreation?.toPlainDate().equals(day)}
       <article
         style="border: 2px solid #ffdcf9; background: #fff0f680; right: 0"
-        style:top="{toRems(placedEvent.time)}rem"
+        style:top="{toRems(eventInCreation.toPlainTime())}rem"
       >
         &nbsp;
       </article>

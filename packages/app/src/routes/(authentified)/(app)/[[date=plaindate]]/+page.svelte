@@ -6,22 +6,18 @@
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
-  import Day, { cancel } from "./Day.svelte";
+  import Day from "./Day.svelte";
 
   const { data } = $props();
   const { latest, windows } = $derived(data);
   const today = Temporal.Now.plainDateISO("Europe/Paris");
   const start = $derived(Temporal.PlainDate.from(data.start));
 
-  const formatDay = (day: string) => {
-    if (day === today.subtract({ days: 1 }).toString()) return m.yesterday();
-    else if (day === today.toString()) return m.today();
-    else if (day === today.add({ days: 1 }).toString()) return m.tomorrow();
-
-    return Temporal.PlainDate.from(day).toLocaleString($language, {
-      month: "short",
-      day: "numeric",
-    });
+  const formatDay = (day: Temporal.PlainDate) => {
+    if (day.equals(today.subtract({ days: 1 }))) return m.yesterday();
+    else if (day.equals(today)) return m.today();
+    else if (day.equals(today.add({ days: 1 }))) return m.tomorrow();
+    return day.toLocaleString($language, { month: "short", day: "numeric" });
   };
 
   const formatter = new Intl.RelativeTimeFormat($language, {
@@ -48,8 +44,20 @@
     return formatter.format(Math.round(diff), "years");
   };
 
-  let eventInCreation = $state<{ date: Temporal.PlainDateTime }>();
+  let eventInCreation = $state<Temporal.PlainDateTime>();
 </script>
+
+<svelte:window
+  onkeydown={({ key }) => {
+    if (!eventInCreation) return;
+
+    if (key === "Escape") eventInCreation = undefined;
+    else if (key === "ArrowDown")
+      eventInCreation = eventInCreation.add({ minutes: 15 });
+    else if (key === "ArrowUp")
+      eventInCreation = eventInCreation.subtract({ minutes: 15 });
+  }}
+/>
 
 <main>
   <section>
@@ -70,7 +78,8 @@
       {/each}
     </div>
   </section>
-  {#each Object.entries(windows) as [day, events], i}
+  {#each Object.entries(windows) as [key, events], i}
+    {@const day = Temporal.PlainDate.from(key)}
     <section>
       <h2 class="_row-2">
         {#if i === 0}
@@ -85,18 +94,7 @@
           </a>
         {/if}
       </h2>
-      <Day
-        {events}
-        today={day === today.toString()}
-        oncreatestart={({ time }) => {
-          eventInCreation = {
-            date: Temporal.PlainDate.from(day).toPlainDateTime(time),
-          };
-        }}
-        oncancel={() => {
-          eventInCreation = undefined;
-        }}
-      />
+      <Day {events} {day} bind:eventInCreation />
     </section>
   {/each}
 </main>
@@ -104,14 +102,12 @@
 {#if eventInCreation}
   <dialog open>
     <form
+      use:enhance
       method="POST"
       action="?/createEvent"
-      use:enhance={() =>
-        async ({ update }) => {
-          eventInCreation = undefined;
-          cancel();
-          return update();
-        }}
+      onreset={() => {
+        eventInCreation = undefined;
+      }}
     >
       <h2>Create a new event</h2>
       <p>
@@ -123,27 +119,27 @@
       <p>
         <label>
           <span>Date</span>
-          <!-- TODO: bind:value -->
           <input
             required
             type="datetime-local"
             name="date"
-            value={eventInCreation.date.toString().slice(0, 16)}
+            value={eventInCreation.toString().slice(0, 16)}
+            oninput={({ currentTarget }) => {
+              try {
+                eventInCreation = Temporal.PlainDateTime.from(
+                  currentTarget.value,
+                );
+              } catch {
+                // Ignore invalid dates
+              }
+            }}
           />
         </label>
       </p>
       <p>Visibility: Public (everyone can see it)</p>
       <p>
         <Button type="submit" color="success">Create</Button>
-        <Button
-          type="button"
-          color="danger"
-          variant="outline"
-          onclick={() => {
-            eventInCreation = undefined;
-            cancel();
-          }}>Cancel</Button
-        >
+        <Button type="reset" color="danger" variant="outline">Cancel</Button>
       </p>
     </form>
   </dialog>
