@@ -56,6 +56,10 @@
       eventInCreation = eventInCreation.add({ minutes: 15 });
     else if (key === "ArrowUp")
       eventInCreation = eventInCreation.subtract({ minutes: 15 });
+    else if (key === "ArrowLeft")
+      eventInCreation = eventInCreation.subtract({ days: 1 });
+    else if (key === "ArrowRight")
+      eventInCreation = eventInCreation.add({ days: 1 });
   }}
 />
 
@@ -78,25 +82,32 @@
       {/each}
     </div>
   </section>
-  {#each Object.entries(windows) as [key, events], i}
-    {@const day = Temporal.PlainDate.from(key)}
-    <section>
-      <h2 class="_row-2">
-        {#if i === 0}
-          <a href="/{start.subtract({ days: 1 }).toString()}">
-            <CaretLeft />
-          </a>
-        {/if}
-        <span style="flex: 1">{formatDay(day)}</span>
-        {#if i === 2}
-          <a href="/{start.add({ days: 1 }).toString()}">
-            <CaretRight />
-          </a>
-        {/if}
-      </h2>
-      <Day {events} {day} bind:eventInCreation />
-    </section>
-  {/each}
+  <div class="calendar">
+    <header>
+      {#each Object.keys(windows) as key, i}
+        {@const day = Temporal.PlainDate.from(key)}
+        <h2 class="_row-2">
+          {#if i === 0}
+            <a href="/{start.subtract({ days: 1 }).toString()}">
+              <CaretLeft />
+            </a>
+          {/if}
+          <span style="flex: 1">{formatDay(day)}</span>
+          {#if i === 2}
+            <a href="/{start.add({ days: 1 }).toString()}">
+              <CaretRight />
+            </a>
+          {/if}
+        </h2>
+      {/each}
+    </header>
+    <div class="scroll">
+      {#each Object.entries(windows) as [key, events]}
+        {@const day = Temporal.PlainDate.from(key)}
+        <Day {events} {day} bind:eventInCreation />
+      {/each}
+    </div>
+  </div>
 </main>
 
 {#if eventInCreation}
@@ -161,7 +172,7 @@
 <style lang="scss">
   main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
     gap: 1px;
     min-height: 0;
 
@@ -176,10 +187,6 @@
     display: flex;
     flex-direction: column;
     contain: strict;
-
-    + section {
-      border-top-left-radius: 0.25rem;
-    }
 
     > * {
       margin: 0;
@@ -211,8 +218,48 @@
     }
   }
 
+  dialog {
+    z-index: 100;
+  }
+
   .scroll {
     overflow-y: scroll;
+  }
+
+  .calendar {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    header {
+      box-shadow: 0 0 0.5rem #19191a10;
+      z-index: 1;
+
+      h2 {
+        background: #fff;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        display: flex;
+        padding: 0.5rem;
+      }
+
+      > * {
+        margin: 0;
+      }
+    }
+
+    > * {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+    }
+
+    .scroll {
+      min-height: 0;
+
+      > :global(*) {
+        background: #fff;
+      }
+    }
   }
 
   ._row-2 {

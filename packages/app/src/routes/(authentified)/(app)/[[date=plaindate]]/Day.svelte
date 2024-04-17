@@ -2,7 +2,6 @@
   import { language } from "$lib/i18n.js";
   import { toTemporalInstant, Temporal } from "@js-temporal/polyfill";
   import type { Event, User } from "@prisma/client";
-  import type { Action } from "svelte/action";
 
   let {
     events,
@@ -26,23 +25,24 @@
     // We can't just use `date.since` because of DST!
     date.since(new Temporal.PlainTime()).total({ unit: "hours" }) * 4;
 
-  const scrollToRelevant: Action<HTMLElement, Array<{ date: Date }>> = (
-    node,
-    events,
-  ) => {
-    const update = ([first]: typeof events) => {
-      node.scrollTo({
-        top:
-          toRems(
-            first
-              ? fixDate(first.date).toPlainTime()
-              : new Temporal.PlainTime(7, 30),
-          ) * 16,
-      });
-    };
-    update(events);
-    return { update };
-  };
+  // import type { Action } from "svelte/action";
+  // const scrollToRelevant: Action<HTMLElement, Array<{ date: Date }>> = (
+  //   node,
+  //   events,
+  // ) => {
+  //   const update = ([first]: typeof events) => {
+  //     node.scrollTo({
+  //       top:
+  //         toRems(
+  //           first
+  //             ? fixDate(first.date).toPlainTime()
+  //             : new Temporal.PlainTime(7, 30),
+  //         ) * 16,
+  //     });
+  //   };
+  //   update(events);
+  //   return { update };
+  // };
 
   const placeEvent = (event: MouseEvent & { currentTarget: HTMLElement }) => {
     if (event.target !== event.currentTarget) return;
@@ -59,51 +59,45 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-<div class="scroll" use:scrollToRelevant={events}>
-  <div class="day" onclick={placeEvent}>
-    {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
-      <div>
-        <span>
-          {Temporal.PlainTime.from({ hour }).toLocaleString($language, {
-            hour: "numeric",
-            minute: "numeric",
-          })}
-        </span>
-      </div>
-    {/each}
-    <div style="border: 0" />
-    {#if day.equals(today)}
-      <hr style:top="{toRems(time)}rem" />
-    {/if}
-    {#each events as { author, body, date }}
-      <article
-        style="background: #dcfaff"
-        style:top="{toRems(fixDate(date).toPlainTime())}rem"
-      >
-        @{author.username}<br />
-        {body}<br />
-        {fixDate(date).toLocaleString($language, {
+<div class="day" onclick={placeEvent}>
+  {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
+    <div>
+      <span>
+        {Temporal.PlainTime.from({ hour }).toLocaleString($language, {
           hour: "numeric",
           minute: "numeric",
         })}
-      </article>
-    {/each}
-    {#if eventInCreation?.toPlainDate().equals(day)}
-      <article
-        style="border: 2px solid #ffdcf9; background: #fff0f680; right: 0"
-        style:top="{toRems(eventInCreation.toPlainTime())}rem"
-      >
-        &nbsp;
-      </article>
-    {/if}
-  </div>
+      </span>
+    </div>
+  {/each}
+  <div style="border: 0" />
+  {#if day.equals(today)}
+    <hr style:top="{toRems(time)}rem" />
+  {/if}
+  {#each events as { author, body, date }}
+    <article
+      style="background: #dcfaff"
+      style:top="{toRems(fixDate(date).toPlainTime())}rem"
+    >
+      @{author.username}<br />
+      {body}<br />
+      {fixDate(date).toLocaleString($language, {
+        hour: "numeric",
+        minute: "numeric",
+      })}
+    </article>
+  {/each}
+  {#if eventInCreation?.toPlainDate().equals(day)}
+    <article
+      style="border: 2px solid #ffdcf9; background: #fff0f680; right: 0"
+      style:top="{toRems(eventInCreation.toPlainTime())}rem"
+    >
+      &nbsp;
+    </article>
+  {/if}
 </div>
 
 <style lang="scss">
-  .scroll {
-    overflow-y: scroll;
-  }
-
   .day {
     contain: content;
 
