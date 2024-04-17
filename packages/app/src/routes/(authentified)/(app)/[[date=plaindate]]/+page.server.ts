@@ -1,5 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
+import type { Prisma } from "@prisma/client";
 import { fail } from "@sveltejs/kit";
 import Object_groupBy from "object.groupby";
 import { z } from "zod";
@@ -12,24 +13,26 @@ export const load = async ({ parent, params }) => {
     : Temporal.Now.zonedDateTimeISO("Europe/Paris").withPlainTime();
   const end = start.add({ days: 3 });
 
+  const where: Prisma.EventWhereInput = {
+    OR: [
+      { authorId: me.id },
+      {
+        public: true,
+        author: { followers: { some: { followerId: me.id } } },
+      },
+    ],
+  };
+
   const [latest, events] = await Promise.all([
     prisma.event.findMany({
-      where: {
-        OR: [
-          { authorId: me.id },
-          { author: { followers: { some: { followerId: me.id } } } },
-        ],
-      },
+      where,
       include: { author: true },
       orderBy: { createdAt: "desc" },
       take: 100,
     }),
     prisma.event.findMany({
       where: {
-        OR: [
-          { authorId: me.id },
-          { author: { followers: { some: { followerId: me.id } } } },
-        ],
+        ...where,
         date: {
           gte: new Date(start.epochMilliseconds),
           lt: new Date(end.epochMilliseconds),
@@ -70,12 +73,14 @@ export const actions = {
     const input = {
       body: String(data.get("body")),
       date: String(data.get("date")),
+      public: Boolean(data.get("public")),
     };
 
     const result = z
       .object({
         body: z.string().min(1).max(1024),
         date: z.string().pipe(z.coerce.date()),
+        public: z.boolean(),
       })
       .safeParse(input);
 

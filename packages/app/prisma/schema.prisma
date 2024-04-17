@@ -41,9 +41,10 @@ model Event {
   date      DateTime @db.Timestamptz(6)
   duration  Int      @db.Integer // Prisma does not support `interval` type yet
   body      String   @db.VarChar(1024)
+  public    Boolean  @default(true)
   authorId  String   @map("author_id") @db.Uuid
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  @@index([authorId])
   @@map("events")
-  @@schema("public")
 }

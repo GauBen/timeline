@@ -101,12 +101,17 @@
 
 {#if eventInCreation}
   <dialog open>
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <form
       use:enhance
       method="POST"
       action="?/createEvent"
       onreset={() => {
         eventInCreation = undefined;
+      }}
+      onkeydown={(event) => {
+        event.stopPropagation();
+        if (event.key === "Escape") event.currentTarget.reset();
       }}
     >
       <h2>Create a new event</h2>
@@ -136,7 +141,15 @@
           />
         </label>
       </p>
-      <p>Visibility: Public (everyone can see it)</p>
+      <p>
+        Visibility:
+        <label>
+          <input type="radio" name="public" value="1" checked /> Public
+        </label>
+        <label>
+          <input type="radio" name="public" value="" /> Private
+        </label>
+      </p>
       <p>
         <Button type="submit" color="success">Create</Button>
         <Button type="reset" color="danger" variant="outline">Cancel</Button>

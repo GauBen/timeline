@@ -7,6 +7,7 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "users" ENABLE ROW LEVEL SECURITY;
 
 -- CreateTable
 CREATE TABLE "follows" (
@@ -16,6 +17,7 @@ CREATE TABLE "follows" (
 
     CONSTRAINT "follows_pkey" PRIMARY KEY ("follower_id","following_id")
 );
+ALTER TABLE "follows" ENABLE ROW LEVEL SECURITY;
 
 -- CreateTable
 CREATE TABLE "events" (
@@ -28,6 +30,7 @@ CREATE TABLE "events" (
 
     CONSTRAINT "events_pkey" PRIMARY KEY ("id")
 );
+ALTER TABLE "events" ENABLE ROW LEVEL SECURITY;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");

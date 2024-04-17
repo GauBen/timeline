@@ -6,14 +6,13 @@ import { SignJWT } from "jose";
 export const load = async () => {
   if (!env.JWT_DEV_SECRET) error(403, "Not allowed in production");
 
+  type Rows = Array<{ id: string; email: string; username: string }>;
   return {
-    users: await prisma.authUser.findMany({
-      select: {
-        id: true,
-        email: true,
-        user: { select: { username: true } },
-      },
-    }),
+    users: await prisma.$queryRaw<Rows>`
+      SELECT au.id, au.email, pu.username
+      FROM auth.users au
+      LEFT JOIN public.users pu ON au.id = pu.id
+    `,
   };
 };
 
