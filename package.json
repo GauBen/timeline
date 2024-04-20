@@ -23,6 +23,7 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "db:reset": "yarn supabase db reset && yarn prisma migrate reset --force",
     "dev": "turbo run dev",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",

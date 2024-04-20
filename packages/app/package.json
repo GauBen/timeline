@@ -38,5 +38,8 @@
     "preview": "vite preview",
     "postinstall": "paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide"
   },
-  "type": "module"
+  "type": "module",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  }
 }
