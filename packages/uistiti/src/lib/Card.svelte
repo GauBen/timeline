@@ -2,9 +2,12 @@
   import type { SvelteHTMLElements } from "svelte/elements";
   import type { CommonProps } from "./definitions.js";
 
-  const { color, variant, ...props } = $props<
-    CommonProps & SvelteHTMLElements["div"]
-  >();
+  const {
+    children,
+    color,
+    variant,
+    ...props
+  }: CommonProps & SvelteHTMLElements["div"] = $props();
   const cls = $derived(
     [color, variant]
       .filter(Boolean)
@@ -14,7 +17,7 @@
 </script>
 
 <div class={cls} {...props}>
-  <slot />
+  {@render children?.()}
 </div>
 
 <style lang="scss">

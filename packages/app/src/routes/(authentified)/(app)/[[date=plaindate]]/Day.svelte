@@ -1,6 +1,6 @@
 <script lang="ts">
   import { language } from "$lib/i18n.js";
-  import { toTemporalInstant, Temporal } from "@js-temporal/polyfill";
+  import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Event, User } from "@prisma/client";
 
   let {
@@ -70,7 +70,7 @@
       </span>
     </div>
   {/each}
-  <div style="border: 0" />
+  <div style="border: 0"></div>
   {#if day.equals(today)}
     <hr style:top="{toRems(time)}rem" />
   {/if}

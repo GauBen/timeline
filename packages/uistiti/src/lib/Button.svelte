@@ -2,9 +2,13 @@
   import type { SvelteHTMLElements } from "svelte/elements";
   import type { CommonProps } from "./definitions.js";
 
-  const { color, variant, ...props } = $props<
-    CommonProps & SvelteHTMLElements["button"]
-  >();
+  const {
+    children,
+    color,
+    variant,
+    ...props
+  }: CommonProps & SvelteHTMLElements["button"] = $props();
+
   const cls = $derived(
     [color, variant]
       .filter(Boolean)
@@ -14,7 +18,7 @@
 </script>
 
 <button class={cls} {...props}>
-  <slot />
+  {@render children?.()}
 </button>
 
 <style lang="scss">
