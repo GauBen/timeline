@@ -12,7 +12,7 @@ Here is a simple roadmap of what's to come:
 - [x] Desktop layout
 - [x] Create events
 - [x] Events can be public or private
-- [ ] Mobile layout
+- [x] Mobile layout
 - [ ] User page
 - [ ] Follow users
 - [ ] Share events with specific people
