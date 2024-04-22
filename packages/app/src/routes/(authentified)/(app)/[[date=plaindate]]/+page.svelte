@@ -1,11 +1,15 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { enhance } from "$app/forms";
+  import { page } from "$app/stores";
   import { language, m } from "$lib/i18n.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
+  import CalendarDots from "~icons/ph/calendar-dots-duotone";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
+  import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
   import Globe from "~icons/ph/globe-duotone";
   import Day from "./Day.svelte";
 
@@ -49,9 +53,19 @@
 
   let calendarHeader = $state<HTMLElement>();
   let numberOfColumns = $state(1);
+
+  const onresize = () => {
+    if (!calendarHeader) return;
+    numberOfColumns = window
+      .getComputedStyle(calendarHeader)
+      .gridTemplateColumns.split(" ").length;
+  };
+
+  $effect(onresize);
 </script>
 
 <svelte:window
+  {onresize}
   onkeydown={({ key }) => {
     if (!eventInCreation) return;
 
@@ -65,13 +79,6 @@
     else if (key === "ArrowRight")
       eventInCreation = eventInCreation.add({ days: 1 });
   }}
-  onresize={() => {
-    if (!calendarHeader) return;
-    numberOfColumns = window
-      .getComputedStyle(calendarHeader)
-      .gridTemplateColumns.split(" ").length;
-    console.log(numberOfColumns);
-  }}
 />
 
 <main>
@@ -81,7 +88,7 @@
       {#each latest as { author, body, date, public: pub, createdAt }}
         <article style="background: #e8faef">
           <header>
-            <h3><a href="/@{author.username}">@{author.username}</a></h3>
+            <h3><a href="/{author.username}">@{author.username}</a></h3>
             <p style="font-size: .75em">
               {#if pub}
                 <Globe />
@@ -128,6 +135,23 @@
     </div>
   </div>
 </main>
+
+<nav>
+  <a
+    href="#recent"
+    aria-current={browser && $page.url.hash !== "#calendar"
+      ? "page"
+      : undefined}
+  >
+    <ClockClockwise /> Recent</a
+  >
+  <a
+    href="#calendar"
+    aria-current={$page.url.hash === "#calendar" ? "page" : undefined}
+  >
+    <CalendarDots /> Calendar</a
+  >
+</nav>
 
 {#if eventInCreation}
   <dialog open>

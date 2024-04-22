@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { page } from "$app/stores";
-  import CalendarDots from "~icons/ph/calendar-dots-duotone";
-  import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
-
   const { children, data } = $props();
 </script>
 
 <div class="layout">
   <header>
-    <h1>Timeline</h1>
+    <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
     <div>
       <select
         value={data.language}
@@ -26,23 +21,6 @@
   </header>
 
   {@render children()}
-
-  <nav>
-    <a
-      href="#recent"
-      aria-current={browser && $page.url.hash !== "#calendar"
-        ? "page"
-        : undefined}
-    >
-      <ClockClockwise /> Recent</a
-    >
-    <a
-      href="#calendar"
-      aria-current={$page.url.hash === "#calendar" ? "page" : undefined}
-    >
-      <CalendarDots /> Calendar</a
-    >
-  </nav>
 </div>
 
 <style lang="scss">
