@@ -8,17 +8,17 @@
   ],
   "devDependencies": {
     "@eslint/js": "^9.1.1",
-    "eslint": "^9.1.0",
+    "eslint": "^9.1.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.37.0",
     "globals": "^15.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-jsdoc": "^1.3.0",
     "prettier-plugin-svelte": "^3.2.3",
-    "supabase": "^1.162.6",
-    "svelte": "^5.0.0-next.110",
+    "supabase": "^1.163.2",
+    "svelte": "^5.0.0-next.111",
     "turbo": "^1.13.2",
-    "typescript-eslint": "^7.7.0",
+    "typescript-eslint": "^7.7.1",
     "vercel": "^34.1.1"
   },
   "scripts": {

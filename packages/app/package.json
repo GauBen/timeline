@@ -10,24 +10,24 @@
     "jose": "^5.2.4",
     "modern-normalize": "^2.0.0",
     "object.groupby": "^1.0.3",
-    "zod": "^3.22.5"
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.1.12",
     "@inlang/paraglide-js": "1.7.0",
     "@sveltejs/adapter-vercel": "^5.3.0",
-    "@sveltejs/kit": "^2.5.6",
+    "@sveltejs/kit": "^2.5.7",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "@types/object.groupby": "^1.0.4",
     "prisma": "^5.12.1",
     "sass": "^1.75.0",
-    "svelte": "^5.0.0-next.110",
+    "svelte": "^5.0.0-next.111",
     "svelte-check": "^3.6.9",
     "tslib": "^2.6.2",
     "typescript": "^5.4.5",
     "uistiti": "workspace:^",
     "unplugin-icons": "^0.18.5",
-    "vite": "^5.2.9"
+    "vite": "^5.2.10"
   },
   "private": true,
   "scripts": {
