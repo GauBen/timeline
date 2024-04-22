@@ -46,6 +46,9 @@
   };
 
   let eventInCreation = $state<Temporal.PlainDateTime>();
+
+  let calendarHeader = $state<HTMLElement>();
+  let numberOfColumns = $state(1);
 </script>
 
 <svelte:window
@@ -62,10 +65,17 @@
     else if (key === "ArrowRight")
       eventInCreation = eventInCreation.add({ days: 1 });
   }}
+  onresize={() => {
+    if (!calendarHeader) return;
+    numberOfColumns = window
+      .getComputedStyle(calendarHeader)
+      .gridTemplateColumns.split(" ").length;
+    console.log(numberOfColumns);
+  }}
 />
 
 <main>
-  <section>
+  <section id="recent">
     <h2>{m.latest_events()}</h2>
     <div class="scroll _stack-2" style="padding: .5rem">
       {#each latest as { author, body, date, public: pub, createdAt }}
@@ -88,8 +98,8 @@
       {/each}
     </div>
   </section>
-  <div class="calendar">
-    <header>
+  <div id="calendar" class="calendar">
+    <header bind:this={calendarHeader}>
       {#each Object.keys(windows) as key, i}
         {@const day = Temporal.PlainDate.from(key)}
         <h2 class="_row-2">
@@ -99,8 +109,11 @@
             </a>
           {/if}
           <span style="flex: 1">{formatDay(day)}</span>
-          {#if i === 2}
-            <a href="/{start.add({ days: 1 }).toString()}">
+          {#if i === numberOfColumns - 1}
+            <a
+              href="/{start.add({ days: 1 }).toString()}"
+              style="position: absolute; right: .5rem"
+            >
               <CaretRight />
             </a>
           {/if}
@@ -178,9 +191,16 @@
 <style lang="scss">
   main {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 100vw 100vw;
+    overflow: hidden;
     gap: 1px;
     min-height: 0;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+
+    @media (width > 40rem) {
+      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
 
     > * {
       min-height: 0;
@@ -189,10 +209,10 @@
 
   section {
     background: #fff;
-    border-top-right-radius: 0.25rem;
     display: flex;
     flex-direction: column;
     contain: strict;
+    scroll-snap-align: start;
 
     > * {
       margin: 0;
@@ -235,6 +255,9 @@
   .calendar {
     display: grid;
     grid-template-rows: auto 1fr;
+    contain: paint;
+    grid-column: 2 / -1;
+    scroll-snap-align: start;
 
     header {
       box-shadow: 0 0 0.5rem #19191a10;
@@ -242,10 +265,9 @@
 
       h2 {
         background: #fff;
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
         display: flex;
         padding: 0.5rem;
+        contain: paint;
       }
 
       > * {
@@ -255,8 +277,11 @@
 
     > * {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1px;
+      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+      grid-template-rows: auto;
+      grid-auto-rows: 0;
+      contain: paint;
+      column-gap: 1px;
     }
 
     .scroll {

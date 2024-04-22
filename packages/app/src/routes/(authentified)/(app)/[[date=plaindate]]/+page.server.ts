@@ -11,7 +11,7 @@ export const load = async ({ parent, params }) => {
   const start = params.date
     ? Temporal.PlainDate.from(params.date).toZonedDateTime("Europe/Paris")
     : Temporal.Now.zonedDateTimeISO("Europe/Paris").withPlainTime();
-  const end = start.add({ days: 3 });
+  const end = start.add({ days: 7 });
 
   const where: Prisma.EventWhereInput = {
     OR: [
@@ -47,7 +47,7 @@ export const load = async ({ parent, params }) => {
   const windows = {
     // Create empty columns for each day
     ...Object.fromEntries(
-      Array.from({ length: 3 }, (_, i) => [
+      Array.from({ length: 7 }, (_, i) => [
         start.add({ days: i }).toPlainDate().toString(),
         [] as never, // Remove these empty columns from the resulting type
       ]),
