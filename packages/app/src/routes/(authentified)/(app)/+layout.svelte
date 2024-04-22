@@ -59,7 +59,7 @@
   }
 
   .layout {
-    height: 100vh;
+    height: 100dvh;
     display: grid;
     grid-template-rows: auto 1fr auto;
     background: #19191a10;
