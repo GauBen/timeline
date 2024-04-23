@@ -3,9 +3,12 @@ import { error } from "@sveltejs/kit";
 
 export const load = async ({ params, parent }) => {
   const { me } = await parent();
+
+  const year = params.year ? Number(params.year) : new Date().getFullYear();
+
   try {
     const user = await prisma.user.findUniqueOrThrow({
-      where: params,
+      where: { username: params.username },
       include: {
         events: {
           where: {
@@ -14,15 +17,21 @@ export const load = async ({ params, parent }) => {
         },
       },
     });
-    return {
-      user,
-      followed: await prisma.follow.findUnique({
+    const [followed, mosaic] = await Promise.all([
+      prisma.follow.findUnique({
         where: {
           followerId_followingId: { followerId: me.id, followingId: user.id },
         },
       }),
-    };
-  } catch {
+      prisma.$queryRaw<Array<{ date: Date; count: number }>>`
+        SELECT date::DATE, COUNT(*)::INT FROM events
+        WHERE author_id = ${user.id}::UUID AND (public OR author_id = ${me.id}::UUID)
+        GROUP BY date::DATE
+      `,
+    ]);
+    return { year, user, followed, mosaic };
+  } catch (e) {
+    console.error(e);
     error(404, "User not found");
   }
 };

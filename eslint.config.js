@@ -25,6 +25,10 @@ export default tsEslint.config(
     rules: {
       // Until https://github.com/sveltejs/eslint-plugin-svelte/issues/652 is fixed
       "svelte/valid-compile": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
     },
   },
   {

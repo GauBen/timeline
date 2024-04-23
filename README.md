@@ -13,8 +13,8 @@ Here is a simple roadmap of what's to come:
 - [x] Create events
 - [x] Events can be public or private
 - [x] Mobile layout
-- [ ] User page
-- [ ] Follow users
+- [ ] ⏳ User page
+- [x] Follow users
 - [ ] Share events with specific people
 - [ ] Event duration
 - [ ] Proper timezone support

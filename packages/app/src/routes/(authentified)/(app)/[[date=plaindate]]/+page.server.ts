@@ -47,8 +47,8 @@ export const load = async ({ parent, params }) => {
   const windows = {
     // Create empty columns for each day
     ...Object.fromEntries(
-      Array.from({ length: 7 }, (_, i) => [
-        start.add({ days: i }).toPlainDate().toString(),
+      Array.from({ length: 7 }, (_, days) => [
+        start.add({ days }).toPlainDate().toString(),
         [] as never, // Remove these empty columns from the resulting type
       ]),
     ),
