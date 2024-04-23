@@ -1,3 +1,5 @@
+ALTER TABLE "_prisma_migrations" ENABLE ROW LEVEL SECURITY;
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" UUID NOT NULL,
