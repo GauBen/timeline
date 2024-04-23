@@ -1,46 +1,5 @@
 <script lang="ts">
-  const { children, data } = $props();
+  const { children } = $props();
 </script>
 
-<div class="layout">
-  <header>
-    <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
-    <div>
-      <select
-        value={data.language}
-        onchange={({ currentTarget }) => {
-          document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
-          location.reload();
-        }}
-      >
-        <option value="en-US">English</option>
-        <option value="fr-FR">Français</option>
-      </select>
-      <a href="/auth/logout" rel="external">Logout</a>
-    </div>
-  </header>
-
-  {@render children()}
-</div>
-
-<style lang="scss">
-  header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    padding: 0.5rem;
-    background: #fff;
-    align-items: center;
-
-    > * {
-      margin: 0;
-    }
-  }
-
-  .layout {
-    height: 100dvh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    background: #19191a10;
-    gap: 1px;
-  }
-</style>
+{@render children()}

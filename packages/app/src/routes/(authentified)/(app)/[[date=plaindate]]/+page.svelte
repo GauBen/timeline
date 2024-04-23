@@ -81,77 +81,96 @@
   }}
 />
 
-<main>
-  <section id="recent">
-    <h2>{m.latest_events()}</h2>
-    <div class="scroll _stack-2" style="padding: .5rem">
-      {#each latest as { author, body, date, public: pub, createdAt }}
-        <article style="background: #e8faef">
-          <header>
-            <h3><a href="/{author.username}">@{author.username}</a></h3>
-            <p style="font-size: .75em">
-              {#if pub}
-                <Globe />
-              {/if}
-              {format(createdAt)}
-            </p>
-          </header>
-          <p>{body}</p>
-          <footer>
-            <Calendar />
-            {format(date)}
-          </footer>
-        </article>
-      {/each}
+<div class="layout">
+  <header>
+    <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
+    <div>
+      <select
+        value={data.language}
+        onchange={({ currentTarget }) => {
+          document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
+          location.reload();
+        }}
+      >
+        <option value="en-US">English</option>
+        <option value="fr-FR">Français</option>
+      </select>
+      <a href="/auth/logout" rel="external">Logout</a>
     </div>
-  </section>
-  <div id="calendar" class="calendar">
-    <header bind:this={calendarHeader}>
-      {#each Object.keys(windows) as key, i}
-        {@const day = Temporal.PlainDate.from(key)}
-        <h2 class="_row-2">
-          {#if i === 0}
-            <a href="/{start.subtract({ days: 1 }).toString()}">
-              <CaretLeft />
-            </a>
-          {/if}
-          <span style="flex: 1">{formatDay(day)}</span>
-          {#if i === numberOfColumns - 1}
-            <a
-              href="/{start.add({ days: 1 }).toString()}"
-              style="position: absolute; right: .5rem"
-            >
-              <CaretRight />
-            </a>
-          {/if}
-        </h2>
-      {/each}
-    </header>
-    <div class="scroll">
-      {#each Object.entries(windows) as [key, events]}
-        {@const day = Temporal.PlainDate.from(key)}
-        <Day {events} {day} bind:eventInCreation />
-      {/each}
-    </div>
-  </div>
-</main>
+  </header>
 
-<nav>
-  <a
-    href="#recent"
-    aria-current={browser && $page.url.hash !== "#calendar"
-      ? "page"
-      : undefined}
-  >
-    <ClockClockwise /> Recent</a
-  >
-  <a
-    href="#calendar"
-    aria-current={$page.url.hash === "#calendar" ? "page" : undefined}
-  >
-    <CalendarDots /> Calendar</a
-  >
-</nav>
+  <main>
+    <section id="recent">
+      <h2>{m.latest_events()}</h2>
+      <div class="scroll _stack-2" style="padding: .5rem">
+        {#each latest as { author, body, date, public: pub, createdAt }}
+          <article style="background: #e8faef">
+            <header>
+              <h3><a href="/{author.username}">@{author.username}</a></h3>
+              <p style="font-size: .75em">
+                {#if pub}
+                  <Globe />
+                {/if}
+                {format(createdAt)}
+              </p>
+            </header>
+            <p>{body}</p>
+            <footer>
+              <Calendar />
+              {format(date)}
+            </footer>
+          </article>
+        {/each}
+      </div>
+    </section>
+    <div id="calendar" class="calendar">
+      <header bind:this={calendarHeader}>
+        {#each Object.keys(windows) as key, i}
+          {@const day = Temporal.PlainDate.from(key)}
+          <h2 class="_row-2">
+            {#if i === 0}
+              <a href="/{start.subtract({ days: 1 }).toString()}">
+                <CaretLeft />
+              </a>
+            {/if}
+            <span style="flex: 1">{formatDay(day)}</span>
+            {#if i === numberOfColumns - 1}
+              <a
+                href="/{start.add({ days: 1 }).toString()}"
+                style="position: absolute; right: .5rem"
+              >
+                <CaretRight />
+              </a>
+            {/if}
+          </h2>
+        {/each}
+      </header>
+      <div class="scroll">
+        {#each Object.entries(windows) as [key, events]}
+          {@const day = Temporal.PlainDate.from(key)}
+          <Day {events} {day} bind:eventInCreation />
+        {/each}
+      </div>
+    </div>
+  </main>
+
+  <nav>
+    <a
+      href="#recent"
+      aria-current={browser && $page.url.hash !== "#calendar"
+        ? "page"
+        : undefined}
+    >
+      <ClockClockwise /> Recent</a
+    >
+    <a
+      href="#calendar"
+      aria-current={$page.url.hash === "#calendar" ? "page" : undefined}
+    >
+      <CalendarDots /> Calendar</a
+    >
+  </nav>
+</div>
 
 {#if eventInCreation}
   <dialog open>
@@ -213,6 +232,26 @@
 {/if}
 
 <style lang="scss">
+  .layout {
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: #19191a10;
+    gap: 1px;
+  }
+
+  .layout > header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 0.5rem;
+    background: #fff;
+    align-items: center;
+
+    > * {
+      margin: 0;
+    }
+  }
+
   main {
     display: grid;
     grid-template-columns: 100vw 100vw;
