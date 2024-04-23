@@ -1,7 +1,8 @@
 generator client {
-  provider      = "prisma-client-js"
+  provider        = "prisma-client-js"
   // rhel (Red Hat Enterprise Linux) is for Vercel deployments
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -10,12 +11,24 @@ datasource db {
   directUrl = env("DATABASE_DIRECT_URL")
 }
 
+view AuthUser {
+  id               String    @id @db.Uuid
+  email            String    @db.VarChar(255)
+  createdAt        DateTime  @map("created_at") @db.Timestamptz(6)
+  emailConfirmedAt DateTime? @map("email_confirmed_at") @db.Timestamptz(6)
+  lastSignInAt     DateTime? @map("last_sign_in_at") @db.Timestamptz(6)
+  user             User?
+
+  @@map("auth_users")
+}
+
 model User {
   id          String   @id @db.Uuid
   username    String   @unique @db.VarChar(255)
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
+  authUser  AuthUser @relation(fields: [id], references: [id])
   followers Follow[] @relation("following")
   following Follow[] @relation("follower")
   events    Event[]

@@ -21,7 +21,7 @@ jobs:
       - run: yarn build
       - run: yarn vercel --cwd=packages/app --token=${{ secrets.VERCEL_TOKEN }} pull --yes --environment=production
       - run: yarn vercel --cwd=packages/app --token=${{ secrets.VERCEL_TOKEN }} deploy --prebuilt --prod --skip-domain > deployment-url.txt
-      - run: yarn prisma migrate deploy
+      - run: yarn supabase db push --db-url="${DATABASE_DIRECT_URL%%\?*}" && yarn prisma migrate deploy
       # We need to specify which organization (scope) owns the deployment,
       # otherwise it fails with "Deployment belongs to a different team"
       - run: yarn vercel --cwd=packages/app --token=${{ secrets.VERCEL_TOKEN }} promote $(cat deployment-url.txt) --scope=${{ secrets.VERCEL_ORG_ID }}

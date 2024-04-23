@@ -10,9 +10,9 @@
     <label>
       User:
       <select name="id">
-        {#each data.users as { id, email, username }}
+        {#each data.users as { id, email, user }}
           <option value={id}>
-            {email} ({username ?? "no account"})
+            {email} ({user?.username ?? "no account"})
           </option>
         {/each}
       </select>
