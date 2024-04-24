@@ -1,4 +1,4 @@
-import { authAPI } from "$lib/auth.js";
+import { authAPI } from "$lib/server/auth.js";
 import { error, redirect } from "@sveltejs/kit";
 import { env } from "$env/dynamic/public";
 import type { Session } from "@supabase/supabase-js";

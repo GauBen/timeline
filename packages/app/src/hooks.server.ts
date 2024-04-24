@@ -1,4 +1,4 @@
-import { fetchAndPersistSession } from "$lib/auth.js";
+import { fetchAndPersistSession } from "$lib/server/auth.js";
 import { isAvailableLanguageTag } from "$paraglide/runtime.js";
 import type { Handle, RequestEvent } from "@sveltejs/kit";
 
