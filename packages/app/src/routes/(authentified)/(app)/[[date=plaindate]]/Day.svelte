@@ -58,7 +58,7 @@
   };
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
 <div class="day" onclick={placeEvent}>
   {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
     <div>

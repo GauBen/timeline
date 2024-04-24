@@ -81,6 +81,65 @@
   }}
 />
 
+{#if eventInCreation}
+  <dialog open>
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <form
+      use:enhance
+      method="POST"
+      action="?/createEvent"
+      onreset={() => {
+        eventInCreation = undefined;
+      }}
+      onkeydown={(event) => {
+        event.stopPropagation();
+        if (event.key === "Escape") event.currentTarget.reset();
+      }}
+    >
+      <h2>Create a new event</h2>
+      <p>
+        <label>
+          <span>Event</span>
+          <input required type="text" maxlength="1024" name="body" />
+        </label>
+      </p>
+      <p>
+        <label>
+          <span>Date</span>
+          <input
+            required
+            type="datetime-local"
+            name="date"
+            value={eventInCreation.toString().slice(0, 16)}
+            oninput={({ currentTarget }) => {
+              try {
+                eventInCreation = Temporal.PlainDateTime.from(
+                  currentTarget.value,
+                );
+              } catch {
+                // Ignore invalid dates
+              }
+            }}
+          />
+        </label>
+      </p>
+      <p>
+        Visibility:
+        <label>
+          <input type="radio" name="public" value="1" checked /> Public
+        </label>
+        <label>
+          <input type="radio" name="public" value="" /> Private
+        </label>
+      </p>
+      <p>
+        <Button type="submit" color="success">Create</Button>
+        <Button type="reset" color="danger" variant="outline">Cancel</Button>
+      </p>
+    </form>
+  </dialog>
+{/if}
+
 <div class="layout">
   <header>
     <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
@@ -171,65 +230,6 @@
     >
   </nav>
 </div>
-
-{#if eventInCreation}
-  <dialog open>
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-    <form
-      use:enhance
-      method="POST"
-      action="?/createEvent"
-      onreset={() => {
-        eventInCreation = undefined;
-      }}
-      onkeydown={(event) => {
-        event.stopPropagation();
-        if (event.key === "Escape") event.currentTarget.reset();
-      }}
-    >
-      <h2>Create a new event</h2>
-      <p>
-        <label>
-          <span>Event</span>
-          <input required type="text" maxlength="1024" name="body" />
-        </label>
-      </p>
-      <p>
-        <label>
-          <span>Date</span>
-          <input
-            required
-            type="datetime-local"
-            name="date"
-            value={eventInCreation.toString().slice(0, 16)}
-            oninput={({ currentTarget }) => {
-              try {
-                eventInCreation = Temporal.PlainDateTime.from(
-                  currentTarget.value,
-                );
-              } catch {
-                // Ignore invalid dates
-              }
-            }}
-          />
-        </label>
-      </p>
-      <p>
-        Visibility:
-        <label>
-          <input type="radio" name="public" value="1" checked /> Public
-        </label>
-        <label>
-          <input type="radio" name="public" value="" /> Private
-        </label>
-      </p>
-      <p>
-        <Button type="submit" color="success">Create</Button>
-        <Button type="reset" color="danger" variant="outline">Cancel</Button>
-      </p>
-    </form>
-  </dialog>
-{/if}
 
 <style lang="scss">
   .layout {

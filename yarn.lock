@@ -2847,6 +2847,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-command@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "eslint-plugin-command@npm:0.0.1"
+  peerDependencies:
+    eslint: "*"
+  checksum: 10c0/b64579c4b604ed9732f1da410154d7a471d23a1f3cf3446bfc92f852a6b798bb302a2ebec91ab6c15cdad7dad46ef4e72e77a04e1c9c423663faed8943abd9ae
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-svelte@npm:^2.38.0":
   version: 2.38.0
   resolution: "eslint-plugin-svelte@npm:2.38.0"
@@ -6492,6 +6501,7 @@ __metadata:
     "@eslint/js": "npm:^9.1.1"
     eslint: "npm:^9.1.1"
     eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-command: "npm:^0.0.1"
     eslint-plugin-svelte: "npm:^2.38.0"
     globals: "npm:^15.0.0"
     prettier: "npm:^3.2.5"

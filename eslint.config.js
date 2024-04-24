@@ -4,8 +4,10 @@ import eslintPluginSvelte from "eslint-plugin-svelte";
 import globals from "globals";
 import svelteParser from "svelte-eslint-parser";
 import tsEslint from "typescript-eslint";
+import command from "eslint-plugin-command/config";
 
 export default tsEslint.config(
+  command(),
   js.configs.recommended,
   ...tsEslint.configs.recommended,
   ...eslintPluginSvelte.configs["flat/recommended"],

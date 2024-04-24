@@ -16,7 +16,10 @@
   <h2>Complete your registration</h2>
   <p>
     <label>
-      <span>Username (a-z A-Z 0-9 or _, 3 to 20 characters)</span>
+      <span>
+        Username (Letters, digits or _, 3 to 20 characters, must start with a
+        letter)
+      </span>
       <input
         required
         type="text"
