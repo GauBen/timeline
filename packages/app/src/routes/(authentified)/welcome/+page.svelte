@@ -1,10 +1,10 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
 
-  export let form;
+  const { form } = $props();
 
-  let username = form?.input?.username ?? "";
-  let displayName = form?.input?.displayName ?? "";
+  let username = $state(form?.input?.username ?? "");
+  let displayName = $state(form?.input?.displayName ?? "");
 </script>
 
 {#if form}
