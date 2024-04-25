@@ -1,11 +1,16 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { ParamMatcher } from "@sveltejs/kit";
 
-export const match: ParamMatcher = (param) => {
-  if (!/^\d{4}-\d\d-\d\d$/.test(param)) return false;
+export const match = (param) => {
+  if (param.length === 0) return true;
+  const matches = param.match(
+    /^(?<year>\d{4})(?:[/-](?<month>\d\d)(?:[/-](?<day>\d\d))?)?$/,
+  );
+  if (!matches) return false;
 
   try {
-    Temporal.PlainDate.from(param);
+    if (matches.groups?.day) Temporal.PlainDate.from(param);
+    else if (matches.groups?.month) Temporal.PlainYearMonth.from(param);
+
     return true;
   } catch {
     return false;
