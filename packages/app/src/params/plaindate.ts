@@ -3,7 +3,7 @@ import { Temporal } from "@js-temporal/polyfill";
 export const match = (param) => {
   if (param.length === 0) return true;
   const matches = param.match(
-    /^(?<year>\d{4})(?:[/-](?<month>\d\d)(?:[/-](?<day>\d\d))?)?$/,
+    /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
   );
   if (!matches) return false;
 

@@ -1,11 +1,14 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { goto } from "$app/navigation";
+  import { resolveRoute } from "$app/paths";
+  import { page } from "$app/stores";
   import Layout from "$lib/Layout.svelte";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
-  import Week from "./Week.svelte";
   import Back from "~icons/ph/caret-left";
   import Month from "./Month.svelte";
+  import Week from "./Week.svelte";
   import Year from "./Year.svelte";
 
   const { data } = $props();
@@ -92,14 +95,14 @@
 <Layout {latest}>
   {#snippet header()}
     {#if user}
-      <h1>
-        <a href="/" style="text-decoration: unset"><Back /></a>
-        <span
-          style="display: inline-block; width: 2rem; height: 2rem; background: purple; border-radius: 1rem"
-        ></span>
-        {user.displayName}
-      </h1>
-      <form method="POST" use:enhance>
+      <form method="POST" class="_row-2" use:enhance>
+        <h1>
+          <a href="/" style="text-decoration: unset"><Back /></a>
+          <span
+            style="display: inline-block; width: 2rem; height: 2rem; background: purple; border-radius: 1rem"
+          ></span>
+          {user.displayName}
+        </h1>
         {#if followed}
           <Button color="danger" formaction="?/unfollow">Unfollow</Button>
         {:else}
@@ -108,28 +111,36 @@
       </form>
     {:else}
       <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
-      <div>
-        <select
-          value={data.language}
-          onchange={({ currentTarget }) => {
-            document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
-            location.reload();
-          }}
-        >
-          <option value="en-US">English</option>
-          <option value="fr-FR">Français</option>
-        </select>
-        <a href="/auth/logout" rel="external">Logout</a>
-      </div>
     {/if}
+    <select
+      onchange={({ currentTarget }) =>
+         goto(resolveRoute($page.route.id!, {
+          ...$page.params,
+          date: start.slice(
+            0,
+            currentTarget.value === "day"
+              ? 10
+              : currentTarget.value === "month"
+                ? 7
+                : 4,
+          ),
+        }) + location.hash, { keepFocus: true })}
+      value={view}
+    >
+      <option value="day">Day</option>
+      <option value="month">Month</option>
+      <option value="year">Year</option>
+    </select>
+
+    <a href="/settings">Settings</a>
   {/snippet}
 
   {#if view === "day"}
     <Week {start} {windows} bind:eventInCreation></Week>
   {:else if view === "month"}
-    <Month start={Temporal.PlainDate.from(start)}></Month>
+    <Month start={Temporal.PlainDate.from(start)} {windows}></Month>
   {:else}
-    <Year start={Temporal.PlainDate.from(start)}></Year>
+    <Year start={Temporal.PlainDate.from(start)} {windows}></Year>
   {/if}
 </Layout>
 

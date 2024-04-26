@@ -1,8 +1,15 @@
 <script lang="ts">
   import { Temporal } from "@js-temporal/polyfill";
   import { language } from "$lib/i18n.js";
+  import type { Event, User } from "@prisma/client";
 
-  const { start: firstDayOfYear }: { start: Temporal.PlainDate } = $props();
+  const {
+    start: firstDayOfYear,
+    windows,
+  }: {
+    start: Temporal.PlainDate;
+    windows: Record<string, Array<Event & { author: User }>>;
+  } = $props();
 
   // const latest = $derived(
   //   user.events.map((event) => ({ ...event, author: user })),
@@ -64,8 +71,7 @@
         <td>{name}</td>
         {#each Array.from({ length: 53 }) as _, week}
           {@const date = start.add({ weeks: week, days: day })}
-          <!-- {@const count = mosaic.get(date.toString())} -->
-          {@const count = undefined}
+          {@const count = windows[date.toString()]?.length}
           <td
             title={date.toString()}
             style:background={count === undefined

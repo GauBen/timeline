@@ -83,7 +83,7 @@
 
   .layout > header {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     padding: 0.5rem;
     background: #fff;
     align-items: center;
@@ -103,7 +103,7 @@
     scroll-snap-type: x mandatory;
 
     @media (width > 40rem) {
-      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+      grid-template-columns: 20rem 1fr;
     }
 
     > * {
@@ -153,8 +153,6 @@
   }
 
   .calendar {
-    display: grid;
-    grid-template-rows: auto 1fr;
     contain: paint;
     grid-column: 2 / -1;
     scroll-snap-align: start;

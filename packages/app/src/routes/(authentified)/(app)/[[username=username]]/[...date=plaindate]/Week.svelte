@@ -44,35 +44,43 @@
 
 <svelte:window {onresize} />
 
-<header bind:this={calendarHeader}>
-  {#each keys as key, i}
-    {@const day = Temporal.PlainDate.from(key)}
-    <h2 class="_row-2">
-      {#if i === 0}
-        <a href="/{startDay.subtract({ days: 1 }).toString()}">
-          <CaretLeft />
-        </a>
-      {/if}
-      <span style="flex: 1">{formatDay(day)}</span>
-      {#if i === numberOfColumns - 1}
-        <a
-          href="/{startDay.add({ days: 1 }).toString()}"
-          style="position: absolute; right: .5rem"
-        >
-          <CaretRight />
-        </a>
-      {/if}
-    </h2>
-  {/each}
-</header>
-<div class="scroll">
-  {#each keys as key}
-    {@const day = Temporal.PlainDate.from(key)}
-    <Day events={windows[key] ?? []} {day} bind:eventInCreation />
-  {/each}
+<div class="wrapper">
+  <header bind:this={calendarHeader}>
+    {#each keys as key, i}
+      {@const day = Temporal.PlainDate.from(key)}
+      <h2 class="_row-2">
+        {#if i === 0}
+          <a href="/{startDay.subtract({ days: 1 }).toString()}">
+            <CaretLeft />
+          </a>
+        {/if}
+        <span style="flex: 1">{formatDay(day)}</span>
+        {#if i === numberOfColumns - 1}
+          <a
+            href="/{startDay.add({ days: 1 }).toString()}"
+            style="position: absolute; right: .5rem"
+          >
+            <CaretRight />
+          </a>
+        {/if}
+      </h2>
+    {/each}
+  </header>
+  <div class="scroll">
+    {#each keys as key}
+      {@const day = Temporal.PlainDate.from(key)}
+      <Day events={windows[key] ?? []} {day} bind:eventInCreation />
+    {/each}
+  </div>
 </div>
 
 <style lang="scss">
+  .wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+
   header {
     box-shadow: 0 0 0.5rem #19191a10;
     z-index: 1;

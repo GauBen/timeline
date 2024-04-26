@@ -20,15 +20,15 @@ export const load = async ({ parent, params }) => {
   }
 
   const matches = params.date.match(
-    /^(?<year>\d{4})(?:[/-](?<month>\d\d)(?:[/-](?<day>\d\d))?)?$/,
+    /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
   );
 
   if (params.date && !matches) error(400, "Invalid date");
 
-  const view: "day" | "month" | "year" =
-    !matches || matches?.groups?.day
+  const view =
+    !matches || matches.groups?.day
       ? "day"
-      : matches?.groups?.month
+      : matches.groups?.month
         ? "month"
         : "year";
 
