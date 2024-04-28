@@ -1,9 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  import { resolveRoute } from "$app/paths";
-  import { page } from "$app/stores";
   import Layout from "$lib/Layout.svelte";
+  import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import Back from "~icons/ph/caret-left";
@@ -115,17 +114,12 @@
     <select
       onchange={({ currentTarget }) =>
         goto(
-          resolveRoute($page.route.id!, {
-            ...$page.params,
+          $resolveRoute({
             date: start.slice(
               0,
-              currentTarget.value === "day"
-                ? 10
-                : currentTarget.value === "month"
-                  ? 7
-                  : 4,
+              { day: 10, month: 7, year: 4 }[currentTarget.value],
             ),
-          }) + $page.url.hash,
+          }),
           { keepFocus: true },
         )}
       value={view}

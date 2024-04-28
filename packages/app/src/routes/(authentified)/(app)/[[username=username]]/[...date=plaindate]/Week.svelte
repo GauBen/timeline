@@ -5,8 +5,7 @@
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
   import Day from "./Day.svelte";
-  import { page } from "$app/stores";
-  import { resolveRoute } from "$app/paths";
+  import { resolveRoute } from "$lib/paths.js";
 
   let {
     start,
@@ -53,10 +52,9 @@
       <h2 class="_row-2">
         {#if i === 0}
           <a
-            href={resolveRoute($page.route.id!, {
-              ...$page.params,
+            href={$resolveRoute({
               date: startDay.subtract({ days: 1 }).toString(),
-            }) + $page.url.hash}
+            })}
             data-sveltekit-keepfocus
           >
             <CaretLeft />
@@ -65,10 +63,9 @@
         <span style="flex: 1">{formatDay(day)}</span>
         {#if i === numberOfColumns - 1}
           <a
-            href={resolveRoute($page.route.id!, {
-              ...$page.params,
+            href={$resolveRoute({
               date: startDay.add({ days: 1 }).toString(),
-            }) + $page.url.hash}
+            })}
             data-sveltekit-keepfocus
           >
             <CaretRight />

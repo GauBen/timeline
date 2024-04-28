@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { resolveRoute } from "$app/paths";
-  import { page } from "$app/stores";
+  import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import type { Event, User } from "@prisma/client";
 
@@ -23,18 +22,14 @@
 <div class="wrapper">
   <div style="position: absolute; z-index: 1">
     <a
-      href={resolveRoute($page.route.id!, {
-        ...$page.params,
+      href={$resolveRoute({
         date: start.toPlainYearMonth().subtract({ months: 1 }).toString(),
-      })}
-      >Previous</a
+      })}>Previous</a
     >
     <a
-      href={resolveRoute($page.route.id!, {
-        ...$page.params,
+      href={$resolveRoute({
         date: start.toPlainYearMonth().add({ months: 1 }).toString(),
-      })}
-      >Next</a
+      })}>Next</a
     >
   </div>
   <table>
@@ -55,10 +50,7 @@
             <td>
               {#if day.month === start.month}
                 <a
-                  href={resolveRoute($page.route.id!, {
-                    ...$page.params,
-                    date: day.toString(),
-                  }) + $page.url.hash}
+                  href={$resolveRoute({ date: day.toString() })}
                   style:background={day.equals(today) ? "tomato" : undefined}
                   >{day.day}</a
                 >

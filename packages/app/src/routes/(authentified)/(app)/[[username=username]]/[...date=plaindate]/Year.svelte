@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { Temporal } from "@js-temporal/polyfill";
   import { language } from "$lib/i18n.js";
+  import { resolveRoute } from "$lib/paths.js";
+  import { Temporal } from "@js-temporal/polyfill";
   import type { Event, User } from "@prisma/client";
-  import { resolveRoute } from "$app/paths";
-  import { page } from "$app/stores";
 
   const {
     start: firstDayOfYear,
@@ -82,12 +81,7 @@
                 : "#cce"
               : `rgb(30% 80% 40% / ${count / max})`}
           >
-            <a
-              href={resolveRoute($page.route.id!, {
-                ...$page.params,
-                date: date.toString(),
-              }) + $page.url.hash}
-            >
+            <a href={$resolveRoute({ date: date.toString() })}>
               {#if count !== undefined}
                 {count}
               {/if}

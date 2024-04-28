@@ -8,7 +8,7 @@
   import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
   import Globe from "~icons/ph/globe-duotone";
   import { format, m } from "./i18n.js";
-  import { resolveRoute } from "$app/paths";
+  import { resolveRoute } from "$lib/paths.js";
 
   const {
     children,
@@ -34,12 +34,7 @@
           <article style="background: #e8faef">
             <header>
               <h3>
-                <a
-                  href={resolveRoute($page.route.id!, {
-                    ...$page.params,
-                    username: author.username,
-                  }) + $page.url.hash}
-                >
+                <a href={$resolveRoute({ username: author.username })}>
                   @{author.username}
                 </a>
               </h3>
