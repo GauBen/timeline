@@ -2,6 +2,8 @@
   import { Temporal } from "@js-temporal/polyfill";
   import { language } from "$lib/i18n.js";
   import type { Event, User } from "@prisma/client";
+  import { resolveRoute } from "$app/paths";
+  import { page } from "$app/stores";
 
   const {
     start: firstDayOfYear,
@@ -80,9 +82,16 @@
                 : "#cce"
               : `rgb(30% 80% 40% / ${count / max})`}
           >
-            {#if count !== undefined}
-              {count}
-            {/if}
+            <a
+              href={resolveRoute($page.route.id!, {
+                ...$page.params,
+                date: date.toString(),
+              }) + $page.url.hash}
+            >
+              {#if count !== undefined}
+                {count}
+              {/if}
+            </a>
           </td>
         {/each}
       </tr>
@@ -100,6 +109,13 @@
       height: 1rem;
       width: 1rem;
       line-height: 1;
+      contain: paint;
     }
+  }
+
+  a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
   }
 </style>

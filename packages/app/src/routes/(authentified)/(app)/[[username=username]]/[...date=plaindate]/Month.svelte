@@ -55,7 +55,10 @@
             <td>
               {#if day.month === start.month}
                 <a
-                  href="{day.month}/{day.day}"
+                  href={resolveRoute($page.route.id!, {
+                    ...$page.params,
+                    date: day.toString(),
+                  }) + $page.url.hash}
                   style:background={day.equals(today) ? "tomato" : undefined}
                   >{day.day}</a
                 >

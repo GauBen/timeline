@@ -5,6 +5,8 @@
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
   import Day from "./Day.svelte";
+  import { page } from "$app/stores";
+  import { resolveRoute } from "$app/paths";
 
   let {
     start,
@@ -50,15 +52,24 @@
       {@const day = Temporal.PlainDate.from(key)}
       <h2 class="_row-2">
         {#if i === 0}
-          <a href="/{startDay.subtract({ days: 1 }).toString()}">
+          <a
+            href={resolveRoute($page.route.id!, {
+              ...$page.params,
+              date: startDay.subtract({ days: 1 }).toString(),
+            }) + $page.url.hash}
+            data-sveltekit-keepfocus
+          >
             <CaretLeft />
           </a>
         {/if}
         <span style="flex: 1">{formatDay(day)}</span>
         {#if i === numberOfColumns - 1}
           <a
-            href="/{startDay.add({ days: 1 }).toString()}"
-            style="position: absolute; right: .5rem"
+            href={resolveRoute($page.route.id!, {
+              ...$page.params,
+              date: startDay.add({ days: 1 }).toString(),
+            }) + $page.url.hash}
+            data-sveltekit-keepfocus
           >
             <CaretRight />
           </a>

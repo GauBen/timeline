@@ -2,7 +2,7 @@
   import { Temporal } from "@js-temporal/polyfill";
 
   const { data } = $props();
-  const { timezones, guess } = $derived(data);
+  const { timezones } = $derived(data);
 
   const supportedTimezones = new Set(Intl.supportedValuesOf("timeZone"));
 
@@ -21,15 +21,6 @@
   let area = $state<string>();
   let location = $state<string>();
   let now = $state<Temporal.Instant>(Temporal.Now.instant());
-
-  // Set area and location from server-side guess
-  if (guess) {
-    const [userArea, ...userLocation] = guess.split("/");
-    if (commonTimezones[userArea]?.includes(userLocation.join("/"))) {
-      area = userArea;
-      location = userLocation.join("/");
-    }
-  }
 
   let wallTime = $derived.by(() => {
     if (!area || !location) return;

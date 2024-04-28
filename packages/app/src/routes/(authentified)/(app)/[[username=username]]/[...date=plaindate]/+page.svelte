@@ -114,17 +114,20 @@
     {/if}
     <select
       onchange={({ currentTarget }) =>
-         goto(resolveRoute($page.route.id!, {
-          ...$page.params,
-          date: start.slice(
-            0,
-            currentTarget.value === "day"
-              ? 10
-              : currentTarget.value === "month"
-                ? 7
-                : 4,
-          ),
-        }) + location.hash, { keepFocus: true })}
+        goto(
+          resolveRoute($page.route.id!, {
+            ...$page.params,
+            date: start.slice(
+              0,
+              currentTarget.value === "day"
+                ? 10
+                : currentTarget.value === "month"
+                  ? 7
+                  : 4,
+            ),
+          }) + $page.url.hash,
+          { keepFocus: true },
+        )}
       value={view}
     >
       <option value="day">Day</option>
