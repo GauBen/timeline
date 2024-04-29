@@ -10,7 +10,7 @@
     "jose": "^5.2.4",
     "modern-normalize": "^2.0.0",
     "object.groupby": "^1.0.3",
-    "zod": "^3.23.4"
+    "zod": "^3.23.5"
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.1.12",
@@ -21,7 +21,7 @@
     "@types/object.groupby": "^1.0.4",
     "prisma": "^5.13.0",
     "sass": "^1.75.0",
-    "svelte": "^5.0.0-next.116",
+    "svelte": "^5.0.0-next.118",
     "svelte-check": "^3.7.0",
     "tslib": "^2.6.2",
     "typescript": "^5.5.0-beta",
