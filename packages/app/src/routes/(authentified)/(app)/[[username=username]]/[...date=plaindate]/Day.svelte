@@ -16,33 +16,12 @@
   const today = Temporal.Now.plainDateISO("Europe/Paris");
 
   const fixDate = (date: Date) =>
-    toTemporalInstant
-      .call(date)
-      .toZonedDateTime({ calendar: "iso8601", timeZone: "Europe/Paris" });
+    toTemporalInstant.call(date).toZonedDateTimeISO("Europe/Paris");
 
   const time = Temporal.Now.plainTimeISO("Europe/Paris");
   const toRems = (date: Temporal.PlainTime) =>
     // We can't just use `date.since` because of DST!
     date.since(new Temporal.PlainTime()).total({ unit: "hours" }) * 4;
-
-  // import type { Action } from "svelte/action";
-  // const scrollToRelevant: Action<HTMLElement, Array<{ date: Date }>> = (
-  //   node,
-  //   events,
-  // ) => {
-  //   const update = ([first]: typeof events) => {
-  //     node.scrollTo({
-  //       top:
-  //         toRems(
-  //           first
-  //             ? fixDate(first.date).toPlainTime()
-  //             : new Temporal.PlainTime(7, 30),
-  //         ) * 16,
-  //     });
-  //   };
-  //   update(events);
-  //   return { update };
-  // };
 
   const placeEvent = (event: MouseEvent & { currentTarget: HTMLElement }) => {
     if (event.target !== event.currentTarget) return;
