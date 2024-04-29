@@ -57,9 +57,9 @@
       eventInCreation?: Temporal.PlainDateTime;
     }
   > = (node, params) => {
-    const update = ({ startDay, numberOfColumns, windows }: typeof params) => {
+    const update = ({ start, numberOfColumns, windows }: typeof params) => {
       const keys = Array.from({ length: numberOfColumns }, (_, days) =>
-        startDay.add({ days }).toString(),
+        start.add({ days }).toString(),
       );
 
       if (
