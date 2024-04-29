@@ -35,6 +35,9 @@
     );
     eventInCreation = day.toPlainDateTime(time);
   };
+
+  let eventInCreationElement = $state<HTMLElement>();
+  export const getEventInCreationElement = () => eventInCreationElement;
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
@@ -68,8 +71,9 @@
   {/each}
   {#if eventInCreation?.toPlainDate().equals(day)}
     <article
-      style="border: 2px solid #ffdcf9; background: #fff0f680; right: 0"
+      bind:this={eventInCreationElement}
       style:top="{toRems(eventInCreation.toPlainTime())}rem"
+      style="border: 2px solid #ffdcf9; background: #fff0f680; right: 0"
     >
       &nbsp;
     </article>

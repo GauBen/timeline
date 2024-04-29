@@ -1,13 +1,16 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { Temporal } from "@js-temporal/polyfill";
+  import { untrack } from "svelte";
   import { Button } from "uistiti";
 
   let {
     onreset,
+    getEventInCreationElement,
     eventInCreation = $bindable(),
   }: {
     onreset: () => void;
+    getEventInCreationElement?: () => HTMLElement;
     eventInCreation: Temporal.PlainDateTime;
   } = $props();
 
@@ -15,26 +18,44 @@
   let x = $state(0);
   let y = $state(0);
   let dialog = $state<HTMLDialogElement>();
+
+  const moveDialog = (
+    { movementX, movementY }: { movementX: number; movementY: number },
+    { left, right, top, bottom }: DOMRect,
+  ) => {
+    // Move the dialog within the screen
+    if (left + movementX < 0) x -= left;
+    else if (right + movementX > window.innerWidth)
+      x -= right - window.innerWidth;
+    else x += movementX;
+
+    if (top + movementY < 0) y -= top;
+    else if (bottom + movementY > window.innerHeight)
+      y -= bottom - window.innerHeight;
+    else y += movementY;
+  };
+
+  $effect(() => {
+    const target = getEventInCreationElement?.()?.getBoundingClientRect();
+    if (!target) return;
+    const source = dialog!.getBoundingClientRect();
+    untrack(() => {
+      // TODO: use floating-ui to position the dialog
+      const movementX = target.x - source.x - source.width - 8;
+      const movementY =
+        target.y - source.y - source.height / 2 + target.height / 2;
+      moveDialog({ movementX, movementY }, source);
+    });
+  });
 </script>
 
 <svelte:document
   onmouseup={() => {
     mousedown = false;
   }}
-  onmousemove={({ movementX, movementY }) => {
+  onmousemove={(event) => {
     if (mousedown && dialog) {
-      const { top, left, bottom, right } = dialog.getBoundingClientRect();
-
-      // Move the dialog within the screen
-      if (left + movementX < 0) x -= left;
-      else if (right + movementX > window.innerWidth)
-        x -= right - window.innerWidth;
-      else x += movementX;
-
-      if (top + movementY < 0) y -= top;
-      else if (bottom + movementY > window.innerHeight)
-        y -= bottom - window.innerHeight;
-      else y += movementY;
+      moveDialog(event, dialog.getBoundingClientRect());
     }
   }}
 />

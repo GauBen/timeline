@@ -16,6 +16,8 @@
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   let eventInCreation = $state<Temporal.PlainDateTime>();
+
+  let component = $state<Month | Week | Year>();
 </script>
 
 <svelte:window
@@ -40,6 +42,7 @@
     onreset={() => {
       eventInCreation = undefined;
     }}
+    getEventInCreationElement={component!.getEventInCreationElement}
   />
 {/if}
 
@@ -88,5 +91,6 @@
     {start}
     {windows}
     bind:eventInCreation
+    bind:this={component}
   />
 </Layout>

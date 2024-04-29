@@ -102,6 +102,11 @@
   };
 
   $effect(onresize);
+
+  let days = $state<Record<string, Day>>({});
+  export const getEventInCreationElement = () =>
+    eventInCreation &&
+    days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
 </script>
 
 <svelte:window {onresize} />
@@ -144,9 +149,14 @@
       eventInCreation,
     }}
   >
-    {#each keys as key}
+    {#each keys.slice(0, numberOfColumns) as key}
       {@const day = Temporal.PlainDate.from(key)}
-      <Day events={windows[key] ?? []} {day} bind:eventInCreation />
+      <Day
+        {day}
+        bind:eventInCreation
+        bind:this={days[key]}
+        events={windows[key] ?? []}
+      />
     {/each}
   </div>
 </div>

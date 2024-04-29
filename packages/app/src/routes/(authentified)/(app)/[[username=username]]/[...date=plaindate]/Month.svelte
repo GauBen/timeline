@@ -19,10 +19,16 @@
   );
 
   const today = Temporal.Now.plainDateISO("Europe/Paris");
+
+  let eventInCreationElement = $state<HTMLElement>();
+  export const getEventInCreationElement = () => eventInCreationElement;
 </script>
 
 {#snippet eventInCreationMarker()}
-  <article style="border: 2px solid #ffdcf9; background: #fff0f680">
+  <article
+    style="border: 2px solid #ffdcf9; background: #fff0f680"
+    bind:this={eventInCreationElement}
+  >
     &nbsp;
   </article>
 {/snippet}
@@ -77,6 +83,7 @@
             >
               {#if day.month === start.month}
                 <a
+                  onclick={(event) => event.stopPropagation()}
                   href={$resolveRoute({ date: day.toString() })}
                   style:background={day.equals(today) ? "tomato" : undefined}
                   >{day.day}</a
