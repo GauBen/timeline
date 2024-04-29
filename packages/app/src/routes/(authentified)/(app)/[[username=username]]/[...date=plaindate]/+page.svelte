@@ -11,7 +11,8 @@
   import Year from "./Year.svelte";
 
   const { data } = $props();
-  const { latest, followed, start, windows, user, view } = $derived(data);
+  const { latest, followed, windows, user, view } = $derived(data);
+  const start = $derived(Temporal.PlainDate.from(data.start));
 
   let eventInCreation = $state<Temporal.PlainDateTime>();
 </script>
@@ -115,10 +116,9 @@
       onchange={({ currentTarget }) =>
         goto(
           $resolveRoute({
-            date: start.slice(
-              0,
-              { day: 10, month: 7, year: 4 }[currentTarget.value],
-            ),
+            date: start
+              .toString()
+              .slice(0, { day: 10, month: 7, year: 4 }[currentTarget.value]),
           }),
           { keepFocus: true },
         )}
@@ -132,13 +132,12 @@
     <a href="/settings">Settings</a>
   {/snippet}
 
-  {#if view === "day"}
-    <Week {start} {windows} bind:eventInCreation></Week>
-  {:else if view === "month"}
-    <Month start={Temporal.PlainDate.from(start)} {windows}></Month>
-  {:else}
-    <Year start={Temporal.PlainDate.from(start)} {windows}></Year>
-  {/if}
+  <svelte:component
+    this={{ day: Week, month: Month, year: Year }[view]}
+    {start}
+    {windows}
+    bind:eventInCreation
+  />
 </Layout>
 
 <style lang="scss">

@@ -1,14 +1,16 @@
 <script lang="ts">
   import { resolveRoute } from "$lib/paths.js";
-  import { Temporal } from "@js-temporal/polyfill";
+  import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Event, User } from "@prisma/client";
 
   let {
     start,
     windows,
+    eventInCreation = $bindable(),
   }: {
     start: Temporal.PlainDate;
     windows: Record<string, Array<Event & { author: User }>>;
+    eventInCreation?: Temporal.PlainDateTime;
   } = $props();
 
   const paddingDaysStart = $derived(start.dayOfWeek - 1);
@@ -18,6 +20,12 @@
 
   const today = Temporal.Now.plainDateISO("Europe/Paris");
 </script>
+
+{#snippet eventInCreationMarker()}
+  <article style="border: 2px solid #ffdcf9; background: #fff0f680">
+    &nbsp;
+  </article>
+{/snippet}
 
 <div class="wrapper">
   <div style="position: absolute; z-index: 1">
@@ -47,17 +55,46 @@
             {@const day = start.add({
               days: dayOfWeek - paddingDaysStart + week * 7,
             })}
-            <td>
+            {@const events = windows[day.toString()] ?? []}
+            {@const index =
+              eventInCreation &&
+              events.filter(
+                ({ date }) =>
+                  Temporal.PlainDateTime.compare(
+                    toTemporalInstant
+                      .call(date)
+                      .toZonedDateTimeISO("Europe/Paris"),
+                    eventInCreation!,
+                  ) < 0,
+              ).length}
+            <td
+              onclick={({ target, currentTarget }) => {
+                if (target !== currentTarget) return;
+                eventInCreation = day.toPlainDateTime(
+                  eventInCreation?.toPlainTime(),
+                );
+              }}
+            >
               {#if day.month === start.month}
                 <a
                   href={$resolveRoute({ date: day.toString() })}
                   style:background={day.equals(today) ? "tomato" : undefined}
                   >{day.day}</a
                 >
-                {#each windows[day.toString()] ?? [] as { body }}
-                  <article>{body}</article>
-                {/each}
               {/if}
+              {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
+                {@render eventInCreationMarker()}
+              {/if}
+              {#each events as { body }, i}
+                <article style:opacity={day.month === start.month ? 1 : 0.75}>
+                  {body}
+                </article>
+                {#if eventInCreation
+                  ?.toPlainDate()
+                  .equals(day) && index === i + 1}
+                  {@render eventInCreationMarker()}
+                {/if}
+              {/each}
             </td>
           {/each}
         </tr>

@@ -13,16 +13,15 @@
     windows,
     eventInCreation = $bindable(),
   }: {
-    start: string;
+    start: Temporal.PlainDate;
     windows: Record<string, Array<Event & { author: User }>>;
     eventInCreation?: Temporal.PlainDateTime;
   } = $props();
   const today = Temporal.Now.plainDateISO("Europe/Paris");
   const now = Temporal.Now.zonedDateTimeISO("Europe/Paris");
-  const startDay = $derived(Temporal.PlainDate.from(start));
 
   const keys = $derived(
-    Array.from({ length: 7 }, (_, days) => startDay.add({ days }).toString()),
+    Array.from({ length: 7 }, (_, days) => start.add({ days }).toString()),
   );
 
   const formatDay = (day: Temporal.PlainDate) => {
@@ -52,7 +51,7 @@
   const scrollToRelevant: Action<
     HTMLElement,
     {
-      startDay: Temporal.PlainDate;
+      start: Temporal.PlainDate;
       numberOfColumns: number;
       windows: Record<string, Array<Event & { author: User }>>;
       eventInCreation?: Temporal.PlainDateTime;
@@ -115,7 +114,7 @@
         {#if i === 0}
           <a
             href={$resolveRoute({
-              date: startDay.subtract({ days: 1 }).toString(),
+              date: start.subtract({ days: 1 }).toString(),
             })}
             data-sveltekit-keepfocus
           >
@@ -126,7 +125,7 @@
         {#if i === numberOfColumns - 1}
           <a
             href={$resolveRoute({
-              date: startDay.add({ days: 1 }).toString(),
+              date: start.add({ days: 1 }).toString(),
             })}
             data-sveltekit-keepfocus
           >
@@ -139,7 +138,7 @@
   <div
     class="scroll"
     use:scrollToRelevant={{
-      startDay,
+      start,
       numberOfColumns,
       windows,
       eventInCreation,

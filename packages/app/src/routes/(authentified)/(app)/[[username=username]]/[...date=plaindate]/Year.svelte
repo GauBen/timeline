@@ -7,29 +7,16 @@
   const {
     start: firstDayOfYear,
     windows,
+    eventInCreation = $bindable(),
   }: {
     start: Temporal.PlainDate;
     windows: Record<string, Array<Event & { author: User }>>;
+    eventInCreation?: Temporal.PlainDateTime;
   } = $props();
 
-  // const latest = $derived(
-  //   user.events.map((event) => ({ ...event, author: user })),
-  // );
-
-  // const mosaic = $derived(
-  //   new Map(
-  //     data.mosaic.map(({ date, count }) => [
-  //       toTemporalInstant
-  //         .call(date)
-  //         .toZonedDateTime({ calendar: "iso8601", timeZone: "Europe/Paris" })
-  //         .toPlainDate()
-  //         .toString(),
-  //       count,
-  //     ]),
-  //   ),
-  // );
-  // const max = $derived(Math.max(...mosaic.values()));
-  const max = 1;
+  const max = $derived(
+    Math.max(...Object.values(windows).map((w) => w.length)),
+  );
 
   const year = $derived(firstDayOfYear.year);
   const start = $derived(
@@ -75,11 +62,13 @@
           {@const count = windows[date.toString()]?.length}
           <td
             title={date.toString()}
-            style:background={count === undefined
-              ? date.month % 2
-                ? "#fff"
-                : "#cce"
-              : `rgb(30% 80% 40% / ${count / max})`}
+            style:background={eventInCreation?.toPlainDate().equals(date)
+              ? "pink"
+              : count === undefined
+                ? date.month % 2
+                  ? "#fff"
+                  : "#cce"
+                : `rgb(30% 80% 40% / ${count / max})`}
           >
             <a href={$resolveRoute({ date: date.toString() })}>
               {#if count !== undefined}

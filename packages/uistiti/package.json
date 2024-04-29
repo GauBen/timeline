@@ -10,12 +10,12 @@
     "modern-normalize": "^2.0.0",
     "publint": "^0.2.7",
     "sass": "^1.75.0",
-    "svelte": "^5.0.0-next.115",
-    "svelte-check": "^3.6.9",
+    "svelte": "^5.0.0-next.116",
+    "svelte-check": "^3.7.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.0-beta",
     "vite": "^5.2.10",
-    "vite-node": "^1.5.1"
+    "vite-node": "^1.5.2"
   },
   "exports": {
     ".": {
