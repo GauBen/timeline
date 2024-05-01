@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  import Layout from "$lib/Layout.svelte";
+  import Layout from "./Layout.svelte";
   import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";

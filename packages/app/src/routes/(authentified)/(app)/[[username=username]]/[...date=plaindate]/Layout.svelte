@@ -1,14 +1,14 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
+  import { format, m } from "$lib/i18n.js";
+  import { resolveRoute } from "$lib/paths.js";
   import type { Event, User } from "@prisma/client";
   import type { Snippet } from "svelte";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CalendarDots from "~icons/ph/calendar-dots-duotone";
   import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
   import Globe from "~icons/ph/globe-duotone";
-  import { format, m } from "../../../../../lib/i18n.js";
-  import { resolveRoute } from "$lib/paths.js";
 
   const {
     children,
