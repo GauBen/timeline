@@ -1,6 +1,7 @@
 import { prisma } from "$lib/server/prisma.js";
+import type { CalendarEvent } from "$lib/types.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-import type { Prisma, User } from "@prisma/client";
+import { Prisma, type User } from "@prisma/client";
 import { error, fail } from "@sveltejs/kit";
 import Object_groupBy from "object.groupby";
 import { z } from "zod";
@@ -57,10 +58,13 @@ export const load = async ({ parent, params }) => {
             public: true,
             author: { followers: { some: { followerId: me.id } } },
           },
+          {
+            users: { some: { userId: me.id, shared: true } },
+          },
         ],
       };
 
-  const [latest, events, followed] = await Promise.all([
+  const [latest, events, followed, followings] = await Promise.all([
     prisma.event.findMany({
       where,
       include: { author: true },
@@ -75,7 +79,7 @@ export const load = async ({ parent, params }) => {
           lt: new Date(end.epochMilliseconds),
         },
       },
-      include: { author: true },
+      include: { author: true, users: { where: { userId: me.id } } },
       orderBy: { date: "asc" },
       take: 100,
     }),
@@ -86,17 +90,36 @@ export const load = async ({ parent, params }) => {
           },
         })
       : undefined,
+    prisma.follow.findMany({
+      where: { followerId: me.id },
+      include: { following: true },
+    }),
   ]);
 
-  const windows = Object_groupBy(events, (event) =>
-    toTemporalInstant
-      .call(event.date)
-      .toZonedDateTimeISO("Europe/Paris")
-      .toPlainDate()
-      .toString(),
+  const windows = Object_groupBy(
+    events.map(
+      ({ users, ...event }): CalendarEvent => ({
+        ...event,
+        added: users[0]?.added ?? false,
+      }),
+    ),
+    (event) =>
+      toTemporalInstant
+        .call(event.date)
+        .toZonedDateTimeISO("Europe/Paris")
+        .toPlainDate()
+        .toString(),
   );
 
-  return { user, followed, view, start: start.toString(), latest, windows };
+  return {
+    followed,
+    followings,
+    latest,
+    start: start.toString(),
+    user,
+    view,
+    windows,
+  };
 };
 
 export const actions = {
@@ -108,6 +131,7 @@ export const actions = {
       body: String(data.get("body")),
       date: String(data.get("date")),
       public: Boolean(data.get("public")),
+      users: data.getAll("shared_with"),
     };
 
     const result = z
@@ -115,6 +139,7 @@ export const actions = {
         body: z.string().min(1).max(1024),
         date: z.string().pipe(z.coerce.date()),
         public: z.boolean(),
+        users: z.string().uuid().array(),
       })
       .safeParse(input);
 
@@ -123,9 +148,21 @@ export const actions = {
 
     return prisma.event.create({
       data: {
-        ...result.data,
+        body: result.data.body,
+        date: result.data.date,
+        public: result.data.public,
         authorId: locals.session.id,
         duration: 0,
+        users: result.data.public
+          ? {}
+          : {
+              createMany: {
+                data: result.data.users.map((userId) => ({
+                  userId,
+                  shared: true,
+                })),
+              },
+            },
       },
     });
   },

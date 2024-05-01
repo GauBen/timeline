@@ -1,4 +1,4 @@
-ALTER TABLE "_prisma_migrations" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS "_prisma_migrations" ENABLE ROW LEVEL SECURITY;
 
 -- CreateTable
 CREATE TABLE "users" (

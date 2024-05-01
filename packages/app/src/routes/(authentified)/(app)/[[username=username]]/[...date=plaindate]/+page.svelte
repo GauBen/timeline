@@ -12,7 +12,7 @@
   import Year from "./Year.svelte";
 
   const { data } = $props();
-  const { latest, followed, windows, user, view } = $derived(data);
+  const { latest, followed, windows, user, view, followings } = $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   let eventInCreation = $state<Temporal.PlainDateTime>();
@@ -38,6 +38,7 @@
 
 {#if eventInCreation}
   <Dialog
+    {followings}
     bind:eventInCreation
     onreset={() => {
       eventInCreation = undefined;

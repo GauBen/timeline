@@ -1,7 +1,7 @@
 <script lang="ts">
   import { resolveRoute } from "$lib/paths.js";
+  import type { CalendarEvent } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-  import type { Event, User } from "@prisma/client";
 
   let {
     start,
@@ -9,7 +9,7 @@
     eventInCreation = $bindable(),
   }: {
     start: Temporal.PlainDate;
-    windows: Record<string, Array<Event & { author: User }>>;
+    windows: Record<string, CalendarEvent[]>;
     eventInCreation?: Temporal.PlainDateTime;
   } = $props();
 
@@ -92,8 +92,11 @@
               {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
                 {@render eventInCreationMarker()}
               {/if}
-              {#each events as { body }, i}
-                <article style:opacity={day.month === start.month ? 1 : 0.75}>
+              {#each events as { body, added }, i}
+                <article
+                  style:background={added ? "#e8faef" : "#fff"}
+                  style:opacity={day.month === start.month ? 1 : 0.75}
+                >
                   {body}
                 </article>
                 {#if eventInCreation
@@ -156,6 +159,7 @@
 
   article {
     background: #e8faef;
+    border: 2px solid #e8faef;
     border-radius: 0.5rem;
     padding: 0.25rem;
     margin: 0.25rem 0;

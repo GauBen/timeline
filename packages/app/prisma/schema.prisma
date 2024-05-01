@@ -28,10 +28,11 @@ model User {
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  authUser  AuthUser @relation(fields: [id], references: [id])
-  followers Follow[] @relation("following")
-  following Follow[] @relation("follower")
-  events    Event[]
+  authUser      AuthUser      @relation(fields: [id], references: [id])
+  followers     Follow[]      @relation("following")
+  following     Follow[]      @relation("follower")
+  eventsCreated Event[]
+  events        EventToUser[]
 
   @@map("users")
 }
@@ -49,15 +50,30 @@ model Follow {
 }
 
 model Event {
-  id        BigInt   @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  date      DateTime @db.Timestamptz(6)
-  duration  Int      @db.Integer // Prisma does not support `interval` type yet
-  body      String   @db.VarChar(1024)
-  public    Boolean  @default(true)
-  authorId  String   @map("author_id") @db.Uuid
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id        BigInt        @id @default(autoincrement())
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  date      DateTime      @db.Timestamptz(6)
+  duration  Int           @db.Integer // Prisma does not support `interval` type yet
+  body      String        @db.VarChar(1024)
+  public    Boolean       @default(true)
+  authorId  String        @map("author_id") @db.Uuid
+  author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  users     EventToUser[]
 
   @@index([authorId])
+  @@index([date])
   @@map("events")
+}
+
+model EventToUser {
+  eventId BigInt  @map("event_id")
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId  String  @map("user_id") @db.Uuid
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  shared  Boolean @default(false)
+  added   Boolean @default(false)
+
+  @@id([eventId, userId])
+  @@index([userId])
+  @@map("events_to_users")
 }

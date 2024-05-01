@@ -1,14 +1,17 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { Temporal } from "@js-temporal/polyfill";
+  import type { Follow, User } from "@prisma/client";
   import { untrack } from "svelte";
   import { Button } from "uistiti";
 
   let {
+    followings,
     onreset,
     getEventInCreationElement,
     eventInCreation = $bindable(),
   }: {
+    followings: Array<Follow & { following: User }>;
     onreset: () => void;
     getEventInCreationElement?: () => HTMLElement;
     eventInCreation: Temporal.PlainDateTime;
@@ -47,6 +50,8 @@
       moveDialog({ movementX, movementY }, source);
     });
   });
+
+  let pub = $state("on");
 </script>
 
 <svelte:document
@@ -109,11 +114,17 @@
     <p>
       Visibility:
       <label>
-        <input type="radio" name="public" value="1" checked /> Public
+        <input type="radio" name="public" value="on" bind:group={pub} /> Public
       </label>
       <label>
-        <input type="radio" name="public" value="" /> Private
+        <input type="radio" name="public" value="" bind:group={pub} /> Only with
+        specific people
       </label>
+      <select multiple disabled={Boolean(pub)} name="shared_with">
+        {#each followings as { following }}
+          <option value={following.id}>{following.displayName}</option>
+        {/each}
+      </select>
     </p>
     <p>
       <Button type="submit" color="success">Create</Button>

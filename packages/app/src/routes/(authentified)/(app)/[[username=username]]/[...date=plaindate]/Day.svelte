@@ -1,14 +1,14 @@
 <script lang="ts">
   import { language } from "$lib/i18n.js";
+  import type { CalendarEvent } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-  import type { Event, User } from "@prisma/client";
 
   let {
     events,
     day,
     eventInCreation = $bindable(),
   }: {
-    events: Array<Event & { author: User }>;
+    events: CalendarEvent[];
     day: Temporal.PlainDate;
     eventInCreation?: Temporal.PlainDateTime;
   } = $props();
@@ -56,9 +56,10 @@
   {#if day.equals(today)}
     <hr style:top="{toRems(time)}rem" />
   {/if}
-  {#each events as { author, body, date }}
+  {#each events as { author, body, date, added }}
     <article
-      style="background: #dcfaff"
+      style="border: 2px solid #dcfaff"
+      style:background={added ? "#dcfaff" : "#fff"}
       style:top="{toRems(fixDate(date).toPlainTime())}rem"
     >
       @{author.username}<br />
