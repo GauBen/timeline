@@ -56,12 +56,13 @@
   {#if day.equals(today)}
     <hr style:top="{toRems(time)}rem" />
   {/if}
-  {#each events as { author, body, date, added }}
+  {#each events as { id, author, body, date, added }}
     <article
       style="border: 2px solid #dcfaff"
       style:background={added ? "#dcfaff" : "#fff"}
       style:top="{toRems(fixDate(date).toPlainTime())}rem"
     >
+      <a href="?event={id}">#</a>
       @{author.username}<br />
       {body}<br />
       {fixDate(date).toLocaleString($language, {

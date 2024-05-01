@@ -5,14 +5,17 @@ import type { RouteParams } from "../routes/(authentified)/(app)/[[username=user
 
 export const resolveRoute = derived(
   page,
-  ($page) => (params: Partial<RouteParams>) => {
-    if (!$page.route.id)
-      throw new Error("Cannot call resolveRoute outside of a page");
-    return (
-      nativeResolveRoute($page.route.id, {
-        ...$page.params,
-        ...params,
-      }) + $page.url.hash
-    );
-  },
+  ($page) =>
+    (params: Partial<RouteParams>, { search, hash } = $page.url) => {
+      if (!$page.route.id)
+        throw new Error("Cannot call resolveRoute outside of a page");
+      return (
+        nativeResolveRoute($page.route.id, {
+          ...$page.params,
+          ...params,
+        }) +
+        search +
+        hash
+      );
+    },
 );

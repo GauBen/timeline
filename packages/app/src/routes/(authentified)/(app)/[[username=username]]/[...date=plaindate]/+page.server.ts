@@ -6,7 +6,11 @@ import { error, fail } from "@sveltejs/kit";
 import Object_groupBy from "object.groupby";
 import { z } from "zod";
 
-export const load = async ({ parent, params }) => {
+export const load = async ({ parent, params, url }) => {
+  const eventId = ((x) => (x ? BigInt(x) : undefined))(
+    url.searchParams.get("event"),
+  );
+
   const { me } = await parent();
 
   let user: User | undefined;
@@ -64,7 +68,13 @@ export const load = async ({ parent, params }) => {
         ],
       };
 
-  const [latest, events, followed, followings] = await Promise.all([
+  const [event, latest, events, followed, followings] = await Promise.all([
+    eventId
+      ? prisma.event.findUnique({
+          where: { id: eventId, AND: where },
+          include: { author: true, users: { where: { userId: me.id } } },
+        })
+      : undefined,
     prisma.event.findMany({
       where,
       include: { author: true },
@@ -112,6 +122,10 @@ export const load = async ({ parent, params }) => {
   );
 
   return {
+    event: event && {
+      ...event,
+      added: event.users[0]?.added ?? false,
+    },
     followed,
     followings,
     latest,
@@ -193,6 +207,49 @@ export const actions = {
       where: {
         followerId: locals.session.id,
         following: { username },
+      },
+    });
+  },
+
+  addEvent: async ({ locals, url }) => {
+    if (!locals.session) return error(401, "Unauthorized");
+    const eventId = url.searchParams.get("/addEvent");
+    if (!eventId) return error(400, "Invalid event");
+    const id = BigInt(eventId);
+    await prisma.eventToUser.upsert({
+      where: {
+        eventId_userId: { eventId: id, userId: locals.session.id },
+        OR: [{ shared: true }, { event: { public: true } }],
+      },
+      create: { eventId: id, userId: locals.session.id, added: true },
+      update: { added: true },
+    });
+  },
+
+  unAddEvent: async ({ locals, url }) => {
+    if (!locals.session) return error(401, "Unauthorized");
+    const eventId = url.searchParams.get("/unAddEvent");
+    if (!eventId) return error(400, "Invalid event");
+    const id = BigInt(eventId);
+    await prisma.eventToUser.update({
+      where: {
+        eventId_userId: { eventId: id, userId: locals.session.id },
+        OR: [{ shared: true }, { event: { public: true } }],
+      },
+      data: { added: false },
+    });
+  },
+
+  removeEvent: async ({ locals, url }) => {
+    if (!locals.session) return error(401, "Unauthorized");
+    const eventId = url.searchParams.get("/removeEvent");
+    if (!eventId) return error(400, "Invalid event");
+    const id = BigInt(eventId);
+    await prisma.eventToUser.deleteMany({
+      where: {
+        eventId: id,
+        userId: locals.session.id,
+        OR: [{ shared: true }, { event: { public: true } }],
       },
     });
   },

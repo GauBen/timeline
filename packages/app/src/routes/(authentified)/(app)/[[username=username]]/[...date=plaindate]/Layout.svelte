@@ -7,7 +7,7 @@
   import CalendarDots from "~icons/ph/calendar-dots-duotone";
   import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
   import Globe from "~icons/ph/globe-duotone";
-  import { format, m } from "./i18n.js";
+  import { format, m } from "../../../../../lib/i18n.js";
   import { resolveRoute } from "$lib/paths.js";
 
   const {
@@ -30,7 +30,7 @@
     <section id="recent">
       <h2>{m.latest_events()}</h2>
       <div class="scroll _stack-2" style="padding: .5rem">
-        {#each latest as { author, body, date, public: pub, createdAt }}
+        {#each latest as { id, author, body, date, public: pub, createdAt }}
           <article style="background: #e8faef">
             <header>
               <h3>
@@ -42,7 +42,7 @@
                 {#if pub}
                   <Globe />
                 {/if}
-                {$format(createdAt)}
+                <a href="?event={id}">{$format(createdAt)}</a>
               </p>
             </header>
             <p>{body}</p>

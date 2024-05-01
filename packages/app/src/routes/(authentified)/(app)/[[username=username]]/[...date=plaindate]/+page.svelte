@@ -12,7 +12,8 @@
   import Year from "./Year.svelte";
 
   const { data } = $props();
-  const { latest, followed, windows, user, view, followings } = $derived(data);
+  const { event, latest, followed, windows, user, view, followings } =
+    $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   let eventInCreation = $state<Temporal.PlainDateTime>();
@@ -36,7 +37,30 @@
   }}
 />
 
-{#if eventInCreation}
+{#if event}
+  <dialog open style="z-index: 1">
+    <h1>{event.author.displayName}</h1>
+    <p>{event.body}</p>
+    <time datetime={event.date.toISOString()}>
+      {event.date.toLocaleString()}
+    </time>
+    <form method="POST" use:enhance>
+      {#if event.added}
+        <Button color="neutral" formaction="?/unAddEvent={event.id}">
+          Un-add
+        </Button>
+      {:else}
+        <Button color="success" formaction="?/addEvent={event.id}">Add</Button>
+      {/if}
+      {#if !event.public}
+        <Button color="danger" formaction="?/removeEvent={event.id}">
+          Remove
+        </Button>
+      {/if}
+    </form>
+    <a href="?">Close</a>
+  </dialog>
+{:else if eventInCreation}
   <Dialog
     {followings}
     bind:eventInCreation
