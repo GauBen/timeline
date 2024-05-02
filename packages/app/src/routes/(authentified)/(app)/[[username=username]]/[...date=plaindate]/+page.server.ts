@@ -7,10 +7,6 @@ import Object_groupBy from "object.groupby";
 import { z } from "zod";
 
 export const load = async ({ parent, params, url }) => {
-  const eventId = ((x) => (x ? BigInt(x) : undefined))(
-    url.searchParams.get("event"),
-  );
-
   const { me } = await parent();
 
   let user: User | undefined;
@@ -68,6 +64,9 @@ export const load = async ({ parent, params, url }) => {
         ],
       };
 
+  const eventId = ((x) => (x ? BigInt(x) : undefined))(
+    url.searchParams.get("event"),
+  );
   const [event, latest, events, followed, followings] = await Promise.all([
     eventId
       ? prisma.event.findUnique({
@@ -77,7 +76,7 @@ export const load = async ({ parent, params, url }) => {
       : undefined,
     prisma.event.findMany({
       where,
-      include: { author: true },
+      include: { author: true, users: { where: { userId: me.id } } },
       orderBy: { createdAt: "desc" },
       take: 100,
     }),
@@ -128,7 +127,10 @@ export const load = async ({ parent, params, url }) => {
     },
     followed,
     followings,
-    latest,
+    latest: latest.map((event) => ({
+      ...event,
+      added: event.users[0]?.added ?? false,
+    })),
     start: start.toString(),
     user,
     view,

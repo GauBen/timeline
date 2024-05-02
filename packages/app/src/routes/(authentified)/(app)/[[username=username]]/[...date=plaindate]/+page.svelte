@@ -12,7 +12,7 @@
   import Year from "./Year.svelte";
 
   const { data } = $props();
-  const { event, latest, followed, windows, user, view, followings } =
+  const { event, latest, followed, windows, user, view, followings, me } =
     $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
 
@@ -108,7 +108,7 @@
       <option value="year">Year</option>
     </select>
 
-    <a href="/settings">Settings</a>
+    <a href="/settings">{me.displayName}</a>
   {/snippet}
 
   <svelte:component

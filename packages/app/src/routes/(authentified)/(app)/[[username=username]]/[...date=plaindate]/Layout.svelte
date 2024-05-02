@@ -1,10 +1,12 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { enhance } from "$app/forms";
   import { page } from "$app/stores";
   import { format, m } from "$lib/i18n.js";
   import { resolveRoute } from "$lib/paths.js";
-  import type { Event, User } from "@prisma/client";
+  import type { CalendarEvent } from "$lib/types.js";
   import type { Snippet } from "svelte";
+  import { Button } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CalendarDots from "~icons/ph/calendar-dots-duotone";
   import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
@@ -17,7 +19,7 @@
   }: {
     children: Snippet;
     header: Snippet;
-    latest: Array<Event & { author: User }>;
+    latest: Array<CalendarEvent>;
   } = $props();
 </script>
 
@@ -30,8 +32,8 @@
     <section id="recent">
       <h2>{m.latest_events()}</h2>
       <div class="scroll _stack-2" style="padding: .5rem">
-        {#each latest as { id, author, body, date, public: pub, createdAt }}
-          <article style="background: #e8faef">
+        {#each latest as { id, author, body, date, public: pub, createdAt, added }}
+          <article class:added>
             <header>
               <h3>
                 <a href={$resolveRoute({ username: author.username })}>
@@ -49,6 +51,17 @@
             <footer>
               <Calendar />
               {$format(date)}
+              <form method="POST" use:enhance>
+                {#if added}
+                  <Button color="neutral" formaction="?/unAddEvent={id}">
+                    Un-add
+                  </Button>
+                {:else}
+                  <Button color="success" formaction="?/addEvent={id}">
+                    Add
+                  </Button>
+                {/if}
+              </form>
             </footer>
           </article>
         {/each}
@@ -137,6 +150,7 @@
   article {
     padding: 0.5rem;
     border-radius: 0.25rem;
+    border: 2px solid #e8faef;
 
     > * {
       margin: 0;
@@ -150,6 +164,10 @@
       > * {
         margin: 0;
       }
+    }
+
+    &.added {
+      background: #e8faef;
     }
   }
 
