@@ -62,13 +62,14 @@
       style:background={added ? "#dcfaff" : "#fff"}
       style:top="{toRems(fixDate(date).toPlainTime())}rem"
     >
-      <a href="?event={id}">#</a>
       @{author.username}<br />
       {body}<br />
-      {fixDate(date).toLocaleString($language, {
-        hour: "numeric",
-        minute: "numeric",
-      })}
+      <a href="?event={id}">
+        {fixDate(date).toLocaleString($language, {
+          hour: "numeric",
+          minute: "numeric",
+        })}
+      </a>
     </article>
   {/each}
   {#if eventInCreation?.toPlainDate().equals(day)}
@@ -121,6 +122,13 @@
       border-radius: 0.5em;
       left: 1em;
       margin-right: 1em;
+      contain: paint;
+
+      a::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
     }
 
     > hr {
