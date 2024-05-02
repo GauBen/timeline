@@ -7,6 +7,7 @@ CREATE TABLE "events_to_users" (
 
     CONSTRAINT "events_to_users_pkey" PRIMARY KEY ("event_id","user_id")
 );
+ALTER TABLE "events_to_users" ENABLE ROW LEVEL SECURITY;
 
 -- CreateIndex
 CREATE INDEX "events_to_users_user_id_idx" ON "events_to_users"("user_id");
