@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/public";
+import { env } from "$env/dynamic/private";
 import type { Session, User } from "@supabase/supabase-js";
 import type { RequestEvent } from "@sveltejs/kit";
 
@@ -7,7 +7,7 @@ import type { RequestEvent } from "@sveltejs/kit";
  * cannot work with a dynamic environment.
  */
 export const authAPI = (route: string) =>
-  new URL("auth/v1/" + route, env.PUBLIC_SUPABASE_URL);
+  new URL("auth/v1/" + route, env.SUPABASE_URL);
 
 export const fetchAndPersistSession = async ({
   cookies,
@@ -20,7 +20,7 @@ export const fetchAndPersistSession = async ({
     const response = await fetch(authAPI("user"), {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        ApiKey: env.PUBLIC_SUPABASE_ANON_KEY,
+        ApiKey: env.SUPABASE_ANON_KEY,
       },
     });
 
@@ -36,7 +36,7 @@ export const fetchAndPersistSession = async ({
     const response = await fetch(authAPI("token?grant_type=refresh_token"), {
       method: "POST",
       headers: {
-        "ApiKey": env.PUBLIC_SUPABASE_ANON_KEY,
+        "ApiKey": env.SUPABASE_ANON_KEY,
         "Content-Type": "application/json;charset=UTF-8",
       },
       body: JSON.stringify({
