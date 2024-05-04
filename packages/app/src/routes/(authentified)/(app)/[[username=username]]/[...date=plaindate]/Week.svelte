@@ -1,9 +1,8 @@
 <script lang="ts">
   import { language, m } from "$lib/i18n.js";
   import { resolveRoute } from "$lib/paths.js";
-  import type { CalendarEvent } from "$lib/types.js";
+  import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-  import type { Event, User } from "@prisma/client";
   import type { Action } from "svelte/action";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
@@ -15,7 +14,7 @@
     eventInCreation = $bindable(),
   }: {
     start: Temporal.PlainDate;
-    windows: Record<string, CalendarEvent[]>;
+    windows: Record<string, Event[]>;
     eventInCreation?: Temporal.PlainDateTime;
   } = $props();
   const today = Temporal.Now.plainDateISO("Europe/Paris");
@@ -54,7 +53,7 @@
     {
       start: Temporal.PlainDate;
       numberOfColumns: number;
-      windows: Record<string, Array<Event & { author: User }>>;
+      windows: Record<string, Array<Event>>;
       eventInCreation?: Temporal.PlainDateTime;
     }
   > = (node, params) => {

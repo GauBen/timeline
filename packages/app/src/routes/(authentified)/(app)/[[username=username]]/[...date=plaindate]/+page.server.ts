@@ -1,5 +1,4 @@
 import { prisma } from "$lib/server/prisma.js";
-import type { CalendarEvent } from "$lib/types.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import { Prisma, type User } from "@prisma/client";
 import { error, fail } from "@sveltejs/kit";
@@ -49,38 +48,27 @@ export const load = async ({ parent, params, url }) => {
         : { years: 1 },
   );
 
-  const where: Prisma.EventWhereInput = user
-    ? { authorId: user.id, OR: [{ authorId: me.id }, { public: true }] }
-    : {
-        OR: [
-          { authorId: me.id },
-          {
-            public: true,
-            author: { followers: { some: { followerId: me.id } } },
-          },
-          {
-            users: { some: { userId: me.id, shared: true } },
-          },
-        ],
-      };
+  const where: Prisma.TimelineEventWhereInput = user
+    ? { userId: me.id, authorId: user.id }
+    : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
   const eventId = ((x) => (x ? BigInt(x) : undefined))(
     url.searchParams.get("event"),
   );
   const [event, latest, events, followed, followings] = await Promise.all([
     eventId
-      ? prisma.event.findUnique({
+      ? prisma.timelineEvent.findUnique({
           where: { id: eventId, AND: where },
-          include: { author: true, users: { where: { userId: me.id } } },
+          include: { author: true },
         })
       : undefined,
-    prisma.event.findMany({
+    prisma.timelineEvent.findMany({
       where,
-      include: { author: true, users: { where: { userId: me.id } } },
+      include: { author: true },
       orderBy: { createdAt: "desc" },
       take: 100,
     }),
-    prisma.event.findMany({
+    prisma.timelineEvent.findMany({
       where: {
         ...where,
         date: {
@@ -88,7 +76,7 @@ export const load = async ({ parent, params, url }) => {
           lt: new Date(end.epochMilliseconds),
         },
       },
-      include: { author: true, users: { where: { userId: me.id } } },
+      include: { author: true },
       orderBy: { date: "asc" },
       take: 100,
     }),
@@ -105,32 +93,19 @@ export const load = async ({ parent, params, url }) => {
     }),
   ]);
 
-  const windows = Object_groupBy(
-    events.map(
-      ({ users, ...event }): CalendarEvent => ({
-        ...event,
-        added: users[0]?.added ?? false,
-      }),
-    ),
-    (event) =>
-      toTemporalInstant
-        .call(event.date)
-        .toZonedDateTimeISO("Europe/Paris")
-        .toPlainDate()
-        .toString(),
+  const windows = Object_groupBy(events, (event) =>
+    toTemporalInstant
+      .call(event.date)
+      .toZonedDateTimeISO("Europe/Paris")
+      .toPlainDate()
+      .toString(),
   );
 
   return {
-    event: event && {
-      ...event,
-      added: event.users[0]?.added ?? false,
-    },
+    event,
     followed,
     followings,
-    latest: latest.map((event) => ({
-      ...event,
-      added: event.users[0]?.added ?? false,
-    })),
+    latest,
     start: start.toString(),
     user,
     view,
@@ -232,27 +207,20 @@ export const actions = {
     if (!locals.session) return error(401, "Unauthorized");
     const eventId = url.searchParams.get("/unAddEvent");
     if (!eventId) return error(400, "Invalid event");
-    const id = BigInt(eventId);
     await prisma.eventToUser.update({
       where: {
-        eventId_userId: { eventId: id, userId: locals.session.id },
+        eventId_userId: { eventId: BigInt(eventId), userId: locals.session.id },
         OR: [{ shared: true }, { event: { public: true } }],
       },
-      data: { added: false },
+      data: { added: null },
     });
   },
 
-  removeEvent: async ({ locals, url }) => {
+  deleteEvent: async ({ locals, url }) => {
     if (!locals.session) return error(401, "Unauthorized");
-    const eventId = url.searchParams.get("/removeEvent");
+    const eventId = url.searchParams.get("/deleteEvent");
     if (!eventId) return error(400, "Invalid event");
     const id = BigInt(eventId);
-    await prisma.eventToUser.deleteMany({
-      where: {
-        eventId: id,
-        userId: locals.session.id,
-        OR: [{ shared: true }, { event: { public: true } }],
-      },
-    });
+    await prisma.event.delete({ where: { id, authorId: locals.session.id } });
   },
 };

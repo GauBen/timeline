@@ -1,6 +1,6 @@
 <script lang="ts">
   import { language } from "$lib/i18n.js";
-  import type { CalendarEvent } from "$lib/types.js";
+  import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
   let {
@@ -8,7 +8,7 @@
     day,
     eventInCreation = $bindable(),
   }: {
-    events: CalendarEvent[];
+    events: Event[];
     day: Temporal.PlainDate;
     eventInCreation?: Temporal.PlainDateTime;
   } = $props();

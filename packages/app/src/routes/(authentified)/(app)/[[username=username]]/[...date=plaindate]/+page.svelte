@@ -1,15 +1,16 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  import Layout from "./Layout.svelte";
   import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import Back from "~icons/ph/caret-left";
   import Dialog from "./Dialog.svelte";
+  import Layout from "./Layout.svelte";
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
+  import EventActions from "./EventActions.svelte";
 
   const { data } = $props();
   const { event, latest, followed, windows, user, view, followings, me } =
@@ -45,18 +46,7 @@
       {event.date.toLocaleString()}
     </time>
     <form method="POST" use:enhance>
-      {#if event.added}
-        <Button color="neutral" formaction="?/unAddEvent={event.id}">
-          Un-add
-        </Button>
-      {:else}
-        <Button color="success" formaction="?/addEvent={event.id}">Add</Button>
-      {/if}
-      {#if !event.public}
-        <Button color="danger" formaction="?/removeEvent={event.id}">
-          Remove
-        </Button>
-      {/if}
+      <EventActions {event} {me} />
     </form>
     <a href="?">Close</a>
   </dialog>
@@ -71,7 +61,7 @@
   />
 {/if}
 
-<Layout {latest}>
+<Layout {me} {latest}>
   {#snippet header()}
     {#if user}
       <form method="POST" class="_row-2" use:enhance>

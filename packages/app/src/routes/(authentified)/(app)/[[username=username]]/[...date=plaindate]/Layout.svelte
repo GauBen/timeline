@@ -4,22 +4,25 @@
   import { page } from "$app/stores";
   import { format, m } from "$lib/i18n.js";
   import { resolveRoute } from "$lib/paths.js";
-  import type { CalendarEvent } from "$lib/types.js";
+  import type { Event } from "$lib/types.js";
+  import type { User } from "@prisma/client";
   import type { Snippet } from "svelte";
-  import { Button } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CalendarDots from "~icons/ph/calendar-dots-duotone";
   import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
   import Globe from "~icons/ph/globe-duotone";
+  import EventActions from "./EventActions.svelte";
 
   const {
+    me,
     children,
     header,
     latest,
   }: {
+    me: User;
     children: Snippet;
     header: Snippet;
-    latest: Array<CalendarEvent>;
+    latest: Array<Event>;
   } = $props();
 </script>
 
@@ -32,35 +35,27 @@
     <section id="recent">
       <h2>{m.latest_events()}</h2>
       <div class="scroll _stack-2" style="padding: .5rem">
-        {#each latest as { id, author, body, date, public: pub, createdAt, added }}
-          <article class:added>
+        {#each latest as event}
+          <article class:added={event.added}>
             <header>
               <h3>
-                <a href={$resolveRoute({ username: author.username })}>
-                  @{author.username}
+                <a href={$resolveRoute({ username: event.author.username })}>
+                  @{event.author.username}
                 </a>
               </h3>
               <p style="font-size: .75em">
-                {#if pub}
+                {#if event.public}
                   <Globe />
                 {/if}
-                <a href="?event={id}">{$format(createdAt)}</a>
+                <a href="?event={event.id}">{$format(event.createdAt)}</a>
               </p>
             </header>
-            <p>{body}</p>
+            <p>{event.body}</p>
             <footer>
               <Calendar />
-              {$format(date)}
+              {$format(event.date)}
               <form method="POST" use:enhance>
-                {#if added}
-                  <Button color="neutral" formaction="?/unAddEvent={id}">
-                    Un-add
-                  </Button>
-                {:else}
-                  <Button color="success" formaction="?/addEvent={id}">
-                    Add
-                  </Button>
-                {/if}
+                <EventActions {event} {me} />
               </form>
             </footer>
           </article>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resolveRoute } from "$lib/paths.js";
-  import type { CalendarEvent } from "$lib/types.js";
+  import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
   let {
@@ -9,7 +9,7 @@
     eventInCreation = $bindable(),
   }: {
     start: Temporal.PlainDate;
-    windows: Record<string, CalendarEvent[]>;
+    windows: Record<string, Event[]>;
     eventInCreation?: Temporal.PlainDateTime;
   } = $props();
 
