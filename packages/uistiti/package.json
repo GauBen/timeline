@@ -2,20 +2,20 @@
   "name": "uistiti",
   "version": "0.0.1",
   "devDependencies": {
-    "@sveltejs/kit": "^2.5.7",
+    "@sveltejs/kit": "^2.5.8",
     "@sveltejs/package": "^2.3.1",
-    "@sveltejs/vite-plugin-svelte": "^3.1.0",
-    "@types/node": "^20.12.8",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0-next.0",
+    "@types/node": "^20.12.11",
     "colorjs.io": "^0.5.0",
     "modern-normalize": "^2.0.0",
     "publint": "^0.2.7",
-    "sass": "^1.76.0",
-    "svelte": "^5.0.0-next.121",
-    "svelte-check": "^3.7.0",
+    "sass": "^1.77.1",
+    "svelte": "^5.0.0-next.131",
+    "svelte-check": "^3.7.1",
     "tslib": "^2.6.2",
-    "typescript": "^5.5.0-dev.20240502",
+    "typescript": "^5.5.0-dev.20240513",
     "vite": "^5.2.11",
-    "vite-node": "^1.5.3"
+    "vite-node": "^1.6.0"
   },
   "exports": {
     ".": {
@@ -30,14 +30,14 @@
     "!dist/**/*.spec.*"
   ],
   "peerDependencies": {
-    "svelte": "^4.0.0"
+    "svelte": ">=5"
   },
   "scripts": {
     "build": "vite-node src/lib/compiler.ts && yarn package",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev": "svelte-package --watch",
-    "dev:sandbox": "vite dev",
+    "dev": "vite-node --watch src/lib/compiler.ts & svelte-package --watch",
+    "dev:sandbox": "yarn dev & vite dev",
     "package": "svelte-kit sync && svelte-package && publint",
     "prepublishOnly": "yarn package",
     "preview": "vite preview"

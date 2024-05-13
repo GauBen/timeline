@@ -2,6 +2,8 @@ import Color from "colorjs.io";
 import { writeFileSync } from "node:fs";
 import { colors, variants } from "./definitions.js";
 
+console.time("Compiled");
+
 const palettes = Object.fromEntries(
   Object.entries(colors).map(([name, color]) => {
     return [
@@ -10,7 +12,7 @@ const palettes = Object.fromEntries(
         const shade = new Color(color);
         if (i < 5) shade.oklch.l = (shade.oklch.l * (i + 1)) / 6;
         else if (i > 5)
-          shade.oklch.l = shade.oklch.l + ((1 - shade.oklch.l) * (i - 5)) / 6;
+          shade.oklch.l = shade.oklch.l + ((1 - shade.oklch.l) * (i - 5)) / 5;
         return shade;
       }),
     ];
@@ -71,3 +73,4 @@ for (const [variant, props] of Object.entries(variants)) {
 }
 
 writeFileSync(new URL("global.css", import.meta.url), output, "utf-8");
+console.timeEnd("Compiled");

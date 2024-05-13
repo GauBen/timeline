@@ -31,9 +31,9 @@
 <section>
   <h2>Inheritance</h2>
   {#each keys(colors) as color}
-    <Card {color}>
+    <Card {color} variant="outline">
       <h3 style="margin-top: 0; text-transform: capitalize">{color}</h3>
-      <Button variant="outline">Ok</Button>
+      <Button variant="solid">Ok</Button>
     </Card>
   {/each}
 </section>

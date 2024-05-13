@@ -1,54 +1,159 @@
 /* Definitions */
 :root {
-  --solid-neutral-color: #343441;
-  --solid-success-color: #004a00;
-  --solid-warning-color: #645600;
-  --solid-danger-color: #630000;
-  --solid-neutral-background: #ebebfb;
-  --solid-success-background: #b8ffad;
-  --solid-warning-background: #fffd8b;
-  --solid-danger-background: #ffdcd4;
-  --solid-neutral-border: #ebebfb;
-  --solid-success-border: #b8ffad;
-  --solid-warning-border: #fffd8b;
-  --solid-danger-border: #ffdcd4;
+  --solid-neutral-color: #fff;
+  --solid-success-color: #f0fff0;
+  --solid-warning-color: #fff;
+  --solid-danger-color: #fff;
+  --solid-neutral-color-opposite: #04040b;
+  --solid-success-color-opposite: #000e00;
+  --solid-warning-color-opposite: #120b00;
+  --solid-danger-color-opposite: #120000;
+  --solid-neutral-color-interaction: #fff;
+  --solid-success-color-interaction: #f0fff0;
+  --solid-warning-color-interaction: #fff;
+  --solid-danger-color-interaction: #fff;
+  --solid-neutral-color-interaction-opposite: #04040b;
+  --solid-success-color-interaction-opposite: #000e00;
+  --solid-warning-color-interaction-opposite: #120b00;
+  --solid-danger-color-interaction-opposite: #120000;
+  --solid-neutral-background: #70707f;
+  --solid-success-background: #1cb23e;
+  --solid-warning-background: #cdb32f;
+  --solid-danger-background: #c30000;
+  --solid-neutral-background-hover: #51515f;
+  --solid-success-background-hover: #008803;
+  --solid-warning-background-hover: #9c8300;
+  --solid-danger-background-hover: #920000;
+  --solid-neutral-background-active: #343441;
+  --solid-success-background-active: #005b00;
+  --solid-warning-background-active: #6a5700;
+  --solid-danger-background-active: #630000;
+  --solid-neutral-border: #70707f;
+  --solid-success-border: #1cb23e;
+  --solid-warning-border: #cdb32f;
+  --solid-danger-border: #c30000;
+  --solid-neutral-border-hover: #343441;
+  --solid-success-border-hover: #005b00;
+  --solid-warning-border-hover: #6a5700;
+  --solid-danger-border-hover: #630000;
+  --solid-neutral-border-active: #1a1925;
+  --solid-success-border-active: #003200;
+  --solid-warning-border-active: #3b2f00;
+  --solid-danger-border-active: #380000;
   --outline-neutral-color: #51515f;
-  --outline-success-color: #007000;
-  --outline-warning-color: #958200;
+  --outline-success-color: #008803;
+  --outline-warning-color: #9c8300;
   --outline-danger-color: #920000;
+  --outline-neutral-color-opposite: #fff;
+  --outline-success-color-opposite: #f0fff0;
+  --outline-warning-color-opposite: #fff;
+  --outline-danger-color-opposite: #fff;
+  --outline-neutral-color-interaction: #fff;
+  --outline-success-color-interaction: #f0fff0;
+  --outline-warning-color-interaction: #fff;
+  --outline-danger-color-interaction: #fff;
+  --outline-neutral-color-interaction-opposite: #04040b;
+  --outline-success-color-interaction-opposite: #000e00;
+  --outline-warning-color-interaction-opposite: #120b00;
+  --outline-danger-color-interaction-opposite: #120000;
   --outline-neutral-background: transparent;
   --outline-success-background: transparent;
   --outline-warning-background: transparent;
   --outline-danger-background: transparent;
-  --outline-neutral-border: #51515f;
-  --outline-success-border: #007000;
-  --outline-warning-border: #958200;
-  --outline-danger-border: #920000;
+  --outline-neutral-background-hover: #51515f;
+  --outline-success-background-hover: #008803;
+  --outline-warning-background-hover: #9c8300;
+  --outline-danger-background-hover: #920000;
+  --outline-neutral-background-active: #343441;
+  --outline-success-background-active: #005b00;
+  --outline-warning-background-active: #6a5700;
+  --outline-danger-background-active: #630000;
+  --outline-neutral-border: #70707f;
+  --outline-success-border: #1cb23e;
+  --outline-warning-border: #cdb32f;
+  --outline-danger-border: #c30000;
+  --outline-neutral-border-hover: #343441;
+  --outline-success-border-hover: #005b00;
+  --outline-warning-border-hover: #6a5700;
+  --outline-danger-border-hover: #630000;
+  --outline-neutral-border-active: #1a1925;
+  --outline-success-border-active: #003200;
+  --outline-warning-border-active: #3b2f00;
+  --outline-danger-border-active: #380000;
   --ghost-neutral-color: #51515f;
-  --ghost-success-color: #007000;
-  --ghost-warning-color: #958200;
+  --ghost-success-color: #008803;
+  --ghost-warning-color: #9c8300;
   --ghost-danger-color: #920000;
+  --ghost-neutral-color-opposite: #fff;
+  --ghost-success-color-opposite: #f0fff0;
+  --ghost-warning-color-opposite: #fff;
+  --ghost-danger-color-opposite: #fff;
+  --ghost-neutral-color-interaction: #fff;
+  --ghost-success-color-interaction: #f0fff0;
+  --ghost-warning-color-interaction: #fff;
+  --ghost-danger-color-interaction: #fff;
+  --ghost-neutral-color-interaction-opposite: #04040b;
+  --ghost-success-color-interaction-opposite: #000e00;
+  --ghost-warning-color-interaction-opposite: #120b00;
+  --ghost-danger-color-interaction-opposite: #120000;
   --ghost-neutral-background: transparent;
   --ghost-success-background: transparent;
   --ghost-warning-background: transparent;
   --ghost-danger-background: transparent;
+  --ghost-neutral-background-hover: #51515f;
+  --ghost-success-background-hover: #008803;
+  --ghost-warning-background-hover: #9c8300;
+  --ghost-danger-background-hover: #920000;
+  --ghost-neutral-background-active: #343441;
+  --ghost-success-background-active: #005b00;
+  --ghost-warning-background-active: #6a5700;
+  --ghost-danger-background-active: #630000;
   --ghost-neutral-border: transparent;
   --ghost-success-border: transparent;
   --ghost-warning-border: transparent;
   --ghost-danger-border: transparent;
+  --ghost-neutral-border-hover: #343441;
+  --ghost-success-border-hover: #005b00;
+  --ghost-warning-border-hover: #6a5700;
+  --ghost-danger-border-hover: #630000;
+  --ghost-neutral-border-active: #1a1925;
+  --ghost-success-border-active: #003200;
+  --ghost-warning-border-active: #3b2f00;
+  --ghost-danger-border-active: #380000;
 }
 
 /* Default color */
 :root {
   --solid-color: var(--solid-neutral-color);
+  --solid-color-opposite: var(--solid-neutral-color-opposite);
+  --solid-color-interaction: var(--solid-neutral-color-interaction);
+  --solid-color-interaction-opposite: var(--solid-neutral-color-interaction-opposite);
   --solid-background: var(--solid-neutral-background);
+  --solid-background-hover: var(--solid-neutral-background-hover);
+  --solid-background-active: var(--solid-neutral-background-active);
   --solid-border: var(--solid-neutral-border);
+  --solid-border-hover: var(--solid-neutral-border-hover);
+  --solid-border-active: var(--solid-neutral-border-active);
   --outline-color: var(--outline-neutral-color);
+  --outline-color-opposite: var(--outline-neutral-color-opposite);
+  --outline-color-interaction: var(--outline-neutral-color-interaction);
+  --outline-color-interaction-opposite: var(--outline-neutral-color-interaction-opposite);
   --outline-background: var(--outline-neutral-background);
+  --outline-background-hover: var(--outline-neutral-background-hover);
+  --outline-background-active: var(--outline-neutral-background-active);
   --outline-border: var(--outline-neutral-border);
+  --outline-border-hover: var(--outline-neutral-border-hover);
+  --outline-border-active: var(--outline-neutral-border-active);
   --ghost-color: var(--ghost-neutral-color);
+  --ghost-color-opposite: var(--ghost-neutral-color-opposite);
+  --ghost-color-interaction: var(--ghost-neutral-color-interaction);
+  --ghost-color-interaction-opposite: var(--ghost-neutral-color-interaction-opposite);
   --ghost-background: var(--ghost-neutral-background);
+  --ghost-background-hover: var(--ghost-neutral-background-hover);
+  --ghost-background-active: var(--ghost-neutral-background-active);
   --ghost-border: var(--ghost-neutral-border);
+  --ghost-border-hover: var(--ghost-neutral-border-hover);
+  --ghost-border-active: var(--ghost-neutral-border-active);
 }
 
 /* Default variant */
@@ -58,75 +163,187 @@
 .-warning,
 .-danger {
   --color: var(--solid-color);
+  --color-opposite: var(--solid-color-opposite);
+  --color-interaction: var(--solid-color-interaction);
+  --color-interaction-opposite: var(--solid-color-interaction-opposite);
   --background: var(--solid-background);
+  --background-hover: var(--solid-background-hover);
+  --background-active: var(--solid-background-active);
   --border: var(--solid-border);
+  --border-hover: var(--solid-border-hover);
+  --border-active: var(--solid-border-active);
 }
 
 /* Colors */
 .-neutral {
   --solid-color: var(--solid-neutral-color);
+  --solid-color-opposite: var(--solid-neutral-color-opposite);
+  --solid-color-interaction: var(--solid-neutral-color-interaction);
+  --solid-color-interaction-opposite: var(--solid-neutral-color-interaction-opposite);
   --solid-background: var(--solid-neutral-background);
+  --solid-background-hover: var(--solid-neutral-background-hover);
+  --solid-background-active: var(--solid-neutral-background-active);
   --solid-border: var(--solid-neutral-border);
+  --solid-border-hover: var(--solid-neutral-border-hover);
+  --solid-border-active: var(--solid-neutral-border-active);
   --outline-color: var(--outline-neutral-color);
+  --outline-color-opposite: var(--outline-neutral-color-opposite);
+  --outline-color-interaction: var(--outline-neutral-color-interaction);
+  --outline-color-interaction-opposite: var(--outline-neutral-color-interaction-opposite);
   --outline-background: var(--outline-neutral-background);
+  --outline-background-hover: var(--outline-neutral-background-hover);
+  --outline-background-active: var(--outline-neutral-background-active);
   --outline-border: var(--outline-neutral-border);
+  --outline-border-hover: var(--outline-neutral-border-hover);
+  --outline-border-active: var(--outline-neutral-border-active);
   --ghost-color: var(--ghost-neutral-color);
+  --ghost-color-opposite: var(--ghost-neutral-color-opposite);
+  --ghost-color-interaction: var(--ghost-neutral-color-interaction);
+  --ghost-color-interaction-opposite: var(--ghost-neutral-color-interaction-opposite);
   --ghost-background: var(--ghost-neutral-background);
+  --ghost-background-hover: var(--ghost-neutral-background-hover);
+  --ghost-background-active: var(--ghost-neutral-background-active);
   --ghost-border: var(--ghost-neutral-border);
+  --ghost-border-hover: var(--ghost-neutral-border-hover);
+  --ghost-border-active: var(--ghost-neutral-border-active);
 }
 
 .-success {
   --solid-color: var(--solid-success-color);
+  --solid-color-opposite: var(--solid-success-color-opposite);
+  --solid-color-interaction: var(--solid-success-color-interaction);
+  --solid-color-interaction-opposite: var(--solid-success-color-interaction-opposite);
   --solid-background: var(--solid-success-background);
+  --solid-background-hover: var(--solid-success-background-hover);
+  --solid-background-active: var(--solid-success-background-active);
   --solid-border: var(--solid-success-border);
+  --solid-border-hover: var(--solid-success-border-hover);
+  --solid-border-active: var(--solid-success-border-active);
   --outline-color: var(--outline-success-color);
+  --outline-color-opposite: var(--outline-success-color-opposite);
+  --outline-color-interaction: var(--outline-success-color-interaction);
+  --outline-color-interaction-opposite: var(--outline-success-color-interaction-opposite);
   --outline-background: var(--outline-success-background);
+  --outline-background-hover: var(--outline-success-background-hover);
+  --outline-background-active: var(--outline-success-background-active);
   --outline-border: var(--outline-success-border);
+  --outline-border-hover: var(--outline-success-border-hover);
+  --outline-border-active: var(--outline-success-border-active);
   --ghost-color: var(--ghost-success-color);
+  --ghost-color-opposite: var(--ghost-success-color-opposite);
+  --ghost-color-interaction: var(--ghost-success-color-interaction);
+  --ghost-color-interaction-opposite: var(--ghost-success-color-interaction-opposite);
   --ghost-background: var(--ghost-success-background);
+  --ghost-background-hover: var(--ghost-success-background-hover);
+  --ghost-background-active: var(--ghost-success-background-active);
   --ghost-border: var(--ghost-success-border);
+  --ghost-border-hover: var(--ghost-success-border-hover);
+  --ghost-border-active: var(--ghost-success-border-active);
 }
 
 .-warning {
   --solid-color: var(--solid-warning-color);
+  --solid-color-opposite: var(--solid-warning-color-opposite);
+  --solid-color-interaction: var(--solid-warning-color-interaction);
+  --solid-color-interaction-opposite: var(--solid-warning-color-interaction-opposite);
   --solid-background: var(--solid-warning-background);
+  --solid-background-hover: var(--solid-warning-background-hover);
+  --solid-background-active: var(--solid-warning-background-active);
   --solid-border: var(--solid-warning-border);
+  --solid-border-hover: var(--solid-warning-border-hover);
+  --solid-border-active: var(--solid-warning-border-active);
   --outline-color: var(--outline-warning-color);
+  --outline-color-opposite: var(--outline-warning-color-opposite);
+  --outline-color-interaction: var(--outline-warning-color-interaction);
+  --outline-color-interaction-opposite: var(--outline-warning-color-interaction-opposite);
   --outline-background: var(--outline-warning-background);
+  --outline-background-hover: var(--outline-warning-background-hover);
+  --outline-background-active: var(--outline-warning-background-active);
   --outline-border: var(--outline-warning-border);
+  --outline-border-hover: var(--outline-warning-border-hover);
+  --outline-border-active: var(--outline-warning-border-active);
   --ghost-color: var(--ghost-warning-color);
+  --ghost-color-opposite: var(--ghost-warning-color-opposite);
+  --ghost-color-interaction: var(--ghost-warning-color-interaction);
+  --ghost-color-interaction-opposite: var(--ghost-warning-color-interaction-opposite);
   --ghost-background: var(--ghost-warning-background);
+  --ghost-background-hover: var(--ghost-warning-background-hover);
+  --ghost-background-active: var(--ghost-warning-background-active);
   --ghost-border: var(--ghost-warning-border);
+  --ghost-border-hover: var(--ghost-warning-border-hover);
+  --ghost-border-active: var(--ghost-warning-border-active);
 }
 
 .-danger {
   --solid-color: var(--solid-danger-color);
+  --solid-color-opposite: var(--solid-danger-color-opposite);
+  --solid-color-interaction: var(--solid-danger-color-interaction);
+  --solid-color-interaction-opposite: var(--solid-danger-color-interaction-opposite);
   --solid-background: var(--solid-danger-background);
+  --solid-background-hover: var(--solid-danger-background-hover);
+  --solid-background-active: var(--solid-danger-background-active);
   --solid-border: var(--solid-danger-border);
+  --solid-border-hover: var(--solid-danger-border-hover);
+  --solid-border-active: var(--solid-danger-border-active);
   --outline-color: var(--outline-danger-color);
+  --outline-color-opposite: var(--outline-danger-color-opposite);
+  --outline-color-interaction: var(--outline-danger-color-interaction);
+  --outline-color-interaction-opposite: var(--outline-danger-color-interaction-opposite);
   --outline-background: var(--outline-danger-background);
+  --outline-background-hover: var(--outline-danger-background-hover);
+  --outline-background-active: var(--outline-danger-background-active);
   --outline-border: var(--outline-danger-border);
+  --outline-border-hover: var(--outline-danger-border-hover);
+  --outline-border-active: var(--outline-danger-border-active);
   --ghost-color: var(--ghost-danger-color);
+  --ghost-color-opposite: var(--ghost-danger-color-opposite);
+  --ghost-color-interaction: var(--ghost-danger-color-interaction);
+  --ghost-color-interaction-opposite: var(--ghost-danger-color-interaction-opposite);
   --ghost-background: var(--ghost-danger-background);
+  --ghost-background-hover: var(--ghost-danger-background-hover);
+  --ghost-background-active: var(--ghost-danger-background-active);
   --ghost-border: var(--ghost-danger-border);
+  --ghost-border-hover: var(--ghost-danger-border-hover);
+  --ghost-border-active: var(--ghost-danger-border-active);
 }
 
 /* Variants */
 .-solid {
   --color: var(--solid-color);
+  --color-opposite: var(--solid-color-opposite);
+  --color-interaction: var(--solid-color-interaction);
+  --color-interaction-opposite: var(--solid-color-interaction-opposite);
   --background: var(--solid-background);
+  --background-hover: var(--solid-background-hover);
+  --background-active: var(--solid-background-active);
   --border: var(--solid-border);
+  --border-hover: var(--solid-border-hover);
+  --border-active: var(--solid-border-active);
 }
 
 .-outline {
   --color: var(--outline-color);
+  --color-opposite: var(--outline-color-opposite);
+  --color-interaction: var(--outline-color-interaction);
+  --color-interaction-opposite: var(--outline-color-interaction-opposite);
   --background: var(--outline-background);
+  --background-hover: var(--outline-background-hover);
+  --background-active: var(--outline-background-active);
   --border: var(--outline-border);
+  --border-hover: var(--outline-border-hover);
+  --border-active: var(--outline-border-active);
 }
 
 .-ghost {
   --color: var(--ghost-color);
+  --color-opposite: var(--ghost-color-opposite);
+  --color-interaction: var(--ghost-color-interaction);
+  --color-interaction-opposite: var(--ghost-color-interaction-opposite);
   --background: var(--ghost-background);
+  --background-hover: var(--ghost-background-hover);
+  --background-active: var(--ghost-background-active);
   --border: var(--ghost-border);
+  --border-hover: var(--ghost-border-hover);
+  --border-active: var(--ghost-border-active);
 }
 
