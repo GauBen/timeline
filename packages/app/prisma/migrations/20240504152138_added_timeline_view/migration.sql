@@ -1,4 +1,6 @@
-CREATE VIEW timeline AS SELECT
+CREATE VIEW timeline
+WITH (security_invoker = true)
+AS SELECT
   users.id AS user_id,
   events.id,
   events.created_at,
