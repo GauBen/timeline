@@ -1,5 +1,5 @@
-# Default recipe: `just` will display the list of tasks
-_list:
+# Default recipe: run `just` to display the list of tasks
+_:
   @just --list --justfile {{justfile()}} --unsorted
 
 # Install dependencies and build the app
@@ -13,9 +13,13 @@ dev: build
   yarn prisma migrate deploy
   yarn dev
 
-# Clean up the development database
+# Reset the development database
 reset:
   yarn db:reset
+
+# Stop the development containers
+stop:
+  yarn supabase stop
 
 # Deploy the app to Vercel
 deploy token: build
