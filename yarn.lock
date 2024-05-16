@@ -87,6 +87,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@es-joy/jsdoccomment@npm:^0.43.0":
+  version: 0.43.0
+  resolution: "@es-joy/jsdoccomment@npm:0.43.0"
+  dependencies:
+    "@types/eslint": "npm:^8.56.5"
+    "@types/estree": "npm:^1.0.5"
+    "@typescript-eslint/types": "npm:^7.2.0"
+    comment-parser: "npm:1.4.1"
+    esquery: "npm:^1.5.0"
+    jsdoc-type-pratt-parser: "npm:~4.0.0"
+  checksum: 10c0/862294ed89772a231f309edd68405ece00f6aaf43103210f28410da894a6b697bc1f281c59e813dd37d5b7294f633ee7b874e07a0aa3d72f49504089fc9cb2c4
+  languageName: node
+  linkType: hard
+
 "@esbuild/aix-ppc64@npm:0.20.2":
   version: 0.20.2
   resolution: "@esbuild/aix-ppc64@npm:0.20.2"
@@ -843,9 +857,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:^2.43.1":
-  version: 2.43.1
-  resolution: "@supabase/supabase-js@npm:2.43.1"
+"@supabase/supabase-js@npm:^2.43.2":
+  version: 2.43.2
+  resolution: "@supabase/supabase-js@npm:2.43.2"
   dependencies:
     "@supabase/auth-js": "npm:2.64.2"
     "@supabase/functions-js": "npm:2.3.1"
@@ -853,7 +867,7 @@ __metadata:
     "@supabase/postgrest-js": "npm:1.15.2"
     "@supabase/realtime-js": "npm:2.9.5"
     "@supabase/storage-js": "npm:2.5.5"
-  checksum: 10c0/d40ae96b15d4ad0766743a025bf3521d2eb0e71be78c5004e40df374bbb7ddefb64ef3334921c3591d52f08765bc103eff64311376aefc714db7cbd486600f07
+  checksum: 10c0/5bb5eddcc7e6ce47cb4137f415bd9882026186a30010758e82004924204a7fe96a46f106bac9008839604bf39b805dc5c5df4bc4f26792e88f8847f49537e2e4
   languageName: node
   linkType: hard
 
@@ -912,24 +926,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte-inspector@npm:^3.0.0-next.0":
-  version: 3.0.0-next.0
-  resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:3.0.0-next.0"
+"@sveltejs/vite-plugin-svelte-inspector@npm:^3.0.0-next.1":
+  version: 3.0.0-next.1
+  resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:3.0.0-next.1"
   dependencies:
     debug: "npm:^4.3.4"
   peerDependencies:
-    "@sveltejs/vite-plugin-svelte": ^4.0.0-next.0
+    "@sveltejs/vite-plugin-svelte": ^4.0.0-next.1
     svelte: ^5.0.0-next.96 || ^5.0.0
     vite: ^5.0.0
-  checksum: 10c0/ad4c40cc7c04d385bd0d21d899d98c40edaef2895b458b616e714eff6bcc4165be4e65ad3613d31d13c351f706615a08d7251da2d32bfb6363d4424aba6ec215
+  checksum: 10c0/e87693e5bdb132fce19eb315148ac76d5d6fbbedcd2c1d506fd396377d027ca918a53ef020b16de3e2685cb1aa9d14089bdb0c791d715eb907d566f410fd21cc
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^4.0.0-next.0":
-  version: 4.0.0-next.0
-  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.0-next.0"
+"@sveltejs/vite-plugin-svelte@npm:^4.0.0-next.1":
+  version: 4.0.0-next.1
+  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.0-next.1"
   dependencies:
-    "@sveltejs/vite-plugin-svelte-inspector": "npm:^3.0.0-next.0"
+    "@sveltejs/vite-plugin-svelte-inspector": "npm:^3.0.0-next.1"
     debug: "npm:^4.3.4"
     deepmerge: "npm:^4.3.1"
     kleur: "npm:^4.1.5"
@@ -938,7 +952,7 @@ __metadata:
   peerDependencies:
     svelte: ^5.0.0-next.96 || ^5.0.0
     vite: ^5.0.0
-  checksum: 10c0/22eadebcee7091d654dd4d9dedeebdc2ed12a1d678b42f07c3dfe0178a7ec98c00d4b1f33a7ef92e29f0400b046465e0614a8a0e126ad9486f39a73b37255b24
+  checksum: 10c0/ac5ac0257427c2fc49f4d75f9c66e856d943ca9e752a061c968c6da91bb4e2b8620041926821fdbe1c483b8f48690cfc31184da2c7e483e2ddd77872de7d443e
   languageName: node
   linkType: hard
 
@@ -952,20 +966,20 @@ __metadata:
     "@prisma/client": "npm:^5.14.0"
     "@supabase/auth-helpers-sveltekit": "npm:^0.13.0"
     "@supabase/ssr": "npm:^0.3.0"
-    "@supabase/supabase-js": "npm:^2.43.1"
+    "@supabase/supabase-js": "npm:^2.43.2"
     "@sveltejs/adapter-vercel": "npm:^5.3.0"
     "@sveltejs/kit": "npm:^2.5.8"
-    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.0"
+    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.1"
     "@types/object.groupby": "npm:^1.0.4"
     jose: "npm:^5.3.0"
     modern-normalize: "npm:^2.0.0"
     object.groupby: "npm:^1.0.3"
     prisma: "npm:^5.14.0"
     sass: "npm:^1.77.1"
-    svelte: "npm:^5.0.0-next.132"
+    svelte: "npm:^5.0.0-next.136"
     svelte-check: "npm:^3.7.1"
     tslib: "npm:^2.6.2"
-    typescript: "npm:^5.5.0-dev.20240514"
+    typescript: "npm:^5.5.0-dev.20240516"
     uistiti: "workspace:^"
     unplugin-icons: "npm:^0.19.0"
     vite: "npm:^5.2.11"
@@ -1036,6 +1050,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/eslint@npm:^8.56.5":
+  version: 8.56.10
+  resolution: "@types/eslint@npm:8.56.10"
+  dependencies:
+    "@types/estree": "npm:*"
+    "@types/json-schema": "npm:*"
+  checksum: 10c0/674349d6c342c3864d70f4d5a9965f96fb253801532752c8c500ad6a1c2e8b219e01ccff5dc8791dcb58b5483012c495708bb9f3ff929f5c9322b3da126c15d3
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:*, @types/estree@npm:1.0.5, @types/estree@npm:^1.0.1, @types/estree@npm:^1.0.5":
   version: 1.0.5
   resolution: "@types/estree@npm:1.0.5"
@@ -1043,7 +1067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:^7.0.6":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.6":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
@@ -1187,7 +1211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:7.9.0":
+"@typescript-eslint/types@npm:7.9.0, @typescript-eslint/types@npm:^7.2.0":
   version: 7.9.0
   resolution: "@typescript-eslint/types@npm:7.9.0"
   checksum: 10c0/d5f4a547dba4865ee2391bf06f2b3f8e8592a561976d2be35bb61ce340c7d1b7b4b25ac6ab5b9941813b465b9420bebb7b2179b1d71f6a83069feeb000b3558d
@@ -1237,10 +1261,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/build-utils@npm:8.1.3":
-  version: 8.1.3
-  resolution: "@vercel/build-utils@npm:8.1.3"
-  checksum: 10c0/64a192f90abf3da8c0c24383a05b48db882659836d762f180e23596ce129b3c16803db6aad1c504cc359b603f7d671c27eedc098a01c1ea7521fd9bfd6409285
+"@vercel/build-utils@npm:8.2.0":
+  version: 8.2.0
+  resolution: "@vercel/build-utils@npm:8.2.0"
+  checksum: 10c0/682ae0a723a6f2a2a58720755b6cbe5bd62a0b3b62d0ce7c506dcf905f28cfb8ba302b58a9c3e07fd6e5e60326de8471243fa047f44a1cf36060a7c85792b038
   languageName: node
   linkType: hard
 
@@ -1288,17 +1312,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/gatsby-plugin-vercel-builder@npm:2.0.30":
-  version: 2.0.30
-  resolution: "@vercel/gatsby-plugin-vercel-builder@npm:2.0.30"
+"@vercel/gatsby-plugin-vercel-builder@npm:2.0.31":
+  version: 2.0.31
+  resolution: "@vercel/gatsby-plugin-vercel-builder@npm:2.0.31"
   dependencies:
     "@sinclair/typebox": "npm:0.25.24"
-    "@vercel/build-utils": "npm:8.1.3"
+    "@vercel/build-utils": "npm:8.2.0"
     "@vercel/routing-utils": "npm:3.1.0"
     esbuild: "npm:0.14.47"
     etag: "npm:1.8.1"
     fs-extra: "npm:11.1.0"
-  checksum: 10c0/829e20a07591f9805ca68b1693223857010fa5ba7e89421fa99dbe4ba2b73dd6f3384a7ce6a7f5a35eeb0e9e3e4450d8f9109cb83e1eb3ece04b92ae79c15356
+  checksum: 10c0/3deda44a22487d911dd6cf4cabc2097029b6aad9a1b073006b056bd5e8295e0a2bf2a509394657508821682aa9ebc05e340eaa26e870801351ccf48fadd223df
   languageName: node
   linkType: hard
 
@@ -1372,15 +1396,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/node@npm:3.1.4":
-  version: 3.1.4
-  resolution: "@vercel/node@npm:3.1.4"
+"@vercel/node@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@vercel/node@npm:3.1.5"
   dependencies:
     "@edge-runtime/node-utils": "npm:2.3.0"
     "@edge-runtime/primitives": "npm:4.1.0"
     "@edge-runtime/vm": "npm:3.2.0"
     "@types/node": "npm:16.18.11"
-    "@vercel/build-utils": "npm:8.1.3"
+    "@vercel/build-utils": "npm:8.2.0"
     "@vercel/error-utils": "npm:2.0.2"
     "@vercel/nft": "npm:0.27.0"
     "@vercel/static-config": "npm:3.0.0"
@@ -1396,7 +1420,7 @@ __metadata:
     ts-node: "npm:10.9.1"
     typescript: "npm:4.9.5"
     undici: "npm:5.26.5"
-  checksum: 10c0/f22edaf2e6ec77f3551b8df478910788325b80bfb7a79db85162482be425102f16e4d4ef94c17c5def1a5fd0e79d4fd3def6276a9d7bf398ceaca00e02165fe4
+  checksum: 10c0/f6a33fdf854ec040ba2027d7f71922a19fa314a83aa829ed8bb46396afcf5aeea1365a0190e42a11fd06f863ece95a8d2927d96baad3ab6cf02a2634a9b690fa
   languageName: node
   linkType: hard
 
@@ -1450,15 +1474,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/static-build@npm:2.5.8":
-  version: 2.5.8
-  resolution: "@vercel/static-build@npm:2.5.8"
+"@vercel/static-build@npm:2.5.9":
+  version: 2.5.9
+  resolution: "@vercel/static-build@npm:2.5.9"
   dependencies:
     "@vercel/gatsby-plugin-vercel-analytics": "npm:1.0.11"
-    "@vercel/gatsby-plugin-vercel-builder": "npm:2.0.30"
+    "@vercel/gatsby-plugin-vercel-builder": "npm:2.0.31"
     "@vercel/static-config": "npm:3.0.0"
     ts-morph: "npm:12.0.0"
-  checksum: 10c0/5e549e362a7070b172a7504a2852fc957471fc37f192041adeaaab563633ea456dfa23654ef34a6a6ce9a61c49ad37085498429acd19a1e056916d422734f755
+  checksum: 10c0/5b4eac820a29944ce64a7bda680e60ca19f17b94beaf12bf322fc149895c756c126fa20bab0648d92e81b84fa121c6829432b9982c57cfc89be7dc7c16da5aeb
   languageName: node
   linkType: hard
 
@@ -2063,7 +2087,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"comment-parser@npm:^1.4.0":
+"comment-parser@npm:1.4.1, comment-parser@npm:^1.4.0":
   version: 1.4.1
   resolution: "comment-parser@npm:1.4.1"
   checksum: 10c0/d6c4be3f5be058f98b24f2d557f745d8fe1cc9eb75bebbdccabd404a0e1ed41563171b16285f593011f8b6a5ec81f564fb1f2121418ac5cbf0f49255bf0840dd
@@ -2868,12 +2892,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-command@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "eslint-plugin-command@npm:0.2.0"
+"eslint-plugin-command@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "eslint-plugin-command@npm:0.2.1"
+  dependencies:
+    "@es-joy/jsdoccomment": "npm:^0.43.0"
   peerDependencies:
     eslint: "*"
-  checksum: 10c0/30b3200e9fee18d41e65bb37e624db28a1c306434ac3380e4fc9f606d1f57d3bae8eb5f78e47b5659d6ec166837f5880d558e1ae19fe714d54459fc62bea86f3
+  checksum: 10c0/3aed82e190fc0f017a746d109ca7443ebed665b20e044437becece602e1724c4262a5abff1583c7d105e6f08beec37ced70e429be081b98ff0360b2a27ead31e
   languageName: node
   linkType: hard
 
@@ -3010,7 +3036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esquery@npm:^1.4.2":
+"esquery@npm:^1.4.2, esquery@npm:^1.5.0":
   version: 1.5.0
   resolution: "esquery@npm:1.5.0"
   dependencies:
@@ -4128,6 +4154,13 @@ __metadata:
   version: 1.1.0
   resolution: "jsbn@npm:1.1.0"
   checksum: 10c0/4f907fb78d7b712e11dea8c165fe0921f81a657d3443dde75359ed52eb2b5d33ce6773d97985a089f09a65edd80b11cb75c767b57ba47391fee4c969f7215c96
+  languageName: node
+  linkType: hard
+
+"jsdoc-type-pratt-parser@npm:~4.0.0":
+  version: 4.0.0
+  resolution: "jsdoc-type-pratt-parser@npm:4.0.0"
+  checksum: 10c0/b23ef7bbbe2f56d72630d1c5a233dc9fecaff399063d373c57bef136908c1b05e723dac107177303c03ccf8d75aa51507510b282aa567600477479c5ea0c36d1
   languageName: node
   linkType: hard
 
@@ -6250,9 +6283,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supabase@npm:^1.167.4":
-  version: 1.167.4
-  resolution: "supabase@npm:1.167.4"
+"supabase@npm:^1.167.6":
+  version: 1.167.6
+  resolution: "supabase@npm:1.167.6"
   dependencies:
     bin-links: "npm:^4.0.3"
     https-proxy-agent: "npm:^7.0.2"
@@ -6260,7 +6293,7 @@ __metadata:
     tar: "npm:7.1.0"
   bin:
     supabase: bin/supabase
-  checksum: 10c0/e6bf7e014f4197e2044d18c43d10ac761a41af86a9ab1054c40abf7e38ec7562b69bba86027217dc9a07b841c28240f29df572a2270e4703b1e8fab4f7147c7e
+  checksum: 10c0/1787bc778f881c8cff43ac77471f9813aba98be4243161a569055175a2e826d453bd4fc8498ce6cca6406a503bc6c2cdc51ffe6758567ec0ab67f0b4dde2b2ad
   languageName: node
   linkType: hard
 
@@ -6370,9 +6403,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.0.0-next.132":
-  version: 5.0.0-next.132
-  resolution: "svelte@npm:5.0.0-next.132"
+"svelte@npm:^5.0.0-next.136":
+  version: 5.0.0-next.136
+  resolution: "svelte@npm:5.0.0-next.136"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.1"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -6387,7 +6420,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.5"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10c0/fdd83aa2d4359d73d4115f706204f504148ec042558708b32ddcdb8f8bf479b3ca0f0f084d08e7a76d4fb3bff05b2a240e0a61a35c1445a8d6fea4c42c10aad9
+  checksum: 10c0/4011d0ea3904b73f61e9a88ae05b097fbf9e226425e52f06f09c9adf629e2be112818d8aa357c867045099f09ff57f7df5fce4da2861055219712d5c936723b6
   languageName: node
   linkType: hard
 
@@ -6457,17 +6490,17 @@ __metadata:
     "@eslint/js": "npm:^9.2.0"
     eslint: "npm:^9.2.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-command: "npm:^0.2.0"
+    eslint-plugin-command: "npm:^0.2.1"
     eslint-plugin-svelte: "npm:^2.39.0"
     globals: "npm:^15.2.0"
     prettier: "npm:^3.2.5"
     prettier-plugin-jsdoc: "npm:^1.3.0"
     prettier-plugin-svelte: "npm:^3.2.3"
-    supabase: "npm:^1.167.4"
-    svelte: "npm:^5.0.0-next.132"
+    supabase: "npm:^1.167.6"
+    svelte: "npm:^5.0.0-next.136"
     turbo: "npm:^1.13.3"
     typescript-eslint: "npm:^7.9.0"
-    vercel: "npm:^34.1.14"
+    vercel: "npm:^34.2.0"
   languageName: unknown
   linkType: soft
 
@@ -6766,13 +6799,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.5.0-dev.20240514":
-  version: 5.5.0-dev.20240514
-  resolution: "typescript@npm:5.5.0-dev.20240514"
+"typescript@npm:^5.5.0-dev.20240516":
+  version: 5.5.0-dev.20240516
+  resolution: "typescript@npm:5.5.0-dev.20240516"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/d6f8501a90f33cb47713d5e9cb46b202b786adccd09ec1f93aa9e3f6081ad3570256b5d13030a2850db7dc8e95cb30e4700c9910b3b29d913d02e2f30b836d8c
+  checksum: 10c0/7c5f38ea6bf3b2df96c4d2f3ddc3d51a5013098bb641f033963294910242308344a1e39bf8d924246cbcbfd93ad1368b68e736f4f9a33ac4952de3cd09ca7e35
   languageName: node
   linkType: hard
 
@@ -6796,13 +6829,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.5.0-dev.20240514#optional!builtin<compat/typescript>":
-  version: 5.5.0-dev.20240514
-  resolution: "typescript@patch:typescript@npm%3A5.5.0-dev.20240514#optional!builtin<compat/typescript>::version=5.5.0-dev.20240514&hash=b45daf"
+"typescript@patch:typescript@npm%3A^5.5.0-dev.20240516#optional!builtin<compat/typescript>":
+  version: 5.5.0-dev.20240516
+  resolution: "typescript@patch:typescript@npm%3A5.5.0-dev.20240516#optional!builtin<compat/typescript>::version=5.5.0-dev.20240516&hash=b45daf"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/0983d22c5e57ff6dbf1eac3e3348d7c4e57ef471d240db2dbd5887f6e762a2e78cb985ea400b95c75891027fdbd35380b0f3de7edcbf311e94e726bd814610c1
+  checksum: 10c0/6bd5081208890cab1ed7102ebae829bab94810457177c2cd59b4730687d181a73c4c6863ff2aea3d500aaa2df027cf90acc8cd13a8e7f749e03a5a03189ca2b6
   languageName: node
   linkType: hard
 
@@ -6826,16 +6859,16 @@ __metadata:
   dependencies:
     "@sveltejs/kit": "npm:^2.5.8"
     "@sveltejs/package": "npm:^2.3.1"
-    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.0"
+    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.1"
     "@types/node": "npm:^20.12.12"
     colorjs.io: "npm:^0.5.0"
     modern-normalize: "npm:^2.0.0"
     publint: "npm:^0.2.7"
     sass: "npm:^1.77.1"
-    svelte: "npm:^5.0.0-next.132"
+    svelte: "npm:^5.0.0-next.136"
     svelte-check: "npm:^3.7.1"
     tslib: "npm:^2.6.2"
-    typescript: "npm:^5.5.0-dev.20240514"
+    typescript: "npm:^5.5.0-dev.20240516"
     vite: "npm:^5.2.11"
     vite-node: "npm:^1.6.0"
   peerDependencies:
@@ -6995,26 +7028,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:^34.1.14":
-  version: 34.1.14
-  resolution: "vercel@npm:34.1.14"
+"vercel@npm:^34.2.0":
+  version: 34.2.0
+  resolution: "vercel@npm:34.2.0"
   dependencies:
-    "@vercel/build-utils": "npm:8.1.3"
+    "@vercel/build-utils": "npm:8.2.0"
     "@vercel/fun": "npm:1.1.0"
     "@vercel/go": "npm:3.1.1"
     "@vercel/hydrogen": "npm:1.0.2"
     "@vercel/next": "npm:4.2.11"
-    "@vercel/node": "npm:3.1.4"
+    "@vercel/node": "npm:3.1.5"
     "@vercel/python": "npm:4.2.0"
     "@vercel/redwood": "npm:2.0.9"
     "@vercel/remix-builder": "npm:2.1.6"
     "@vercel/ruby": "npm:2.1.0"
-    "@vercel/static-build": "npm:2.5.8"
+    "@vercel/static-build": "npm:2.5.9"
     chokidar: "npm:3.3.1"
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: 10c0/f8800247a43d339be1aea0ed8c41425bbfdaee840035fa0acca95d360903fd0f35778c8e138e3a40b5afe17394e3a4b4f410b4f9ba72e8db943e18a70d30c35a
+  checksum: 10c0/fe1e3dd799778c4bda33c0490b4b6f894a78496f27fca1ffb6f29a37f78014b53cc6b3e16e2764381b3704af7633b51ca2ae378d0ba90b48baaa8f21e1547666
   languageName: node
   linkType: hard
 
