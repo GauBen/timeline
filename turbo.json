@@ -6,7 +6,6 @@
       "outputs": [".vercel", "build", "dist"]
     },
     "dev": {
-      "dependsOn": ["build"],
       "cache": false,
       "persistent": true
     }

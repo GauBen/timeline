@@ -6,11 +6,13 @@
   let {
     start,
     windows,
-    eventInCreation = $bindable(),
+    eventInCreation,
+    onevent,
   }: {
     start: Temporal.PlainDate;
     windows: Record<string, Event[]>;
     eventInCreation?: Temporal.PlainDateTime;
+    onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
 
   const paddingDaysStart = $derived(start.dayOfWeek - 1);
@@ -76,9 +78,7 @@
             <td
               onclick={({ target, currentTarget }) => {
                 if (target !== currentTarget) return;
-                eventInCreation = day.toPlainDateTime(
-                  eventInCreation?.toPlainTime(),
-                );
+                onevent(day.toPlainDateTime(eventInCreation?.toPlainTime()));
               }}
             >
               {#if day.month === start.month}
@@ -92,12 +92,14 @@
               {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
                 {@render eventInCreationMarker()}
               {/if}
-              {#each events as { body, added }, i}
+              {#each events as { id, body, added }, i}
                 <article
                   style:background={added ? "#e8faef" : "#fff"}
                   style:opacity={day.month === start.month ? 1 : 0.75}
                 >
-                  {body}
+                  <a href="?event={id}">
+                    {body}
+                  </a>
                 </article>
                 {#if eventInCreation
                   ?.toPlainDate()
@@ -150,7 +152,7 @@
     height: 6rem;
   }
 
-  td a {
+  td > a {
     position: absolute;
     color: #888;
     font-size: 0.8em;

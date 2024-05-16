@@ -11,11 +11,13 @@
   let {
     start,
     windows,
-    eventInCreation = $bindable(),
+    eventInCreation,
+    onevent,
   }: {
     start: Temporal.PlainDate;
     windows: Record<string, Event[]>;
     eventInCreation?: Temporal.PlainDateTime;
+    onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
   const today = Temporal.Now.plainDateISO("Europe/Paris");
   const now = Temporal.Now.zonedDateTimeISO("Europe/Paris");
@@ -153,7 +155,8 @@
       {@const day = Temporal.PlainDate.from(key)}
       <Day
         {day}
-        bind:eventInCreation
+        {onevent}
+        {eventInCreation}
         bind:this={days[key]}
         events={windows[key] ?? []}
       />

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { goto } from "$app/navigation";
+  import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import type { Follow, User } from "@prisma/client";
   import { untrack } from "svelte";
@@ -9,7 +11,7 @@
     followings,
     onreset,
     getEventInCreationElement,
-    eventInCreation = $bindable(),
+    eventInCreation,
   }: {
     followings: Array<Follow & { following: User }>;
     onreset: () => void;
@@ -99,10 +101,17 @@
           type="datetime-local"
           name="date"
           value={eventInCreation.toString().slice(0, 16)}
-          oninput={({ currentTarget }) => {
+          oninput={async ({ currentTarget }) => {
             try {
-              eventInCreation = Temporal.PlainDateTime.from(
+              const x = Temporal.PlainDateTime.from(
                 currentTarget.value,
+              ).toString();
+              await goto(
+                $resolveRoute(
+                  {},
+                  { search: "?" + new URLSearchParams({ new: x }) },
+                ),
+                { keepFocus: true, noScroll: true },
               );
             } catch {
               // Ignore invalid dates

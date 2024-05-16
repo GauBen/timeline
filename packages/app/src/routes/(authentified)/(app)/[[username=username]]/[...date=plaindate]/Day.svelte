@@ -6,11 +6,13 @@
   let {
     events,
     day,
-    eventInCreation = $bindable(),
+    eventInCreation,
+    onevent,
   }: {
     events: Event[];
     day: Temporal.PlainDate;
     eventInCreation?: Temporal.PlainDateTime;
+    onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
 
   const today = Temporal.Now.plainDateISO("Europe/Paris");
@@ -33,7 +35,7 @@
       // Make minutes a multiple of 15
       Math.floor((y % 64) / 16) * 15,
     );
-    eventInCreation = day.toPlainDateTime(time);
+    onevent(day.toPlainDateTime(time));
   };
 
   let eventInCreationElement = $state<HTMLElement>();

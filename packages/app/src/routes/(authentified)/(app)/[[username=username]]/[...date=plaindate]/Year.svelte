@@ -7,11 +7,12 @@
   const {
     start: firstDayOfYear,
     windows,
-    eventInCreation = $bindable(),
+    eventInCreation,
   }: {
     start: Temporal.PlainDate;
     windows: Record<string, Event[]>;
     eventInCreation?: Temporal.PlainDateTime;
+    onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
 
   const max = $derived(

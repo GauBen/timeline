@@ -11,30 +11,39 @@
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
   import EventActions from "./EventActions.svelte";
+  import { page } from "$app/stores";
 
   const { data } = $props();
   const { event, latest, followed, windows, user, view, followings, me } =
     $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
-
-  let eventInCreation = $state<Temporal.PlainDateTime>();
+  const eventInCreation = $derived(
+    data.eventInCreation
+      ? Temporal.PlainDateTime.from(data.eventInCreation)
+      : undefined,
+  );
 
   let component = $state<Month | Week | Year>();
 </script>
 
 <svelte:window
-  onkeydown={({ key }) => {
+  onkeydown={async ({ key }) => {
     if (!eventInCreation) return;
+    let to: Temporal.PlainDateTime | undefined;
 
-    if (key === "Escape") eventInCreation = undefined;
+    if (key === "Escape") await goto($page.url.pathname, { keepFocus: true, noScroll: true })
     else if (key === "ArrowDown")
-      eventInCreation = eventInCreation.add({ minutes: 15 });
+    to = eventInCreation.add({ minutes: 15 });
     else if (key === "ArrowUp")
-      eventInCreation = eventInCreation.subtract({ minutes: 15 });
+    to = eventInCreation.subtract({ minutes: 15 });
     else if (key === "ArrowLeft")
-      eventInCreation = eventInCreation.subtract({ days: 1 });
+    to = eventInCreation.subtract({ days: 1 });
     else if (key === "ArrowRight")
-      eventInCreation = eventInCreation.add({ days: 1 });
+    to = eventInCreation.add({ days: 1 });
+
+    if (to) {
+      await goto($resolveRoute({},{search: '?'+ new URLSearchParams({new: to.toString()})}), { keepFocus: true, noScroll: true })
+    }
   }}
 />
 
@@ -48,14 +57,17 @@
     <form method="POST" use:enhance>
       <EventActions {event} {me} />
     </form>
-    <a href="?">Close</a>
+    <a href={$page.url.pathname}>Close</a>
   </dialog>
 {:else if eventInCreation}
   <Dialog
     {followings}
-    bind:eventInCreation
-    onreset={() => {
-      eventInCreation = undefined;
+    {eventInCreation}
+    onreset={async () => {
+      await goto($resolveRoute({}, { search: "" }), {
+        keepFocus: true,
+        noScroll: true,
+      });
     }}
     getEventInCreationElement={component!.getEventInCreationElement}
   />
@@ -105,7 +117,17 @@
     this={{ day: Week, month: Month, year: Year }[view]}
     {start}
     {windows}
-    bind:eventInCreation
+    {eventInCreation}
+    onevent={async (to) => {
+      console.log(to);
+      await goto(
+        $resolveRoute(
+          {},
+          { search: "?" + new URLSearchParams({ new: to.toString() }) },
+        ),
+        { keepFocus: true, noScroll: true },
+      );
+    }}
     bind:this={component}
   />
 </Layout>

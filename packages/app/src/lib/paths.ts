@@ -6,7 +6,13 @@ import type { RouteParams } from "../routes/(authentified)/(app)/[[username=user
 export const resolveRoute = derived(
   page,
   ($page) =>
-    (params: Partial<RouteParams>, { search, hash } = $page.url) => {
+    (
+      params: Partial<RouteParams>,
+      {
+        search = $page.url.search,
+        hash = $page.url.hash,
+      }: { search?: string; hash?: string } = {},
+    ) => {
       if (!$page.route.id)
         throw new Error("Cannot call resolveRoute outside of a page");
       return (
