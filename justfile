@@ -2,24 +2,30 @@
 _:
   @just --list --justfile {{justfile()}} --unsorted
 
-# Install dependencies and build the app
+# Install dependencies and build the monorepo
 build:
   yarn install --immutable
-  yarn build
+  yarn turbo run build
 
 # Get the development environment up and running
 dev: build
   yarn supabase start
   yarn prisma migrate deploy
-  yarn dev
+  yarn turbo run dev
 
 # Reset the development database
 reset:
-  yarn db:reset
+  yarn supabase db reset
+  yarn prisma migrate deploy
 
 # Stop the development containers
 stop:
   yarn supabase stop
+
+# Lint and auto-fix the code
+lint:
+  yarn prettier --write --list-different .
+  yarn eslint --fix .
 
 # Deploy the app to Vercel
 deploy token: build

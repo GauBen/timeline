@@ -39,6 +39,7 @@ export default tsEslint.config(
       "**/.vercel",
       "**/.yarn",
       "**/build",
+      "**/dist",
       "**/node_modules",
       "**/package",
       "**/src/paraglide",
