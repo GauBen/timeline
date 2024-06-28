@@ -2,8 +2,22 @@ import { prisma } from "$lib/server/prisma.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import { Prisma, type User } from "@prisma/client";
 import { error, fail } from "@sveltejs/kit";
-import Object_groupBy from "object.groupby";
 import { z } from "zod";
+
+// Polyfill until Vercel supports Node >= 21
+function Object_groupBy<T, K extends PropertyKey>(
+  iterable: Iterable<T>,
+  callbackfn: (value: T, index: number) => K,
+): Record<K, T[]> {
+  const result = {} as Record<K, T[]>;
+  let index = 0;
+  for (const value of iterable) {
+    const key = callbackfn(value, index++);
+    if (key in result) result[key].push(value);
+    else result[key] = [value];
+  }
+  return result;
+}
 
 export const load = async ({ parent, params, url }) => {
   const { me } = await parent();

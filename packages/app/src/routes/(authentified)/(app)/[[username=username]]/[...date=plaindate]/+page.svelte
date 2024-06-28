@@ -31,18 +31,21 @@
     if (!eventInCreation) return;
     let to: Temporal.PlainDateTime | undefined;
 
-    if (key === "Escape") await goto($page.url.pathname, { keepFocus: true, noScroll: true })
-    else if (key === "ArrowDown")
-    to = eventInCreation.add({ minutes: 15 });
-    else if (key === "ArrowUp")
-    to = eventInCreation.subtract({ minutes: 15 });
-    else if (key === "ArrowLeft")
-    to = eventInCreation.subtract({ days: 1 });
-    else if (key === "ArrowRight")
-    to = eventInCreation.add({ days: 1 });
+    if (key === "Escape")
+      await goto($page.url.pathname, { keepFocus: true, noScroll: true });
+    else if (key === "ArrowDown") to = eventInCreation.add({ minutes: 15 });
+    else if (key === "ArrowUp") to = eventInCreation.subtract({ minutes: 15 });
+    else if (key === "ArrowLeft") to = eventInCreation.subtract({ days: 1 });
+    else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
 
     if (to) {
-      await goto($resolveRoute({},{search: '?'+ new URLSearchParams({new: to.toString()})}), { keepFocus: true, noScroll: true })
+      await goto(
+        $resolveRoute(
+          {},
+          { search: "?" + new URLSearchParams({ new: to.toString() }) },
+        ),
+        { keepFocus: true, noScroll: true },
+      );
     }
   }}
 />

@@ -8,7 +8,7 @@
   <p>
     <a href="/auth/google" rel="external">Sign in with google</a>
     {#if data.devMode}
-      <a href="/dev/impersonate" rel="external"> Impersonate </a>
+      <a href="/dev/impersonate" rel="external">Impersonate</a>
     {/if}
   </p>
   <h2>What is Timeline?</h2>

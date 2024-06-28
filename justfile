@@ -24,8 +24,8 @@ stop:
 
 # Lint and auto-fix the code
 lint:
-  yarn prettier --write --list-different .
   yarn eslint --fix .
+  yarn prettier --write --list-different .
 
 # Deploy the app to Vercel
 deploy token: build

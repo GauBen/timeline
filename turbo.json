@@ -9,6 +9,5 @@
       "cache": false,
       "persistent": true
     }
-  },
-  "globalPassThroughEnv": ["LD_LIBRARY_PATH"]
+  }
 }

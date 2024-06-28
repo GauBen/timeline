@@ -1,7 +1,6 @@
 import { env } from "$env/dynamic/private";
 import { prisma } from "$lib/server/prisma.js";
 import { error, redirect } from "@sveltejs/kit";
-import { SignJWT } from "jose";
 
 export const load = async () => {
   if (!env.JWT_DEV_SECRET) error(403, "Not allowed in production");
@@ -17,6 +16,9 @@ export const actions = {
 
     const secret = new TextEncoder().encode(env.JWT_DEV_SECRET);
 
+    // Avoid importing dev dependencies at the top level to reduce production
+    // memory footprint and attack surface
+    const { SignJWT } = await import("jose");
     const jwt = await new SignJWT()
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
