@@ -1,7 +1,5 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { goto } from "$app/navigation";
-  import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import type { Follow, User } from "@prisma/client";
   import { untrack } from "svelte";
@@ -9,12 +7,14 @@
 
   let {
     followings,
-    onreset,
+    toggleEventCreation,
     getEventInCreationElement,
     eventInCreation,
   }: {
     followings: Array<Follow & { following: User }>;
-    onreset: () => void;
+    toggleEventCreation: (
+      datetime?: Temporal.PlainDateTime | undefined,
+    ) => Promise<void>;
     getEventInCreationElement?: () => HTMLElement;
     eventInCreation: Temporal.PlainDateTime;
   } = $props();
@@ -78,7 +78,7 @@
   </h2>
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <form
-    {onreset}
+    onreset={async () => toggleEventCreation()}
     use:enhance
     method="POST"
     action="?/createEvent"
@@ -103,15 +103,8 @@
           value={eventInCreation.toString().slice(0, 16)}
           oninput={async ({ currentTarget }) => {
             try {
-              const x = Temporal.PlainDateTime.from(
-                currentTarget.value,
-              ).toString();
-              await goto(
-                $resolveRoute(
-                  {},
-                  { search: "?" + new URLSearchParams({ new: x }) },
-                ),
-                { keepFocus: true, noScroll: true },
+              toggleEventCreation(
+                Temporal.PlainDateTime.from(currentTarget.value),
               );
             } catch {
               // Ignore invalid dates

@@ -1,7 +1,7 @@
 import { prisma } from "$lib/server/prisma.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import { Prisma, type User } from "@prisma/client";
-import { error, fail } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 
 // Polyfill until Vercel supports Node >= 21
@@ -151,7 +151,7 @@ export const actions = {
     if (!result.success)
       return fail(400, { input, validationErrors: result.error.flatten() });
 
-    return prisma.event.create({
+    await prisma.event.create({
       data: {
         body: result.data.body,
         date: result.data.date,
@@ -170,6 +170,8 @@ export const actions = {
             },
       },
     });
+
+    redirect(303, new URL(request.url).pathname);
   },
 
   follow: async ({ locals, params }) => {

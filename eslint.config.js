@@ -25,6 +25,8 @@ export default tsEslint.config(
       },
     },
     rules: {
+      // Still unstable
+      "svelte/valid-compile": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_" },

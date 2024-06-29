@@ -1,29 +1,46 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import Back from "~icons/ph/caret-left";
   import Dialog from "./Dialog.svelte";
+  import EventActions from "./EventActions.svelte";
   import Layout from "./Layout.svelte";
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
-  import EventActions from "./EventActions.svelte";
-  import { page } from "$app/stores";
 
   const { data } = $props();
   const { event, latest, followed, windows, user, view, followings, me } =
     $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
+
+  let component = $state<Month | Week | Year>();
+
+  /** Opens or closes the event creation dialog at a given datetime. */
+  const toggleEventCreation = async (
+    datetime?: Temporal.PlainDateTime | undefined,
+  ) => {
+    await goto(
+      $resolveRoute(
+        {},
+        {
+          search: datetime
+            ? "?" + new URLSearchParams({ new: datetime.toString() })
+            : "",
+        },
+      ),
+      { keepFocus: true, noScroll: true },
+    );
+  };
   const eventInCreation = $derived(
     data.eventInCreation
       ? Temporal.PlainDateTime.from(data.eventInCreation)
       : undefined,
   );
-
-  let component = $state<Month | Week | Year>();
 </script>
 
 <svelte:window
@@ -38,15 +55,7 @@
     else if (key === "ArrowLeft") to = eventInCreation.subtract({ days: 1 });
     else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
 
-    if (to) {
-      await goto(
-        $resolveRoute(
-          {},
-          { search: "?" + new URLSearchParams({ new: to.toString() }) },
-        ),
-        { keepFocus: true, noScroll: true },
-      );
-    }
+    if (to) await toggleEventCreation(to);
   }}
 />
 
@@ -66,13 +75,8 @@
   <Dialog
     {followings}
     {eventInCreation}
-    onreset={async () => {
-      await goto($resolveRoute({}, { search: "" }), {
-        keepFocus: true,
-        noScroll: true,
-      });
-    }}
-    getEventInCreationElement={component!.getEventInCreationElement}
+    {toggleEventCreation}
+    getEventInCreationElement={component?.getEventInCreationElement}
   />
 {/if}
 
@@ -121,16 +125,7 @@
     {start}
     {windows}
     {eventInCreation}
-    onevent={async (to) => {
-      console.log(to);
-      await goto(
-        $resolveRoute(
-          {},
-          { search: "?" + new URLSearchParams({ new: to.toString() }) },
-        ),
-        { keepFocus: true, noScroll: true },
-      );
-    }}
+    onevent={async (to) => toggleEventCreation(to)}
     bind:this={component}
   />
 </Layout>

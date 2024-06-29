@@ -24,7 +24,7 @@ Here is a simple roadmap of what's to come:
 
 ## Development
 
-To develop Timeline, you'll need a working Node+Yarn environment, as well as a Docker-compatible container runtime. It is recommended using [pkgx](https://pkgx.sh/): the [`dev` command](https://docs.pkgx.sh/using-dev/dev) will set upt the development environment for you, in seconds.
+To develop Timeline, you'll need a working Node+Yarn environment, as well as a Docker-compatible container runtime. It is recommended using [pkgx](https://pkgx.sh/): the [`dev` command](https://docs.pkgx.sh/using-dev/dev) will set up the development environment for you, in seconds.
 
 ```bash
 # Clone the repository
