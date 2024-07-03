@@ -1,6 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-import { Prisma, type User } from "@prisma/client";
+import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 

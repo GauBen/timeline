@@ -2,10 +2,13 @@
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import { format } from "$lib/i18n.js";
   import { resolveRoute } from "$lib/paths.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
+  import Calendar from "~icons/ph/calendar-dot-duotone";
   import Back from "~icons/ph/caret-left";
+  import Globe from "~icons/ph/globe-duotone";
   import Dialog from "./Dialog.svelte";
   import EventActions from "./EventActions.svelte";
   import Layout from "./Layout.svelte";
@@ -61,15 +64,28 @@
 
 {#if event}
   <dialog open style="z-index: 1">
-    <h1>{event.author.displayName}</h1>
-    <p>{event.body}</p>
-    <time datetime={event.date.toISOString()}>
-      {event.date.toLocaleString()}
-    </time>
-    <form method="POST" use:enhance>
-      <EventActions {event} {me} />
-    </form>
     <a href={$page.url.pathname}>Close</a>
+    <header>
+      <h3>
+        <a href={$resolveRoute({ username: event.author.username })}>
+          @{event.author.username}
+        </a>
+      </h3>
+      <p style="font-size: .75em">
+        {#if event.public}
+          <Globe />
+        {/if}
+        <a href="?event={event.id}">{$format(event.createdAt)}</a>
+      </p>
+    </header>
+    <p>{event.body}</p>
+    <footer>
+      <Calendar />
+      {$format(event.date)}
+      <form method="POST" use:enhance>
+        <EventActions {event} {me} />
+      </form>
+    </footer>
   </dialog>
 {:else if eventInCreation}
   <Dialog
@@ -129,3 +145,9 @@
     bind:this={component}
   />
 </Layout>
+
+<style lang="scss">
+  dialog {
+    min-width: 20rem;
+  }
+</style>
