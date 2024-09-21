@@ -33,6 +33,7 @@ model User {
   following     Follow[]      @relation("follower")
   eventsCreated Event[]
   events        EventToUser[]
+  habits        Habit[]
 
   timeline TimelineEvent[]
 
@@ -95,4 +96,24 @@ view TimelineEvent {
   added    Boolean?
 
   @@map("timeline")
+}
+
+model Habit {
+  id     BigInt @id @default(autoincrement())
+  name   String @db.VarChar(255)
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  marks HabitMark[]
+
+  @@map("habits")
+}
+
+model HabitMark {
+  habitId BigInt   @map("habit_id")
+  habit   Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  date    DateTime @db.Date
+
+  @@id([habitId, date])
+  @@map("habit_marks")
 }

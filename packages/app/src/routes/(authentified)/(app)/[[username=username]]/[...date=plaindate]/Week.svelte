@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from "$app/forms";
   import { language, m } from "$lib/i18n.js";
   import { resolveRoute } from "$lib/paths.js";
   import type { Event } from "$lib/types.js";
@@ -10,11 +11,15 @@
 
   let {
     start,
+    habits,
     windows,
     eventInCreation,
     onevent,
   }: {
     start: Temporal.PlainDate;
+    habits:
+      | Array<{ id: bigint; name: string; marks: Array<{ date: Date }> }>
+      | undefined;
     windows: Record<string, Event[]>;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
@@ -109,6 +114,22 @@
   export const getEventInCreationElement = () =>
     eventInCreation &&
     days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
+
+  const processedHabits = $derived(
+    habits?.map(({ id, name, marks }) => ({
+      id,
+      name,
+      days: new Set(
+        marks.map(({ date }) =>
+          toTemporalInstant
+            .call(date)
+            .toZonedDateTimeISO("Europe/Paris")
+            .toPlainDate()
+            .toString(),
+        ),
+      ),
+    })),
+  );
 </script>
 
 <svelte:window {onresize} />
@@ -117,29 +138,49 @@
   <header bind:this={calendarHeader}>
     {#each keys as key, i}
       {@const day = Temporal.PlainDate.from(key)}
-      <h2 class="_row-2">
-        {#if i === 0}
-          <a
-            href={$resolveRoute({
-              date: start.subtract({ days: 1 }).toString(),
-            })}
-            data-sveltekit-keepfocus
-          >
-            <CaretLeft />
-          </a>
+      <div class="column">
+        <h2 class="_row-2">
+          {#if i === 0}
+            <a
+              href={$resolveRoute({
+                date: start.subtract({ days: 1 }).toString(),
+              })}
+              data-sveltekit-keepfocus
+            >
+              <CaretLeft />
+            </a>
+          {/if}
+          <span style="flex: 1">{formatDay(day)}</span>
+          {#if i === numberOfColumns - 1}
+            <a
+              href={$resolveRoute({
+                date: start.add({ days: 1 }).toString(),
+              })}
+              data-sveltekit-keepfocus
+            >
+              <CaretRight />
+            </a>
+          {/if}
+        </h2>
+        {#if processedHabits}
+          <div class="_row-2">
+            {#each processedHabits as { id, name, days }}
+              <form method="post" action="?/markHabit" use:enhance>
+                <input type="hidden" name="habitId" value={id} />
+                <input type="hidden" name="date" value={key} />
+                <button
+                  type="submit"
+                  name="mark"
+                  value={(!days.has(key)).toString()}
+                >
+                  {days.has(key) ? "☑️" : "⬜"}
+                  {name}
+                </button>
+              </form>
+            {/each}
+          </div>
         {/if}
-        <span style="flex: 1">{formatDay(day)}</span>
-        {#if i === numberOfColumns - 1}
-          <a
-            href={$resolveRoute({
-              date: start.add({ days: 1 }).toString(),
-            })}
-            data-sveltekit-keepfocus
-          >
-            <CaretRight />
-          </a>
-        {/if}
-      </h2>
+      </div>
     {/each}
   </header>
   <div
@@ -175,11 +216,19 @@
     box-shadow: 0 0 0.5rem #19191a10;
     z-index: 1;
 
+    .column {
+      background: #fff;
+      padding: 0.5rem;
+      contain: paint;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
     h2 {
       background: #fff;
       display: flex;
-      padding: 0.5rem;
-      contain: paint;
+      margin: 0;
     }
 
     > * {

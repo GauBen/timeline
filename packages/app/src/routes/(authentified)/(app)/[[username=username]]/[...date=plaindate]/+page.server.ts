@@ -69,43 +69,62 @@ export const load = async ({ parent, params, url }) => {
   const eventId = ((x) => (x ? BigInt(x) : undefined))(
     url.searchParams.get("event"),
   );
-  const [event, latest, events, followed, followings] = await Promise.all([
-    eventId
-      ? prisma.timelineEvent.findUnique({
-          where: { id: eventId, AND: where },
-          include: { author: true },
-        })
-      : undefined,
-    prisma.timelineEvent.findMany({
-      where,
-      include: { author: true },
-      orderBy: { createdAt: "desc" },
-      take: 100,
-    }),
-    prisma.timelineEvent.findMany({
-      where: {
-        ...where,
-        date: {
-          gte: new Date(start.epochMilliseconds),
-          lt: new Date(end.epochMilliseconds),
-        },
-      },
-      include: { author: true },
-      orderBy: { date: "asc" },
-      take: 100,
-    }),
-    user
-      ? prisma.follow.findUnique({
-          where: {
-            followerId_followingId: { followerId: me.id, followingId: user.id },
+  const [event, latest, events, followed, followings, habits] =
+    await Promise.all([
+      eventId
+        ? prisma.timelineEvent.findUnique({
+            where: { id: eventId, AND: where },
+            include: { author: true },
+          })
+        : undefined,
+      prisma.timelineEvent.findMany({
+        where,
+        include: { author: true },
+        orderBy: { createdAt: "desc" },
+        take: 100,
+      }),
+      prisma.timelineEvent.findMany({
+        where: {
+          ...where,
+          date: {
+            gte: new Date(start.epochMilliseconds),
+            lt: new Date(end.epochMilliseconds),
           },
-        })
-      : undefined,
-    prisma.follow.findMany({
-      where: { followerId: me.id },
-      include: { following: true },
-    }),
-  ]);
+        },
+        include: { author: true },
+        orderBy: { date: "asc" },
+        take: 100,
+      }),
+      user
+        ? prisma.follow.findUnique({
+            where: {
+              followerId_followingId: {
+                followerId: me.id,
+                followingId: user.id,
+              },
+            },
+          })
+        : undefined,
+      prisma.follow.findMany({
+        where: { followerId: me.id },
+        include: { following: true },
+      }),
+      !user
+        ? prisma.habit.findMany({
+            where: { userId: me.id },
+            include: {
+              marks: {
+                where: {
+                  date: {
+                    gte: new Date(start.epochMilliseconds),
+                    lt: new Date(end.epochMilliseconds),
+                  },
+                },
+              },
+            },
+          })
+        : undefined,
+    ]);
 
   const windows = Object_groupBy(events, (event) =>
     toTemporalInstant
@@ -119,6 +138,7 @@ export const load = async ({ parent, params, url }) => {
     event,
     followed,
     followings,
+    habits,
     latest,
     start: start.toString(),
     user,
@@ -238,5 +258,29 @@ export const actions = {
     if (!eventId) return error(400, "Invalid event");
     const id = BigInt(eventId);
     await prisma.event.delete({ where: { id, authorId: locals.session.id } });
+  },
+
+  markHabit: async ({ locals, request }) => {
+    if (!locals.session) return error(401, "Unauthorized");
+
+    const data = await request.formData();
+    const input = {
+      habitId: data.get("habitId"),
+      date: data.get("date"),
+    };
+
+    const result = z
+      .object({
+        habitId: z.string().pipe(z.coerce.bigint()),
+        date: z.string().pipe(z.coerce.date()),
+      })
+      .safeParse(input);
+
+    if (!result.success)
+      return fail(400, { input, validationErrors: result.error.flatten() });
+
+    if (data.get("mark") === "true")
+      await prisma.habitMark.createMany({ data: result.data });
+    else await prisma.habitMark.deleteMany({ where: result.data });
   },
 };

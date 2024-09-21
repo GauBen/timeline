@@ -17,8 +17,17 @@
   import Year from "./Year.svelte";
 
   const { data } = $props();
-  const { event, latest, followed, windows, user, view, followings, me } =
-    $derived(data);
+  const {
+    event,
+    followed,
+    followings,
+    habits,
+    latest,
+    me,
+    user,
+    view,
+    windows,
+  } = $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   const Component = $derived({ day: Week, month: Month, year: Year }[view]);
@@ -41,9 +50,7 @@
     );
   };
   const eventInCreation = $derived(
-    data.eventInCreation
-      ? Temporal.PlainDateTime.from(data.eventInCreation)
-      : undefined,
+    data.eventInCreation && Temporal.PlainDateTime.from(data.eventInCreation),
   );
 </script>
 
@@ -139,6 +146,7 @@
 
   <Component
     {start}
+    {habits}
     {windows}
     {eventInCreation}
     onevent={toggleEventCreation}

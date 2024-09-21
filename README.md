@@ -21,6 +21,7 @@ Here is a simple roadmap of what's to come:
 - [ ] UI consistency
 - [ ] Sync with Google Calendar
 - [ ] Publish pictures
+- [x] Habit tracker
 
 ## Development
 
