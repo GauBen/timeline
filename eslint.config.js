@@ -1,10 +1,10 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
+import command from "eslint-plugin-command/config";
 import eslintPluginSvelte from "eslint-plugin-svelte";
 import globals from "globals";
 import svelteParser from "svelte-eslint-parser";
 import tsEslint from "typescript-eslint";
-import command from "eslint-plugin-command/config";
 
 export default tsEslint.config(
   command(),
@@ -26,6 +26,7 @@ export default tsEslint.config(
     },
     rules: {
       // Still unstable
+      "svelte/no-unused-svelte-ignore": "off",
       "svelte/valid-compile": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",

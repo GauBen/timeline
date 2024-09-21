@@ -29,9 +29,9 @@ lint:
 
 # Deploy the app to Vercel
 deploy token: build
-  yarn vercel --cwd=packages/app --token={{token}} pull --yes --environment=production
-  yarn vercel --cwd=packages/app --token={{token}} deploy --prebuilt --prod --skip-domain > deployment-url.txt
+  yarn vercel pull --yes --environment=production --cwd=packages/app --token={{token}}
+  yarn vercel deploy --prebuilt --prod --skip-domain --cwd=packages/app --token={{token}} > deployment-url.txt
   yarn supabase db push --db-url="${DATABASE_DIRECT_URL%%\?*}" && yarn prisma migrate deploy
   # We need to specify which organization (scope) owns the deployment,
   # otherwise it fails with "Deployment belongs to a different team"
-  yarn vercel --cwd=packages/app --token={{token}} promote $(cat deployment-url.txt) --scope="$VERCEL_ORG_ID"
+  yarn vercel promote $(cat deployment-url.txt) --cwd=packages/app --token={{token}} --scope="$VERCEL_ORG_ID"

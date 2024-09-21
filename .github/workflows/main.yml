@@ -17,4 +17,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pkgxdev/dev@v0
-      - run: pkgx just deploy ${{ secrets.VERCEL_TOKEN }}
+      - run: just deploy ${{ secrets.VERCEL_TOKEN }}

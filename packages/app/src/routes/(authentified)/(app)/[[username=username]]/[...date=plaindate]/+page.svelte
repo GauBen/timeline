@@ -21,6 +21,7 @@
     $derived(data);
   const start = $derived(Temporal.PlainDate.from(data.start));
 
+  const Component = $derived({ day: Week, month: Month, year: Year }[view]);
   let component = $state<Month | Week | Year>();
 
   /** Opens or closes the event creation dialog at a given datetime. */
@@ -136,12 +137,11 @@
     <a href="/settings">{me.displayName}</a>
   {/snippet}
 
-  <svelte:component
-    this={{ day: Week, month: Month, year: Year }[view]}
+  <Component
     {start}
     {windows}
     {eventInCreation}
-    onevent={async (to) => toggleEventCreation(to)}
+    onevent={toggleEventCreation}
     bind:this={component}
   />
 </Layout>
