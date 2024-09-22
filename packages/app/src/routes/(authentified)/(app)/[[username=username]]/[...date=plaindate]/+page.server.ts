@@ -164,7 +164,7 @@ export const actions = {
     const result = z
       .object({
         body: z.string().min(1).max(1024),
-        date: z.string().pipe(z.coerce.date()),
+        date: z.string().transform((date) => Temporal.PlainDateTime.from(date)),
         startTimezone: z.string().refine((tz) => timezones.has(tz)),
         public: z.boolean(),
         users: z.string().uuid().array(),
@@ -174,10 +174,16 @@ export const actions = {
     if (!result.success)
       return fail(400, { input, validationErrors: result.error.flatten() });
 
+    const date = new Date(
+      result.data.date.toZonedDateTime(
+        result.data.startTimezone,
+      ).epochMilliseconds,
+    );
+
     await prisma.event.create({
       data: {
         body: result.data.body,
-        date: result.data.date,
+        date,
         startTimezone: result.data.startTimezone,
         public: result.data.public,
         authorId: locals.session.id,
