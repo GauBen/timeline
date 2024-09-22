@@ -17,7 +17,7 @@ Here is a simple roadmap of what's to come:
 - [x] Follow users
 - [ ] ⏳ Share events with specific people
 - [ ] Event duration
-- [ ] Proper timezone support
+- [x] Proper timezone support
 - [ ] UI consistency
 - [ ] Sync with Google Calendar
 - [ ] Publish pictures
