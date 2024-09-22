@@ -156,6 +156,7 @@ export const actions = {
     const input = {
       body: String(data.get("body")),
       date: String(data.get("date")),
+      startTimezone: String(data.get("startTimezone")),
       public: Boolean(data.get("public")),
       users: data.getAll("shared_with"),
     };
