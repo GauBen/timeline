@@ -27,6 +27,7 @@ model User {
   username    String   @unique @db.VarChar(255)
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  timezone    String   @db.VarChar(32)
 
   authUser      AuthUser      @relation(fields: [id], references: [id])
   followers     Follow[]      @relation("following")
@@ -53,15 +54,17 @@ model Follow {
 }
 
 model Event {
-  id        BigInt        @id @default(autoincrement())
-  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  date      DateTime      @db.Timestamptz(6)
-  duration  Int           @db.Integer // Prisma does not support `interval` type yet
-  body      String        @db.VarChar(1024)
-  public    Boolean       @default(true)
-  authorId  String        @map("author_id") @db.Uuid
-  author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  users     EventToUser[]
+  id            BigInt        @id @default(autoincrement())
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  date          DateTime      @db.Timestamptz(6)
+  startTimezone String        @map("start_timezone") @db.VarChar(32)
+  // TODO: replace duration with end, add timezone
+  duration      Int           @db.Integer // Prisma does not support `interval` type yet
+  body          String        @db.VarChar(1024)
+  public        Boolean       @default(true)
+  authorId      String        @map("author_id") @db.Uuid
+  author        User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  users         EventToUser[]
 
   @@index([authorId])
   @@index([date])

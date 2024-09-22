@@ -100,6 +100,7 @@
     {followings}
     {eventInCreation}
     {toggleEventCreation}
+    timezone={me.timezone}
     getEventInCreationElement={component?.getEventInCreationElement}
   />
 {/if}
@@ -148,6 +149,7 @@
     {start}
     {habits}
     {windows}
+    timezone={me.timezone}
     {eventInCreation}
     onevent={toggleEventCreation}
     bind:this={component}

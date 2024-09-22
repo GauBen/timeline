@@ -7,20 +7,22 @@
     events,
     day,
     eventInCreation,
+    timezone,
     onevent,
   }: {
     events: Event[];
     day: Temporal.PlainDate;
     eventInCreation?: Temporal.PlainDateTime;
+    timezone: string;
     onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
 
-  const today = Temporal.Now.plainDateISO("Europe/Paris");
+  const today = $derived(Temporal.Now.plainDateISO(timezone));
 
   const fixDate = (date: Date) =>
-    toTemporalInstant.call(date).toZonedDateTimeISO("Europe/Paris");
+    toTemporalInstant.call(date).toZonedDateTimeISO(timezone);
 
-  const time = Temporal.Now.plainTimeISO("Europe/Paris");
+  const time = $derived(Temporal.Now.plainTimeISO(timezone));
   const toRems = (date: Temporal.PlainTime) =>
     // We can't just use `date.since` because of DST!
     date.since(new Temporal.PlainTime()).total({ unit: "hours" }) * 4;

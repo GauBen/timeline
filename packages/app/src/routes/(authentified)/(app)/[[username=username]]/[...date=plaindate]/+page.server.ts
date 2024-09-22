@@ -1,4 +1,5 @@
 import { prisma } from "$lib/server/prisma.js";
+import { timezones } from "$lib/server/tz.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -51,8 +52,8 @@ export const load = async ({ parent, params, url }) => {
         year: matches.groups?.year ? Number(matches.groups.year) : 1,
         month: matches.groups?.month ? Number(matches.groups.month) : 1,
         day: matches.groups?.day ? Number(matches.groups.day) : 1,
-      }).toZonedDateTime("Europe/Paris")
-    : Temporal.Now.zonedDateTimeISO("Europe/Paris").withPlainTime();
+      }).toZonedDateTime(me.timezone)
+    : Temporal.Now.zonedDateTimeISO(me.timezone).withPlainTime();
 
   const end = start.add(
     view === "day"
@@ -129,7 +130,7 @@ export const load = async ({ parent, params, url }) => {
   const windows = Object_groupBy(events, (event) =>
     toTemporalInstant
       .call(event.date)
-      .toZonedDateTimeISO("Europe/Paris")
+      .toZonedDateTimeISO(me.timezone)
       .toPlainDate()
       .toString(),
   );
@@ -163,6 +164,7 @@ export const actions = {
       .object({
         body: z.string().min(1).max(1024),
         date: z.string().pipe(z.coerce.date()),
+        startTimezone: z.string().refine((tz) => timezones.has(tz)),
         public: z.boolean(),
         users: z.string().uuid().array(),
       })
@@ -175,6 +177,7 @@ export const actions = {
       data: {
         body: result.data.body,
         date: result.data.date,
+        startTimezone: result.data.startTimezone,
         public: result.data.public,
         authorId: locals.session.id,
         duration: 0,

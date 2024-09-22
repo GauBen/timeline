@@ -1,4 +1,5 @@
 import { prisma } from "$lib/server/prisma.js";
+import { timezones } from "$lib/server/tz.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
@@ -54,12 +55,14 @@ export const actions = {
     const input = {
       username: String(data.get("username")),
       displayName: String(data.get("display_name")),
+      timezone: String(data.get("timezone")),
     };
 
     const result = z
       .object({
         username: z.string().regex(/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/),
         displayName: z.string().min(1).max(255),
+        timezone: z.string().refine((tz) => timezones.has(tz)),
       })
       .safeParse(input);
 

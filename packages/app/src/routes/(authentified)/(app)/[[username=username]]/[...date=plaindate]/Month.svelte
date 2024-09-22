@@ -6,11 +6,13 @@
   let {
     start,
     windows,
+    timezone,
     eventInCreation,
     onevent,
   }: {
     start: Temporal.PlainDate;
     windows: Record<string, Event[]>;
+    timezone: string;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
@@ -20,7 +22,7 @@
     Math.ceil((start.dayOfWeek + start.daysInMonth - 1) / 7),
   );
 
-  const today = Temporal.Now.plainDateISO("Europe/Paris");
+  const today = $derived(Temporal.Now.plainDateISO(timezone));
 
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
@@ -69,9 +71,7 @@
               events.filter(
                 ({ date }) =>
                   Temporal.PlainDateTime.compare(
-                    toTemporalInstant
-                      .call(date)
-                      .toZonedDateTimeISO("Europe/Paris"),
+                    toTemporalInstant.call(date).toZonedDateTimeISO(timezone),
                     eventInCreation!,
                   ) < 0,
               ).length}

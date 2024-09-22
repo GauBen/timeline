@@ -13,6 +13,7 @@
     start,
     habits,
     windows,
+    timezone,
     eventInCreation,
     onevent,
   }: {
@@ -21,11 +22,12 @@
       | Array<{ id: bigint; name: string; marks: Array<{ date: Date }> }>
       | undefined;
     windows: Record<string, Event[]>;
+    timezone: string;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
-  const today = Temporal.Now.plainDateISO("Europe/Paris");
-  const now = Temporal.Now.zonedDateTimeISO("Europe/Paris");
+  const today = $derived(Temporal.Now.plainDateISO(timezone));
+  const now = $derived(Temporal.Now.zonedDateTimeISO(timezone));
 
   const keys = $derived(
     Array.from({ length: 7 }, (_, days) => start.add({ days }).toString()),
@@ -49,7 +51,7 @@
   };
 
   const fixDate = (date: Date) =>
-    toTemporalInstant.call(date).toZonedDateTimeISO("Europe/Paris");
+    toTemporalInstant.call(date).toZonedDateTimeISO(timezone);
 
   const toRems = (date: Temporal.PlainTime) =>
     // We can't just use `date.since` because of DST!
@@ -123,7 +125,7 @@
         marks.map(({ date }) =>
           toTemporalInstant
             .call(date)
-            .toZonedDateTimeISO("Europe/Paris")
+            .toZonedDateTimeISO(timezone)
             .toPlainDate()
             .toString(),
         ),
@@ -197,6 +199,7 @@
       <Day
         {day}
         {onevent}
+        {timezone}
         {eventInCreation}
         bind:this={days[key]}
         events={windows[key] ?? []}

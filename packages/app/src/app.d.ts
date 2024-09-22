@@ -11,6 +11,7 @@ declare global {
     interface PageData {
       session?: User;
       language: AvailableLanguageTag;
+      timezones: string[];
     }
     // interface Error {}
     // interface Platform {}

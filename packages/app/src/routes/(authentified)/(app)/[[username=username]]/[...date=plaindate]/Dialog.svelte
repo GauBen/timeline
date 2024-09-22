@@ -1,16 +1,19 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import { Temporal } from "@js-temporal/polyfill";
   import type { Follow, User } from "@prisma/client";
   import { untrack } from "svelte";
   import { Button } from "uistiti";
 
   let {
+    timezone,
     followings,
     toggleEventCreation,
     getEventInCreationElement,
     eventInCreation,
   }: {
+    timezone: string;
     followings: Array<Follow & { following: User }>;
     toggleEventCreation: (
       datetime?: Temporal.PlainDateTime | undefined,
@@ -112,6 +115,10 @@
           }}
         />
       </label>
+    </p>
+    <p>
+      Timezone:
+      <TimezonePicker bind:timezone />
     </p>
     <p>
       Visibility:

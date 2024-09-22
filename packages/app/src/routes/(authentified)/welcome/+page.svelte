@@ -1,7 +1,10 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import TimezonePicker from "$lib/components/TimezonePicker.svelte";
 
   const { form } = $props();
+
+  let timezone = $state.raw(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
   let username = $state(form?.input?.username ?? "");
   let displayName = $state(form?.input?.displayName ?? "");
@@ -43,6 +46,11 @@
       />
       {(form?.validationErrors?.fieldErrors?.displayName ?? []).join(", ")}
     </label>
+  </p>
+  <p>
+    Time zone
+    <TimezonePicker bind:timezone />
+    <input type="hidden" name="timezone" value={timezone} />
   </p>
   <p>
     <button type="submit">Yay!</button>
