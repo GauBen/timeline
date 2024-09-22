@@ -119,6 +119,7 @@
     <p>
       Timezone:
       <TimezonePicker bind:timezone />
+      <input type="hidden" name="startTimezone" value={timezone} />
     </p>
     <p>
       Visibility:
