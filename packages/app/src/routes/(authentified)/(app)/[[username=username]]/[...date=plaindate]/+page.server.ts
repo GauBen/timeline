@@ -1,5 +1,5 @@
 import { prisma } from "$lib/server/prisma.js";
-import { timezones } from "$lib/server/tz.js";
+import { TimezoneSchema } from "$lib/server/tz.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
@@ -165,7 +165,7 @@ export const actions = {
       .object({
         body: z.string().min(1).max(1024),
         date: z.string().transform((date) => Temporal.PlainDateTime.from(date)),
-        startTimezone: z.string().refine((tz) => timezones.has(tz)),
+        startTimezone: TimezoneSchema,
         public: z.boolean(),
         users: z.string().uuid().array(),
       })
