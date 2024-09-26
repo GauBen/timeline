@@ -1,16 +1,16 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { form, text } from "../src/index.ts";
+import * as fg from "../src/index.ts";
 
-describe("basic input types", () => {
+describe("text()", () => {
   it("should be able to parse a text input", () => {
     const data = new FormData();
     data.append("input1", "hello world");
     data.append("input2", "");
 
-    const schema = form({
-      input1: text({ required: true }),
-      input2: text(),
+    const schema = fg.form({
+      input1: fg.text({ required: true }),
+      input2: fg.text(),
     });
 
     const result = schema.parse(data);
@@ -23,7 +23,7 @@ describe("basic input types", () => {
     const data = new FormData();
     data.append("input", "");
 
-    const schema = form({ input: text({ required: true }) });
+    const schema = fg.form({ input: fg.text({ required: true }) });
 
     try {
       schema.parse(data);
@@ -33,10 +33,10 @@ describe("basic input types", () => {
     }
   });
 
-  it("should reject a missing required field", () => {
+  it("should reject a missing field", () => {
     const data = new FormData();
 
-    const schema = form({ input: text({ required: true }) });
+    const schema = fg.form({ input: fg.text() });
 
     try {
       schema.parse(data);
@@ -50,8 +50,8 @@ describe("basic input types", () => {
     const data = new FormData();
     data.append("input", "");
 
-    const optionalSchema = form({ input: text() });
-    const requiredSchema = form({ input: text({ required: true }) });
+    const optionalSchema = fg.form({ input: fg.text() });
+    const requiredSchema = fg.form({ input: fg.text({ required: true }) });
 
     try {
       assert.equal(optionalSchema.safeParse(data).success, true);
@@ -59,5 +59,165 @@ describe("basic input types", () => {
     } catch {
       assert(false, "safeParse threw an error");
     }
+  });
+
+  it("should trim values properly", () => {
+    const data = new FormData();
+    data.append("input", "  hello world  ");
+
+    const schema = fg.form({
+      input: fg.text({ required: true }).trim(),
+    });
+
+    const result = schema.parse(data);
+
+    assert.equal(result.input, "hello world");
+  });
+
+  it("should support all attributes", () => {
+    const data = new FormData();
+    data.append("input", "hello world");
+
+    try {
+      const result = fg.form({ input: fg.text({ minlength: 11 }) }).parse(data);
+      assert.equal(result.input, "hello world");
+    } catch {
+      assert(false, "Failed to validate minlength");
+    }
+
+    try {
+      const result = fg.form({ input: fg.text({ maxlength: 11 }) }).parse(data);
+      assert.equal(result.input, "hello world");
+    } catch {
+      assert(false, "Failed to validate maxlength");
+    }
+
+    try {
+      const result = fg
+        .form({ input: fg.text({ pattern: /^hello/ }) })
+        .parse(data);
+      assert.equal(result.input, "hello world");
+    } catch {
+      assert(false, "Failed to validate pattern");
+    }
+  });
+
+  it("should reject if attributes don't match", () => {
+    const data = new FormData();
+    data.append("input", "hello world");
+
+    try {
+      fg.form({ input: fg.text({ minlength: 12 }) }).parse(data);
+      assert(false, "Failed to validate minlength");
+    } catch {
+      // Do nothing
+    }
+
+    try {
+      fg.form({ input: fg.text({ maxlength: 10 }) }).parse(data);
+      assert(false, "Failed to validate maxlength");
+    } catch {
+      // Do nothing
+    }
+
+    try {
+      fg.form({ input: fg.text({ pattern: /hello$/ }) }).parse(data);
+      assert(false, "Failed to validate pattern");
+    } catch {
+      // Do nothing
+    }
+  });
+});
+
+describe("checkbox()", () => {
+  it("should be able to parse a checkbox input", () => {
+    const data = new FormData();
+    data.append("input", "on");
+
+    const schema = fg.form({
+      input: fg.checkbox(),
+      nothing: fg.checkbox(),
+    });
+
+    const result = schema.parse(data);
+
+    assert.equal(result.input, true);
+    assert.equal(result.nothing, false);
+  });
+
+  it("should reject a missing required checkbox", () => {
+    const schema = fg.form({ input: fg.checkbox({ required: true }) });
+
+    try {
+      schema.parse(new FormData());
+      assert(false, "Missing field was accepted");
+    } catch {
+      // Do nothing
+    }
+  });
+});
+
+describe("color()", () => {
+  it("should be able to parse a color input", () => {
+    const data = new FormData();
+    data.append("input", "#ff0000");
+
+    const schema = fg.form({ input: fg.color() });
+
+    const result = schema.parse(data);
+
+    assert.equal(result.input, "#ff0000");
+  });
+
+  it("should reject an invalid color", () => {
+    const data = new FormData();
+    data.append("input", "#ff000");
+
+    const schema = fg.form({ input: fg.color() });
+
+    try {
+      schema.parse(data);
+      assert(false, "Invalid color was accepted");
+    } catch {
+      // Do nothing
+    }
+  });
+});
+
+describe("date()", () => {
+  it("should be able to parse a date input", () => {
+    const data = new FormData();
+    data.append("input", "2021-01-01");
+
+    const schema = fg.form({ input: fg.date() });
+
+    const result = schema.parse(data);
+
+    assert.equal(result.input, "2021-01-01");
+  });
+
+  it("should reject an invalid date", () => {
+    const data = new FormData();
+    data.append("input", "2021-01-32");
+
+    const schema = fg.form({ input: fg.date() });
+
+    try {
+      schema.parse(data);
+      assert(false, "Invalid date was accepted");
+    } catch {
+      // Do nothing
+    }
+  });
+
+  it("should convert dates to number and Date", () => {
+    const data = new FormData();
+    data.append("input", "2021-01-01");
+
+    const number = fg.form({ input: fg.date().asNumber() }).parse(data);
+    const date = fg.form({ input: fg.date().asDate() }).parse(data);
+
+    assert.equal(number.input, 1609459200000);
+    assert.deepEqual(date.input, new Date("2021-01-01"));
   });
 });
