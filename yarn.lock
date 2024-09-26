@@ -1093,6 +1093,7 @@ __metadata:
     "@sveltejs/adapter-vercel": "npm:^5.4.4"
     "@sveltejs/kit": "npm:^2.5.28"
     "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.7"
+    formgator: "workspace:^"
     jose: "npm:^5.9.3"
     modern-normalize: "npm:^3.0.1"
     prisma: "npm:^5.20.0"
@@ -3221,7 +3222,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formgator@workspace:packages/formgator":
+"formgator@workspace:^, formgator@workspace:packages/formgator":
   version: 0.0.0-use.local
   resolution: "formgator@workspace:packages/formgator"
   dependencies:

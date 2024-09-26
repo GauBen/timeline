@@ -3,6 +3,7 @@ import { TimezoneSchema } from "$lib/server/tz.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
+import * as fg from "formgator";
 import { z } from "zod";
 
 // Polyfill until Vercel supports Node >= 21
@@ -274,20 +275,14 @@ export const actions = {
     if (!locals.session) return error(401, "Unauthorized");
 
     const data = await request.formData();
-    const input = {
-      habitId: data.get("habitId"),
-      date: data.get("date"),
-    };
-
-    const result = z
-      .object({
-        habitId: z.string().pipe(z.coerce.bigint()),
-        date: z.string().pipe(z.coerce.date()),
+    const result = fg
+      .form({
+        habitId: fg.text({ required: true }).pipe(BigInt),
+        date: fg.date({ required: true }).asDate(),
       })
-      .safeParse(input);
+      .safeParse(data);
 
-    if (!result.success)
-      return fail(400, { input, validationErrors: result.error.flatten() });
+    if (!result.success) return fail(400, { error: result.error });
 
     if (data.get("mark") === "true")
       await prisma.habitMark.createMany({ data: result.data });

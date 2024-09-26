@@ -1,11 +1,9 @@
-type Result<T> =
-  | { success: true; value: T }
-  | { success: false; error: string };
+type Result<T> = { success: true; data: T } | { success: false; error: string };
 
 type FormInput<T> = {
-  safeParse(data: FormData, name: string): Result<T>;
   attributes: Record<string, unknown>;
   pipe: <U>(fn: (input: T) => U) => FormInput<U>;
+  safeParse(data: FormData, name: string): Result<T>;
 };
 
 type Output<T extends Record<string, FormInput<unknown>>> = {
@@ -25,7 +23,7 @@ function pipe<T, U>(this: FormInput<T>, fn: (input: T) => U): FormInput<U> {
     safeParse: (data, name) => {
       const result = this.safeParse(data, name);
       if (result.success === false) return result;
-      return { success: true, value: fn(result.value) };
+      return { success: true, data: fn(result.data) };
     },
   };
 }
@@ -53,7 +51,7 @@ export function checkbox(
         return { success: false, error: "Invalid type" };
       if (attributes.required && value === null)
         return { success: false, error: "Required" };
-      return { success: true, value: value === "on" };
+      return { success: true, data: value === "on" };
     },
   };
 }
@@ -75,12 +73,12 @@ export function color(): FormInput<`#${string}`> {
         return { success: false, error: "Invalid type" };
       if (!/^#[0-9a-f]{6}$/i.test(value))
         return { success: false, error: "Invalid format" };
-      return { success: true, value: value as `#${string}` };
+      return { success: true, data: value as `#${string}` };
     },
   };
 }
 
-export function date(attributes: {
+export function date(attributes?: {
   required?: false;
   min?: Date;
   max?: Date;
@@ -123,7 +121,7 @@ export function date(
       if (value === "")
         return attributes.required
           ? { success: false, error: "Required" }
-          : { success: true, value: null };
+          : { success: true, data: null };
       if (!/^\d{4}-\d{2}-\d{2}$/.test(value))
         return { success: false, error: "Invalid format" };
       const date = Date.parse(value);
@@ -134,7 +132,7 @@ export function date(
         return { success: false, error: "Too early" };
       if (attributes.max && date > attributes.max.getTime())
         return { success: false, error: "Too late" };
-      return { success: true, value };
+      return { success: true, data: value };
     },
     /**
      * Returns the date as a number representing the number of milliseconds
@@ -186,7 +184,7 @@ export function text(
         return { success: false, error: "Too short" };
       if (attributes.pattern && !attributes.pattern.test(value))
         return { success: false, error: "Invalid format" };
-      return { success: true, value };
+      return { success: true, data: value };
     },
     /** Removes the leading and trailing white space from the value. */
     trim() {
@@ -207,17 +205,17 @@ export function form<T extends Record<string, FormInput<unknown>>>(
       for (const [name, input] of Object.entries(schema)) {
         const result = input.safeParse(data, name);
         if (result.success === false) return result;
-        entries.push([name, result.value]);
+        entries.push([name, result.data]);
       }
       return {
         success: true,
-        value: Object.fromEntries(entries),
+        data: Object.fromEntries(entries),
       } as Result<Output<T>>;
     },
     parse(data) {
       const result = this.safeParse(data);
       if (result.success === false) throw new Error(result.error);
-      return result.value;
+      return result.data;
     },
   };
 }
