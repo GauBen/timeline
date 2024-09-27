@@ -15,6 +15,7 @@
     "@sveltejs/kit": "^2.6.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0-next.7",
     "jose": "^5.9.3",
+    "prettier-plugin-packagejson": "^2.5.2",
     "prisma": "^5.20.0",
     "sass": "^1.79.3",
     "svelte": "^5.0.0-next.259",

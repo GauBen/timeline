@@ -1,5 +1,9 @@
 {
   "quoteProps": "consistent",
-  "plugins": ["prettier-plugin-svelte", "prettier-plugin-jsdoc"],
+  "plugins": [
+    "prettier-plugin-svelte",
+    "prettier-plugin-jsdoc",
+    "prettier-plugin-packagejson"
+  ],
   "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
 }

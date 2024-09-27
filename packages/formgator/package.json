@@ -1,18 +1,40 @@
 {
   "name": "formgator",
   "version": "0.0.1",
+  "description": "A validator for FormData and URLSearchParams objects",
+  "keywords": [
+    "typescript",
+    "form",
+    "validator",
+    "formdata",
+    "urlsearchparams"
+  ],
+  "homepage": "https://github.com/GauBen/timeline/tree/main/packages/formgator#readme",
+  "bugs": "https://github.com/gauben/timeline/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gauben/timeline.git",
+    "directory": "packages/formgator"
+  },
+  "license": "MIT",
+  "author": "Gautier Ben Aïm (https://gautier.dev)",
+  "sideEffects": false,
   "type": "module",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.js"
   },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tsx --experimental-test-coverage --test"
+  },
   "devDependencies": {
     "@types/node": "^20.16.9",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
-  },
-  "scripts": {
-    "build": "tsc",
-    "test": "tsx --experimental-test-coverage --test"
   }
 }

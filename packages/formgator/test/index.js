@@ -221,3 +221,32 @@ describe("date()", () => {
     assert.deepEqual(date.input, new Date("2021-01-01"));
   });
 });
+
+describe(".refine()", () => {
+  it("should work", () => {
+    const data = new FormData();
+    data.append("input", "hello world");
+
+    const schema = fg.form({
+      input: fg.text().refine((value) => value === "hello folks"),
+    });
+
+    const result = schema.safeParse(data);
+
+    assert.equal(result.success, false);
+  });
+});
+
+it("supports URLSearchParams", () => {
+  const data = new URLSearchParams("?page=10");
+
+  const schema = fg.form({
+    page: fg.number({ required: true }),
+    cursor: fg.text().nullable(),
+  });
+
+  const result = schema.parse(data);
+
+  assert.equal(result.page, 10);
+  assert.equal(result.cursor, null);
+});

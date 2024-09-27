@@ -1,8 +1,20 @@
+// #region Types
+
 type Result<T> = { success: true; data: T } | { success: false; error: string };
+
+/**
+ * An interface matching both `FormData` and `URLSearchParams` for read
+ * operations.
+ */
+interface ReadonlyFormData {
+  has(name: string): boolean;
+  get(name: string): string | File | null;
+  getAll(name: string): Array<string | File>;
+}
 
 interface FormInput<T> {
   attributes: Record<string, unknown>;
-  safeParse(data: FormData, name: string): Result<T>;
+  safeParse(data: ReadonlyFormData, name: string): Result<T>;
 
   /**
    * Transforms the output of the validator into another value.
@@ -21,6 +33,13 @@ interface FormInput<T> {
 
   /** Adds a custom validation to the input. */
   refine<U extends T>(fn: (value: T) => value is U): FormInput<U>;
+  refine(fn: (value: T) => unknown): FormInput<T>;
+
+  /**
+   * Makes the field optional, for inputs that may be removed or added
+   * dynamically from the form.
+   */
+  nullable(): FormInput<T | null>;
 }
 
 type Output<T extends Record<string, FormInput<unknown>>> = {
@@ -29,9 +48,11 @@ type Output<T extends Record<string, FormInput<unknown>>> = {
 
 interface FormGator<T extends Record<string, FormInput<unknown>>> {
   inputs: T;
-  parse(data: FormData): Output<T>;
-  safeParse(data: FormData): Result<Output<T>>;
+  parse(data: ReadonlyFormData): Output<T>;
+  safeParse(data: ReadonlyFormData): Result<Output<T>>;
 }
+
+// #region Methods
 
 /** Transforms the output value of a form input. */
 function transform<T, U>(
@@ -71,7 +92,19 @@ function refine<T, U extends T>(
   };
 }
 
-const methods = { transform, refine };
+function nullable<T>(this: FormInput<T>): FormInput<T | null> {
+  return {
+    ...this,
+    safeParse: (data, name) => {
+      if (!data.has(name)) return { success: true, data: null };
+      return this.safeParse(data, name);
+    },
+  };
+}
+
+const methods = { transform, refine, nullable };
+
+// #region Validators
 
 /**
  * `<input type="checkbox">` form input validator.
@@ -123,6 +156,17 @@ export function color(): FormInput<`#${string}`> {
   };
 }
 
+/**
+ * `<input type="date">` form input validator.
+ *
+ * Supported attributes:
+ *
+ * - `required` - Whether the input is required.
+ * - `min` - Minimum date.
+ * - `max` - Maximum date.
+ *
+ * The output value is a string with the format `yyyy-mm-dd`.
+ */
 export function date(attributes?: {
   required?: false;
   min?: Date;
@@ -139,17 +183,6 @@ export function date(attributes: {
   asNumber: () => FormInput<number>;
   asDate: () => FormInput<Date>;
 };
-/**
- * `<input type="date">` form input validator.
- *
- * Supported attributes:
- *
- * - `required` - Whether the input is required.
- * - `min` - Minimum date.
- * - `max` - Maximum date.
- *
- * The output value is a string with the format `yyyy-mm-dd`.
- */
 export function date(
   attributes: { required?: boolean; min?: Date; max?: Date } = {},
 ): FormInput<string | null> & {
@@ -197,6 +230,17 @@ export function date(
   };
 }
 
+/**
+ * `<input type="datetime-local">` form input validator.
+ *
+ * Supported attributes:
+ *
+ * - `required` - Whether the input is required.
+ * - `min` - Minimum date.
+ * - `max` - Maximum date.
+ *
+ * The output value is a string with the format `yyyy-mm-ddThh:mm`.
+ */
 export function datetimeLocal(attributes?: {
   required?: false;
   min?: Date;
@@ -213,17 +257,6 @@ export function datetimeLocal(attributes: {
   asNumber: () => FormInput<number>;
   asDate: () => FormInput<Date>;
 };
-/**
- * `<input type="datetime-local">` form input validator.
- *
- * Supported attributes:
- *
- * - `required` - Whether the input is required.
- * - `min` - Minimum date.
- * - `max` - Maximum date.
- *
- * The output value is a string with the format `yyyy-mm-ddThh:mm`.
- */
 export function datetimeLocal(
   attributes: { required?: boolean; min?: Date; max?: Date } = {},
 ): FormInput<string | null> & {
@@ -272,7 +305,74 @@ export function datetimeLocal(
 }
 
 /**
+ * `<input type="number">` form input validator.
+ *
+ * Supported attributes:
+ *
+ * - `required` - Whether the input is required.
+ * - `min` - Minimum value.
+ * - `max` - Maximum value.
+ */
+export function number(attributes?: {
+  required?: false;
+  min?: number;
+  max?: number;
+}): FormInput<number | null>;
+export function number(attributes: {
+  required: true;
+  min?: number;
+  max?: number;
+}): FormInput<number>;
+export function number(
+  attributes: {
+    required?: boolean;
+    min?: number;
+    max?: number;
+    /**
+     * Accepted granularity of the value. Default is 1 (integer), set to 0 to
+     * allow any number.
+     *
+     * The value must be a multiple of the step attribute, i.e. it could be
+     * written as: `value = (min ?? 0) + k * step` with `k` an integer.
+     *
+     * @default 1 (only integers are accepted)
+     */
+    step?: number;
+  } = {},
+): FormInput<number | null> {
+  return {
+    ...methods,
+    attributes,
+    safeParse: (data, name) => {
+      const value = data.get(name);
+      if (typeof value !== "string")
+        return { success: false, error: "Invalid type" };
+      if (value === "")
+        return attributes.required
+          ? { success: false, error: "Required" }
+          : { success: true, data: null };
+
+      const number = Number(value);
+      if (Number.isNaN(number))
+        return { success: false, error: "Invalid number" };
+
+      const step = attributes.step ?? 1;
+      if (step > 0 && (number - (attributes.min ?? 0)) % step !== 0)
+        return { success: false, error: "Invalid step" };
+
+      if (attributes.min !== undefined && number < attributes.min)
+        return { success: false, error: "Too small" };
+      if (attributes.max !== undefined && number > attributes.max)
+        return { success: false, error: "Too big" };
+      return { success: true, data: number };
+    },
+  };
+}
+
+/**
  * `<input type="text">` form input validator.
+ *
+ * Does not accept new lines, use `textarea()` instead.
  *
  * Supported attributes:
  *
@@ -345,7 +445,7 @@ export function select<T extends string>(
   const accept =
     values instanceof Set
       ? (value: string) => values.has(value)
-      : values instanceof Function
+      : typeof values === "function"
         ? values
         : (() => {
             const set = new Set<string>(values);
@@ -380,6 +480,9 @@ export function select<T extends string>(
   };
 }
 
+// #region Form
+
+/** Creates a form validator from a record of form inputs. */
 export function form<T extends Record<string, FormInput<unknown>>>(
   inputs: T,
 ): FormGator<T> {
