@@ -1,10 +1,9 @@
 import { prisma } from "$lib/server/prisma.js";
-import { TimezoneSchema } from "$lib/server/tz.js";
+import { timezones } from "$lib/server/tz.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
-import { z } from "zod";
 
 // Polyfill until Vercel supports Node >= 21
 function Object_groupBy<T, K extends PropertyKey>(
@@ -153,33 +152,24 @@ export const actions = {
   createEvent: async ({ request, locals }) => {
     if (!locals.session) return fail(401, { error: "Unauthorized" });
 
-    const data = await request.formData();
-    const input = {
-      body: String(data.get("body")),
-      date: String(data.get("date")),
-      startTimezone: String(data.get("startTimezone")),
-      public: Boolean(data.get("public")),
-      users: data.getAll("shared_with"),
-    };
-
-    const result = z
-      .object({
-        body: z.string().min(1).max(1024),
-        date: z.string().transform((date) => Temporal.PlainDateTime.from(date)),
-        startTimezone: TimezoneSchema,
-        public: z.boolean(),
-        users: z.string().uuid().array(),
+    const result = fg
+      .form({
+        body: fg.text({ required: true, minlength: 1, maxlength: 1024 }),
+        date: fg
+          .datetimeLocal({ required: true })
+          .transform(Temporal.PlainDateTime.from),
+        startTimezone: fg.select(timezones, { required: true }),
+        public: fg.checkbox(),
+        shared_with: fg.select(() => true, { multiple: true }),
       })
-      .safeParse(input);
+      .safeParse(await request.formData());
 
-    if (!result.success)
-      return fail(400, { input, validationErrors: result.error.flatten() });
+    if (!result.success) return fail(400, { validationErrors: result.error });
 
-    const date = new Date(
-      result.data.date.toZonedDateTime(
-        result.data.startTimezone,
-      ).epochMilliseconds,
-    );
+    const date = result.data.date
+      .toZonedDateTime(result.data.startTimezone)
+      .toInstant()
+      .toString();
 
     await prisma.event.create({
       data: {
@@ -193,7 +183,7 @@ export const actions = {
           ? {}
           : {
               createMany: {
-                data: result.data.users.map((userId) => ({
+                data: result.data.shared_with.map((userId) => ({
                   userId,
                   shared: true,
                 })),
@@ -277,7 +267,7 @@ export const actions = {
     const data = await request.formData();
     const result = fg
       .form({
-        habitId: fg.text({ required: true }).pipe(BigInt),
+        habitId: fg.text({ required: true }).transform(BigInt),
         date: fg.date({ required: true }).asDate(),
       })
       .safeParse(data);

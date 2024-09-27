@@ -1,32 +1,77 @@
 type Result<T> = { success: true; data: T } | { success: false; error: string };
 
-type FormInput<T> = {
+interface FormInput<T> {
   attributes: Record<string, unknown>;
-  pipe: <U>(fn: (input: T) => U) => FormInput<U>;
   safeParse(data: FormData, name: string): Result<T>;
-};
+
+  /**
+   * Transforms the output of the validator into another value.
+   *
+   * @example
+   *   text().transform((value) => value.length);
+   *
+   * @param fn - The transformation function.
+   * @param catcher - In case the transformation function throws, this function
+   *   is called to generate an error message.
+   */
+  transform<U>(
+    fn: (value: T) => U,
+    catcher?: (error: unknown) => string,
+  ): FormInput<U>;
+
+  /** Adds a custom validation to the input. */
+  refine<U extends T>(fn: (value: T) => value is U): FormInput<U>;
+}
 
 type Output<T extends Record<string, FormInput<unknown>>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
 };
 
-type FormGator<T> = {
-  parse(data: FormData): T;
-  safeParse(data: FormData): Result<T>;
-};
+interface FormGator<T extends Record<string, FormInput<unknown>>> {
+  inputs: T;
+  parse(data: FormData): Output<T>;
+  safeParse(data: FormData): Result<Output<T>>;
+}
 
 /** Transforms the output value of a form input. */
-function pipe<T, U>(this: FormInput<T>, fn: (input: T) => U): FormInput<U> {
+function transform<T, U>(
+  this: FormInput<T>,
+  fn: (value: T) => U,
+  catcher: (error: unknown) => string = () => "Transformation failed",
+): FormInput<U> {
   return {
     ...this,
-    pipe, // Redeclare the pipe method to keep the generics happy
+    ...methods,
     safeParse: (data, name) => {
       const result = this.safeParse(data, name);
       if (result.success === false) return result;
-      return { success: true, data: fn(result.data) };
+      try {
+        return { success: true, data: fn(result.data) };
+      } catch (error) {
+        return { success: false, error: catcher(error) };
+      }
     },
   };
 }
+
+/** Adds a custom validation to the input. */
+function refine<T, U extends T>(
+  this: FormInput<T>,
+  fn: (value: T) => value is U,
+): FormInput<U> {
+  return {
+    ...this,
+    ...methods,
+    safeParse: (data, name) => {
+      const result = this.safeParse(data, name);
+      if (result.success === false) return result;
+      if (!fn(result.data)) return { success: false, error: "Invalid value" };
+      return { success: true, data: result.data };
+    },
+  };
+}
+
+const methods = { transform, refine };
 
 /**
  * `<input type="checkbox">` form input validator.
@@ -43,8 +88,8 @@ export function checkbox(
   attributes: { required?: boolean } = {},
 ): FormInput<boolean> {
   return {
+    ...methods,
     attributes,
-    pipe,
     safeParse: (data, name) => {
       const value = data.get(name);
       if (value !== null && value !== "on")
@@ -65,8 +110,8 @@ export function checkbox(
  */
 export function color(): FormInput<`#${string}`> {
   return {
+    ...methods,
     attributes: {},
-    pipe,
     safeParse: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string")
@@ -112,8 +157,8 @@ export function date(
   asDate: () => FormInput<Date | null>;
 } {
   return {
+    ...methods,
     attributes,
-    pipe,
     safeParse: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string")
@@ -139,11 +184,89 @@ export function date(
      * since January 1, 1970, 00:00:00 UTC.
      */
     asNumber() {
-      return this.pipe((value) => (value === null ? null : Date.parse(value)));
+      return this.transform((value) =>
+        value === null ? null : Date.parse(value),
+      );
     },
     /** Returns the date as a Date object. */
     asDate() {
-      return this.pipe((value) => (value === null ? null : new Date(value)));
+      return this.transform((value) =>
+        value === null ? null : new Date(value),
+      );
+    },
+  };
+}
+
+export function datetimeLocal(attributes?: {
+  required?: false;
+  min?: Date;
+  max?: Date;
+}): FormInput<string | null> & {
+  asNumber: () => FormInput<number | null>;
+  asDate: () => FormInput<Date | null>;
+};
+export function datetimeLocal(attributes: {
+  required: true;
+  min?: Date;
+  max?: Date;
+}): FormInput<string> & {
+  asNumber: () => FormInput<number>;
+  asDate: () => FormInput<Date>;
+};
+/**
+ * `<input type="datetime-local">` form input validator.
+ *
+ * Supported attributes:
+ *
+ * - `required` - Whether the input is required.
+ * - `min` - Minimum date.
+ * - `max` - Maximum date.
+ *
+ * The output value is a string with the format `yyyy-mm-ddThh:mm`.
+ */
+export function datetimeLocal(
+  attributes: { required?: boolean; min?: Date; max?: Date } = {},
+): FormInput<string | null> & {
+  asNumber: () => FormInput<number | null>;
+  asDate: () => FormInput<Date | null>;
+} {
+  return {
+    ...methods,
+    attributes,
+    safeParse: (data, name) => {
+      const value = data.get(name);
+      if (typeof value !== "string")
+        return { success: false, error: "Invalid type" };
+      if (value === "")
+        return attributes.required
+          ? { success: false, error: "Required" }
+          : { success: true, data: null };
+      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value))
+        return { success: false, error: "Invalid format" };
+      const date = Date.parse(value);
+      if (Number.isNaN(date)) return { success: false, error: "Invalid date" };
+      if (attributes.required && value === "")
+        return { success: false, error: "Required" };
+      if (attributes.min && date < attributes.min.getTime())
+        return { success: false, error: "Too early" };
+      if (attributes.max && date > attributes.max.getTime())
+        return { success: false, error: "Too late" };
+      return { success: true, data: value };
+    },
+    /**
+     * Returns the date as a number representing the number of milliseconds
+     * since January 1, 1970, 00:00:00 UTC.
+     */
+    asNumber() {
+      return this.transform((value) =>
+        value === null ? null : Date.parse(value),
+      );
+    },
+    /** Returns the date as a Date object. */
+    asDate() {
+      return this.transform((value) =>
+        value === null ? null : new Date(value),
+      );
     },
   };
 }
@@ -168,8 +291,8 @@ export function text(
   } = {},
 ): FormInput<string> & { trim: () => FormInput<string> } {
   return {
+    ...methods,
     attributes,
-    pipe,
     safeParse: (data, name) => {
       const value = data.get(name);
       if (typeof value !== "string")
@@ -188,7 +311,7 @@ export function text(
     },
     /** Removes the leading and trailing white space from the value. */
     trim() {
-      return this.pipe((value) => value.trim());
+      return this.transform((value) => value.trim());
     },
   };
 }
@@ -196,13 +319,75 @@ export function text(
 // type="search" behaves like type="text"
 export { text as search };
 
-export function form<T extends Record<string, FormInput<unknown>>>(
-  schema: T,
-): FormGator<Output<T>> {
+export function select<T extends string>(
+  values: Iterable<T> | ((value: string) => boolean),
+  attributes?: { multiple?: false; required?: boolean },
+): FormInput<T>;
+export function select<T extends string>(
+  values: Iterable<T> | ((value: string) => boolean),
+  attributes: { multiple: true; required?: boolean },
+): FormInput<T[]>;
+/**
+ * `<select>` form input validator.
+ *
+ * Supported attributes:
+ *
+ * - `multiple` - Whether the input allows multiple selections.
+ * - `required` - Whether the input is required.
+ *
+ * @param values - The valid values for the input. It can be an iterable of
+ *   strings or a function that returns a boolean if the value is valid.
+ */
+export function select<T extends string>(
+  values: Iterable<T> | ((value: string) => boolean),
+  attributes: { multiple?: boolean; required?: boolean } = {},
+): FormInput<T | T[]> {
+  const accept =
+    values instanceof Set
+      ? (value: string) => values.has(value)
+      : values instanceof Function
+        ? values
+        : (() => {
+            const set = new Set<string>(values);
+            return (value: string) => set.has(value);
+          })();
+
   return {
+    ...methods,
+    attributes,
+    safeParse: attributes.multiple
+      ? (data, name) => {
+          const values = data.getAll(name);
+          if (values.length === 0 && attributes.required)
+            return { success: false, error: "Required" };
+          for (const value of values) {
+            if (typeof value !== "string")
+              return { success: false, error: "Invalid type" };
+            if (!accept(value))
+              return { success: false, error: "Invalid value" };
+          }
+          return { success: true, data: values as T[] };
+        }
+      : (data, name) => {
+          const value = data.get(name);
+          if (typeof value !== "string")
+            return { success: false, error: "Invalid type" };
+          if (attributes.required && value === "")
+            return { success: false, error: "Required" };
+          if (!accept(value)) return { success: false, error: "Invalid value" };
+          return { success: true, data: value as T };
+        },
+  };
+}
+
+export function form<T extends Record<string, FormInput<unknown>>>(
+  inputs: T,
+): FormGator<T> {
+  return {
+    inputs,
     safeParse: (data) => {
       const entries = [];
-      for (const [name, input] of Object.entries(schema)) {
+      for (const [name, input] of Object.entries(inputs)) {
         const result = input.safeParse(data, name);
         if (result.success === false) return result;
         entries.push([name, result.data]);

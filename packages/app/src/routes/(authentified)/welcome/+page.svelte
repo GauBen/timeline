@@ -41,7 +41,7 @@
         required
         type="text"
         maxlength="255"
-        name="display_name"
+        name="displayName"
         bind:value={displayName}
       />
       {(form?.validationErrors?.fieldErrors?.displayName ?? []).join(", ")}

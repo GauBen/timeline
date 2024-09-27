@@ -127,8 +127,8 @@
         <input type="radio" name="public" value="on" bind:group={pub} /> Public
       </label>
       <label>
-        <input type="radio" name="public" value="" bind:group={pub} /> Only with
-        specific people
+        <input type="radio" name="public" bind:group={pub} />
+        Only with specific people
       </label>
       <select multiple disabled={Boolean(pub)} name="shared_with">
         {#each followings as { following }}

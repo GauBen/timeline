@@ -1105,7 +1105,6 @@ __metadata:
     uistiti: "workspace:^"
     unplugin-icons: "npm:^0.19.3"
     vite: "npm:^5.4.8"
-    zod: "npm:^3.23.8"
   languageName: unknown
   linkType: soft
 
@@ -6665,12 +6664,5 @@ __metadata:
   version: 1.1.2
   resolution: "zimmerframe@npm:1.1.2"
   checksum: 10c0/8f693609c31cbb4449db223acd61661bc93b73e615f9db6fb8c86d4ceea84ca54cbbeebcf53cf74c22a1f923b92abd18e97988a5e175c76b6ab17238e5593a9d
-  languageName: node
-  linkType: hard
-
-"zod@npm:^3.23.8":
-  version: 3.23.8
-  resolution: "zod@npm:3.23.8"
-  checksum: 10c0/8f14c87d6b1b53c944c25ce7a28616896319d95bc46a9660fe441adc0ed0a81253b02b5abdaeffedbeb23bdd25a0bf1c29d2c12dd919aef6447652dd295e3e69
   languageName: node
   linkType: hard

@@ -1,6 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import { fail } from "@sveltejs/kit";
-import { z } from "zod";
+import * as fg from "formgator";
 
 export const load = async ({ parent }) => {
   const { me } = await parent();
@@ -13,16 +13,15 @@ export const actions = {
   async create({ locals, request }) {
     if (!locals.session) return fail(401, { error: "Unauthorized" });
 
-    const data = await request.formData();
-    const input = data.get("name");
-    const result = z.string().min(1).max(255).safeParse(input);
+    const result = fg
+      .form({ name: fg.text({ required: true, minlength: 1, maxlength: 255 }) })
+      .safeParse(await request.formData());
 
-    if (!result.success)
-      return fail(400, { input, validationErrors: result.error.flatten() });
+    if (!result.success) return fail(400, { error: result.error });
 
     await prisma.habit.create({
       data: {
-        name: result.data,
+        name: result.data.name,
         userId: locals.session.id,
       },
     });
@@ -31,15 +30,14 @@ export const actions = {
   async remove({ locals, request }) {
     if (!locals.session) return fail(401, { error: "Unauthorized" });
 
-    const data = await request.formData();
-    const input = data.get("id");
-    const result = z.string().pipe(z.coerce.bigint()).safeParse(input);
+    const result = fg
+      .form({ id: fg.text({ required: true }).transform(BigInt) })
+      .safeParse(await request.formData());
 
-    if (!result.success)
-      return fail(400, { input, validationErrors: result.error.flatten() });
+    if (!result.success) return fail(400, { validationErrors: result.error });
 
     await prisma.habit.delete({
-      where: { id: result.data, userId: locals.session.id },
+      where: { id: result.data.id, userId: locals.session.id },
     });
   },
 };

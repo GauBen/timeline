@@ -1,8 +1,8 @@
 import { prisma } from "$lib/server/prisma.js";
-import { TimezoneSchema } from "$lib/server/tz.js";
+import { timezones } from "$lib/server/tz.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { fail, redirect } from "@sveltejs/kit";
-import { z } from "zod";
+import * as fg from "formgator";
 
 const reserved = new Set([
   // @keep-sorted
@@ -51,26 +51,19 @@ const reserved = new Set([
 export const actions = {
   default: async ({ request, locals }) => {
     if (!locals.session) return fail(401, { error: "Unauthorized" });
-    const data = await request.formData();
-    const input = {
-      username: String(data.get("username")),
-      displayName: String(data.get("display_name")),
-      timezone: String(data.get("timezone")),
-    };
 
-    const result = z
-      .object({
-        username: z.string().regex(/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/),
-        displayName: z.string().min(1).max(255),
-        timezone: TimezoneSchema,
+    const result = fg
+      .form({
+        username: fg.text({ pattern: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/ }),
+        displayName: fg.text({ minlength: 1, maxlength: 255 }),
+        timezone: fg.select(timezones, { required: true }),
       })
-      .safeParse(input);
+      .safeParse(await request.formData());
 
-    if (!result.success)
-      return fail(400, { input, validationErrors: result.error.flatten() });
+    if (!result.success) return fail(400, { error: result.error });
 
-    if (reserved.has(input.username.toLowerCase().replace(/s$/, "")))
-      return fail(400, { input, error: "Username already exists" });
+    if (reserved.has(result.data.username.toLowerCase().replace(/s$/, "")))
+      return fail(400, { error: "Username already exists" });
 
     try {
       await prisma.user.create({
@@ -81,9 +74,9 @@ export const actions = {
         error instanceof PrismaClientKnownRequestError &&
         error.code === "P2002"
       )
-        return fail(400, { input, error: "Username already exists" });
+        return fail(400, { error: "Username already exists" });
       console.error(error);
-      return fail(500, { input, error: "Internal server error" });
+      return fail(500, { error: "Internal server error" });
     }
 
     redirect(307, "/");
