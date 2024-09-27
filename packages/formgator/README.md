@@ -1,6 +1,6 @@
 # formgator
 
-A validation library for JavaScript `FormData` and `URLSearchParam` objects.
+A validation library for JavaScript `FormData` and `URLSearchParams` objects.
 
 ## Basic Usage
 

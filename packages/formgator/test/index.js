@@ -222,6 +222,49 @@ describe("date()", () => {
   });
 });
 
+describe("email()", () => {
+  it("should accept valid emails", () => {
+    const data = new FormData();
+    data.append("single", "");
+    data.append("singleRequired", "gautier@example.com");
+    data.append("multiple", "");
+    data.append("multipleRequired", "gautier@example.net, gautier@example.org");
+
+    const schema = fg.form({
+      single: fg.email(),
+      singleRequired: fg.email({ required: true }),
+      multiple: fg.email({ multiple: true }),
+      multipleRequired: fg.email({ required: true, multiple: true }),
+    });
+
+    const result = schema.parse(data);
+
+    assert.equal(result.single, null);
+    assert.equal(result.singleRequired, "gautier@example.com");
+    assert.deepEqual(result.multiple, []);
+    assert.deepEqual(result.multipleRequired, [
+      "gautier@example.net",
+      "gautier@example.org",
+    ]);
+  });
+
+  it("should refuse invalid emails", () => {
+    const data = new FormData();
+    data.append("single", "@example.com");
+    data.append("multiple", "gautier@example.net, gautier");
+
+    assert.equal(
+      fg.form({ single: fg.email() }).safeParse(data).success,
+      false,
+    );
+    assert.equal(
+      fg.form({ multiple: fg.email({ multiple: true }) }).safeParse(data)
+        .success,
+      false,
+    );
+  });
+});
+
 describe(".refine()", () => {
   it("should work", () => {
     const data = new FormData();

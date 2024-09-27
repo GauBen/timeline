@@ -5,6 +5,7 @@
     "moduleResolution": "NodeNext",
     "outDir": "dist",
     "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true
   },
   "include": ["src"]
