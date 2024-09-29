@@ -25,6 +25,7 @@ import * as fg from "../index.js";
 export function formgate<
   Action,
   Inputs extends Record<string, fg.FormInput<unknown>>,
+  ID extends string = string,
 >(
   inputs: Inputs,
   action: Action extends kit.Action<
@@ -39,8 +40,9 @@ export function formgate<
   options: {
     /** @default "POST" */
     method?: "GET" | "POST";
+    id?: ID;
   } = {},
-): Action {
+): Action & (() => Promise<{ id: ID; issues: fg.InferError<Inputs> }>) {
   return (async (event: kit.RequestEvent & { data: fg.Infer<Inputs> }) => {
     const data = fg
       .form(inputs)
@@ -50,9 +52,10 @@ export function formgate<
           : await event.request.formData(),
       );
 
-    if (!data.success) return fail(400, { error: data.error });
+    if (!data.success)
+      return fail(400, { id: options.id ?? "default", error: data.error });
 
     event.data = data.data;
     return action(event);
-  }) as Action;
+  }) as never;
 }

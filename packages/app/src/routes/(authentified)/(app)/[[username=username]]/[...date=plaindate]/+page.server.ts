@@ -191,12 +191,13 @@ export const actions = {
 
       redirect(303, new URL(request.url).pathname);
     },
+    { id: "createEvent" },
   ),
 
   follow: async ({ locals, params }) => {
-    if (!locals.session) return error(401, "Unauthorized");
+    if (!locals.session) error(401, "Unauthorized");
     const { username } = params;
-    if (!username) return error(400, "Invalid username");
+    if (!username) error(400, "Invalid username");
 
     try {
       await prisma.follow.create({
@@ -211,9 +212,9 @@ export const actions = {
   },
 
   unfollow: async ({ locals, params }) => {
-    if (!locals.session) return error(401, "Unauthorized");
+    if (!locals.session) error(401, "Unauthorized");
     const { username } = params;
-    if (!username) return error(400, "Invalid username");
+    if (!username) error(400, "Invalid username");
 
     await prisma.follow.deleteMany({
       where: {
@@ -224,9 +225,9 @@ export const actions = {
   },
 
   addEvent: async ({ locals, url }) => {
-    if (!locals.session) return error(401, "Unauthorized");
+    if (!locals.session) error(401, "Unauthorized");
     const eventId = url.searchParams.get("/addEvent");
-    if (!eventId) return error(400, "Invalid event");
+    if (!eventId) error(400, "Invalid event");
     const id = BigInt(eventId);
     await prisma.eventToUser.upsert({
       where: {
@@ -239,9 +240,9 @@ export const actions = {
   },
 
   unAddEvent: async ({ locals, url }) => {
-    if (!locals.session) return error(401, "Unauthorized");
+    if (!locals.session) error(401, "Unauthorized");
     const eventId = url.searchParams.get("/unAddEvent");
-    if (!eventId) return error(400, "Invalid event");
+    if (!eventId) error(400, "Invalid event");
     await prisma.eventToUser.update({
       where: {
         eventId_userId: { eventId: BigInt(eventId), userId: locals.session.id },
@@ -252,28 +253,34 @@ export const actions = {
   },
 
   deleteEvent: async ({ locals, url }) => {
-    if (!locals.session) return error(401, "Unauthorized");
+    if (!locals.session) error(401, "Unauthorized");
     const eventId = url.searchParams.get("/deleteEvent");
-    if (!eventId) return error(400, "Invalid event");
+    if (!eventId) error(400, "Invalid event");
     const id = BigInt(eventId);
     await prisma.event.delete({ where: { id, authorId: locals.session.id } });
   },
 
-  markHabit: async ({ locals, request }) => {
-    if (!locals.session) return error(401, "Unauthorized");
+  markHabit: formgate(
+    {
+      mark: fg
+        .select(["true", "false"], { required: true })
+        .transform((value) => value === "true"),
+      habitId: fg.text({ required: true }).transform(BigInt),
+      date: fg.date({ required: true }).asDate(),
+    },
+    async ({ locals, data }) => {
+      if (!locals.session) error(401, "Unauthorized");
 
-    const data = await request.formData();
-    const result = fg
-      .form({
-        habitId: fg.text({ required: true }).transform(BigInt),
-        date: fg.date({ required: true }).asDate(),
-      })
-      .safeParse(data);
-
-    if (!result.success) return fail(400, { error: result.error });
-
-    if (data.get("mark") === "true")
-      await prisma.habitMark.createMany({ data: result.data });
-    else await prisma.habitMark.deleteMany({ where: result.data });
-  },
+      if (data.mark) {
+        await prisma.habitMark.createMany({
+          data: { habitId: data.habitId, date: data.date },
+        });
+      } else {
+        await prisma.habitMark.deleteMany({
+          where: { habitId: data.habitId, date: data.date },
+        });
+      }
+    },
+    { id: "markHabit" },
+  ),
 };

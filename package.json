@@ -1,11 +1,13 @@
 {
   "name": "timeline",
-  "packageManager": "yarn@4.5.0",
   "private": true,
   "type": "module",
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "prisma": "yarn workspace @timeline/app prisma"
+  },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "eslint": "^9.11.1",
@@ -23,7 +25,5 @@
     "typescript-eslint": "^8.7.0",
     "vercel": "^37.6.0"
   },
-  "scripts": {
-    "prisma": "yarn workspace @timeline/app prisma"
-  }
+  "packageManager": "yarn@4.5.0"
 }

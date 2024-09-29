@@ -1,6 +1,16 @@
 {
   "name": "@timeline/app",
   "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "(test -f .env || cp .env.example .env) && prisma generate && paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide && vite build",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "vite dev",
+    "postinstall": "paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
     "@prisma/client": "^5.20.0",
@@ -26,16 +36,6 @@
     "unplugin-icons": "^0.19.3",
     "vite": "^5.4.8"
   },
-  "private": true,
-  "scripts": {
-    "build": "(test -f .env || cp .env.example .env) && prisma generate && paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide && vite build",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev": "vite dev",
-    "preview": "vite preview",
-    "postinstall": "paraglide-js compile --project ../../project.inlang --outdir ./src/paraglide"
-  },
-  "type": "module",
   "prisma": {
     "seed": "node prisma/seed.js"
   }
