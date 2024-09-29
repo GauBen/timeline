@@ -12,7 +12,7 @@ interface ReadonlyFormData {
   getAll(name: string): Array<string | File>;
 }
 
-interface FormInput<T> {
+export interface FormInput<T> {
   attributes: Record<string, unknown>;
   safeParse(data: ReadonlyFormData, name: string): Result<T>;
 
@@ -42,14 +42,14 @@ interface FormInput<T> {
   nullable(): FormInput<T | null>;
 }
 
-type Output<T extends Record<string, FormInput<unknown>>> = {
+export type Infer<T extends Record<string, FormInput<unknown>>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
 };
 
 interface FormGator<T extends Record<string, FormInput<unknown>>> {
   inputs: T;
-  parse(data: ReadonlyFormData): Output<T>;
-  safeParse(data: ReadonlyFormData): Result<Output<T>>;
+  parse(data: ReadonlyFormData): Infer<T>;
+  safeParse(data: ReadonlyFormData): Result<Infer<T>>;
 }
 
 // #region Methods
@@ -473,8 +473,8 @@ export function text(
   };
 }
 
-// type="search" behaves like type="text"
-export { text as search };
+// type="search" and type="password" behave like type="text"
+export { text as password, text as search };
 
 export function select<T extends string>(
   values: Iterable<T> | ((value: string) => boolean),
@@ -555,7 +555,7 @@ export function form<T extends Record<string, FormInput<unknown>>>(
       return {
         success: true,
         data: Object.fromEntries(entries),
-      } as Result<Output<T>>;
+      } as Result<Infer<T>>;
     },
     parse(data) {
       const result = this.safeParse(data);

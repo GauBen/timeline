@@ -4,6 +4,7 @@ import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
+import { formgate } from "formgator/sveltekit";
 
 // Polyfill until Vercel supports Node >= 21
 function Object_groupBy<T, K extends PropertyKey>(
@@ -149,51 +150,48 @@ export const load = async ({ parent, params, url }) => {
 };
 
 export const actions = {
-  createEvent: async ({ request, locals }) => {
-    if (!locals.session) return fail(401, { error: "Unauthorized" });
+  createEvent: formgate(
+    {
+      body: fg.text({ required: true, minlength: 1, maxlength: 1024 }),
+      date: fg
+        .datetimeLocal({ required: true })
+        .transform(Temporal.PlainDateTime.from),
+      startTimezone: fg.select(timezones, { required: true }),
+      public: fg.checkbox(),
+      shared_with: fg.select(() => true, { multiple: true }),
+    },
+    async ({ request, locals, data }) => {
+      if (!locals.session) return fail(401, { error: "Unauthorized" });
 
-    const result = fg
-      .form({
-        body: fg.text({ required: true, minlength: 1, maxlength: 1024 }),
-        date: fg
-          .datetimeLocal({ required: true })
-          .transform(Temporal.PlainDateTime.from),
-        startTimezone: fg.select(timezones, { required: true }),
-        public: fg.checkbox(),
-        shared_with: fg.select(() => true, { multiple: true }),
-      })
-      .safeParse(await request.formData());
+      const date = data.date
+        .toZonedDateTime(data.startTimezone)
+        .toInstant()
+        .toString();
 
-    if (!result.success) return fail(400, { validationErrors: result.error });
-
-    const date = result.data.date
-      .toZonedDateTime(result.data.startTimezone)
-      .toInstant()
-      .toString();
-
-    await prisma.event.create({
-      data: {
-        body: result.data.body,
-        date,
-        startTimezone: result.data.startTimezone,
-        public: result.data.public,
-        authorId: locals.session.id,
-        duration: 0,
-        users: result.data.public
-          ? {}
-          : {
-              createMany: {
-                data: result.data.shared_with.map((userId) => ({
-                  userId,
-                  shared: true,
-                })),
+      await prisma.event.create({
+        data: {
+          body: data.body,
+          date,
+          startTimezone: data.startTimezone,
+          public: data.public,
+          authorId: locals.session.id,
+          duration: 0,
+          users: data.public
+            ? {}
+            : {
+                createMany: {
+                  data: data.shared_with.map((userId) => ({
+                    userId,
+                    shared: true,
+                  })),
+                },
               },
-            },
-      },
-    });
+        },
+      });
 
-    redirect(303, new URL(request.url).pathname);
-  },
+      redirect(303, new URL(request.url).pathname);
+    },
+  ),
 
   follow: async ({ locals, params }) => {
     if (!locals.session) return error(401, "Unauthorized");

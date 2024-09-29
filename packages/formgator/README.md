@@ -58,6 +58,29 @@ async function handle(request: Request) {
 
 You can expect `formgator` to expose a validator for all possible `<input type="...">` values.
 
+## Usage with SvelteKit
+
+`formgator` exposes a SvelteKit adapter that can be used to validate form data in SvelteKit [form actions](https://kit.svelte.dev/docs/form-actions).
+
+```ts
+// +page.server.ts
+import * as fg from "formgator";
+import { formgate } from "formgator/sveltekit";
+
+export const actions = {
+  login: formgate(
+    {
+      email: fg.email({ required: true }),
+      password: fg.password({ required: true }),
+    },
+    ({ data }) => {
+      // data.email and data.password are guaranteed to be strings
+      // The form will be rejected as 400 Bad Request if they are missing or empty
+    },
+  ),
+};
+```
+
 ## Disclaimer
 
 This package is still in development and the API is subject to change. API will be stabilized in version 1.0.0.
