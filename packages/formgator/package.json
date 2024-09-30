@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "tsx --experimental-test-coverage --test"
+    "test": "tsx --experimental-test-coverage --test src/**/*.test.ts"
   },
   "devDependencies": {
     "@sveltejs/kit": "^2.6.1",
