@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import * as fg from "../src/index.ts";
-import { errorGenerators } from "./utils.ts";
+import { fail, failures } from "./definitions.js";
+import * as fg from "./index.js";
 
 describe("form()", () => {
   describe(".safeParse()", () => {
@@ -33,7 +33,7 @@ describe("form()", () => {
         .safeParse(data);
 
       assert.equal(result.success, false);
-      assert.deepEqual(result.error.input, errorGenerators.maxlength(10));
+      assert.deepEqual(fail(result.error.input), failures.maxlength(10));
     });
   });
 
@@ -56,7 +56,7 @@ describe("form()", () => {
         assert.fail("Expected an error");
       } catch (error) {
         assert(error instanceof fg.FormgatorError);
-        assert.deepEqual(error.issues.input, errorGenerators.maxlength(10));
+        assert.deepEqual(fail(error.issues.input), failures.maxlength(10));
       }
     });
   });

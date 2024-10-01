@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { color } from "./color.ts";
+import { failures, succeed } from "../definitions.js";
+import { color } from "./color.js";
 
 describe("color()", async () => {
   it("should accept valid inputs", () => {
@@ -15,13 +15,7 @@ describe("color()", async () => {
     const data = new FormData();
     data.append("input", "invalid");
 
-    assert.deepEqual(
-      color().safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
-    );
-    assert.deepEqual(
-      color().safeParse(data, "missing"),
-      fail(errorGenerators.type()),
-    );
+    assert.deepEqual(color().safeParse(data, "input"), failures.invalid());
+    assert.deepEqual(color().safeParse(data, "missing"), failures.type());
   });
 });

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { file } from "./file.ts";
+import { failures, succeed } from "../definitions.js";
+import { file } from "./file.js";
 
 describe("file()", async () => {
   it("should accept valid inputs", () => {
@@ -38,33 +38,30 @@ describe("file()", async () => {
     data.append("input", "invalid");
     data.append("ok", f);
 
-    assert.deepEqual(
-      file().safeParse(data, "input"),
-      fail(errorGenerators.type()),
-    );
+    assert.deepEqual(file().safeParse(data, "input"), failures.type());
     assert.deepEqual(
       file({ multiple: true }).safeParse(data, "input"),
-      fail(errorGenerators.type()),
+      failures.type(),
     );
     assert.deepEqual(
       file({ multiple: true, required: true }).safeParse(data, "missing"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
     assert.deepEqual(
       file({ accept: [".jpg"] }).safeParse(data, "ok"),
-      fail(errorGenerators.accept([".jpg"])),
+      failures.accept([".jpg"]),
     );
     assert.deepEqual(
       file({ accept: ["image/*"] }).safeParse(data, "ok"),
-      fail(errorGenerators.accept(["image/*"])),
+      failures.accept(["image/*"]),
     );
     assert.deepEqual(
       file({ accept: ["image/jpeg"] }).safeParse(data, "ok"),
-      fail(errorGenerators.accept(["image/jpeg"])),
+      failures.accept(["image/jpeg"]),
     );
     assert.deepEqual(
       file({ multiple: true, accept: [".jpg"] }).safeParse(data, "ok"),
-      fail(errorGenerators.accept([".jpg"])),
+      failures.accept([".jpg"]),
     );
   });
 });

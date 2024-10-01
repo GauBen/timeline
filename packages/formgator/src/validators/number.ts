@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="number">` form input validator.
@@ -45,23 +43,21 @@ export function number(
     attributes,
     safeParse: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return fail(errorGenerators.type());
+      if (typeof value !== "string") return failures.type();
       if (value === "")
-        return attributes.required
-          ? fail(errorGenerators.required())
-          : succeed(null);
+        return attributes.required ? failures.required() : succeed(null);
 
       const number = Number(value);
-      if (Number.isNaN(number)) return fail(errorGenerators.invalid());
+      if (Number.isNaN(number)) return failures.invalid();
 
       const step = attributes.step ?? 1;
       if (step > 0 && (number - (attributes.min ?? 0)) % step !== 0)
-        return fail(errorGenerators.step(step));
+        return failures.step(step);
 
       if (attributes.min !== undefined && number < attributes.min)
-        return fail(errorGenerators.min(attributes.min));
+        return failures.min(attributes.min);
       if (attributes.max !== undefined && number > attributes.max)
-        return fail(errorGenerators.max(attributes.max));
+        return failures.max(attributes.max);
       return succeed(number);
     },
   };

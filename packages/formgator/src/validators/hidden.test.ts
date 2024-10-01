@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { hidden } from "./hidden.ts";
+import { failures, succeed } from "../definitions.js";
+import { hidden } from "./hidden.js";
 
 describe("hidden()", async () => {
   it("should accept valid inputs", () => {
@@ -17,7 +17,7 @@ describe("hidden()", async () => {
   it("should refuse invalid inputs", () => {
     assert.deepEqual(
       hidden().safeParse(new FormData(), "missing"),
-      fail(errorGenerators.type()),
+      failures.type(),
     );
   });
 });

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { number } from "./number.ts";
+import { failures, succeed } from "../definitions.js";
+import { number } from "./number.js";
 
 describe("number()", async () => {
   it("should accept valid inputs", () => {
@@ -44,29 +44,23 @@ describe("number()", async () => {
     data.append("empty", "");
     data.append("ok", "123");
 
-    assert.deepEqual(
-      number().safeParse(data, "missing"),
-      fail(errorGenerators.type()),
-    );
+    assert.deepEqual(number().safeParse(data, "missing"), failures.type());
     assert.deepEqual(
       number({ required: true }).safeParse(data, "empty"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
-    assert.deepEqual(
-      number().safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
-    );
+    assert.deepEqual(number().safeParse(data, "input"), failures.invalid());
     assert.deepEqual(
       number({ min: 124 }).safeParse(data, "ok"),
-      fail(errorGenerators.min(124)),
+      failures.min(124),
     );
     assert.deepEqual(
       number({ max: 122 }).safeParse(data, "ok"),
-      fail(errorGenerators.max(122)),
+      failures.max(122),
     );
     assert.deepEqual(
       number({ step: 2 }).safeParse(data, "ok"),
-      fail(errorGenerators.step(2)),
+      failures.step(2),
     );
   });
 });

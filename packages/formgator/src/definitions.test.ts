@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "./utils.ts";
-import { text } from "./validators/text.ts";
+import { failures, succeed } from "./definitions.js";
+import { text } from "./validators/text.js";
 
 describe("methods", () => {
   describe(".transform()", () => {
@@ -23,7 +23,7 @@ describe("methods", () => {
         text()
           .transform(BigInt, () => "Not a number")
           .safeParse(data, "input"),
-        fail(errorGenerators.transform("Not a number")),
+        failures.transform("Not a number"),
       );
     });
 
@@ -35,7 +35,7 @@ describe("methods", () => {
 
       assert.deepEqual(
         input.safeParse(data, "input"),
-        fail(errorGenerators.pattern(/^\d+$/)),
+        failures.pattern(/^\d+$/),
       );
     });
   });
@@ -61,7 +61,7 @@ describe("methods", () => {
         text()
           .refine((value) => value.startsWith("1"))
           .safeParse(data, "input"),
-        fail(errorGenerators.refine("Invalid value")),
+        failures.refine("Invalid value"),
       );
     });
 
@@ -76,7 +76,7 @@ describe("methods", () => {
             () => "Nope",
           )
           .safeParse(data, "input"),
-        fail(errorGenerators.refine("Nope")),
+        failures.refine("Nope"),
       );
     });
 
@@ -90,7 +90,7 @@ describe("methods", () => {
 
       assert.deepEqual(
         input.safeParse(data, "input"),
-        fail(errorGenerators.pattern(/^\d+$/)),
+        failures.pattern(/^\d+$/),
       );
     });
   });

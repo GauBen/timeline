@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "exactOptionalPropertyTypes": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "dist",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": true
-  },
-  "include": ["src"],
-  "exclude": ["**/*.test.ts"]
+    "strict": true,
+    "verbatimModuleSyntax": true
+  }
 }

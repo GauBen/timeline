@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { select } from "./select.ts";
+import { failures, succeed } from "../definitions.js";
+import { select } from "./select.js";
 
 describe("select()", async () => {
   it("should accept valid inputs", () => {
@@ -41,27 +41,27 @@ describe("select()", async () => {
 
     assert.deepEqual(
       select(["option"]).safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
+      failures.invalid(),
     );
     assert.deepEqual(
       select(["option"], { multiple: true }).safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
+      failures.invalid(),
     );
     assert.deepEqual(
       select([], { required: true }).safeParse(data, "missing"),
-      fail(errorGenerators.type()),
+      failures.type(),
     );
     assert.deepEqual(
       select([], { multiple: true, required: true }).safeParse(data, "missing"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
     assert.deepEqual(
       select([], { required: true }).safeParse(data, "empty"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
     assert.deepEqual(
       select([], { multiple: true }).safeParse(data, "file"),
-      fail(errorGenerators.type()),
+      failures.type(),
     );
   });
 });

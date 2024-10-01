@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { text } from "./text.ts";
+import { failures, succeed } from "../definitions.js";
+import { text } from "./text.js";
 
 describe("text()", async () => {
   it("should accept valid inputs", () => {
@@ -31,29 +31,23 @@ describe("text()", async () => {
     data.append("empty", "");
     data.append("ok", "hello world!");
 
-    assert.deepEqual(
-      text().safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
-    );
-    assert.deepEqual(
-      text().safeParse(data, "missing"),
-      fail(errorGenerators.type()),
-    );
+    assert.deepEqual(text().safeParse(data, "input"), failures.invalid());
+    assert.deepEqual(text().safeParse(data, "missing"), failures.type());
     assert.deepEqual(
       text({ required: true }).safeParse(data, "empty"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
     assert.deepEqual(
       text({ minlength: 13 }).safeParse(data, "ok"),
-      fail(errorGenerators.minlength(13)),
+      failures.minlength(13),
     );
     assert.deepEqual(
       text({ maxlength: 11 }).safeParse(data, "ok"),
-      fail(errorGenerators.maxlength(11)),
+      failures.maxlength(11),
     );
     assert.deepEqual(
       text({ pattern: /^\w+ \w+\?$/u }).safeParse(data, "ok"),
-      fail(errorGenerators.pattern(/^\w+ \w+\?$/u)),
+      failures.pattern(/^\w+ \w+\?$/u),
     );
   });
 });

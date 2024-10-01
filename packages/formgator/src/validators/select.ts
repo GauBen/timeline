@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
  * `<select>` form input validator.
@@ -42,19 +40,18 @@ export function select<T extends string>(
       ? (data, name) => {
           const values = data.getAll(name);
           if (values.length === 0 && attributes.required)
-            return fail(errorGenerators.required());
+            return failures.required();
           for (const value of values) {
-            if (typeof value !== "string") return fail(errorGenerators.type());
-            if (!accept(value)) return fail(errorGenerators.invalid());
+            if (typeof value !== "string") return failures.type();
+            if (!accept(value)) return failures.invalid();
           }
           return succeed(values as T[]);
         }
       : (data, name) => {
           const value = data.get(name);
-          if (typeof value !== "string") return fail(errorGenerators.type());
-          if (attributes.required && value === "")
-            return fail(errorGenerators.required());
-          if (!accept(value)) return fail(errorGenerators.invalid());
+          if (typeof value !== "string") return failures.type();
+          if (attributes.required && value === "") return failures.required();
+          if (!accept(value)) return failures.invalid();
           return succeed(value as T);
         },
   };

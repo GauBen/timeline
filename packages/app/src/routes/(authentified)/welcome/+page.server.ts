@@ -3,6 +3,7 @@ import { timezones } from "$lib/server/tz.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
+import { formgate } from "formgator/sveltekit";
 
 const reserved = new Set([
   // @keep-sorted
@@ -49,36 +50,33 @@ const reserved = new Set([
 ]);
 
 export const actions = {
-  default: async ({ request, locals }) => {
-    if (!locals.session) return fail(401, { error: "Unauthorized" });
+  default: formgate(
+    {
+      username: fg.text({ pattern: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/ }),
+      displayName: fg.text({ minlength: 1, maxlength: 255 }),
+      timezone: fg.select(timezones, { required: true }),
+    },
+    async ({ locals, data }) => {
+      if (!locals.session) return fail(401, { error: "Unauthorized" });
 
-    const result = fg
-      .form({
-        username: fg.text({ pattern: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/ }),
-        displayName: fg.text({ minlength: 1, maxlength: 255 }),
-        timezone: fg.select(timezones, { required: true }),
-      })
-      .safeParse(await request.formData());
-
-    if (!result.success) return fail(400, { error: result.error });
-
-    if (reserved.has(result.data.username.toLowerCase().replace(/s$/, "")))
-      return fail(400, { error: "Username already exists" });
-
-    try {
-      await prisma.user.create({
-        data: { ...result.data, id: locals.session.id },
-      });
-    } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === "P2002"
-      )
+      if (reserved.has(data.username.toLowerCase().replace(/s$/, "")))
         return fail(400, { error: "Username already exists" });
-      console.error(error);
-      return fail(500, { error: "Internal server error" });
-    }
 
-    redirect(307, "/");
-  },
+      try {
+        await prisma.user.create({
+          data: { ...data, id: locals.session.id },
+        });
+      } catch (error) {
+        if (
+          error instanceof PrismaClientKnownRequestError &&
+          error.code === "P2002"
+        )
+          return fail(400, { error: "Username already exists" });
+        console.error(error);
+        return fail(500, { error: "Internal server error" });
+      }
+
+      redirect(307, "/");
+    },
+  ),
 };

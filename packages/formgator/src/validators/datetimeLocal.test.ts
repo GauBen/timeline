@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { datetimeLocal } from "./datetimeLocal.ts";
+import { failures, succeed } from "../definitions.js";
+import { datetimeLocal } from "./datetimeLocal.js";
 
 describe("date()", async () => {
   it("should accept valid inputs", () => {
@@ -53,31 +53,31 @@ describe("date()", async () => {
 
     assert.deepEqual(
       datetimeLocal().safeParse(data, "missing"),
-      fail(errorGenerators.type()),
+      failures.type(),
     );
     assert.deepEqual(
       datetimeLocal({ required: true }).safeParse(data, "empty"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
     assert.deepEqual(
       datetimeLocal().safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
+      failures.invalid(),
     );
     assert.deepEqual(
       datetimeLocal().safeParse(data, "nad"),
-      fail(errorGenerators.invalid()),
+      failures.invalid(),
     );
     assert.deepEqual(
       datetimeLocal({
         min: new Date("2024-09-30T22:46"),
       }).safeParse(data, "ok"),
-      fail(errorGenerators.min(new Date("2024-09-30T22:46"))),
+      failures.min(new Date("2024-09-30T22:46")),
     );
     assert.deepEqual(
       datetimeLocal({
         max: new Date("2024-09-30T22:44"),
       }).safeParse(data, "ok"),
-      fail(errorGenerators.max(new Date("2024-09-30T22:44"))),
+      failures.max(new Date("2024-09-30T22:44")),
     );
   });
 });

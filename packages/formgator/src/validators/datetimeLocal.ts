@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="datetime-local">` form input validator.
@@ -40,19 +38,17 @@ export function datetimeLocal(
     attributes,
     safeParse: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return fail(errorGenerators.type());
+      if (typeof value !== "string") return failures.type();
       if (value === "")
-        return attributes.required
-          ? fail(errorGenerators.required())
-          : succeed(null);
+        return attributes.required ? failures.required() : succeed(null);
       if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value))
-        return fail(errorGenerators.invalid());
+        return failures.invalid();
       const date = Date.parse(value);
-      if (Number.isNaN(date)) return fail(errorGenerators.invalid());
+      if (Number.isNaN(date)) return failures.invalid();
       if (attributes.min && date < attributes.min.getTime())
-        return fail(errorGenerators.min(attributes.min));
+        return failures.min(attributes.min);
       if (attributes.max && date > attributes.max.getTime())
-        return fail(errorGenerators.max(attributes.max));
+        return failures.max(attributes.max);
       return succeed(value);
     },
     /**

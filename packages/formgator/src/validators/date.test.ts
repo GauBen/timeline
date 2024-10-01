@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { date } from "./date.ts";
+import { failures, succeed } from "../definitions.js";
+import { date } from "./date.js";
 
 describe("date()", async () => {
   it("should accept valid inputs", () => {
@@ -38,29 +38,20 @@ describe("date()", async () => {
     data.append("nad", "2024-13-01");
     data.append("ok", "2024-09-30");
 
-    assert.deepEqual(
-      date().safeParse(data, "missing"),
-      fail(errorGenerators.type()),
-    );
+    assert.deepEqual(date().safeParse(data, "missing"), failures.type());
     assert.deepEqual(
       date({ required: true }).safeParse(data, "empty"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
-    assert.deepEqual(
-      date().safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
-    );
-    assert.deepEqual(
-      date().safeParse(data, "nad"),
-      fail(errorGenerators.invalid()),
-    );
+    assert.deepEqual(date().safeParse(data, "input"), failures.invalid());
+    assert.deepEqual(date().safeParse(data, "nad"), failures.invalid());
     assert.deepEqual(
       date({ min: new Date("2024-10-01") }).safeParse(data, "ok"),
-      fail(errorGenerators.min(new Date("2024-10-01"))),
+      failures.min(new Date("2024-10-01")),
     );
     assert.deepEqual(
       date({ max: new Date("2024-09-29") }).safeParse(data, "ok"),
-      fail(errorGenerators.max(new Date("2024-09-29"))),
+      failures.max(new Date("2024-09-29")),
     );
   });
 });

@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
 const emailRegex =
@@ -35,21 +33,21 @@ export function email(
     attributes,
     safeParse: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return fail(errorGenerators.type());
+      if (typeof value !== "string") return failures.type();
       if (value === "")
         return attributes.required
-          ? fail(errorGenerators.required())
+          ? failures.required()
           : succeed(attributes.multiple ? [] : null);
 
       if (attributes.multiple) {
         // Emails are comma-separated, with optional white space
         const values = value.split(",").map((value) => value.trim());
         for (const email of values)
-          if (!emailRegex.test(email)) return fail(errorGenerators.invalid());
+          if (!emailRegex.test(email)) return failures.invalid();
 
         return succeed(values);
       } else {
-        if (!emailRegex.test(value)) return fail(errorGenerators.invalid());
+        if (!emailRegex.test(value)) return failures.invalid();
         return succeed(value);
       }
     },

@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="hidden">` form input validator.
@@ -13,7 +11,7 @@ export function hidden(): FormInput<string> {
     attributes: {},
     safeParse: (data, name) => {
       const value = data.get(name);
-      if (typeof value !== "string") return fail(errorGenerators.type());
+      if (typeof value !== "string") return failures.type();
       return succeed(value);
     },
   };

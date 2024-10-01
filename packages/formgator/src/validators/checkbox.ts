@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="checkbox">` form input validator.
@@ -21,10 +19,8 @@ export function checkbox(
     attributes,
     safeParse: (data, name) => {
       const value = data.get(name);
-      if (value !== null && value !== "on")
-        return fail(errorGenerators.invalid());
-      if (attributes.required && value === null)
-        return fail(errorGenerators.required());
+      if (value !== null && value !== "on") return failures.invalid();
+      if (attributes.required && value === null) return failures.required();
       return succeed(value === "on");
     },
   };

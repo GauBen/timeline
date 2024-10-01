@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { errorGenerators, fail, succeed } from "../utils.ts";
-import { email } from "./email.ts";
+import { failures, succeed } from "../definitions.js";
+import { email } from "./email.js";
 
 describe("email()", async () => {
   it("should accept valid inputs", () => {
@@ -30,21 +30,15 @@ describe("email()", async () => {
     data.append("input", "invalid");
     data.append("empty", "");
 
-    assert.deepEqual(
-      email().safeParse(data, "missing"),
-      fail(errorGenerators.type()),
-    );
+    assert.deepEqual(email().safeParse(data, "missing"), failures.type());
     assert.deepEqual(
       email({ required: true }).safeParse(data, "empty"),
-      fail(errorGenerators.required()),
+      failures.required(),
     );
-    assert.deepEqual(
-      email().safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
-    );
+    assert.deepEqual(email().safeParse(data, "input"), failures.invalid());
     assert.deepEqual(
       email({ multiple: true }).safeParse(data, "input"),
-      fail(errorGenerators.invalid()),
+      failures.invalid(),
     );
   });
 });

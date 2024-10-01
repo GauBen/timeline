@@ -1,13 +1,13 @@
 import {
-  FormGator,
-  FormInput,
-  Infer,
-  InferError,
-  ValidationIssue,
-} from "./types.js";
-import { fail, succeed } from "./utils.js";
+  fail,
+  succeed,
+  type FormInput,
+  type ReadonlyFormData,
+  type Result,
+  type ValidationIssue,
+} from "./definitions.js";
 
-export type { FormInput, Infer, InferError } from "./types.js";
+export type { FormInput };
 
 export { checkbox } from "./validators/checkbox.js";
 export { color } from "./validators/color.js";
@@ -15,9 +15,26 @@ export { date } from "./validators/date.js";
 export { datetimeLocal } from "./validators/datetimeLocal.js";
 export { email } from "./validators/email.js";
 export { file } from "./validators/file.js";
+export { hidden } from "./validators/hidden.js";
 export { number } from "./validators/number.js";
 export { select } from "./validators/select.js";
 export { text as password, text as search, text } from "./validators/text.js";
+
+export type Infer<T extends Record<string, FormInput<unknown>>> = {
+  [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
+};
+
+export type InferError<T extends Record<string, FormInput<unknown>>> = {
+  [K in keyof T]?: ValidationIssue;
+};
+
+export interface FormGator<T extends Record<string, FormInput<unknown>>> {
+  inputs: T;
+  parse(data: ReadonlyFormData): Infer<T>;
+  safeParse(
+    data: ReadonlyFormData,
+  ): Result<Infer<T>, { [K in keyof T]?: ValidationIssue }>;
+}
 
 export class FormgatorError<
   T extends Record<string, FormInput<unknown>>,

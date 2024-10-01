@@ -1,6 +1,4 @@
-import { methods } from "../methods.js";
-import { FormInput } from "../types.js";
-import { errorGenerators, fail, succeed } from "../utils.js";
+import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
  * `<input type="file">` form input validator.
@@ -51,21 +49,17 @@ export function file(
       ? (data, name) => {
           const values = data.getAll(name);
           if (values.length === 0)
-            return attributes.required
-              ? fail(errorGenerators.required())
-              : succeed([]);
+            return attributes.required ? failures.required() : succeed([]);
           for (const value of values) {
-            if (!(value instanceof File)) return fail(errorGenerators.type());
-            if (!accept(value))
-              return fail(errorGenerators.accept(attributes.accept!));
+            if (!(value instanceof File)) return failures.type();
+            if (!accept(value)) return failures.accept(attributes.accept!);
           }
           return succeed(values as File[]);
         }
       : (data, name) => {
           const value = data.get(name);
-          if (!(value instanceof File)) return fail(errorGenerators.type());
-          if (!accept(value))
-            return fail(errorGenerators.accept(attributes.accept!));
+          if (!(value instanceof File)) return failures.type();
+          if (!accept(value)) return failures.accept(attributes.accept!);
           return succeed(value);
         },
   };
