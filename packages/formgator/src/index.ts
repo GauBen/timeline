@@ -14,6 +14,7 @@ export { color } from "./validators/color.js";
 export { date } from "./validators/date.js";
 export { datetimeLocal } from "./validators/datetimeLocal.js";
 export { email } from "./validators/email.js";
+export { file } from "./validators/file.js";
 export { number } from "./validators/number.js";
 export { select } from "./validators/select.js";
 export { text as password, text as search, text } from "./validators/text.js";

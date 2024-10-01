@@ -34,6 +34,11 @@ export const errorGenerators = {
     step,
     message: "Invalid step",
   }),
+  accept: (accept: string[]) => ({
+    code: "accept",
+    accept,
+    message: "Invalid file type",
+  }),
   refine: (message: string) => ({ code: "refine", message }),
   transform: (message: string) => ({ code: "transform", message }),
 } satisfies {

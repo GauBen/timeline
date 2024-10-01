@@ -22,6 +22,7 @@ export type ValidationIssue =
   | { code: "min"; min: number | Date; message: string }
   | { code: "max"; max: number | Date; message: string }
   | { code: "step"; step: number; message: string }
+  | { code: "accept"; message: string }
   | { code: "transform"; message: string }
   | { code: "refine"; message: string };
 
