@@ -2,6 +2,16 @@ import { methods } from "../methods.js";
 import { FormInput } from "../types.js";
 import { errorGenerators, fail, succeed } from "../utils.js";
 
+/**
+ * `<input type="file">` form input validator.
+ *
+ * Supported attributes:
+ *
+ * - `multiple` - Whether the input allows multiple files.
+ * - `required` - Whether the input is required.
+ * - `accept` - The accepted file types, as an array of MIME types (`image/png`),
+ *   MIME wildcards (`image/*`), or file extensions (`.png`).
+ */
 export function file(attributes?: {
   multiple?: false;
   required?: false;
