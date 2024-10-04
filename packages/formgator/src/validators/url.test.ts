@@ -11,9 +11,17 @@ describe("url()", async () => {
 
     assert.deepEqualTyped(
       url().safeParse(data, "input"),
+      succeed("http://example.com/~gautier"),
+    );
+    assert.deepEqualTyped(
+      url().asURL().safeParse(data, "input"),
       succeed(new URL("http://example.com/~gautier")),
     );
     assert.deepEqualTyped(url().safeParse(data, "empty"), succeed(null));
+    assert.deepEqualTyped(
+      url().asURL().safeParse(data, "empty"),
+      succeed(null),
+    );
   });
 
   it("should refuse invalid inputs", () => {

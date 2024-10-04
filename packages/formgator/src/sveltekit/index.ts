@@ -23,7 +23,7 @@ import * as fg from "../index.js";
  */
 export function formgate<
   Action,
-  Inputs extends Record<string, fg.FormInput<unknown>>,
+  Inputs extends Record<string, fg.FormInput>,
   ID extends string = string,
 >(
   inputs: Inputs,

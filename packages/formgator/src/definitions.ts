@@ -28,8 +28,8 @@ export type ValidationIssue =
   | { code: "transform"; message: string }
   | { code: "refine"; message: string };
 
-export interface FormInput<T> {
-  attributes: Record<string, unknown>;
+export interface FormInput<T = unknown> {
+  attributes: Record<string, string | string[] | number | boolean | RegExp>;
   safeParse(data: ReadonlyFormData, name: string): Result<T, ValidationIssue>;
 
   /**

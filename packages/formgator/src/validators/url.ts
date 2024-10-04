@@ -7,11 +7,15 @@ import { failures, type FormInput, methods, succeed } from "../definitions.js";
  *
  * - `required` - Whether the input is required.
  */
-export function url(attributes?: { required?: false }): FormInput<URL | null>;
-export function url(attributes: { required: true }): FormInput<URL>;
+export function url(attributes?: {
+  required?: false;
+}): FormInput<string | null> & { asURL(): FormInput<URL | null> };
+export function url(attributes: {
+  required: true;
+}): FormInput<string> & { asURL(): FormInput<URL> };
 export function url(
   attributes: { required?: boolean } = {},
-): FormInput<URL | null> {
+): FormInput<string | null> & { asURL(): FormInput<URL | null> } {
   return {
     ...methods,
     attributes,
@@ -21,7 +25,11 @@ export function url(
       if (value === "")
         return attributes.required ? failures.required() : succeed(null);
       if (!URL.canParse(value)) return failures.invalid();
-      return succeed(new URL(value));
+      return succeed(value);
+    },
+
+    asURL() {
+      return this.transform((url) => (url === null ? null : new URL(url)));
     },
   };
 }

@@ -7,8 +7,6 @@ import {
   type ValidationIssue,
 } from "./definitions.js";
 
-export type { FormInput };
-
 export { checkbox } from "./validators/checkbox.js";
 export { color } from "./validators/color.js";
 export { date } from "./validators/date.js";
@@ -32,18 +30,43 @@ export { textarea } from "./validators/textarea.js";
 export { time } from "./validators/time.js";
 export { url } from "./validators/url.js";
 export { week } from "./validators/week.js";
+export type { FormInput };
 
-export type Infer<T extends Record<string, FormInput<unknown>>> = {
+const stringifyRegex = (regex: RegExp) => {
+  if (regex.flags !== "u")
+    console.warn("[formgator] RegExp attribute must be written with u flag");
+  if (!regex.source.startsWith("^") || !regex.source.endsWith("$"))
+    console.warn(
+      "[formgator] RegExp attribute must start with ^ and end with $",
+    );
+  return regex.source.replaceAll(/^\^|\$$/g, "");
+};
+
+/** Allows you to splat attributes into Svelte HTML template. */
+export function splat(attributes: FormInput["attributes"]) {
+  return Object.fromEntries(
+    Object.entries(attributes).map(([key, value]) => [
+      key,
+      Array.isArray(value)
+        ? value.join(",")
+        : value instanceof RegExp
+          ? stringifyRegex(value)
+          : value,
+    ]),
+  );
+}
+
+export type Infer<T extends Record<string, FormInput>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
 } extends infer O // Black magic to make the type human-readable
   ? { [K in keyof O]: O[K] }
   : never;
 
-export type InferError<T extends Record<string, FormInput<unknown>>> = {
+export type InferError<T extends Record<string, FormInput>> = {
   [K in keyof T]?: ValidationIssue;
 };
 
-export interface FormGator<T extends Record<string, FormInput<unknown>>> {
+export interface FormGator<T extends Record<string, FormInput>> {
   inputs: T;
   parse(data: ReadonlyFormData): Infer<T>;
   safeParse(
@@ -51,9 +74,7 @@ export interface FormGator<T extends Record<string, FormInput<unknown>>> {
   ): Result<Infer<T>, { [K in keyof T]?: ValidationIssue }>;
 }
 
-export class FormgatorError<
-  T extends Record<string, FormInput<unknown>>,
-> extends Error {
+export class FormgatorError<T extends Record<string, FormInput>> extends Error {
   constructor(public issues: InferError<T>) {
     super("Form validation failed");
     this.name = "FormgatorError";
