@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap",
-    "test": "tsx --experimental-test-coverage --test src/**/*.test.ts"
+    "test": "tsc --noEmit && tsx --experimental-test-coverage --test src/**/*.test.ts"
   },
   "devDependencies": {
     "@sveltejs/kit": "^2.6.1",

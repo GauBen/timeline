@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import assert from "./assert.js";
 import { failures, succeed } from "./definitions.js";
 import { text } from "./validators/text.js";
 
@@ -9,7 +9,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "123");
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text().transform(BigInt).safeParse(data, "input"),
         succeed(123n),
       );
@@ -19,7 +19,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "nan");
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text()
           .transform(BigInt, () => "Not a number")
           .safeParse(data, "input"),
@@ -33,7 +33,7 @@ describe("methods", () => {
 
       const input = text({ pattern: /^\d+$/ }).transform(BigInt);
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         input.safeParse(data, "input"),
         failures.pattern(/^\d+$/),
       );
@@ -45,7 +45,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "123");
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text()
           .refine((value) => value.startsWith("1"))
           .safeParse(data, "input"),
@@ -57,7 +57,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "nan");
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text()
           .refine((value) => value.startsWith("1"))
           .safeParse(data, "input"),
@@ -69,7 +69,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "nan");
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text()
           .refine(
             (value) => value.startsWith("1"),
@@ -88,7 +88,7 @@ describe("methods", () => {
         value.startsWith("1"),
       );
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         input.safeParse(data, "input"),
         failures.pattern(/^\d+$/),
       );
@@ -99,7 +99,7 @@ describe("methods", () => {
     it("should accept missing fields", () => {
       const data = new FormData();
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text().optional().safeParse(data, "input"),
         succeed(undefined),
       );
@@ -109,7 +109,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "123");
 
-      assert.deepEqual(
+      assert.deepEqualTyped(
         text().optional().safeParse(data, "input"),
         succeed("123"),
       );
@@ -125,6 +125,6 @@ describe("methods", () => {
       .refine((value) => value % 2 === 1)
       .transform(String);
 
-    assert.deepEqual(input.safeParse(data, "input"), succeed("123"));
+    assert.deepEqualTyped(input.safeParse(data, "input"), succeed("123"));
   });
 });

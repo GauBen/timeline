@@ -1,21 +1,28 @@
-import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import assert from "../assert.js";
 import { failures, succeed } from "../definitions.js";
 import { color } from "./color.js";
 
 describe("color()", async () => {
   it("should accept valid inputs", () => {
     const data = new FormData();
-    data.append("input", "#ff0000");
+    data.append("input", "#cafe99");
 
-    assert.deepEqual(color().safeParse(data, "input"), succeed("#ff0000"));
+    assert.deepEqualTyped(
+      color().safeParse(data, "input"),
+      succeed<`#${string}`>("#cafe99"),
+    );
+    assert.deepEqualTyped(
+      color().asRGB().safeParse(data, "input"),
+      succeed<[number, number, number]>([202, 254, 153]),
+    );
   });
 
   it("should refuse invalid inputs", () => {
     const data = new FormData();
     data.append("input", "invalid");
 
-    assert.deepEqual(color().safeParse(data, "input"), failures.invalid());
-    assert.deepEqual(color().safeParse(data, "missing"), failures.type());
+    assert.deepEqualTyped(color().safeParse(data, "input"), failures.invalid());
+    assert.deepEqualTyped(color().safeParse(data, "missing"), failures.type());
   });
 });

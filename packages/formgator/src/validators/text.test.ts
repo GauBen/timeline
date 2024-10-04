@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import assert from "../assert.js";
 import { failures, succeed } from "../definitions.js";
 import { text } from "./text.js";
 
@@ -9,20 +9,26 @@ describe("text()", async () => {
     data.append("input", "hello world!");
     data.append("trim", "  hello ");
 
-    assert.deepEqual(text().safeParse(data, "input"), succeed("hello world!"));
-    assert.deepEqual(
+    assert.deepEqualTyped(
+      text().safeParse(data, "input"),
+      succeed("hello world!"),
+    );
+    assert.deepEqualTyped(
       text({ minlength: 12 }).safeParse(data, "input"),
       succeed("hello world!"),
     );
-    assert.deepEqual(
+    assert.deepEqualTyped(
       text({ maxlength: 12 }).safeParse(data, "input"),
       succeed("hello world!"),
     );
-    assert.deepEqual(
+    assert.deepEqualTyped(
       text({ pattern: /^\w+ \w+!$/u }).safeParse(data, "input"),
       succeed("hello world!"),
     );
-    assert.deepEqual(text().trim().safeParse(data, "trim"), succeed("hello"));
+    assert.deepEqualTyped(
+      text().trim().safeParse(data, "trim"),
+      succeed("hello"),
+    );
   });
 
   it("should refuse invalid inputs", () => {
@@ -31,21 +37,21 @@ describe("text()", async () => {
     data.append("empty", "");
     data.append("ok", "hello world!");
 
-    assert.deepEqual(text().safeParse(data, "input"), failures.invalid());
-    assert.deepEqual(text().safeParse(data, "missing"), failures.type());
-    assert.deepEqual(
+    assert.deepEqualTyped(text().safeParse(data, "input"), failures.invalid());
+    assert.deepEqualTyped(text().safeParse(data, "missing"), failures.type());
+    assert.deepEqualTyped(
       text({ required: true }).safeParse(data, "empty"),
       failures.required(),
     );
-    assert.deepEqual(
+    assert.deepEqualTyped(
       text({ minlength: 13 }).safeParse(data, "ok"),
       failures.minlength(13),
     );
-    assert.deepEqual(
+    assert.deepEqualTyped(
       text({ maxlength: 11 }).safeParse(data, "ok"),
       failures.maxlength(11),
     );
-    assert.deepEqual(
+    assert.deepEqualTyped(
       text({ pattern: /^\w+ \w+\?$/u }).safeParse(data, "ok"),
       failures.pattern(/^\w+ \w+\?$/u),
     );

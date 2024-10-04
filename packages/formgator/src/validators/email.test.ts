@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import assert from "../assert.js";
 import { failures, succeed } from "../definitions.js";
 import { email } from "./email.js";
 
@@ -10,16 +10,16 @@ describe("email()", async () => {
     data.append("multiple", "gautier@example.com, gautier@example.net");
     data.append("empty", "");
 
-    assert.deepEqual(
+    assert.deepEqualTyped(
       email().safeParse(data, "input"),
       succeed("gautier@example.com"),
     );
-    assert.deepEqual(email().safeParse(data, "empty"), succeed(null));
-    assert.deepEqual(
+    assert.deepEqualTyped(email().safeParse(data, "empty"), succeed(null));
+    assert.deepEqualTyped(
       email({ multiple: true }).safeParse(data, "multiple"),
       succeed(["gautier@example.com", "gautier@example.net"]),
     );
-    assert.deepEqual(
+    assert.deepEqualTyped(
       email({ multiple: true }).safeParse(data, "empty"),
       succeed([]),
     );
@@ -30,13 +30,13 @@ describe("email()", async () => {
     data.append("input", "invalid");
     data.append("empty", "");
 
-    assert.deepEqual(email().safeParse(data, "missing"), failures.type());
-    assert.deepEqual(
+    assert.deepEqualTyped(email().safeParse(data, "missing"), failures.type());
+    assert.deepEqualTyped(
       email({ required: true }).safeParse(data, "empty"),
       failures.required(),
     );
-    assert.deepEqual(email().safeParse(data, "input"), failures.invalid());
-    assert.deepEqual(
+    assert.deepEqualTyped(email().safeParse(data, "input"), failures.invalid());
+    assert.deepEqualTyped(
       email({ multiple: true }).safeParse(data, "input"),
       failures.invalid(),
     );
