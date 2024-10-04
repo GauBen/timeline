@@ -28,6 +28,10 @@ export {
   text as tel,
   text,
 } from "./validators/text.js";
+export { textarea } from "./validators/textarea.js";
+export { time } from "./validators/time.js";
+export { url } from "./validators/url.js";
+export { week } from "./validators/week.js";
 
 export type Infer<T extends Record<string, FormInput<unknown>>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;

@@ -1,7 +1,7 @@
 import { failures, type FormInput, methods, succeed } from "../definitions.js";
 
 /**
- * `<input type="month">` form input validator.
+ * `<input type="time">` form input validator.
  *
  * Supported attributes:
  *
@@ -11,27 +11,24 @@ import { failures, type FormInput, methods, succeed } from "../definitions.js";
  *
  * The output value is a string with the format `yyyy-mm-dd`.
  */
-export function month(attributes?: {
+export function time(attributes?: {
   required?: false;
   min?: string;
   max?: string;
 }): FormInput<string | null> & {
-  asNumber: () => FormInput<number | null>;
-  asDate: () => FormInput<Date | null>;
+  asSeconds: () => FormInput<number | null>;
 };
-export function month(attributes: {
+export function time(attributes: {
   required: true;
   min?: string;
   max?: string;
 }): FormInput<string> & {
-  asNumber: () => FormInput<number>;
-  asDate: () => FormInput<Date>;
+  asSeconds: () => FormInput<number>;
 };
-export function month(
+export function time(
   attributes: { required?: boolean; min?: string; max?: string } = {},
 ): FormInput<string | null> & {
-  asNumber: () => FormInput<number | null>;
-  asDate: () => FormInput<Date | null>;
+  asSeconds: () => FormInput<number | null>;
 } {
   return {
     ...methods,
@@ -41,26 +38,19 @@ export function month(
       if (typeof value !== "string") return failures.type();
       if (value === "")
         return attributes.required ? failures.required() : succeed(null);
-      if (!/^\d{4}-(0\d|1[12])$/.test(value)) return failures.invalid();
+      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)) return failures.invalid();
       if (attributes.min && value < attributes.min)
         return failures.min(attributes.min);
       if (attributes.max && value > attributes.max)
         return failures.max(attributes.max);
       return succeed(value);
     },
-    /**
-     * Returns the month as a number representing the number of milliseconds
-     * since January 1, 1970, 00:00:00 UTC.
-     */
-    asNumber() {
+    /** Returns the time as a number of seconds. */
+    asSeconds() {
       return this.transform((value) =>
-        value === null ? null : Date.parse(value),
-      );
-    },
-    /** Returns the month as a Date object. */
-    asDate() {
-      return this.transform((value) =>
-        value === null ? null : new Date(value),
+        value === null
+          ? null
+          : Number(value.slice(0, 2)) * 3600 + Number(value.slice(3, 5)) * 60,
       );
     },
   };
