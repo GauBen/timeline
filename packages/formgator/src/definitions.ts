@@ -21,8 +21,8 @@ export type ValidationIssue =
   | { code: "minlength"; minlength: number; message: string }
   | { code: "maxlength"; maxlength: number; message: string }
   | { code: "pattern"; pattern: RegExp; message: string }
-  | { code: "min"; min: number | Date; message: string }
-  | { code: "max"; max: number | Date; message: string }
+  | { code: "min"; min: number | string; message: string }
+  | { code: "max"; max: number | string; message: string }
   | { code: "step"; step: number; message: string }
   | { code: "accept"; message: string }
   | { code: "transform"; message: string }
@@ -96,9 +96,9 @@ export const failures = {
     }),
   pattern: (pattern: RegExp) =>
     fail({ code: "pattern", pattern, message: "Invalid format" }),
-  min: (min: number | Date) =>
+  min: (min: number | string) =>
     fail({ code: "min", min, message: `Too small, minimum value is ${min}` }),
-  max: (max: number | Date) =>
+  max: (max: number | string) =>
     fail({ code: "max", max, message: `Too big, maximum value is ${max}` }),
   step: (step: number) => fail({ code: "step", step, message: "Invalid step" }),
   accept: (accept: string[]) =>

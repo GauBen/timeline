@@ -19,13 +19,13 @@ describe("date()", async () => {
     );
     assert.deepEqualTyped(
       datetimeLocal({
-        min: new Date("2024-09-30T22:45"),
+        min: "2024-09-30T22:45",
       }).safeParse(data, "input"),
       succeed("2024-09-30T22:45"),
     );
     assert.deepEqualTyped(
       datetimeLocal({
-        max: new Date("2024-09-30T22:45"),
+        max: "2024-09-30T22:45",
       }).safeParse(data, "input"),
       succeed("2024-09-30T22:45"),
     );
@@ -72,15 +72,15 @@ describe("date()", async () => {
     );
     assert.deepEqualTyped(
       datetimeLocal({
-        min: new Date("2024-09-30T22:46"),
+        min: "2024-09-30T22:46",
       }).safeParse(data, "ok"),
-      failures.min(new Date("2024-09-30T22:46")),
+      failures.min("2024-09-30T22:46"),
     );
     assert.deepEqualTyped(
       datetimeLocal({
-        max: new Date("2024-09-30T22:44"),
+        max: "2024-09-30T22:44",
       }).safeParse(data, "ok"),
-      failures.max(new Date("2024-09-30T22:44")),
+      failures.max("2024-09-30T22:44"),
     );
   });
 });

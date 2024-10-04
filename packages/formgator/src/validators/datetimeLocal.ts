@@ -13,22 +13,22 @@ import { failures, type FormInput, methods, succeed } from "../definitions.js";
  */
 export function datetimeLocal(attributes?: {
   required?: false;
-  min?: Date;
-  max?: Date;
+  min?: string;
+  max?: string;
 }): FormInput<string | null> & {
   asNumber: () => FormInput<number | null>;
   asDate: () => FormInput<Date | null>;
 };
 export function datetimeLocal(attributes: {
   required: true;
-  min?: Date;
-  max?: Date;
+  min?: string;
+  max?: string;
 }): FormInput<string> & {
   asNumber: () => FormInput<number>;
   asDate: () => FormInput<Date>;
 };
 export function datetimeLocal(
-  attributes: { required?: boolean; min?: Date; max?: Date } = {},
+  attributes: { required?: boolean; min?: string; max?: string } = {},
 ): FormInput<string | null> & {
   asNumber: () => FormInput<number | null>;
   asDate: () => FormInput<Date | null>;
@@ -43,11 +43,10 @@ export function datetimeLocal(
         return attributes.required ? failures.required() : succeed(null);
       if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value))
         return failures.invalid();
-      const date = Date.parse(value);
-      if (Number.isNaN(date)) return failures.invalid();
-      if (attributes.min && date < attributes.min.getTime())
+      if (Number.isNaN(Date.parse(value))) return failures.invalid();
+      if (attributes.min && value < attributes.min)
         return failures.min(attributes.min);
-      if (attributes.max && date > attributes.max.getTime())
+      if (attributes.max && value > attributes.max)
         return failures.max(attributes.max);
       return succeed(value);
     },

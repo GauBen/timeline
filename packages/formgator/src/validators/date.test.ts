@@ -14,11 +14,11 @@ describe("date()", async () => {
     );
     assert.deepEqualTyped(date().safeParse(data, "empty"), succeed(null));
     assert.deepEqualTyped(
-      date({ min: new Date("2024-09-30") }).safeParse(data, "input"),
+      date({ min: "2024-09-30" }).safeParse(data, "input"),
       succeed("2024-09-30"),
     );
     assert.deepEqualTyped(
-      date({ max: new Date("2024-09-30") }).safeParse(data, "input"),
+      date({ max: "2024-09-30" }).safeParse(data, "input"),
       succeed("2024-09-30"),
     );
     assert.deepEqualTyped(
@@ -54,12 +54,12 @@ describe("date()", async () => {
     assert.deepEqualTyped(date().safeParse(data, "input"), failures.invalid());
     assert.deepEqualTyped(date().safeParse(data, "nad"), failures.invalid());
     assert.deepEqualTyped(
-      date({ min: new Date("2024-10-01") }).safeParse(data, "ok"),
-      failures.min(new Date("2024-10-01")),
+      date({ min: "2024-10-01" }).safeParse(data, "ok"),
+      failures.min("2024-10-01"),
     );
     assert.deepEqualTyped(
-      date({ max: new Date("2024-09-29") }).safeParse(data, "ok"),
-      failures.max(new Date("2024-09-29")),
+      date({ max: "2024-09-29" }).safeParse(data, "ok"),
+      failures.max("2024-09-29"),
     );
   });
 });
