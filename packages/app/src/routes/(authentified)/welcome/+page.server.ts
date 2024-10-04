@@ -56,7 +56,7 @@ export const actions = {
       displayName: fg.text({ minlength: 1, maxlength: 255 }),
       timezone: fg.select(timezones, { required: true }),
     },
-    async ({ locals, data }) => {
+    async (data, { locals }) => {
       if (!locals.session) return fail(401, { error: "Unauthorized" });
 
       if (reserved.has(data.username.toLowerCase().replace(/s$/, "")))

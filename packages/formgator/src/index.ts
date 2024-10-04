@@ -35,7 +35,9 @@ export { week } from "./validators/week.js";
 
 export type Infer<T extends Record<string, FormInput<unknown>>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
-};
+} extends infer O // Black magic to make the type human-readable
+  ? { [K in keyof O]: O[K] }
+  : never;
 
 export type InferError<T extends Record<string, FormInput<unknown>>> = {
   [K in keyof T]?: ValidationIssue;

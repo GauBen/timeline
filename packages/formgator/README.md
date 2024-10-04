@@ -73,13 +73,16 @@ export const actions = {
       email: fg.email({ required: true }),
       password: fg.password({ required: true }),
     },
-    ({ data }) => {
+    (data, event) => {
       // data.email and data.password are guaranteed to be strings
       // The form will be rejected as 400 Bad Request if they are missing or empty
+      // event is the object that would be your first argument without formgator
     },
   ),
 };
 ```
+
+The parsed form result is added at the beginning of the arguments list to ensure ascending compatibility with SvelteKit; extending the `event` object might clash with upcoming features.
 
 ## Disclaimer
 

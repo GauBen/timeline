@@ -1,4 +1,3 @@
-import type * as kit from "@sveltejs/kit";
 import { fail } from "@sveltejs/kit";
 import * as fg from "../index.js";
 
@@ -28,14 +27,10 @@ export function formgate<
   ID extends string = string,
 >(
   inputs: Inputs,
-  action: Action extends kit.Action<
-    infer Params,
-    infer OutputData,
-    infer RouteId
-  >
-    ? (
-        event: kit.RequestEvent<Params, RouteId> & { data: fg.Infer<Inputs> },
-      ) => OutputData | Promise<OutputData>
+  action: Action extends (
+    event: infer Event extends { request: Request; url: URL },
+  ) => infer Output
+    ? (data: fg.Infer<Inputs>, event: Event) => Output
     : never,
   options: {
     /** @default "POST" */
@@ -43,7 +38,7 @@ export function formgate<
     id?: ID;
   } = {},
 ): Action & (() => Promise<{ id: ID; issues: fg.InferError<Inputs> }>) {
-  return (async (event: kit.RequestEvent & { data: fg.Infer<Inputs> }) => {
+  return (async (event: { request: Request; url: URL }) => {
     const data = fg
       .form(inputs)
       .safeParse(
@@ -55,7 +50,6 @@ export function formgate<
     if (!data.success)
       return fail(400, { id: options.id ?? "default", error: data.error });
 
-    event.data = data.data;
-    return action(event);
+    return action(data.data as never, event);
   }) as never;
 }

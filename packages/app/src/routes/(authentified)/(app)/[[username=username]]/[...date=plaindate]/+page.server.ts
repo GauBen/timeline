@@ -160,7 +160,7 @@ export const actions = {
       public: fg.checkbox(),
       shared_with: fg.select(() => true, { multiple: true }),
     },
-    async ({ request, locals, data }) => {
+    async (data, { request, locals }) => {
       if (!locals.session) return fail(401, { error: "Unauthorized" });
 
       const date = data.date
@@ -268,7 +268,7 @@ export const actions = {
       habitId: fg.text({ required: true }).transform(BigInt),
       date: fg.date({ required: true }).asDate(),
     },
-    async ({ locals, data }) => {
+    async (data, { locals }) => {
       if (!locals.session) error(401, "Unauthorized");
 
       if (data.mark) {
