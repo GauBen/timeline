@@ -16,9 +16,18 @@ export { datetimeLocal } from "./validators/datetimeLocal.js";
 export { email } from "./validators/email.js";
 export { file } from "./validators/file.js";
 export { hidden } from "./validators/hidden.js";
+export { image } from "./validators/image.js";
+export { month } from "./validators/month.js";
 export { number } from "./validators/number.js";
+export { radio } from "./validators/radio.js";
+export { range } from "./validators/range.js";
 export { select } from "./validators/select.js";
-export { text as password, text as search, text } from "./validators/text.js";
+export {
+  text as password,
+  text as search,
+  text as tel,
+  text,
+} from "./validators/text.js";
 
 export type Infer<T extends Record<string, FormInput<unknown>>> = {
   [K in keyof T]: T[K] extends FormInput<infer U> ? U : never;
