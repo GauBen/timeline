@@ -92,7 +92,7 @@ This package is still in development and the API is subject to change. API will 
 
 - Why does `text()` produce `null` for an empty string?
 
-  This allows making the difference between _empty_ and _valid_. For instance, the field `<input type="text" minlength="4">` would accept both `''` and `'1234'` but not `'123'`; an empty field is considered valid as long as the `required` attribute is not set on the input. Therefore, `text()` produces `string` when valid and `null` when empty. To receive a `string` value, either use `text({ required: true })` to prevent empty inputs or `text().transform(v => v ?? '')` to transform `null` into `''`.
+  This allows making the difference between _empty_ and _valid_. For instance, the field `<input type="text" minlength="4">` would accept both `''` and `'1234'` but not `'123'`; an empty field is considered valid as long as the `required` attribute is not set on the input. Therefore, `text()` produces `string` when valid and `null` when empty. To receive a `string` value, either use `text({ required: true })` to prevent empty inputs, `text().transform(v => v ?? '')` to transform `null` into `''`, or `text().trim()` to transform whitespace-only strings into `''`.
 
 ## License
 

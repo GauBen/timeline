@@ -48,8 +48,8 @@ export function formgate<
       );
 
     if (!data.success)
-      return fail(400, { id: options.id ?? "default", error: data.error });
+      return fail(400, { id: options.id ?? "default", issues: data.error });
 
-    return action(data.data as never, event);
+    return action(data.data, event);
   }) as never;
 }

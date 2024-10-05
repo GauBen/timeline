@@ -1,4 +1,11 @@
-import { failures, type FormInput, methods, succeed } from "../definitions.js";
+import {
+  failures,
+  type FormInput,
+  methods,
+  safeParseText,
+  succeed,
+  type TextAttributes,
+} from "../definitions.js";
 
 /**
  * `<input type="url">` form input validator.
@@ -7,27 +14,21 @@ import { failures, type FormInput, methods, succeed } from "../definitions.js";
  *
  * - `required` - Whether the input is required.
  */
-export function url(attributes?: {
-  required?: false;
-}): FormInput<string | null> & { asURL(): FormInput<URL | null> };
-export function url(attributes: {
-  required: true;
-}): FormInput<string> & { asURL(): FormInput<URL> };
 export function url(
-  attributes: { required?: boolean } = {},
+  attributes?: TextAttributes<false>,
+): FormInput<string | null> & { asURL(): FormInput<URL | null> };
+export function url(
+  attributes: TextAttributes<true>,
+): FormInput<string> & { asURL(): FormInput<URL> };
+export function url(
+  attributes: TextAttributes = {},
 ): FormInput<string | null> & { asURL(): FormInput<URL | null> } {
   return {
     ...methods,
     attributes,
-    safeParse: (data, name) => {
-      const value = data.get(name);
-      if (typeof value !== "string") return failures.type();
-      if (value === "")
-        return attributes.required ? failures.required() : succeed(null);
-      if (!URL.canParse(value)) return failures.invalid();
-      return succeed(value);
-    },
-
+    safeParse: safeParseText(attributes, (value) =>
+      URL.canParse(value) ? succeed(value) : failures.invalid(),
+    ),
     asURL() {
       return this.transform((url) => (url === null ? null : new URL(url)));
     },

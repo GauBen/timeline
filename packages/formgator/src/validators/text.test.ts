@@ -8,6 +8,7 @@ describe("text()", async () => {
     const data = new FormData();
     data.append("input", "hello world!");
     data.append("trim", "  hello ");
+    data.append("empty", "");
 
     assert.deepEqualTyped(
       text().safeParse(data, "input"),
@@ -29,6 +30,7 @@ describe("text()", async () => {
       text().trim().safeParse(data, "trim"),
       succeed("hello"),
     );
+    assert.deepEqualTyped(text().trim().safeParse(data, "empty"), succeed(""));
   });
 
   it("should refuse invalid inputs", () => {

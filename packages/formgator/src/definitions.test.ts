@@ -10,7 +10,7 @@ describe("methods", () => {
       data.append("input", "123");
 
       assert.deepEqualTyped(
-        text().transform(BigInt).safeParse(data, "input"),
+        text({ required: true }).transform(BigInt).safeParse(data, "input"),
         succeed(123n),
       );
     });
@@ -20,7 +20,7 @@ describe("methods", () => {
       data.append("input", "nan");
 
       assert.deepEqualTyped(
-        text()
+        text({ required: true })
           .transform(BigInt, () => "Not a number")
           .safeParse(data, "input"),
         failures.transform("Not a number"),
@@ -31,7 +31,9 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "nan");
 
-      const input = text({ pattern: /^\d+$/ }).transform(BigInt);
+      const input = text({ required: true, pattern: /^\d+$/ }).transform(
+        BigInt,
+      );
 
       assert.deepEqualTyped(
         input.safeParse(data, "input"),
@@ -46,7 +48,7 @@ describe("methods", () => {
       data.append("input", "123");
 
       assert.deepEqualTyped(
-        text()
+        text({ required: true })
           .refine((value) => value.startsWith("1"))
           .safeParse(data, "input"),
         succeed("123"),
@@ -58,7 +60,7 @@ describe("methods", () => {
       data.append("input", "nan");
 
       assert.deepEqualTyped(
-        text()
+        text({ required: true })
           .refine((value) => value.startsWith("1"))
           .safeParse(data, "input"),
         failures.refine("Invalid value"),
@@ -70,7 +72,7 @@ describe("methods", () => {
       data.append("input", "nan");
 
       assert.deepEqualTyped(
-        text()
+        text({ required: true })
           .refine(
             (value) => value.startsWith("1"),
             () => "Nope",
@@ -84,7 +86,7 @@ describe("methods", () => {
       const data = new FormData();
       data.append("input", "nan");
 
-      const input = text({ pattern: /^\d+$/ }).refine((value) =>
+      const input = text({ required: true, pattern: /^\d+$/ }).refine((value) =>
         value.startsWith("1"),
       );
 

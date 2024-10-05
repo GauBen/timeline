@@ -45,14 +45,16 @@ const stringifyRegex = (regex: RegExp) => {
 /** Allows you to splat attributes into Svelte HTML template. */
 export function splat(attributes: FormInput["attributes"]) {
   return Object.fromEntries(
-    Object.entries(attributes).map(([key, value]) => [
-      key,
-      Array.isArray(value)
-        ? value.join(",")
-        : value instanceof RegExp
-          ? stringifyRegex(value)
-          : value,
-    ]),
+    Object.entries(attributes)
+      .filter(([, value]) => value !== false && value !== undefined)
+      .map(([key, value]) => [
+        key,
+        Array.isArray(value)
+          ? value.join(",")
+          : value instanceof RegExp
+            ? stringifyRegex(value)
+            : value,
+      ]),
   );
 }
 

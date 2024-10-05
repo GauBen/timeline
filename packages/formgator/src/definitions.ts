@@ -29,7 +29,10 @@ export type ValidationIssue =
   | { code: "refine"; message: string };
 
 export interface FormInput<T = unknown> {
-  attributes: Record<string, string | string[] | number | boolean | RegExp>;
+  attributes: Record<
+    string,
+    string | string[] | number | boolean | RegExp | undefined
+  >;
   safeParse(data: ReadonlyFormData, name: string): Result<T, ValidationIssue>;
 
   /**
@@ -110,6 +113,41 @@ export const failures = {
     ...args: never
   ) => Result<never, ValidationIssue>;
 };
+
+// #region Common
+export type TextAttributes<Required = boolean> = Required extends true
+  ? {
+      required: true;
+      minlength?: number | undefined;
+      maxlength?: number | undefined;
+      pattern?: RegExp | undefined;
+    }
+  : {
+      required?: false | undefined;
+      minlength?: number | undefined;
+      maxlength?: number | undefined;
+      pattern?: RegExp | undefined;
+    };
+
+export const safeParseText =
+  (
+    attributes: TextAttributes,
+    end: (value: string) => Result<string, ValidationIssue> = succeed,
+  ) =>
+  (data: ReadonlyFormData, name: string) => {
+    const value = data.get(name);
+    if (typeof value !== "string") return failures.type();
+    if (/[\r\n]/.test(value)) return failures.invalid();
+    if (value === "")
+      return attributes.required ? failures.required() : succeed(null);
+    if (attributes.maxlength && value.length > attributes.maxlength)
+      return failures.maxlength(attributes.maxlength);
+    if (attributes.minlength && value.length < attributes.minlength)
+      return failures.minlength(attributes.minlength);
+    if (attributes.pattern && !attributes.pattern.test(value))
+      return failures.pattern(attributes.pattern);
+    return end(value);
+  };
 
 // #region Methods
 
