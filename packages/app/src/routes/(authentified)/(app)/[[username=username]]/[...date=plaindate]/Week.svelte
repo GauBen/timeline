@@ -112,7 +112,7 @@
 
   $effect(onresize);
 
-  let days = $state<Record<string, Day>>({});
+  let days = $state<Record<string, ReturnType<typeof Day>>>({});
   export const getEventInCreationElement = () =>
     eventInCreation &&
     days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();

@@ -23,6 +23,9 @@
   const start = $derived(
     firstDayOfYear.subtract({ days: firstDayOfYear.dayOfWeek - 1 }),
   );
+
+  let eventInCreationElement = $state<HTMLElement>();
+  export const getEventInCreationElement = () => eventInCreationElement;
 </script>
 
 <table>
@@ -48,6 +51,9 @@
                 .total({ unit: "week", relativeTo: date })}
             >
               {date.toLocaleString($language, { month: "short" })}
+              {#if eventInCreation?.toPlainDate().equals(date)}
+                <span bind:this={eventInCreationElement}></span>
+              {/if}
             </td>
           {/if}
         {:else}

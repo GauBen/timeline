@@ -31,7 +31,8 @@
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   const Component = $derived({ day: Week, month: Month, year: Year }[view]);
-  let component = $state<Month | Week | Year>();
+  let component =
+    $state<ReturnType<typeof Week | typeof Month | typeof Year>>();
 
   /** Opens or closes the event creation dialog at a given datetime. */
   const toggleEventCreation = async (

@@ -18,7 +18,7 @@
     toggleEventCreation: (
       datetime?: Temporal.PlainDateTime | undefined,
     ) => Promise<void>;
-    getEventInCreationElement?: () => HTMLElement;
+    getEventInCreationElement?: () => HTMLElement | undefined;
     eventInCreation: Temporal.PlainDateTime;
   } = $props();
 
