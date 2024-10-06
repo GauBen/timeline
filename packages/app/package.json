@@ -14,7 +14,7 @@
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
     "@prisma/client": "^5.20.0",
-    "formgator": "workspace:^",
+    "formgator": "0.0.9",
     "modern-normalize": "^3.0.1"
   },
   "devDependencies": {
@@ -22,7 +22,7 @@
     "@inlang/paraglide-js": "^1.11.2",
     "@supabase/supabase-js": "^2.45.4",
     "@sveltejs/adapter-vercel": "^5.4.4",
-    "@sveltejs/kit": "^2.6.1",
+    "@sveltejs/kit": "^2.6.2",
     "@sveltejs/vite-plugin-svelte": "^4.0.0-next.7",
     "jose": "^5.9.3",
     "prettier-plugin-packagejson": "^2.5.2",
