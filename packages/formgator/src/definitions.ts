@@ -115,6 +115,7 @@ export const failures = {
 };
 
 // #region Common
+
 export type TextAttributes<Required = boolean> = Required extends true
   ? {
       required: true;

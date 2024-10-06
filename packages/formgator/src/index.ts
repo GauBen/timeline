@@ -30,7 +30,7 @@ export { textarea } from "./validators/textarea.js";
 export { time } from "./validators/time.js";
 export { url } from "./validators/url.js";
 export { week } from "./validators/week.js";
-export type { FormInput };
+export type { FormInput, ValidationIssue };
 
 const stringifyRegex = (regex: RegExp) => {
   if (regex.flags !== "u")
@@ -42,7 +42,11 @@ const stringifyRegex = (regex: RegExp) => {
   return regex.source.replaceAll(/^\^|\$$/g, "");
 };
 
-/** Allows you to splat attributes into Svelte HTML template. */
+/**
+ * Allows you to splat attributes into Svelte HTML template.
+ *
+ * This feature is considered experimental and may be removed in the future.
+ */
 export function splat(attributes: FormInput["attributes"]) {
   return Object.fromEntries(
     Object.entries(attributes)

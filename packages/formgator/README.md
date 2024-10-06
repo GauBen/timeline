@@ -60,7 +60,126 @@ async function handle(request: Request) {
 
 ## API
 
-You can expect `formgator` to expose a validator for [all possible `<input type="...">` values](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) as well as `<select>` and `<textarea>`.
+You can expect formgator to expose a validator for [all possible `<input type="...">` values](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) as well as `<select>` and `<textarea>`.
+
+These validators will produce a coherent value for each input type:
+
+- `number()` and `range()` produce `number` values.
+- `checkbox()` produces `boolean` values.
+- `file()` produces a `File` object.
+- Other validators produce `string` values.
+
+All these validators take their common (and less common) HTML validation attributes as options:
+
+- `text({ required: true, maxlength: 255 })`
+- `number({ min: 10, max: 100, step: 10 })`
+- `radio(["yes", "no"], { required: true })` to check against a list of possible values.
+- `select(["apple", "banana", "cherry"], { multiple: true })` for `<select multiple>` elements.
+- `file({ accept: [".jpg", ".jpeg"] })` for basic extension and MIME type validation.
+
+Some validators have additional methods to transform the value into a native JavaScript object:
+
+- `datetimeLocal()`, `date()` and `month()` have `asDate()` to return a `Date` object, and `asNumber()` to return a timestamp.
+- `color()` has `asRgb()` to return a `[number, number, number]` tuple.
+- `textarea()` has `trim()` to remove leading and trailing whitespace.
+
+Validators can be chained with additional methods to transform the value:
+
+- `transform(fn: (value: T) => U)` transforms the value using the provided function.
+
+  ```ts
+  const schema = fg.form({
+    id: fg.text({ required: true, pattern: /^\d+$/ }).transform(BigInt),
+  });
+  // schema.parse(form) will produce an object with the shape { id: BigInt }
+  ```
+
+  A second argument can be provided to `transform` to produce a meaningful error message if the transformation fails.
+
+- `refine(fn: (value: T) => boolean)` adds a custom validation step.
+
+  ```ts
+  const schema = fg.form({
+    even: fg.number().refine((value) => value % 2 === 0),
+  });
+  // schema.parse(form) will throw an error if `even` is odd
+  ```
+
+  A second argument can be provided to `refine` to produce a meaningful error message if the refinement fails.
+
+- `optional()` allows the field to be missing. This is useful when dynamically adding fields to a form. Missing and empty fields are different things, and `optional` does not allow empty fields.
+
+  ```ts
+  const schema = fg.form({
+    contactChannel = fg.radio(["email", "phone"], { required: true }),
+    email: fg.email({ required: true }).optional(),
+    phone: fg.tel({ required: true }).optional(),
+  });
+  // You should then check if at least one is properly defined
+  ```
+
+The schema produced by `fg.form()` has two methods:
+
+- `.parse()` that returns the parsed form data or throws an error if the form data is invalid.
+- `.safeParse()` that returns an object with this shape: `{ success: true, data: Output } | { success: false, error: Error }`.
+
+## Errors
+
+An invalid form will produce an error with the same shape as your form schema:
+
+```ts
+const schema = fg.form({
+  username: fg.text({ required: true }),
+  birthday: fg.date().asDate(),
+  newsletter: fg.checkbox(),
+});
+
+// Using `.parse()`:
+try {
+  schema.parse(form);
+} catch (error) {
+  if (error instanceof fg.FormError) {
+    // error.issues is an object with this shape
+    // {
+    //   username?: ValidationIssue
+    //   birthday?: ValidationIssue
+    //   newsletter?: ValidationIssue
+    // }
+  }
+}
+
+// Using `.safeParse()`:
+const result = schema.safeParse(form);
+if (!result.success) {
+  // result.error is an object with this shape
+  // {
+  //   username?: ValidationIssue
+  //   birthday?: ValidationIssue
+  //   newsletter?: ValidationIssue
+  // }
+}
+```
+
+A `ValidationIssue` object has the following shape:
+
+```ts
+interface ValidationIssue {
+  code:
+    | "type" // If the value is not of the expected type (e.g. string instead of File)
+    | "invalid" // If the value does not have the right format (e.g. invalid email)
+    | "required" // If the value is empty
+    | "minlength" // If the value is too short
+    | "maxlength" // If the value is too long
+    | "pattern" // If the value does not match the pattern
+    | "min" // If the value is too low
+    | "max" // If the value is too high
+    | "step" // If the value is not a multiple of the step
+    | "accept" // If the value does not match the accept attribute
+    | "transform" // If the `transform` callback throws an error
+    | "refine"; // If the `refine` callback returns false
+  message: string;
+}
+```
 
 ## Usage with SvelteKit
 
@@ -97,6 +216,14 @@ This package is still in development and the API is subject to change. API will 
 - Why does `text()` produce `null` for an empty string?
 
   This allows making the difference between _empty_ and _valid_. For instance, the field `<input type="text" minlength="4">` would accept both `''` and `'1234'` but not `'123'`; an empty field is considered valid as long as the `required` attribute is not set on the input. Therefore, `text()` produces `string` when valid and `null` when empty. To receive a `string` value, either use `text({ required: true })` to prevent empty inputs, `text().transform(v => v ?? '')` to transform `null` into `''`, or `text().trim()` to transform whitespace-only strings into `''`.
+
+- Why use both `null` and `undefined`?
+
+  `null` is used to represent an empty field, while `undefined` is used to represent a missing field. JavaScript is a weird language with two different ways to represent the absence of a value, and we can use this to our advantage.
+
+- Why? Just why?
+
+  I needed a way to mirror client-side validation on a server application. Most JavaScript form validation libraries are designed to work with native JS objects, not `FormData`, so I made my own.
 
 ## License
 
