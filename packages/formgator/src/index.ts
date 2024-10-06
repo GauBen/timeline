@@ -75,13 +75,20 @@ export type InferError<T extends Record<string, FormInput>> = {
 export interface FormGator<T extends Record<string, FormInput>> {
   inputs: T;
   parse(data: ReadonlyFormData): Infer<T>;
-  safeParse(
-    data: ReadonlyFormData,
-  ): Result<Infer<T>, { [K in keyof T]?: ValidationIssue }>;
+  safeParse(data: ReadonlyFormData): Result<
+    Infer<T>,
+    {
+      issues: { [K in keyof T]?: ValidationIssue };
+      accepted: Partial<Infer<T>>;
+    }
+  >;
 }
 
 export class FormgatorError<T extends Record<string, FormInput>> extends Error {
-  constructor(public issues: InferError<T>) {
+  constructor(
+    public issues: InferError<T>,
+    public accepted: Partial<Infer<T>>,
+  ) {
     super("Form validation failed");
     this.name = "FormgatorError";
   }
@@ -103,11 +110,15 @@ export function form<T extends Record<string, FormInput<unknown>>>(
       }
       return errorEntries.length === 0
         ? succeed(Object.fromEntries(entries) as Infer<T>)
-        : fail(Object.fromEntries(errorEntries) as InferError<T>);
+        : fail({
+            issues: Object.fromEntries(errorEntries) as InferError<T>,
+            accepted: Object.fromEntries(entries) as Partial<Infer<T>>,
+          });
     },
     parse(data) {
       const result = this.safeParse(data);
-      if (result.success === false) throw new FormgatorError(result.error);
+      if (result.success === false)
+        throw new FormgatorError(result.error.issues, result.error.accepted);
       return result.data;
     },
   };

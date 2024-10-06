@@ -6,13 +6,9 @@
 
   let timezone = $state.raw(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
-  let username = $state(form?.input?.username ?? "");
-  let displayName = $state(form?.input?.displayName ?? "");
+  let username = $state(form?.accepted.username ?? "");
+  let displayName = $state(form?.accepted.displayName ?? "");
 </script>
-
-{#if form}
-  {form.error}
-{/if}
 
 <h1>Welcome!</h1>
 <form method="POST" action="" use:enhance>
@@ -29,10 +25,10 @@
         maxlength="20"
         name="username"
         bind:value={username}
-        pattern={"[a-zA-Z0-9_]{3,20}"}
+        pattern={"[a-zA-Z][a-zA-Z0-9_]{2,19}"}
       />
     </label>
-    {(form?.validationErrors?.fieldErrors?.username ?? []).join(", ")}
+    {form?.issues.username?.message}
   </p>
   <p>
     <label>
@@ -44,13 +40,14 @@
         name="displayName"
         bind:value={displayName}
       />
-      {(form?.validationErrors?.fieldErrors?.displayName ?? []).join(", ")}
+      {form?.issues.displayName?.message}
     </label>
   </p>
   <p>
     Time zone
     <TimezonePicker bind:timezone />
     <input type="hidden" name="timezone" value={timezone} />
+    {form?.issues.timezone?.message}
   </p>
   <p>
     <button type="submit">Yay!</button>

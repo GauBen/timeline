@@ -1,6 +1,6 @@
 {
   "name": "formgator",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A validator for FormData and URLSearchParams objects",
   "keywords": [
     "typescript",
@@ -37,6 +37,7 @@
   ],
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap",
+    "dev": "pkgroll --sourcemap --watch",
     "test": "tsc --noEmit && tsx --experimental-test-coverage --test src/**/*.test.ts"
   },
   "devDependencies": {

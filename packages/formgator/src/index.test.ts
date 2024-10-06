@@ -33,7 +33,10 @@ describe("form()", () => {
         .safeParse(data);
 
       assert(!result.success);
-      assert.deepEqualTyped(fail(result.error.input), failures.maxlength(10));
+      assert.deepEqualTyped(
+        fail(result.error.issues.input),
+        failures.maxlength(10),
+      );
     });
   });
 

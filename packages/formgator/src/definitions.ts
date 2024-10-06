@@ -26,7 +26,7 @@ export type ValidationIssue =
   | { code: "step"; step: number; message: string }
   | { code: "accept"; message: string }
   | { code: "transform"; message: string }
-  | { code: "refine"; message: string };
+  | { code: "refine"; received: unknown; message: string };
 
 export interface FormInput<T = unknown> {
   attributes: Record<
@@ -106,7 +106,8 @@ export const failures = {
   step: (step: number) => fail({ code: "step", step, message: "Invalid step" }),
   accept: (accept: string[]) =>
     fail({ code: "accept", accept, message: "Invalid file type" }),
-  refine: (message: string) => fail({ code: "refine", message }),
+  refine: (received: unknown, message: string) =>
+    fail({ code: "refine", received, message }),
   transform: (message: string) => fail({ code: "transform", message }),
 } satisfies {
   [K in ValidationIssue["code"]]: (
@@ -188,6 +189,7 @@ function refine<T, U extends T>(
 
       if (!fn(result.data)) {
         return failures.refine(
+          result.data,
           typeof message === "string" ? message : message(result.data),
         );
       }

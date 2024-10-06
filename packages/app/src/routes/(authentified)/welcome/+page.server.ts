@@ -52,15 +52,20 @@ const reserved = new Set([
 export const actions = {
   default: formgate(
     {
-      username: fg.text({ pattern: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/ }),
-      displayName: fg.text({ minlength: 1, maxlength: 255 }),
+      username: fg
+        .text({
+          required: true,
+          pattern: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/,
+        })
+        .refine(
+          (value) => !reserved.has(value.toLowerCase().replace(/s$/, "")),
+          "Username already exists",
+        ),
+      displayName: fg.text({ required: true, minlength: 1, maxlength: 255 }),
       timezone: fg.select(timezones, { required: true }),
     },
     async (data, { locals }) => {
       if (!locals.session) return fail(401, { error: "Unauthorized" });
-
-      if (reserved.has(data.username.toLowerCase().replace(/s$/, "")))
-        return fail(400, { error: "Username already exists" });
 
       try {
         await prisma.user.create({
@@ -70,8 +75,11 @@ export const actions = {
         if (
           error instanceof PrismaClientKnownRequestError &&
           error.code === "P2002"
-        )
-          return fail(400, { error: "Username already exists" });
+        ) {
+          return fail(400, {
+            issues: { username: { message: "Username already exists" } },
+          });
+        }
         console.error(error);
         return fail(500, { error: "Internal server error" });
       }

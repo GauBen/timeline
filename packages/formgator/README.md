@@ -138,7 +138,7 @@ const schema = fg.form({
 try {
   schema.parse(form);
 } catch (error) {
-  if (error instanceof fg.FormError) {
+  if (error instanceof fg.FormgatorError) {
     // error.issues is an object with this shape
     // {
     //   username?: ValidationIssue
@@ -151,7 +151,7 @@ try {
 // Using `.safeParse()`:
 const result = schema.safeParse(form);
 if (!result.success) {
-  // result.error is an object with this shape
+  // result.error.issues is an object with this shape
   // {
   //   username?: ValidationIssue
   //   birthday?: ValidationIssue
@@ -181,6 +181,8 @@ interface ValidationIssue {
 }
 ```
 
+If some fields were accepted nonetheless, the `error` object will have an `accepted` property with all the accepted fields: `error.accepted` for `.parse()` and `result.error.accepted` for `.safeParse()`. This allows you to recover from partial form data.
+
 ## Usage with SvelteKit
 
 `formgator` exposes a SvelteKit adapter that can be used to validate form data in SvelteKit [form actions](https://kit.svelte.dev/docs/form-actions).
@@ -206,6 +208,25 @@ export const actions = {
 ```
 
 The parsed form result is added at the beginning of the arguments list to ensure ascending compatibility with SvelteKit; extending the `event` object might clash with upcoming features.
+
+If the form data is invalid, the form action will populate the `form` property of your `+page.svelte` component. Its shape will be as follows:
+
+```ts
+export let form: {
+  issues: {
+    // Contains the validation issues for each field
+    email?: ValidationIssue;
+    password?: ValidationIssue;
+  };
+  accepted: {
+    // Allows you to recover from partial form data
+    email?: string;
+    password?: string;
+  };
+};
+```
+
+If you have several forms on the same page, you can add a third argument to `formgate` to specify the form name: `formgate(..., { id: "login" })`. This id will be propagated to `form.id` in your page component.
 
 ## Disclaimer
 

@@ -37,7 +37,12 @@ export function formgate<
     method?: "GET" | "POST";
     id?: ID;
   } = {},
-): Action & (() => Promise<{ id: ID; issues: fg.InferError<Inputs> }>) {
+): Action &
+  (() => Promise<{
+    id: ID;
+    issues: fg.InferError<Inputs>;
+    accepted: Partial<fg.Infer<Inputs>>;
+  }>) {
   return (async (event: { request: Request; url: URL }) => {
     const data = fg
       .form(inputs)
@@ -48,7 +53,7 @@ export function formgate<
       );
 
     if (!data.success)
-      return fail(400, { id: options.id ?? "default", issues: data.error });
+      return fail(400, { id: options.id ?? "default", ...data.error });
 
     return action(data.data, event);
   }) as never;

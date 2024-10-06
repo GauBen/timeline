@@ -63,7 +63,7 @@ describe("methods", () => {
         text({ required: true })
           .refine((value) => value.startsWith("1"))
           .safeParse(data, "input"),
-        failures.refine("Invalid value"),
+        failures.refine("nan", "Invalid value"),
       );
     });
 
@@ -78,7 +78,7 @@ describe("methods", () => {
             () => "Nope",
           )
           .safeParse(data, "input"),
-        failures.refine("Nope"),
+        failures.refine("nan", "Nope"),
       );
     });
 
