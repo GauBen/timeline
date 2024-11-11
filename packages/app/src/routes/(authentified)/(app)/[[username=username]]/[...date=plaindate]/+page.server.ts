@@ -4,7 +4,7 @@ import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
-import { formgate } from "formgator/sveltekit";
+import { formgate, loadgate } from "formgator/sveltekit";
 
 // Polyfill until Vercel supports Node >= 21
 function Object_groupBy<T, K extends PropertyKey>(
@@ -21,133 +21,138 @@ function Object_groupBy<T, K extends PropertyKey>(
   return result;
 }
 
-export const load = async ({ parent, params, url }) => {
-  const { me } = await parent();
+export const load = loadgate(
+  {
+    event: fg
+      .text({ required: true, pattern: /^\d+$/ })
+      .transform(BigInt)
+      .optional(),
+  },
+  async (searchParams, { parent, params }) => {
+    const { me } = await parent();
 
-  let user: User | undefined;
-  if (params.username) {
-    try {
-      user = await prisma.user.findUniqueOrThrow({
-        where: { username: params.username },
-      });
-    } catch {
-      error(404, "User not found");
+    let user: User | undefined;
+    if (params.username) {
+      try {
+        user = await prisma.user.findUniqueOrThrow({
+          where: { username: params.username },
+        });
+      } catch {
+        error(404, "User not found");
+      }
     }
-  }
 
-  const matches = params.date.match(
-    /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
-  );
+    const matches = params.date.match(
+      /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
+    );
 
-  if (params.date && !matches) error(400, "Invalid date");
+    if (params.date && !matches) error(400, "Invalid date");
 
-  const view =
-    !matches || matches.groups?.day
-      ? "day"
-      : matches.groups?.month
-        ? "month"
-        : "year";
+    const view =
+      !matches || matches.groups?.day
+        ? "day"
+        : matches.groups?.month
+          ? "month"
+          : "year";
 
-  const start = matches
-    ? Temporal.PlainDate.from({
-        year: matches.groups?.year ? Number(matches.groups.year) : 1,
-        month: matches.groups?.month ? Number(matches.groups.month) : 1,
-        day: matches.groups?.day ? Number(matches.groups.day) : 1,
-      }).toZonedDateTime(me.timezone)
-    : Temporal.Now.zonedDateTimeISO(me.timezone).withPlainTime();
+    const start = matches
+      ? Temporal.PlainDate.from({
+          year: matches.groups?.year ? Number(matches.groups.year) : 1,
+          month: matches.groups?.month ? Number(matches.groups.month) : 1,
+          day: matches.groups?.day ? Number(matches.groups.day) : 1,
+        }).toZonedDateTime(me.timezone)
+      : Temporal.Now.zonedDateTimeISO(me.timezone).withPlainTime();
 
-  const end = start.add(
-    view === "day"
-      ? { days: 7 }
-      : view === "month"
-        ? { months: 1 }
-        : { years: 1 },
-  );
+    const end = start.add(
+      view === "day"
+        ? { days: 7 }
+        : view === "month"
+          ? { months: 1 }
+          : { years: 1 },
+    );
 
-  const where: Prisma.TimelineEventWhereInput = user
-    ? { userId: me.id, authorId: user.id }
-    : { userId: me.id, OR: [{ added: true }, { followed: true }] };
+    const where: Prisma.TimelineEventWhereInput = user
+      ? { userId: me.id, authorId: user.id }
+      : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-  const eventId = ((x) => (x ? BigInt(x) : undefined))(
-    url.searchParams.get("event"),
-  );
-  const [event, latest, events, followed, followings, habits] =
-    await Promise.all([
-      eventId
-        ? prisma.timelineEvent.findUnique({
-            where: { id: eventId, AND: where },
-            include: { author: true },
-          })
-        : undefined,
-      prisma.timelineEvent.findMany({
-        where,
-        include: { author: true },
-        orderBy: { createdAt: "desc" },
-        take: 100,
-      }),
-      prisma.timelineEvent.findMany({
-        where: {
-          ...where,
-          date: {
-            gte: new Date(start.epochMilliseconds),
-            lt: new Date(end.epochMilliseconds),
-          },
-        },
-        include: { author: true },
-        orderBy: { date: "asc" },
-        take: 100,
-      }),
-      user
-        ? prisma.follow.findUnique({
-            where: {
-              followerId_followingId: {
-                followerId: me.id,
-                followingId: user.id,
-              },
+    const [event, latest, events, followed, followings, habits] =
+      await Promise.all([
+        searchParams.event
+          ? prisma.timelineEvent.findUnique({
+              where: { id: searchParams.event, AND: where },
+              include: { author: true },
+            })
+          : undefined,
+        prisma.timelineEvent.findMany({
+          where,
+          include: { author: true },
+          orderBy: { createdAt: "desc" },
+          take: 100,
+        }),
+        prisma.timelineEvent.findMany({
+          where: {
+            ...where,
+            date: {
+              gte: new Date(start.epochMilliseconds),
+              lt: new Date(end.epochMilliseconds),
             },
-          })
-        : undefined,
-      prisma.follow.findMany({
-        where: { followerId: me.id },
-        include: { following: true },
-      }),
-      !user
-        ? prisma.habit.findMany({
-            where: { userId: me.id },
-            include: {
-              marks: {
-                where: {
-                  date: {
-                    gte: new Date(start.epochMilliseconds),
-                    lt: new Date(end.epochMilliseconds),
+          },
+          include: { author: true },
+          orderBy: { date: "asc" },
+          take: 100,
+        }),
+        user
+          ? prisma.follow.findUnique({
+              where: {
+                followerId_followingId: {
+                  followerId: me.id,
+                  followingId: user.id,
+                },
+              },
+            })
+          : undefined,
+        prisma.follow.findMany({
+          where: { followerId: me.id },
+          include: { following: true },
+        }),
+        !user
+          ? prisma.habit.findMany({
+              where: { userId: me.id },
+              include: {
+                marks: {
+                  where: {
+                    date: {
+                      gte: new Date(start.epochMilliseconds),
+                      lt: new Date(end.epochMilliseconds),
+                    },
                   },
                 },
               },
-            },
-          })
-        : undefined,
-    ]);
+            })
+          : undefined,
+      ]);
 
-  const windows = Object_groupBy(events, (event) =>
-    toTemporalInstant
-      .call(event.date)
-      .toZonedDateTimeISO(me.timezone)
-      .toPlainDate()
-      .toString(),
-  );
+    const windows = Object_groupBy(events, (event) =>
+      toTemporalInstant
+        .call(event.date)
+        .toZonedDateTimeISO(me.timezone)
+        .toPlainDate()
+        .toString(),
+    );
 
-  return {
-    event,
-    followed,
-    followings,
-    habits,
-    latest,
-    start: start.toString(),
-    user,
-    view,
-    windows,
-  };
-};
+    return {
+      event,
+      followed,
+      followings,
+      habits,
+      latest,
+      start: start.toString(),
+      user,
+      view,
+      windows,
+    };
+  },
+);
 
 export const actions = {
   createEvent: formgate(

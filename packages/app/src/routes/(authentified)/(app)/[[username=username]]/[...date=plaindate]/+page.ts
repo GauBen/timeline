@@ -1,12 +1,13 @@
 import { Temporal } from "@js-temporal/polyfill";
+import * as fg from "formgator";
+import { loadgate } from "formgator/sveltekit";
 
-export const load = ({ data, url }) => {
-  const eventInCreation = url.searchParams.get("new");
-
-  return {
-    ...data,
-    eventInCreation: eventInCreation
-      ? Temporal.PlainDateTime.from(eventInCreation)
-      : undefined,
-  };
-};
+export const load = loadgate(
+  {
+    new: fg
+      .text({ required: true })
+      .transform(Temporal.PlainDateTime.from)
+      .optional(),
+  },
+  (searchParams, { data }) => ({ ...data, eventInCreation: searchParams.new }),
+);
