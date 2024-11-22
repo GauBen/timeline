@@ -8,23 +8,17 @@
     variant,
     ...props
   }: CommonProps & SvelteHTMLElements["div"] = $props();
-  const cls = $derived(
-    [color, variant]
-      .filter(Boolean)
-      .map((v) => "-" + v)
-      .join(" "),
-  );
 </script>
 
-<div class={cls} {...props}>
+<div data-color={color} data-variant={variant} {...props}>
   {@render children?.()}
 </div>
 
 <style lang="scss">
   div {
-    color: var(--color);
-    background: var(--background);
-    border: 1px solid var(--border);
+    color: var(--ui-color);
+    background: var(--ui-background);
+    border: 1px solid var(--ui-border);
     margin-block: 1rem;
     padding: 1em;
     border-radius: 0.25em;

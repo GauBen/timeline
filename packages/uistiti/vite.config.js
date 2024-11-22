@@ -8,4 +8,9 @@ export default defineConfig({
       scss: { api: "modern" },
     },
   },
+  server: {
+    fs: {
+      allow: ["./dist"],
+    },
+  },
 });

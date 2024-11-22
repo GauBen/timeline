@@ -8,16 +8,9 @@
     variant,
     ...props
   }: CommonProps & SvelteHTMLElements["button"] = $props();
-
-  const cls = $derived(
-    [color, variant]
-      .filter(Boolean)
-      .map((v) => "-" + v)
-      .join(" "),
-  );
 </script>
 
-<button class={cls} {...props}>
+<button data-color={color} data-variant={variant} {...props}>
   {@render children?.()}
 </button>
 
@@ -26,10 +19,10 @@
     font-size: 1em;
     padding: calc(7em / 16) calc(15em / 16);
     border-radius: 0.25em;
-    border: calc(1em / 16) solid var(--border);
+    border: calc(1em / 16) solid var(--ui-border);
     outline: 0.125em solid transparent;
     outline-offset: 0.125em;
-    color: var(--color);
+    color: var(--ui-color);
     transition:
       100ms background-color,
       100ms box-shadow,
@@ -37,31 +30,31 @@
       100ms border-color;
 
     &:enabled {
-      background-color: var(--background);
-      box-shadow: inset 0 0 0 var(--border-active);
-      text-shadow: 0 0 0.125rem var(--color-opposite);
+      background-color: var(--ui-background);
+      box-shadow: inset 0 0 0 var(--ui-border-active);
+      text-shadow: 0 0 0.125rem var(--ui-color-opposite);
 
       &:hover {
-        color: var(--color-interaction);
-        text-shadow: 0 0 0.125rem var(--color-interaction-opposite);
-        background-color: var(--background-hover);
-        border-color: var(--border-hover);
+        color: var(--ui-color-interaction);
+        text-shadow: 0 0 0.125rem var(--ui-color-interaction-opposite);
+        background-color: var(--ui-background-hover);
+        border-color: var(--ui-border-hover);
       }
 
       &:focus-visible {
-        color: var(--color-interaction);
-        text-shadow: 0 0 0.125rem var(--color-interaction-opposite);
-        background-color: var(--background-hover);
-        border-color: var(--border-hover);
-        outline-color: var(--border-hover);
+        color: var(--ui-color-interaction);
+        text-shadow: 0 0 0.125rem var(--ui-color-interaction-opposite);
+        background-color: var(--ui-background-hover);
+        border-color: var(--ui-border-hover);
+        outline-color: var(--ui-border-hover);
       }
 
       &:active {
-        color: var(--color-interaction);
-        text-shadow: 0 0 0.125rem var(--color-interaction-opposite);
-        background-color: var(--background-active);
-        border-color: var(--border-active);
-        box-shadow: inset 0 0.125em 0 var(--border-active);
+        color: var(--ui-color-interaction);
+        text-shadow: 0 0 0.125rem var(--ui-color-interaction-opposite);
+        background-color: var(--ui-background-active);
+        border-color: var(--ui-border-active);
+        box-shadow: inset 0 0.125em 0 var(--ui-border-active);
       }
     }
   }

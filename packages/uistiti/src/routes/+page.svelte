@@ -2,8 +2,8 @@
   import Button from "$lib/Button.svelte";
   import Card from "$lib/Card.svelte";
   import { colors, variants } from "$lib/definitions.js";
-  import "$lib/global.css";
   import "modern-normalize/modern-normalize.css";
+  import "uistiti/global.css";
 
   const keys = Object.keys as <T>(o: T) => Array<keyof T>;
 </script>
