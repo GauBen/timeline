@@ -8,7 +8,7 @@ export default {
   preprocess: vitePreprocess(),
 
   kit: {
-    adapter: adapter({ runtime: "nodejs20.x" }),
+    adapter: adapter({ runtime: "nodejs22.x" }),
 
     alias: {
       $paraglide: "src/paraglide",

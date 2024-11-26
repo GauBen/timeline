@@ -30,17 +30,13 @@ for (const [i, name] of Object.keys(colors).entries()) {
 
 output += `/* Variants */\n`;
 
-for (const [i, [name, variant]] of Object.entries(variants).entries()) {
-  output += (i === 0 ? ":root, " : "") + `[data-variant=${name}] {\n`;
+for (const [name, variant] of Object.entries(variants)) {
+  output += `[data-variant=${name}] {\n`;
   for (const [prop, value] of Object.entries(variant)) {
     output += `  --ui-${prop}: ${value === null ? "transparent" : `var(--ui-color-${value})`};\n`;
   }
   output += "}\n\n";
 }
 
-writeFileSync(
-  new URL("global.css", new URL("../dist/global.css", import.meta.url)),
-  output,
-  "utf-8",
-);
+writeFileSync(new URL("../dist/global.css", import.meta.url), output, "utf-8");
 console.timeEnd("Compiled");

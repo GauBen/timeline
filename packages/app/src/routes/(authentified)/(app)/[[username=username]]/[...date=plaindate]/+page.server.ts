@@ -6,21 +6,6 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
 
-// Polyfill until Vercel supports Node >= 21
-function Object_groupBy<T, K extends PropertyKey>(
-  iterable: Iterable<T>,
-  callbackfn: (value: T, index: number) => K,
-): Record<K, T[]> {
-  const result = {} as Record<K, T[]>;
-  let index = 0;
-  for (const value of iterable) {
-    const key = callbackfn(value, index++);
-    if (key in result) result[key].push(value);
-    else result[key] = [value];
-  }
-  return result;
-}
-
 export const load = loadgate(
   {
     event: fg
@@ -132,7 +117,7 @@ export const load = loadgate(
           : undefined,
       ]);
 
-    const windows = Object_groupBy(events, (event) =>
+    const windows = Object.groupBy(events, (event) =>
       toTemporalInstant
         .call(event.date)
         .toZonedDateTimeISO(me.timezone)
