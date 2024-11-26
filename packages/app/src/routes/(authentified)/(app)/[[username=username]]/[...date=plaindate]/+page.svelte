@@ -31,8 +31,7 @@
   const start = $derived(Temporal.PlainDate.from(data.start));
 
   const Component = $derived({ day: Week, month: Month, year: Year }[view]);
-  let component =
-    $state<ReturnType<typeof Week | typeof Month | typeof Year>>();
+  let component = $state<Week | Month | Year>();
 
   /** Opens or closes the event creation dialog at a given datetime. */
   const toggleEventCreation = async (
@@ -57,17 +56,30 @@
 
 <svelte:window
   onkeydown={async ({ key }) => {
-    if (!eventInCreation) return;
-    let to: Temporal.PlainDateTime | undefined;
+    if (eventInCreation) {
+      let to: Temporal.PlainDateTime | undefined;
 
-    if (key === "Escape")
-      await goto($page.url.pathname, { keepFocus: true, noScroll: true });
-    else if (key === "ArrowDown") to = eventInCreation.add({ minutes: 15 });
-    else if (key === "ArrowUp") to = eventInCreation.subtract({ minutes: 15 });
-    else if (key === "ArrowLeft") to = eventInCreation.subtract({ days: 1 });
-    else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
+      if (key === "Escape")
+        await goto($page.url.pathname, { keepFocus: true, noScroll: true });
+      else if (key === "ArrowDown") to = eventInCreation.add({ minutes: 15 });
+      else if (key === "ArrowUp")
+        to = eventInCreation.subtract({ minutes: 15 });
+      else if (key === "ArrowLeft") to = eventInCreation.subtract({ days: 1 });
+      else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
 
-    if (to) await toggleEventCreation(to);
+      if (to) await toggleEventCreation(to);
+    } else {
+      if (key === "ArrowLeft") {
+        await goto(
+          $resolveRoute({ date: start.subtract({ days: 1 }).toString() }),
+          { keepFocus: true },
+        );
+      } else if (key === "ArrowRight") {
+        await goto($resolveRoute({ date: start.add({ days: 1 }).toString() }), {
+          keepFocus: true,
+        });
+      }
+    }
   }}
 />
 
