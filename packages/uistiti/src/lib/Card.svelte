@@ -5,7 +5,7 @@
   const {
     children,
     color,
-    variant,
+    variant = "outline",
     ...props
   }: CommonProps & SvelteHTMLElements["div"] = $props();
 </script>
