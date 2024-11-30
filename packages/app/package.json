@@ -13,27 +13,27 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.0.0",
     "formgator": "0.0.16",
     "modern-normalize": "^3.0.1"
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.1",
     "@inlang/paraglide-js": "^1.11.3",
-    "@supabase/supabase-js": "^2.46.1",
-    "@sveltejs/adapter-vercel": "^5.4.8",
-    "@sveltejs/kit": "^2.8.4",
+    "@supabase/supabase-js": "^2.46.2",
+    "@sveltejs/adapter-vercel": "^5.5.0",
+    "@sveltejs/kit": "^2.9.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "jose": "^5.9.6",
     "prettier-plugin-packagejson": "^2.5.6",
-    "prisma": "^5.22.0",
+    "prisma": "^6.0.0",
     "sass": "^1.81.0",
-    "svelte": "^5.2.8",
+    "svelte": "^5.2.11",
     "svelte-check": "^4.1.0",
     "typescript": "^5.7.2",
     "uistiti": "workspace:^",
-    "unplugin-icons": "^0.20.1",
-    "vite": "^6.0.0"
+    "unplugin-icons": "^0.20.2",
+    "vite": "^6.0.1"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
