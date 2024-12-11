@@ -29,19 +29,19 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^2.9.0",
+    "@sveltejs/kit": "^2.10.1",
     "@sveltejs/package": "^2.3.7",
     "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "@types/node": "^22.10.1",
     "colorjs.io": "^0.5.2",
     "modern-normalize": "^3.0.1",
     "publint": "^0.2.12",
-    "sass": "^1.81.0",
-    "svelte": "^5.2.11",
-    "svelte-check": "^4.1.0",
+    "sass": "^1.82.0",
+    "svelte": "^5.10.1",
+    "svelte-check": "^4.1.1",
     "typescript": "^5.7.2",
-    "vite": "^6.0.1",
-    "vite-node": "^2.1.6"
+    "vite": "^6.0.3",
+    "vite-node": "^2.1.8"
   },
   "peerDependencies": {
     "svelte": ">=5"
