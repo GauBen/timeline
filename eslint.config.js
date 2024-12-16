@@ -1,28 +1,21 @@
 import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
+import prettier from "eslint-config-prettier";
 import command from "eslint-plugin-command/config";
-import eslintPluginSvelte from "eslint-plugin-svelte";
+import svelte from "eslint-plugin-svelte";
 import globals from "globals";
-import svelteParser from "svelte-eslint-parser";
-import tsEslint from "typescript-eslint";
+import ts from "typescript-eslint";
 
-export default tsEslint.config(
+export default ts.config(
   command(),
   js.configs.recommended,
-  ...tsEslint.configs.recommended,
-  ...eslintPluginSvelte.configs["flat/recommended"],
-  eslintConfigPrettier,
-  ...eslintPluginSvelte.configs["flat/prettier"],
+  ts.configs.recommended,
+  svelte.configs["flat/recommended"],
+  prettier,
+  svelte.configs["flat/prettier"],
   {
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: "module",
       globals: { ...globals.node, ...globals.browser },
-      parser: svelteParser,
-      parserOptions: {
-        parser: tsEslint.parser,
-        extraFileExtensions: [".svelte"],
-      },
+      parserOptions: { parser: ts.parser },
     },
     rules: {
       // Still unstable
