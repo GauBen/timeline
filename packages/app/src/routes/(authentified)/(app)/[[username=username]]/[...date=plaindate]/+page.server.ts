@@ -45,16 +45,20 @@ export const load = loadgate(
           year: matches.groups?.year ? Number(matches.groups.year) : 1,
           month: matches.groups?.month ? Number(matches.groups.month) : 1,
           day: matches.groups?.day ? Number(matches.groups.day) : 1,
-        }).toZonedDateTime(me.timezone)
-      : Temporal.Now.zonedDateTimeISO(me.timezone).withPlainTime();
+        })
+      : Temporal.Now.plainDateISO(me.timezone);
 
-    const end = start.add(
-      view === "day"
-        ? { days: 7 }
-        : view === "month"
-          ? { months: 1 }
-          : { years: 1 },
-    );
+    // SQL query date boundaries
+    const gte = start.toZonedDateTime(me.timezone).toInstant().toString();
+    const lt = start
+      .add(
+        view === "day"
+          ? { days: 7 }
+          : { [view === "month" ? "months" : "years"]: 1 },
+      )
+      .toZonedDateTime(me.timezone)
+      .toInstant()
+      .toString();
 
     const where: Prisma.TimelineEventWhereInput = user
       ? { userId: me.id, authorId: user.id }
@@ -77,10 +81,7 @@ export const load = loadgate(
         prisma.timelineEvent.findMany({
           where: {
             ...where,
-            date: {
-              gte: new Date(start.epochMilliseconds),
-              lt: new Date(end.epochMilliseconds),
-            },
+            date: { gte, lt },
           },
           include: { author: true },
           orderBy: { date: "asc" },
@@ -104,14 +105,7 @@ export const load = loadgate(
           ? prisma.habit.findMany({
               where: { userId: me.id },
               include: {
-                marks: {
-                  where: {
-                    date: {
-                      gte: new Date(start.epochMilliseconds),
-                      lt: new Date(end.epochMilliseconds),
-                    },
-                  },
-                },
+                marks: { where: { date: { gte, lt } } },
               },
             })
           : undefined,
@@ -131,7 +125,7 @@ export const load = loadgate(
       followings,
       habits,
       latest,
-      start: start.toString(),
+      start,
       user,
       view,
       windows,

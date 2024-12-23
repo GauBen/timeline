@@ -19,16 +19,17 @@
   const { data } = $props();
   const {
     event,
+    eventInCreation,
     followed,
     followings,
     habits,
     latest,
     me,
+    start,
     user,
     view,
     windows,
   } = $derived(data);
-  const start = $derived(Temporal.PlainDate.from(data.start));
 
   const Component = $derived({ day: Week, month: Month, year: Year }[view]);
   let component = $state<Week | Month | Year>();
@@ -49,9 +50,6 @@
       { keepFocus: true, noScroll: true },
     );
   };
-  const eventInCreation = $derived(
-    data.eventInCreation && Temporal.PlainDateTime.from(data.eventInCreation),
-  );
 </script>
 
 <svelte:window
