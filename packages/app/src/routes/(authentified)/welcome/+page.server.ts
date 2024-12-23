@@ -3,7 +3,7 @@ import { timezones } from "$lib/server/tz.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
-import { formgate } from "formgator/sveltekit";
+import { formgate, formfail } from "formgator/sveltekit";
 
 const reserved = new Set([
   // @keep-sorted
@@ -76,9 +76,7 @@ export const actions = {
           error instanceof PrismaClientKnownRequestError &&
           error.code === "P2002"
         ) {
-          return fail(400, {
-            issues: { username: { message: "Username already exists" } },
-          });
+          formfail({ username: "Username already exists" });
         }
         console.error(error);
         return fail(500, { error: "Internal server error" });
