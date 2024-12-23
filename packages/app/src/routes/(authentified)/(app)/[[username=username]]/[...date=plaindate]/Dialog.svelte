@@ -3,8 +3,9 @@
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import { Temporal } from "@js-temporal/polyfill";
   import type { Follow, User } from "@prisma/client";
+  import { reportValidity } from "formgator/sveltekit";
   import { untrack } from "svelte";
-  import { Button } from "uistiti";
+  import { Button, Card, Input, Select } from "uistiti";
 
   let {
     timezone,
@@ -71,93 +72,115 @@
 />
 
 <dialog open style:transform="translate({x}px, {y}px)" bind:this={dialog}>
-  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-  <h2
-    onmousedown={() => {
-      mousedown = true;
+  <Card
+    headerProps={{
+      style: "cursor: move; user-select: none",
+      onmousedown: () => (mousedown = true),
     }}
   >
-    Create a new event
-  </h2>
-  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-  <form
-    onreset={async () => toggleEventCreation()}
-    use:enhance
-    method="POST"
-    action="?/createEvent"
-    onkeydown={(event) => {
-      event.stopPropagation();
-      if (event.key === "Escape") event.currentTarget.reset();
-    }}
-  >
-    <p>
-      <label>
-        <span>Event</span>
-        <input required type="text" maxlength="1024" name="body" />
-      </label>
-    </p>
-    <p>
-      <label>
-        <span>Date</span>
-        <input
-          required
-          type="datetime-local"
-          name="date"
-          value={eventInCreation.toString().slice(0, 16)}
-          oninput={async ({ currentTarget }) => {
-            try {
-              toggleEventCreation(
-                Temporal.PlainDateTime.from(currentTarget.value),
-              );
-            } catch {
-              // Ignore invalid dates
-            }
-          }}
-        />
-      </label>
-    </p>
-    <p>
-      Timezone:
-      <TimezonePicker bind:timezone />
-      <input type="hidden" name="startTimezone" value={timezone} />
-    </p>
-    <p>
-      Visibility:
-      <label>
-        <input type="radio" name="public" value="on" bind:group={pub} /> Public
-      </label>
-      <label>
-        <input type="radio" name="public" bind:group={pub} />
-        Only with specific people
-      </label>
-      <select multiple disabled={Boolean(pub)} name="shared_with">
-        {#each followings as { following }}
-          <option value={following.id}>{following.displayName}</option>
-        {/each}
-      </select>
-    </p>
-    <p>
-      <Button type="submit" color="success">Create</Button>
-      <Button type="reset" color="danger" variant="outline">Cancel</Button>
-    </p>
-  </form>
+    {#snippet header()}
+      Create a new event
+    {/snippet}
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+    <form
+      use:enhance={reportValidity}
+      method="POST"
+      action="?/createEvent"
+      class="_stack-2"
+      style="min-width: 30rem"
+      onkeydown={(event) => {
+        if (event.key === "Escape") toggleEventCreation();
+        event.stopPropagation();
+      }}
+    >
+      <p>
+        <label class="label">
+          <span>Event</span>
+          <Input
+            type="text"
+            name="body"
+            required
+            maxlength={1024}
+            style="width: 100%"
+          />
+        </label>
+      </p>
+      <p>
+        <label class="label">
+          <span>Date</span>
+          <Input
+            type="datetime-local"
+            name="date"
+            required
+            style="width: 100%"
+            value={eventInCreation.toString().slice(0, 16)}
+            oninput={async ({ currentTarget }) => {
+              try {
+                toggleEventCreation(
+                  Temporal.PlainDateTime.from(currentTarget.value),
+                );
+              } catch {
+                // Ignore invalid dates
+              }
+            }}
+          />
+        </label>
+      </p>
+      <p class="label">
+        <span>Timezone</span>
+        <TimezonePicker bind:timezone />
+        <input type="hidden" name="startTimezone" value={timezone} />
+      </p>
+      <p class="label">
+        <span>Visibility</span>
+        <span class="_stack-2" style="flex: 1">
+          <label class="_row-2">
+            <input type="radio" name="public" value="on" bind:group={pub} /> Public
+          </label>
+          <label class="_row-2">
+            <input type="radio" name="public" bind:group={pub} />
+            Only with specific people
+          </label>
+          <Select
+            multiple
+            disabled={Boolean(pub)}
+            name="shared_with"
+            style="width: 100%"
+          >
+            {#each followings as { following }}
+              <option value={following.id}>{following.displayName}</option>
+            {/each}
+          </Select>
+        </span>
+      </p>
+      <p style="display: flex; justify-content: end; gap: .5em">
+        <Button variant="ghost" onclick={() => toggleEventCreation()}>
+          Cancel
+        </Button>
+        <Button type="submit" color="success">Create</Button>
+      </p>
+    </form>
+  </Card>
 </dialog>
 
 <style lang="scss">
   dialog {
     z-index: 100;
     padding: 0;
+    border: 0;
+    background: none;
   }
 
-  form {
-    padding-inline: 1rem;
-  }
+  .label {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 
-  h2 {
-    margin: 0;
-    background: #ccc;
-    padding: 0.5rem;
-    cursor: move;
-    user-select: none;
+    > :first-child {
+      font-weight: bold;
+      min-width: 5em;
+      text-align: right;
+      user-select: none;
+    }
   }
 </style>

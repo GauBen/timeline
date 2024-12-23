@@ -11,22 +11,21 @@ a:visited {
   color: inherit;
 }
 
+// TODO: generate _stack-n in uistiti
+._stack-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 ._stack-2 {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
-  > * {
-    margin: 0;
-  }
 }
 
 ._row-2 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
-  > * {
-    margin: 0;
-  }
 }

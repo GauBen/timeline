@@ -6,31 +6,26 @@
   const {
     children,
     header,
-    footer,
+    headerProps,
     color,
     variant = "outline",
     ...props
   }: CommonProps &
-    SvelteHTMLElements["section"] & {
+    SvelteHTMLElements["div"] & {
       header?: Snippet;
-      footer?: Snippet;
+      headerProps?: SvelteHTMLElements["header"];
     } = $props();
 </script>
 
-<section data-color={color} data-variant={variant} {...props}>
+<section data-color={color} data-variant={variant}>
   {#if header}
-    <header>
+    <header {...headerProps}>
       {@render header()}
     </header>
   {/if}
-  <div>
+  <div {...props}>
     {@render children?.()}
   </div>
-  {#if footer}
-    <footer>
-      {@render footer()}
-    </footer>
-  {/if}
 </section>
 
 <style lang="scss">
@@ -38,19 +33,20 @@
     color: var(--ui-color);
     background: var(--ui-background);
     border: 1px solid var(--ui-border);
-    margin-block: 1rem;
     border-radius: 0.25em;
+    contain: paint;
   }
 
   header {
+    padding: 0.5rem;
     border-bottom: 1px solid var(--ui-border);
+    font-weight: bold;
+    background-color: var(--ui-background-strong);
+    color: var(--ui-color-strong);
+    font-size: 1.25em;
   }
 
   div {
-    padding-inline: 1rem;
-  }
-
-  footer {
-    border-top: 1px solid var(--ui-border);
+    padding: 1rem;
   }
 </style>

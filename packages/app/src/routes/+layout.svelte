@@ -2,6 +2,7 @@
   import { setLanguageTag } from "$paraglide/runtime.js";
   import "modern-normalize/modern-normalize.css";
   import "uistiti/global.css";
+  import "uistiti/reset.css";
   import "../app.scss";
 
   const { children, data } = $props();

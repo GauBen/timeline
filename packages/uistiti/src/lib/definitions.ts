@@ -7,10 +7,12 @@ export const colors = {
 
 type Props =
   | "color"
+  | "color-strong"
   | "color-opposite"
   | "color-interaction"
   | "color-interaction-opposite"
   | "background"
+  | "background-strong"
   | "background-hover"
   | "background-active"
   | "border"
@@ -22,11 +24,13 @@ export const variants: Record<
   Record<Props, number | null>
 > = {
   solid: {
-    "color": 10,
+    "color": 9,
+    "color-strong": 10,
     "color-opposite": 0,
     "color-interaction": 10,
     "color-interaction-opposite": 0,
     "background": 4,
+    "background-strong": 3,
     "background-hover": 3,
     "background-active": 2,
     "border": 4,
@@ -35,10 +39,12 @@ export const variants: Record<
   },
   outline: {
     "color": 3,
+    "color-strong": 2,
     "color-opposite": 10,
     "color-interaction": 10,
     "color-interaction-opposite": 0,
-    "background": null,
+    "background": 10,
+    "background-strong": 8,
     "background-hover": 3,
     "background-active": 2,
     "border": 4,
@@ -47,10 +53,12 @@ export const variants: Record<
   },
   ghost: {
     "color": 3,
+    "color-strong": 2,
     "color-opposite": 10,
     "color-interaction": 10,
     "color-interaction-opposite": 0,
     "background": null,
+    "background-strong": 9,
     "background-hover": 3,
     "background-active": 2,
     "border": null,

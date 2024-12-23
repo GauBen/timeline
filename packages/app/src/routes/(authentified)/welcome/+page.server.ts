@@ -1,7 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { fail, redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, formfail } from "formgator/sveltekit";
 
@@ -65,21 +64,14 @@ export const actions = {
       timezone: fg.select(timezones, { required: true }),
     },
     async (data, { locals }) => {
-      if (!locals.session) return fail(401, { error: "Unauthorized" });
+      if (!locals.session) error(401, "Unauthorized");
 
       try {
         await prisma.user.create({
           data: { ...data, id: locals.session.id },
         });
-      } catch (error) {
-        if (
-          error instanceof PrismaClientKnownRequestError &&
-          error.code === "P2002"
-        ) {
-          formfail({ username: "Username already exists" });
-        }
-        console.error(error);
-        return fail(500, { error: "Internal server error" });
+      } catch {
+        formfail({ username: "Username already exists" });
       }
 
       redirect(307, "/");

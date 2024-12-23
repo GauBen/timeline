@@ -121,19 +121,21 @@
     days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
 
   const processedHabits = $derived(
-    habits?.map(({ id, name, marks }) => ({
-      id,
-      name,
-      days: new Set(
-        marks.map(({ date }) =>
-          toTemporalInstant
-            .call(date)
-            .toZonedDateTimeISO(timezone)
-            .toPlainDate()
-            .toString(),
+    habits &&
+      habits.length > 0 &&
+      habits.map(({ id, name, marks }) => ({
+        id,
+        name,
+        days: new Set(
+          marks.map(({ date }) =>
+            toTemporalInstant
+              .call(date)
+              .toZonedDateTimeISO(timezone)
+              .toPlainDate()
+              .toString(),
+          ),
         ),
-      ),
-    })),
+      })),
   );
 </script>
 
@@ -234,11 +236,6 @@
     h2 {
       background: #fff;
       display: flex;
-      margin: 0;
-    }
-
-    > * {
-      margin: 0;
     }
   }
 

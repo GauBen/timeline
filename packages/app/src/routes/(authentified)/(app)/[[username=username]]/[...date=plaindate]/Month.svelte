@@ -89,24 +89,26 @@
                   >{day.day}</a
                 >
               {/if}
-              {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
-                {@render eventInCreationMarker()}
-              {/if}
-              {#each events as { id, body, added }, i}
-                <article
-                  style:background={added ? "#e8faef" : "#fff"}
-                  style:opacity={day.month === start.month ? 1 : 0.75}
-                >
-                  <a href="?event={id}">
-                    {body}
-                  </a>
-                </article>
-                {#if eventInCreation
-                  ?.toPlainDate()
-                  .equals(day) && index === i + 1}
+              <div class="_stack-1">
+                {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
                   {@render eventInCreationMarker()}
                 {/if}
-              {/each}
+                {#each events as { id, body, added }, i}
+                  <article
+                    style:background={added ? "#e8faef" : "#fff"}
+                    style:opacity={day.month === start.month ? 1 : 0.75}
+                  >
+                    <a href="?event={id}">
+                      {body}
+                    </a>
+                  </article>
+                  {#if eventInCreation
+                    ?.toPlainDate()
+                    .equals(day) && index === i + 1}
+                    {@render eventInCreationMarker()}
+                  {/if}
+                {/each}
+              </div>
             </td>
           {/each}
         </tr>
@@ -164,6 +166,5 @@
     border: 2px solid #e8faef;
     border-radius: 0.5rem;
     padding: 0.25rem;
-    margin: 0.25rem 0;
   }
 </style>

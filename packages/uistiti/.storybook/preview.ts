@@ -2,6 +2,7 @@ import type { Preview } from "@storybook/svelte";
 
 import "modern-normalize/modern-normalize.css";
 import "uistiti/global.css";
+import "uistiti/reset.css";
 
 const preview: Preview = {
   parameters: {

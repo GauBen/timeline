@@ -98,10 +98,6 @@
     padding: 0.5rem;
     background: #fff;
     align-items: center;
-
-    > :global(*) {
-      margin: 0;
-    }
   }
 
   main {
@@ -129,10 +125,6 @@
     contain: strict;
     scroll-snap-align: start;
 
-    > * {
-      margin: 0;
-    }
-
     h2 {
       padding: 0.5rem;
       box-shadow: 0 0 0.5rem #19191a10;
@@ -145,18 +137,10 @@
     border-radius: 0.25rem;
     border: 2px solid #e8faef;
 
-    > * {
-      margin: 0;
-    }
-
     > header {
       display: flex;
       gap: 0.5rem;
       align-items: baseline;
-
-      > * {
-        margin: 0;
-      }
     }
 
     &.added {

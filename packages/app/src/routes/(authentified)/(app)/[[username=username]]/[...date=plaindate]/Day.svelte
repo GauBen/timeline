@@ -99,7 +99,6 @@
 
     > div {
       width: 100%;
-      margin: 0;
       border: 0;
       border-top-width: 0px;
       border-top-style: none;
@@ -137,7 +136,6 @@
 
     > hr {
       position: absolute;
-      margin: 0;
       border: 0;
       width: 100%;
       height: 2px;

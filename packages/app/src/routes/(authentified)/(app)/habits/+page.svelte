@@ -1,5 +1,7 @@
 <script>
   import { enhance } from "$app/forms";
+  import { reportValidity } from "formgator/sveltekit";
+  import { Button, Input } from "uistiti";
 
   const { data } = $props();
 </script>
@@ -32,10 +34,10 @@
 
 <h2>New habit</h2>
 
-<form method="post" action="?/create" use:enhance>
+<form method="post" action="?/create" use:enhance={reportValidity}>
   <label>
     Name:
-    <input type="text" name="name" required maxlength="255" />
+    <Input type="text" name="name" required maxlength={255} />
   </label>
-  <button type="submit">Add</button>
+  <Button type="submit">Add</Button>
 </form>

@@ -10,7 +10,8 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
     },
-    "./global.css": "./dist/global.css"
+    "./global.css": "./dist/global.css",
+    "./reset.css": "./dist/reset.css"
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",

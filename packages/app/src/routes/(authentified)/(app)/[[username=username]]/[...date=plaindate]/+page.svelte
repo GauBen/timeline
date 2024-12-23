@@ -5,7 +5,7 @@
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import { Temporal } from "@js-temporal/polyfill";
-  import { Button } from "uistiti";
+  import { Button, Select } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import Back from "~icons/ph/caret-left";
   import Globe from "~icons/ph/globe-duotone";
@@ -139,7 +139,7 @@
     {:else}
       <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
     {/if}
-    <select
+    <Select
       onchange={({ currentTarget }) =>
         goto(
           paths.resolveRoute({
@@ -154,7 +154,7 @@
       <option value="day">Day</option>
       <option value="month">Month</option>
       <option value="year">Year</option>
-    </select>
+    </Select>
 
     <a href="/settings">{me.displayName}</a>
   {/snippet}

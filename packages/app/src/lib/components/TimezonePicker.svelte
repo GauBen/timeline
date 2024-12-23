@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import { Select } from "uistiti";
 
   let { timezone = $bindable("Europe/London") }: { timezone: string } =
     $props();
@@ -33,7 +34,7 @@
   $effect(splitTimezone);
 </script>
 
-<select
+<Select
   bind:value={area}
   onchange={() => {
     if (area) {
@@ -45,10 +46,10 @@
   {#each Object.keys(commonTimezones) as value}
     <option {value} selected={value === area}>{value}</option>
   {/each}
-</select>
+</Select>
 
 {#if area}
-  <select
+  <Select
     bind:value={location}
     onchange={() => {
       if (location) timezone = `${area}/${location}`;
@@ -59,5 +60,5 @@
         {value.replaceAll("_", " ")}
       </option>
     {/each}
-  </select>
+  </Select>
 {/if}

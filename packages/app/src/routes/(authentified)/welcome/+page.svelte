@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
+  import { reportValidity } from "formgator/sveltekit";
+  import { Input } from "uistiti";
 
   const { form } = $props();
 
@@ -11,7 +13,7 @@
 </script>
 
 <h1>Welcome!</h1>
-<form method="POST" action="" use:enhance>
+<form method="POST" action="" use:enhance={reportValidity}>
   <h2>Complete your registration</h2>
   <p>
     <label>
@@ -19,10 +21,10 @@
         Username (Letters, digits or _, 3 to 20 characters, must start with a
         letter)
       </span>
-      <input
+      <Input
         required
         type="text"
-        maxlength="20"
+        maxlength={20}
         name="username"
         bind:value={username}
         pattern={"[a-zA-Z][a-zA-Z0-9_]{2,19}"}
@@ -33,10 +35,10 @@
   <p>
     <label>
       <span>Display name</span>
-      <input
+      <Input
         required
         type="text"
-        maxlength="255"
+        maxlength={255}
         name="displayName"
         bind:value={displayName}
       />
