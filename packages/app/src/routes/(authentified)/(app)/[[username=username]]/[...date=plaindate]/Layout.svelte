@@ -13,19 +13,13 @@
   import Globe from "~icons/ph/globe-duotone";
   import EventActions from "./EventActions.svelte";
 
-  console.log(m);
-
   const {
     me,
     children,
     header,
     latest,
-  }: {
-    me: User;
-    children: Snippet;
-    header: Snippet;
-    latest: Array<Event>;
-  } = $props();
+  }: { me: User; children: Snippet; header: Snippet; latest: Event[] } =
+    $props();
 </script>
 
 <div class="layout">
