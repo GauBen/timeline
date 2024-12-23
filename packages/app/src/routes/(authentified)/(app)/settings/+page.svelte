@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { language } from "$lib/i18n";
+  import i18n from "$lib/i18n.svelte.js";
 </script>
 
 <div>
   <select
-    value={$language}
+    value={i18n.language}
     onchange={({ currentTarget }) => {
       document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
       location.reload();

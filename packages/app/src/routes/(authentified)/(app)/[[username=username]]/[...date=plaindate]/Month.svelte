@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { resolveRoute } from "$lib/paths.js";
+  import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
@@ -11,7 +11,7 @@
     onevent,
   }: {
     start: Temporal.PlainDate;
-    windows: Record<string, Event[]>;
+    windows: Record<string, Event[] | undefined>;
     timezone: string;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
@@ -40,12 +40,12 @@
 <div class="wrapper">
   <div style="position: absolute; z-index: 1">
     <a
-      href={$resolveRoute({
+      href={paths.resolveRoute({
         date: start.toPlainYearMonth().subtract({ months: 1 }).toString(),
       })}>Previous</a
     >
     <a
-      href={$resolveRoute({
+      href={paths.resolveRoute({
         date: start.toPlainYearMonth().add({ months: 1 }).toString(),
       })}>Next</a
     >
@@ -84,7 +84,7 @@
               {#if day.month === start.month}
                 <a
                   onclick={(event) => event.stopPropagation()}
-                  href={$resolveRoute({ date: day.toString() })}
+                  href={paths.resolveRoute({ date: day.toString() })}
                   style:background={day.equals(today) ? "tomato" : undefined}
                   >{day.day}</a
                 >

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   let { timezone = $bindable("Europe/London") }: { timezone: string } =
     $props();
@@ -7,7 +7,7 @@
   const supportedTimezones = new Set(Intl.supportedValuesOf("timeZone"));
 
   const commonTimezones = $derived(
-    $page.data.timezones
+    page.data.timezones
       .filter((tz) => supportedTimezones.has(tz))
       .reduce(
         (acc, tz) => {

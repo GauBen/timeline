@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { language, m } from "$lib/i18n.js";
-  import { resolveRoute } from "$lib/paths.js";
+  import i18n, { m } from "$lib/i18n.svelte.js";
+  import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Action } from "svelte/action";
@@ -21,7 +21,7 @@
     habits:
       | Array<{ id: bigint; name: string; marks: Array<{ date: Date }> }>
       | undefined;
-    windows: Record<string, Event[]>;
+    windows: Record<string, Event[] | undefined>;
     timezone: string;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
@@ -37,7 +37,10 @@
     if (day.equals(today.subtract({ days: 1 }))) return m.yesterday();
     else if (day.equals(today)) return m.today();
     else if (day.equals(today.add({ days: 1 }))) return m.tomorrow();
-    return day.toLocaleString($language, { month: "short", day: "numeric" });
+    return day.toLocaleString(i18n.language, {
+      month: "short",
+      day: "numeric",
+    });
   };
 
   let calendarHeader = $state<HTMLElement>();
@@ -62,7 +65,7 @@
     {
       start: Temporal.PlainDate;
       numberOfColumns: number;
-      windows: Record<string, Array<Event>>;
+      windows: Record<string, Array<Event> | undefined>;
       eventInCreation?: Temporal.PlainDateTime;
     }
   > = (node, params) => {
@@ -144,7 +147,7 @@
         <h2 class="_row-2">
           {#if i === 0}
             <a
-              href={$resolveRoute({
+              href={paths.resolveRoute({
                 date: start.subtract({ days: 1 }).toString(),
               })}
               data-sveltekit-keepfocus
@@ -155,7 +158,7 @@
           <span style="flex: 1">{formatDay(day)}</span>
           {#if i === numberOfColumns - 1}
             <a
-              href={$resolveRoute({
+              href={paths.resolveRoute({
                 date: start.add({ days: 1 }).toString(),
               })}
               data-sveltekit-keepfocus

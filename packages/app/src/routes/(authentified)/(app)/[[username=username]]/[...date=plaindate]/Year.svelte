@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { language } from "$lib/i18n.js";
-  import { resolveRoute } from "$lib/paths.js";
+  import i18n from "$lib/i18n.svelte.js";
+  import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import { Temporal } from "@js-temporal/polyfill";
 
@@ -10,13 +10,13 @@
     eventInCreation,
   }: {
     start: Temporal.PlainDate;
-    windows: Record<string, Event[]>;
+    windows: Record<string, Event[] | undefined>;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
 
   const max = $derived(
-    Math.max(...Object.values(windows).map((w) => w.length)),
+    Math.max(...Object.values(windows).map((w) => w?.length ?? 0)),
   );
 
   const year = $derived(firstDayOfYear.year);
@@ -50,7 +50,7 @@
                 })
                 .total({ unit: "week", relativeTo: date })}
             >
-              {date.toLocaleString($language, { month: "short" })}
+              {date.toLocaleString(i18n.language, { month: "short" })}
               {#if eventInCreation?.toPlainDate().equals(date)}
                 <span bind:this={eventInCreationElement}></span>
               {/if}
@@ -77,7 +77,7 @@
                   : "#cce"
                 : `rgb(30% 80% 40% / ${count / max})`}
           >
-            <a href={$resolveRoute({ date: date.toString() })}>
+            <a href={paths.resolveRoute({ date: date.toString() })}>
               {#if count !== undefined}
                 {count}
               {/if}

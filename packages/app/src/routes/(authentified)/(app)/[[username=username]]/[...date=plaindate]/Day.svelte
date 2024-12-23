@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { language } from "$lib/i18n.js";
+  import i18n from "$lib/i18n.svelte.js";
   import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
@@ -49,7 +49,7 @@
   {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
     <div>
       <span>
-        {Temporal.PlainTime.from({ hour }).toLocaleString($language, {
+        {Temporal.PlainTime.from({ hour }).toLocaleString(i18n.language, {
           hour: "numeric",
           minute: "numeric",
         })}
@@ -69,7 +69,7 @@
       @{author.username}<br />
       {body}<br />
       <a href="?event={id}">
-        {fixDate(date).toLocaleString($language, {
+        {fixDate(date).toLocaleString(i18n.language, {
           hour: "numeric",
           minute: "numeric",
         })}

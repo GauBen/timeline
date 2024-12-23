@@ -1,9 +1,9 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { enhance } from "$app/forms";
-  import { page } from "$app/stores";
-  import { format, m } from "$lib/i18n.js";
-  import { resolveRoute } from "$lib/paths.js";
+  import { page } from "$app/state";
+  import i18n, { m } from "$lib/i18n.svelte.js";
+  import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import type { User } from "@prisma/client";
   import type { Snippet } from "svelte";
@@ -12,6 +12,8 @@
   import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
   import Globe from "~icons/ph/globe-duotone";
   import EventActions from "./EventActions.svelte";
+
+  console.log(m);
 
   const {
     me,
@@ -39,7 +41,9 @@
           <article class:added={event.added}>
             <header>
               <h3>
-                <a href={$resolveRoute({ username: event.author.username })}>
+                <a
+                  href={paths.resolveRoute({ username: event.author.username })}
+                >
                   @{event.author.username}
                 </a>
               </h3>
@@ -47,13 +51,13 @@
                 {#if event.public}
                   <Globe />
                 {/if}
-                <a href="?event={event.id}">{$format(event.createdAt)}</a>
+                <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
               </p>
             </header>
             <p>{event.body}</p>
             <footer>
               <Calendar />
-              {$format(event.date)}
+              {i18n.format(event.date)}
               <form method="POST" use:enhance>
                 <EventActions {event} {me} />
               </form>
@@ -70,7 +74,7 @@
   <nav>
     <a
       href="#recent"
-      aria-current={browser && $page.url.hash !== "#calendar"
+      aria-current={browser && page.url.hash !== "#calendar"
         ? "page"
         : undefined}
     >
@@ -78,7 +82,7 @@
     >
     <a
       href="#calendar"
-      aria-current={$page.url.hash === "#calendar" ? "page" : undefined}
+      aria-current={page.url.hash === "#calendar" ? "page" : undefined}
     >
       <CalendarDots /> Calendar</a
     >

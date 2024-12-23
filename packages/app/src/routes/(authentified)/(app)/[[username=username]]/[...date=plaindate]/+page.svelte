@@ -1,9 +1,9 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import { format } from "$lib/i18n.js";
-  import { resolveRoute } from "$lib/paths.js";
+  import { page } from "$app/state";
+  import i18n from "$lib/i18n.svelte.js";
+  import paths from "$lib/paths.svelte.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
@@ -38,7 +38,7 @@
     datetime?: Temporal.PlainDateTime | undefined,
   ) => {
     await goto(
-      $resolveRoute(
+      paths.resolveRoute(
         {},
         {
           search: datetime
@@ -60,7 +60,7 @@
       let to: Temporal.PlainDateTime | undefined;
 
       if (key === "Escape")
-        await goto($page.url.pathname, { keepFocus: true, noScroll: true });
+        await goto(page.url.pathname, { keepFocus: true, noScroll: true });
       else if (key === "ArrowDown") to = eventInCreation.add({ minutes: 15 });
       else if (key === "ArrowUp")
         to = eventInCreation.subtract({ minutes: 15 });
@@ -71,13 +71,16 @@
     } else {
       if (key === "ArrowLeft") {
         await goto(
-          $resolveRoute({ date: start.subtract({ days: 1 }).toString() }),
+          paths.resolveRoute({ date: start.subtract({ days: 1 }).toString() }),
           { keepFocus: true },
         );
       } else if (key === "ArrowRight") {
-        await goto($resolveRoute({ date: start.add({ days: 1 }).toString() }), {
-          keepFocus: true,
-        });
+        await goto(
+          paths.resolveRoute({ date: start.add({ days: 1 }).toString() }),
+          {
+            keepFocus: true,
+          },
+        );
       }
     }
   }}
@@ -85,10 +88,10 @@
 
 {#if event}
   <dialog open style="z-index: 1">
-    <a href={$page.url.pathname}>Close</a>
+    <a href={page.url.pathname}>Close</a>
     <header>
       <h3>
-        <a href={$resolveRoute({ username: event.author.username })}>
+        <a href={paths.resolveRoute({ username: event.author.username })}>
           @{event.author.username}
         </a>
       </h3>
@@ -96,13 +99,13 @@
         {#if event.public}
           <Globe />
         {/if}
-        <a href="?event={event.id}">{$format(event.createdAt)}</a>
+        <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
       </p>
     </header>
     <p>{event.body}</p>
     <footer>
       <Calendar />
-      {$format(event.date)}
+      {i18n.format(event.date)}
       <form method="POST" use:enhance>
         <EventActions {event} {me} />
       </form>
@@ -141,7 +144,7 @@
     <select
       onchange={({ currentTarget }) =>
         goto(
-          $resolveRoute({
+          paths.resolveRoute({
             date: start
               .toString()
               .slice(0, { day: 10, month: 7, year: 4 }[currentTarget.value]),
