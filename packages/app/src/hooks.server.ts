@@ -1,29 +1,24 @@
 import { fetchAndPersistSession } from "$lib/server/auth.js";
-import { isAvailableLanguageTag } from "$paraglide/runtime.js";
-import type { Handle, RequestEvent } from "@sveltejs/kit";
+import {
+  isAvailableLanguageTag,
+  sourceLanguageTag,
+} from "$paraglide/runtime.js";
+import type { RequestEvent } from "@sveltejs/kit";
 
 const getLanguage = ({ request, cookies }: RequestEvent) => {
   const acceptLanguage =
     cookies.get("language") ?? request.headers.get("accept-language");
-  const language = acceptLanguage ? acceptLanguage.split(",")[0] : "en-US";
-  return isAvailableLanguageTag(language) ? language : "en-US";
+  const language = acceptLanguage?.split(",")[0];
+  return isAvailableLanguageTag(language) ? language : sourceLanguageTag;
 };
 
-export const handle: Handle = async ({ event, resolve }) => {
+export const handle = async ({ event, resolve }) => {
   event.locals.session = await fetchAndPersistSession(event);
   event.locals.language = getLanguage(event);
 
-  let replacedLangAttribute = false;
   return resolve(event, {
-    transformPageChunk: ({ html }) => {
-      // Replace the first %lang% of the response with the language tag
-
-      if (!replacedLangAttribute && html.includes("%lang%")) {
-        replacedLangAttribute = true;
-        return html.replace("%lang%", event.locals.language);
-      }
-
-      return html;
-    },
+    // Replace %lang% with the language code
+    transformPageChunk: ({ html }) =>
+      html.replace("<html %lang%", `<html lang="${event.locals.language}"`),
   });
 };
