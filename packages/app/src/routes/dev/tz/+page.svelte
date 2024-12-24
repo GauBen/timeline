@@ -2,8 +2,8 @@
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import { Temporal } from "@js-temporal/polyfill";
 
-  let timezone = $state("Europe/London");
-  let now = $state(Temporal.Now.instant());
+  let timezone = $state(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  let now = $state.raw(Temporal.Now.instant());
 
   let wallTime = $derived.by(() =>
     now
@@ -11,11 +11,6 @@
       .toPlainTime()
       .toString({ smallestUnit: "second" }),
   );
-
-  // Set the timezone on load
-  $effect(() => {
-    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  });
 
   // Update `wallTime` every second
   $effect(() => {
@@ -26,8 +21,8 @@
   });
 </script>
 
-<TimezonePicker bind:timezone />
+<p>
+  <TimezonePicker bind:timezone />
 
-{#if wallTime}
   Current time: {wallTime}
-{/if}
+</p>

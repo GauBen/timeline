@@ -6,6 +6,7 @@ export {
   isAvailableLanguageTag,
   languageTag,
   setLanguageTag,
+  sourceLanguageTag,
 } from "$paraglide/runtime.js";
 
 const thresholds = {

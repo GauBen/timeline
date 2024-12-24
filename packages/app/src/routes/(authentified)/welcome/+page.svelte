@@ -2,7 +2,7 @@
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import { reportValidity } from "formgator/sveltekit";
-  import { Button, Input } from "uistiti";
+  import { Button, Input, Select } from "uistiti";
   import Dice1 from "~icons/ph/dice-one-duotone";
   import Dice2 from "~icons/ph/dice-two-duotone";
   import Dice3 from "~icons/ph/dice-three-duotone";
@@ -10,6 +10,8 @@
   import Dice5 from "~icons/ph/dice-five-duotone";
   import Dice6 from "~icons/ph/dice-six-duotone";
   import { humanId } from "human-id";
+  import i18n, { m, sourceLanguageTag } from "$lib/i18n.svelte.js";
+  import { Temporal } from "@js-temporal/polyfill";
 
   const dice = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
   let Die = $state(Dice6);
@@ -17,31 +19,56 @@
 
   const { form, data } = $props();
 
-  let timezone = $state.raw(Intl.DateTimeFormat().resolvedOptions().timeZone);
-
   let username = $state(form?.accepted.username ?? "");
   let displayName = $state(form?.accepted.displayName ?? "");
+
+  let timezone = $state.raw(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  let now = $state.raw(Temporal.Now.instant());
+  let wallTime = $derived.by(() =>
+    now
+      .toZonedDateTimeISO(timezone)
+      .toPlainTime()
+      .toLocaleString([data.language, sourceLanguageTag]),
+  );
+
+  // Update `wallTime` every second
+  $effect(() => {
+    const interval = setInterval(() => {
+      now = Temporal.Now.instant();
+    }, 1000);
+    return () => clearInterval(interval);
+  });
 </script>
 
 <main
   style="margin-inline: auto; padding: 1rem; max-width: 40rem"
   class="_stack-8"
 >
-  <header>
-    <h1 style="font-size: 4em">Welcome!</h1>
+  <header style="contain: paint">
+    <h1 style="font-size: 4em">{m.lower_super_gopher_flow()}</h1>
     <p>
-      Thanks for joining Timeline so early in the development process! I hope
-      you find it useful and convenient.
+      {m.sweet_next_lizard_zoom()}
       <a href="https://github.com/GauBen/timeline">
-        Share ideas and report bugs on GitHub.
+        {m.warm_smart_maggot_accept()}
       </a>
     </p>
+    <Select
+      value={i18n.language}
+      style="position: absolute; right: 1rem; top: 1rem"
+      onchange={({ currentTarget }) => {
+        document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
+        location.reload();
+      }}
+    >
+      <option value="en-US">English</option>
+      <option value="fr-FR">Français</option>
+    </Select>
   </header>
   <form method="POST" action="" use:enhance={reportValidity} class="_stack-2">
-    <h2>Complete your registration</h2>
+    <h2>{m.direct_legal_giraffe_empower()}</h2>
     <p>
       <label class="label">
-        <span>Email</span>
+        <span>{m.tame_north_sheep_zap()}</span>
         <span class="_stack-1" style="flex: 1">
           <Input
             type="text"
@@ -49,13 +76,13 @@
             readonly
             style="width: 100%"
           />
-          <small>Just for reference, you can't change it</small>
+          <small>{m.patient_next_thrush_soar()}</small>
         </span>
       </label>
     </p>
     <p>
       <label class="label">
-        <span>Username</span>
+        <span>{m.muddy_jolly_swan_heal()}</span>
         <span class="_stack-1" style="flex: 1">
           <span class="_row-1">
             <Input
@@ -81,16 +108,13 @@
               <Die />
             </Button>
           </span>
-          <small>
-            • Letters, digits or _ • 3 to 20 characters • Must start with a
-            letter
-          </small>
+          <small>{m.equal_elegant_iguana_stir()}</small>
         </span>
       </label>
     </p>
     <p>
       <label class="label">
-        <span>Display name</span>
+        <span>{m.misty_keen_bobcat_skip()}</span>
         <span class="_stack-1" style="flex: 1">
           <Input
             required
@@ -100,7 +124,7 @@
             style="width: 100%"
             bind:value={displayName}
           />
-          <small>Put as many emojis as you like ✨</small>
+          <small>{m.quick_heroic_fox_mix()}</small>
         </span>
       </label>
     </p>
@@ -108,14 +132,14 @@
       <span>Timezone</span>
       <TimezonePicker bind:timezone />
       <input type="hidden" name="timezone" value={timezone} />
+      {m.elegant_misty_shad_stop({ wallTime })}
     </p>
     <p>
-      Last step is clicking this ginornous button. I made it big so you don't
-      miss it :)
+      {m.tense_loved_jan_thrive()}
     </p>
     <p>
       <Button type="submit" color="success" style="width: 100%; font-size: 3em">
-        Let's go!
+        {m.early_dark_bobcat_hack()}
       </Button>
     </p>
   </form>

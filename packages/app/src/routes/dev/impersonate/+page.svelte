@@ -22,6 +22,8 @@
   </p>
   <p class="_row-2">
     <Button type="submit" variant="outline">Impersonate</Button>
-    <a href="http://localhost:54323/project/default">Create new users</a>
+    <a href="http://localhost:54323/project/default/auth/users">
+      Create new users
+    </a>
   </p>
 </form>

@@ -3,5 +3,6 @@
   "latest_events": "Derniers événements",
   "yesterday": "Hier",
   "today": "Aujourd'hui",
-  "tomorrow": "Demain"
+  "tomorrow": "Demain",
+  "elegant_misty_shad_stop": "Heure actuelle : {wallTime}"
 }

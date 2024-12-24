@@ -1,8 +1,5 @@
 import { fetchAndPersistSession } from "$lib/server/auth.js";
-import {
-  isAvailableLanguageTag,
-  sourceLanguageTag,
-} from "$paraglide/runtime.js";
+import { isAvailableLanguageTag, sourceLanguageTag } from "$lib/i18n.svelte.js";
 import type { RequestEvent } from "@sveltejs/kit";
 
 const getLanguage = ({ request, cookies }: RequestEvent) => {
