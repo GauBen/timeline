@@ -154,10 +154,14 @@
         </span>
       </p>
       <p style="display: flex; justify-content: end; gap: .5em">
-        <Button variant="ghost" onclick={() => toggleEventCreation()}>
+        <Button
+          variant="ghost"
+          onclick={() => toggleEventCreation()}
+          type="button"
+        >
           Cancel
         </Button>
-        <Button type="submit" color="success">Create</Button>
+        <Button color="success">Create</Button>
       </p>
     </form>
   </Card>
