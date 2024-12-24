@@ -129,7 +129,7 @@
       </label>
     </p>
     <p class="label">
-      <span>Timezone</span>
+      <span>{m.day_north_ape_blink()}</span>
       <TimezonePicker bind:timezone />
       <input type="hidden" name="timezone" value={timezone} />
       {m.elegant_misty_shad_stop({ wallTime })}
