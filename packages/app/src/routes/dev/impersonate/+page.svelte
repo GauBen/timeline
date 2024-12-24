@@ -6,7 +6,7 @@
   const { data } = $props();
 </script>
 
-<form method="POST" use:enhance={reportValidity}>
+<form method="POST" class="_stack-2" use:enhance={reportValidity}>
   <h1>Impersonate</h1>
   <p>
     <label>
@@ -20,7 +20,8 @@
       </Select>
     </label>
   </p>
-  <p>
-    <Button type="submit">Impersonate</Button>
+  <p class="_row-2">
+    <Button type="submit" variant="outline">Impersonate</Button>
+    <a href="http://localhost:54323/project/default">Create new users</a>
   </p>
 </form>

@@ -15,7 +15,8 @@
 <style lang="scss">
   input {
     font-size: 1em;
-    padding: calc(7em / 16);
+    line-height: 1.5; // Values under 1.25 appear ignored
+    padding: calc(5em / 16) calc(7em / 16);
     border-radius: 0.25em;
     border: calc(1em / 16) solid var(--ui-border);
     outline: 0.125em solid transparent;

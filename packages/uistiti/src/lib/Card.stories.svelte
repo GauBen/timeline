@@ -50,17 +50,3 @@
     </Card>
   {/snippet}
 </Story>
-
-<style global>
-  :global ._stack-2 {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  :global ._stack-4 {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-</style>

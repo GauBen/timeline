@@ -2,7 +2,7 @@
   const { data } = $props();
 </script>
 
-<main>
+<main class="_stack-4">
   <h1>Timeline</h1>
   <p>The social calendar</p>
   <p>
@@ -27,19 +27,18 @@
     email for all events, which is a terribly cumbersome.
   </p>
   <p>Timeline is the missing social calendar.</p>
+  <footer style="font-size: .8em; text-align: center">
+    <p>
+      ⚠️ Timeline is in not production ready. Please don't use it for anything
+      important. ⚠️
+    </p>
+  </footer>
 </main>
-
-<footer style="font-size: .8em; text-align: center">
-  <p>
-    ⚠️ Timeline is in not production ready. Please don't use it for anything
-    important. ⚠️
-  </p>
-</footer>
 
 <style lang="scss">
   main {
     max-width: 60rem;
     padding-inline: 1rem;
-    margin-inline: auto;
+    margin: 2rem auto;
   }
 </style>

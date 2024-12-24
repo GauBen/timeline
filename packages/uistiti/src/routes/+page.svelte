@@ -4,6 +4,8 @@
   import { colors, variants } from "$lib/definitions.js";
   import "modern-normalize/modern-normalize.css";
   import "uistiti/global.css";
+  import "uistiti/reset.css";
+  import "uistiti/utils.css";
 
   const keys = Object.keys as <T>(o: T) => Array<keyof T>;
 </script>

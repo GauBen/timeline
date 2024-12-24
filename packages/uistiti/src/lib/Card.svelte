@@ -9,11 +9,13 @@
     headerProps,
     color,
     variant = "outline",
+    padding = 4,
     ...props
   }: CommonProps &
     SvelteHTMLElements["div"] & {
       header?: Snippet;
       headerProps?: SvelteHTMLElements["header"];
+      padding?: number;
     } = $props();
 </script>
 
@@ -23,7 +25,7 @@
       {@render header()}
     </header>
   {/if}
-  <div {...props}>
+  <div style:padding="{padding / 4}em" {...props}>
     {@render children?.()}
   </div>
 </section>
@@ -44,9 +46,8 @@
     background-color: var(--ui-background-strong);
     color: var(--ui-color-strong);
     font-size: 1.25em;
-  }
-
-  div {
-    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 </style>

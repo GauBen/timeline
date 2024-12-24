@@ -11,7 +11,8 @@
       "svelte": "./dist/index.js"
     },
     "./global.css": "./dist/global.css",
-    "./reset.css": "./dist/reset.css"
+    "./reset.css": "./dist/reset.css",
+    "./utils.css": "./dist/utils.css"
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",

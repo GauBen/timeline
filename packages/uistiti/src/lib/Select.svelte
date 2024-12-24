@@ -9,6 +9,11 @@
     value = $bindable(),
     ...props
   }: CommonProps & SvelteHTMLElements["select"] = $props();
+
+  // https://github.com/sveltejs/svelte/issues/14815
+  $effect(() => {
+    if (props.multiple) value ??= [];
+  });
 </script>
 
 <select bind:value data-color={color} data-variant={variant} {...props}>

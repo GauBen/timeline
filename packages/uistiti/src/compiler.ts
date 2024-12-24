@@ -39,4 +39,14 @@ for (const [name, variant] of Object.entries(variants)) {
 }
 
 writeFileSync(new URL("../dist/global.css", import.meta.url), output, "utf-8");
+
+output = "";
+
+for (const i of [0, 1, 2, 4, 8]) {
+  output += `._stack-${i} {\n  display: flex;\n  flex-direction: column;\n  gap: ${i / 4}rem;\n}\n\n`;
+  output += `._row-${i} {\n  display: flex;\n  align-items:center;\n  gap: ${i / 4}rem;\n}\n\n`;
+}
+
+writeFileSync(new URL("../dist/utils.css", import.meta.url), output, "utf-8");
+
 console.timeEnd("Compiled");

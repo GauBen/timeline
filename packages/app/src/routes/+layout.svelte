@@ -3,6 +3,7 @@
   import "modern-normalize/modern-normalize.css";
   import "uistiti/global.css";
   import "uistiti/reset.css";
+  import "uistiti/utils.css";
   import "../app.scss";
 
   const { children, data } = $props();

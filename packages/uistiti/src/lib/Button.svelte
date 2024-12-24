@@ -6,11 +6,13 @@
     children,
     color,
     variant = "solid",
+    square = false,
     ...props
-  }: CommonProps & SvelteHTMLElements["button"] = $props();
+  }: CommonProps &
+    SvelteHTMLElements["button"] & { square?: boolean } = $props();
 </script>
 
-<button data-color={color} data-variant={variant} {...props}>
+<button class:square data-color={color} data-variant={variant} {...props}>
   {@render children?.()}
 </button>
 
@@ -28,6 +30,10 @@
       100ms box-shadow,
       100ms outline-color,
       100ms border-color;
+
+    &.square {
+      padding: calc(7em / 16);
+    }
 
     &:enabled {
       background-color: var(--ui-background);
