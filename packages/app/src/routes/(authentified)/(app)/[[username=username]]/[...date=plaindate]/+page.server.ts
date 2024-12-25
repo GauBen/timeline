@@ -5,13 +5,15 @@ import type { Prisma, User } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
+import * as journal from "../../journal/+page.server.js";
 
 export const load = loadgate(
   {
-    event: fg
+    "event": fg
       .text({ required: true, pattern: /^\d+$/ })
       .transform(BigInt)
       .optional(),
+    "/journal": fg.date({ required: true }).optional(),
   },
   async (searchParams, { parent, params }) => {
     const { me } = await parent();
@@ -64,7 +66,7 @@ export const load = loadgate(
       ? { userId: me.id, authorId: user.id }
       : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-    const [event, latest, events, followed, followings, habits] =
+    const [event, latest, events, followed, followings, habits, journal] =
       await Promise.all([
         searchParams.event
           ? prisma.timelineEvent.findUnique({
@@ -109,6 +111,15 @@ export const load = loadgate(
               },
             })
           : undefined,
+        searchParams["/journal"] &&
+          prisma.journalEntry.findUnique({
+            where: {
+              authorId_date: {
+                authorId: me.id,
+                date: searchParams["/journal"] + "T00:00:00Z",
+              },
+            },
+          }),
       ]);
 
     const windows = Object.groupBy(events, (event) =>
@@ -124,6 +135,7 @@ export const load = loadgate(
       followed,
       followings,
       habits,
+      journal,
       latest,
       start,
       user,
@@ -267,4 +279,6 @@ export const actions = {
     },
     { id: "markHabit" },
   ),
+
+  journal: journal.actions.default,
 };

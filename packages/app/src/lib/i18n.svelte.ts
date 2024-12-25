@@ -1,4 +1,6 @@
 import { page } from "$app/state";
+import { Temporal } from "@js-temporal/polyfill";
+import * as m from "messages";
 
 export {
   isAvailableLanguageTag,
@@ -16,6 +18,9 @@ const thresholds = {
 };
 
 export default {
+  get today() {
+    return Temporal.Now.plainDateTimeISO(page.data.me?.timezone);
+  },
   get language() {
     return page.data.language;
   },
@@ -24,19 +29,27 @@ export default {
       numeric: "auto",
     });
   },
-  get format() {
-    return (date: Date) => {
-      let diff = (date.getTime() - Date.now()) / 1000;
-      for (const [unit, threshold] of Object.entries(thresholds)) {
-        if (Math.abs(diff) < threshold) {
-          return this.formatter.format(
-            Math.round(diff),
-            unit as Intl.RelativeTimeFormatUnit,
-          );
-        }
-        diff /= threshold;
+  format(date: Date) {
+    let diff = (date.getTime() - Date.now()) / 1000;
+    for (const [unit, threshold] of Object.entries(thresholds)) {
+      if (Math.abs(diff) < threshold) {
+        return this.formatter.format(
+          Math.round(diff),
+          unit as Intl.RelativeTimeFormatUnit,
+        );
       }
-      return this.formatter.format(Math.round(diff), "years");
-    };
+      diff /= threshold;
+    }
+    return this.formatter.format(Math.round(diff), "years");
+  },
+  formatDay(day: Temporal.PlainDate) {
+    const { today } = this;
+    if (day.equals(today.subtract({ days: 1 }))) return m.yesterday();
+    if (day.equals(today)) return m.today();
+    if (day.equals(today.add({ days: 1 }))) return m.tomorrow();
+    return day.toLocaleString(this.language, {
+      month: "short",
+      day: "numeric",
+    });
   },
 };

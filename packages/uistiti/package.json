@@ -48,7 +48,7 @@
     "publint": "^0.2.12",
     "sass": "^1.83.0",
     "storybook": "^8.4.7",
-    "svelte": "^5.15.0",
+    "svelte": "^5.16.0",
     "svelte-check": "^4.1.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",

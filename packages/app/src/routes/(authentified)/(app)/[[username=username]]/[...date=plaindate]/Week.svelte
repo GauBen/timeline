@@ -4,7 +4,6 @@
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-  import * as m from "messages";
   import type { Action } from "svelte/action";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
@@ -33,16 +32,6 @@
   const keys = $derived(
     Array.from({ length: 7 }, (_, days) => start.add({ days }).toString()),
   );
-
-  const formatDay = (day: Temporal.PlainDate) => {
-    if (day.equals(today.subtract({ days: 1 }))) return m.yesterday();
-    else if (day.equals(today)) return m.today();
-    else if (day.equals(today.add({ days: 1 }))) return m.tomorrow();
-    return day.toLocaleString(i18n.language, {
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   let calendarHeader = $state<HTMLElement>();
   let numberOfColumns = $state(1);
@@ -158,7 +147,17 @@
               <CaretLeft />
             </a>
           {/if}
-          <span style="flex: 1">{formatDay(day)}</span>
+          <!-- Only allow journaling for past days -->
+          {#if Temporal.PlainDate.compare(day, today) <= 0}
+            <a
+              style="flex: 1; text-decoration: inherit;"
+              href="?/journal={day.toString()}"
+            >
+              {i18n.formatDay(day)}
+            </a>
+          {:else}
+            <span style="flex: 1">{i18n.formatDay(day)}</span>
+          {/if}
           {#if i === numberOfColumns - 1}
             <a
               href={paths.resolveRoute({

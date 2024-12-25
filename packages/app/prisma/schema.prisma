@@ -120,3 +120,12 @@ model HabitMark {
   @@id([habitId, date])
   @@map("habit_marks")
 }
+
+model JournalEntry {
+  authorId String   @map("author_id") @db.Uuid
+  date     DateTime @db.Date
+  body     String   @db.Text
+
+  @@id([authorId, date])
+  @@map("journal_entries")
+}

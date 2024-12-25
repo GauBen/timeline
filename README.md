@@ -18,10 +18,11 @@ Here is a simple roadmap of what's to come:
 - [ ] ⏳ Share events with specific people
 - [ ] Event duration
 - [x] Proper timezone support
-- [ ] UI consistency
+- [ ] ⏳ UI consistency
 - [ ] Sync with Google Calendar
 - [ ] Publish pictures
 - [x] Habit tracker
+- [x] Journaling
 
 ## Development
 

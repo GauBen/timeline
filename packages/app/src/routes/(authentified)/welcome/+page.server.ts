@@ -25,6 +25,7 @@ const reserved = new Set([
   "help",
   "home",
   "index",
+  "journal",
   "login",
   "logout",
   "new",

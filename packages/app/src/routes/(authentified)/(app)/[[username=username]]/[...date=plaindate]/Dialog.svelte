@@ -83,11 +83,11 @@
     {/snippet}
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <form
-      use:enhance={reportValidity}
+      use:enhance={() => reportValidity()}
       method="POST"
       action="?/createEvent"
       class="_stack-2"
-      style="min-width: 30rem"
+      style="width: 30rem; max-width: 100%"
       onkeydown={(event) => {
         if (event.key === "Escape") toggleEventCreation();
         event.stopPropagation();
@@ -173,6 +173,7 @@
     padding: 0;
     border: 0;
     background: none;
+    max-width: 100%;
   }
 
   .label {

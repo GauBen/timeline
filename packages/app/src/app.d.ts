@@ -1,5 +1,6 @@
 import type { AvailableLanguageTag } from "messages/runtime";
-import type { User } from "@supabase/supabase-js";
+import type Supabase from "@supabase/supabase-js";
+import type Prisma from "@prisma/client";
 import "unplugin-icons/types/svelte";
 
 declare global {
@@ -9,7 +10,8 @@ declare global {
       language: AvailableLanguageTag;
     }
     interface PageData {
-      session?: User;
+      session?: Supabase.User;
+      me?: Prisma.User;
       language: AvailableLanguageTag;
       timezones: string[];
     }

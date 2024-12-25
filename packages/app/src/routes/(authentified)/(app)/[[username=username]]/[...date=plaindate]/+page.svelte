@@ -15,6 +15,8 @@
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
+  import paths from "$lib/paths.svelte.js";
+  import { reportValidity } from "formgator/sveltekit";
 
   const { data } = $props();
   const {
@@ -23,6 +25,7 @@
     followed,
     followings,
     habits,
+    journal,
     latest,
     me,
     start,
@@ -117,6 +120,24 @@
     timezone={me.timezone}
     getEventInCreationElement={component?.getEventInCreationElement}
   />
+{:else if page.url.searchParams.has("/journal")}
+  {@const date = page.url.searchParams.get("/journal")!}
+  <dialog open style="z-index: 100">
+    <form
+      action="?/journal={date}"
+      method="POST"
+      use:enhance={() => reportValidity({ reset: false })}
+    >
+      <h3>
+        Journal: {i18n.formatDay(Temporal.PlainDate.from(date))}
+        <a href={paths.resolveRoute(page.params, { search: "" })}>Close</a>
+      </h3>
+      <input type="hidden" name="date" value={date} />
+      <textarea name="body" cols="50" rows="8" value={journal?.body ?? ""}
+      ></textarea>
+      <Button color="success">Save</Button>
+    </form>
+  </dialog>
 {/if}
 
 <Layout {me} {latest}>
