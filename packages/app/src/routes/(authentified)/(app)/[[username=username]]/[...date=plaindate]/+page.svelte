@@ -5,6 +5,7 @@
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import { Temporal } from "@js-temporal/polyfill";
+  import { reportValidity } from "formgator/sveltekit";
   import { Button, Select } from "uistiti";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import Back from "~icons/ph/caret-left";
@@ -15,8 +16,6 @@
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
-  import paths from "$lib/paths.svelte.js";
-  import { reportValidity } from "formgator/sveltekit";
 
   const { data } = $props();
   const {
