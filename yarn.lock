@@ -1888,7 +1888,6 @@ __metadata:
   resolution: "@timeline/app@workspace:packages/app"
   dependencies:
     "@iconify-json/ph": "npm:^1.2.2"
-    "@inlang/paraglide-js": "npm:^1.11.3"
     "@js-temporal/polyfill": "npm:^0.4.4"
     "@prisma/client": "npm:^6.1.0"
     "@supabase/supabase-js": "npm:^2.47.10"
@@ -1898,6 +1897,7 @@ __metadata:
     formgator: "npm:^0.0.20"
     human-id: "npm:^4.1.1"
     jose: "npm:^5.9.6"
+    messages: "workspace:^"
     modern-normalize: "npm:^3.0.1"
     prisma: "npm:^6.1.0"
     sass: "npm:^1.83.0"
@@ -5626,6 +5626,14 @@ __metadata:
   checksum: 10c0/254a8a4605b58f450308fc474c82ac9a094848081bf4c06778200207820e5193726dc563a0d2c16468810516a5c97d9d3ea0ca6585d23c58ccfff2403e8dbbeb
   languageName: node
   linkType: hard
+
+"messages@workspace:^, messages@workspace:packages/messages":
+  version: 0.0.0-use.local
+  resolution: "messages@workspace:packages/messages"
+  dependencies:
+    "@inlang/paraglide-js": "npm:^1.11.3"
+  languageName: unknown
+  linkType: soft
 
 "micro@npm:9.3.5-canary.3":
   version: 9.3.5-canary.3

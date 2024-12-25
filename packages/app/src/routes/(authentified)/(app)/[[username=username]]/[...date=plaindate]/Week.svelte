@@ -1,9 +1,10 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import i18n, { m } from "$lib/i18n.svelte.js";
+  import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
+  import * as m from "messages";
   import type { Action } from "svelte/action";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";

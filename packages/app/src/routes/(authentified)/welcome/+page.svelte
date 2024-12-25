@@ -1,17 +1,18 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
-  import { reportValidity } from "formgator/sveltekit";
-  import { Button, Input, Select } from "uistiti";
-  import Dice1 from "~icons/ph/dice-one-duotone";
-  import Dice2 from "~icons/ph/dice-two-duotone";
-  import Dice3 from "~icons/ph/dice-three-duotone";
-  import Dice4 from "~icons/ph/dice-four-duotone";
-  import Dice5 from "~icons/ph/dice-five-duotone";
-  import Dice6 from "~icons/ph/dice-six-duotone";
-  import { humanId } from "human-id";
-  import i18n, { m, sourceLanguageTag } from "$lib/i18n.svelte.js";
+  import i18n, { sourceLanguageTag } from "$lib/i18n.svelte.js";
   import { Temporal } from "@js-temporal/polyfill";
+  import { reportValidity } from "formgator/sveltekit";
+  import { humanId } from "human-id";
+  import * as m from "messages";
+  import { Button, Input, Select } from "uistiti";
+  import Dice5 from "~icons/ph/dice-five-duotone";
+  import Dice4 from "~icons/ph/dice-four-duotone";
+  import Dice1 from "~icons/ph/dice-one-duotone";
+  import Dice6 from "~icons/ph/dice-six-duotone";
+  import Dice3 from "~icons/ph/dice-three-duotone";
+  import Dice2 from "~icons/ph/dice-two-duotone";
 
   const dice = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
   let Die = $state(Dice6);

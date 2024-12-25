@@ -2,10 +2,11 @@
   import { browser } from "$app/environment";
   import { enhance } from "$app/forms";
   import { page } from "$app/state";
-  import i18n, { m } from "$lib/i18n.svelte.js";
+  import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import type { User } from "@prisma/client";
+  import * as m from "messages";
   import type { Snippet } from "svelte";
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import CalendarDots from "~icons/ph/calendar-dots-duotone";
@@ -72,13 +73,13 @@
         ? "page"
         : undefined}
     >
-      <ClockClockwise /> Recent</a
+      <ClockClockwise /> {m.true_jumpy_tadpole_hush()}</a
     >
     <a
       href="#calendar"
       aria-current={page.url.hash === "#calendar" ? "page" : undefined}
     >
-      <CalendarDots /> Calendar</a
+      <CalendarDots /> {m.weird_large_nuthatch_fall()}</a
     >
   </nav>
 </div>

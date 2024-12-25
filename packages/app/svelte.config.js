@@ -9,9 +9,5 @@ export default {
 
   kit: {
     adapter: adapter({ runtime: "nodejs22.x" }),
-
-    alias: {
-      $paraglide: "src/paraglide",
-    },
   },
 };

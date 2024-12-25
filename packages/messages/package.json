@@ -1,0 +1,15 @@
+{
+  "name": "messages",
+  "private": true,
+  "exports": {
+    ".": "./dist/messages.js",
+    "./runtime": "./dist/runtime.js"
+  },
+  "scripts": {
+    "build": "paraglide-js compile --project ../../project.inlang --outdir ./dist",
+    "dev": "paraglide-js compile --watch --project ../../project.inlang --outdir ./dist"
+  },
+  "devDependencies": {
+    "@inlang/paraglide-js": "^1.11.3"
+  }
+}

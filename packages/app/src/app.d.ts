@@ -1,4 +1,4 @@
-import type { AvailableLanguageTag } from "$paraglide/runtime.js";
+import type { AvailableLanguageTag } from "messages/runtime";
 import type { User } from "@supabase/supabase-js";
 import "unplugin-icons/types/svelte";
 

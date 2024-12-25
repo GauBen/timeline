@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setLanguageTag } from "$paraglide/runtime.js";
+  import { setLanguageTag } from "$lib/i18n.svelte.js";
   import "modern-normalize/modern-normalize.css";
   import "uistiti/global.css";
   import "uistiti/reset.css";

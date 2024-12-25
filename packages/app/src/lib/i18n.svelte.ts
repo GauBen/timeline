@@ -1,13 +1,11 @@
 import { page } from "$app/state";
-import * as m from "$paraglide/messages.js";
 
-export { m }; // https://github.com/sveltejs/svelte/issues/14768
 export {
   isAvailableLanguageTag,
   languageTag,
   setLanguageTag,
   sourceLanguageTag,
-} from "$paraglide/runtime.js";
+} from "messages/runtime";
 
 const thresholds = {
   seconds: 60,
