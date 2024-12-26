@@ -6,7 +6,7 @@
   const { data } = $props();
 </script>
 
-<form method="POST" class="_stack-2" use:enhance={reportValidity}>
+<form method="POST" class="_stack-2" use:enhance={() => reportValidity()}>
   <h1>Impersonate</h1>
   <p>
     <label>

@@ -65,7 +65,12 @@
       <option value="fr-FR">Français</option>
     </Select>
   </header>
-  <form method="POST" action="" use:enhance={reportValidity} class="_stack-2">
+  <form
+    method="POST"
+    action=""
+    use:enhance={() => reportValidity()}
+    class="_stack-2"
+  >
     <h2>{m.direct_legal_giraffe_empower()}</h2>
     <p>
       <label class="label">

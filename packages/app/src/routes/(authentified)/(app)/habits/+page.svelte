@@ -34,7 +34,7 @@
 
 <h2>New habit</h2>
 
-<form method="post" action="?/create" use:enhance={reportValidity}>
+<form method="post" action="?/create" use:enhance={() => reportValidity()}>
   <label>
     Name:
     <Input type="text" name="name" required maxlength={255} />
