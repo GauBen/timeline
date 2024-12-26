@@ -45,7 +45,7 @@
     font-weight: bold;
     background-color: var(--ui-background-strong);
     color: var(--ui-color-strong);
-    font-size: 1.25em;
+    font-size: 1.2em;
     display: flex;
     align-items: center;
     gap: 0.5rem;

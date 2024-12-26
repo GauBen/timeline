@@ -1,8 +1,9 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
   import Pencil from "~icons/ph/pencil-duotone";
+  import X from "~icons/ph/x";
   import { Temporal } from "@js-temporal/polyfill";
-  import { Button, Input } from "uistiti";
+  import { Button, Card, Input } from "uistiti";
   import { reportValidity } from "formgator/sveltekit";
   import { enhance } from "$app/forms";
 
@@ -11,34 +12,41 @@
   let edit = $state<string>();
 </script>
 
-<main class="_stack-4">
+<main class="_stack-4" style="max-width: 40rem; margin: 1rem auto">
   <h1>Journal</h1>
 
-  {#each data.entries as { date, body }}
-    {@const day = date.toISOString().slice(0, 10)}
-    <article id="journal-{day}">
-      <h2 class="_row-2">
-        {i18n.formatDay(Temporal.PlainDate.from(day))}
-      </h2>
+  <p class="_row-2">
+    <a href="/journal" aria-current={data.tag === undefined ? "page" : null}>
+      All ({data.count})
+    </a>
+    {#each data.tags as { tag, _count }}
+      <a href="?tag={tag}" aria-current={data.tag === tag ? "page" : null}>
+        {tag} ({_count.tag})
+      </a>
+    {/each}
+  </p>
 
-      {#if day === edit}
-        <form
-          method="POST"
-          use:enhance={() => reportValidity({ reset: false })}
-        >
-          <input type="hidden" name="date" value={day} />
-          <textarea name="body" cols="50" rows="8" value={body ?? ""}
-          ></textarea>
-          <Button color="success">Save</Button>
+  {#each data.entries as { date, body, html }}
+    {@const day = date.toISOString().slice(0, 10)}
+    <Card id="journal-{day}">
+      <!-- <h2 class="_row-2"> -->
+      {#snippet header()}
+        <a href="#journal-{day}" style="text-decoration: inherit">
+          {i18n.formatDay(Temporal.PlainDate.from(day))}
+        </a>
+        <span style="flex:1"></span>
+
+        {#if day === edit}
           <Button
-            type="button"
-            variant="outline"
-            onclick={() => (edit = undefined)}>Cancel</Button
+            square
+            variant="ghost"
+            onclick={() => (edit = undefined)}
+            title="Edit"
+            style="font-size: 1rem"
           >
-        </form>
-      {:else}
-        <p>
-          {body}
+            <X />
+          </Button>
+        {:else}
           <Button
             square
             variant="ghost"
@@ -48,9 +56,38 @@
           >
             <Pencil />
           </Button>
-        </p>
+        {/if}
+      {/snippet}
+
+      {#if day === edit}
+        <form
+          method="POST"
+          use:enhance={() => reportValidity({ reset: false })}
+        >
+          <input type="hidden" name="date" value={day} />
+          <!-- svelte-ignore a11y_autofocus -->
+          <textarea
+            name="body"
+            cols="50"
+            rows="8"
+            value={body ?? ""}
+            autofocus
+            onkeydown={(event) => {
+              if (event.key === "Enter" && event.shiftKey) {
+                event.preventDefault();
+                event.currentTarget.form!.requestSubmit();
+              } else if (event.key === "Escape") {
+                edit = undefined;
+              }
+            }}
+          ></textarea>
+          <Button color="success">Save</Button>
+        </form>
+      {:else}
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html html}
       {/if}
-    </article>
+    </Card>
   {/each}
 
   <details>
@@ -68,3 +105,9 @@
     </form>
   </details>
 </main>
+
+<style>
+  [aria-current="page"] {
+    font-weight: bold;
+  }
+</style>

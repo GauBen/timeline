@@ -122,10 +122,21 @@ model HabitMark {
 }
 
 model JournalEntry {
-  authorId String   @map("author_id") @db.Uuid
-  date     DateTime @db.Date
-  body     String   @db.Text
+  authorId String       @map("author_id") @db.Uuid
+  date     DateTime     @db.Date
+  body     String       @db.Text
+  tags     JournalTag[]
 
   @@id([authorId, date])
   @@map("journal_entries")
+}
+
+model JournalTag {
+  authorId String       @map("author_id") @db.Uuid
+  date     DateTime     @db.Date
+  tag      String       @db.VarChar(32)
+  entry    JournalEntry @relation(fields: [authorId, date], references: [authorId, date], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([authorId, tag, date])
+  @@map("journal_tags")
 }
