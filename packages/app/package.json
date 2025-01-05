@@ -13,6 +13,7 @@
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
     "@prisma/client": "^6.1.0",
+    "googleapis": "^144.0.0",
     "human-id": "^4.1.1",
     "mdast-util-find-and-replace": "^3.0.2",
     "modern-normalize": "^3.0.1",
