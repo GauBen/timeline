@@ -14,7 +14,7 @@
     "@js-temporal/polyfill": "^0.4.4",
     "@prisma/client": "^6.1.0",
     "human-id": "^4.1.1",
-    "mdast-util-find-and-replace": "^3.0.1",
+    "mdast-util-find-and-replace": "^3.0.2",
     "modern-normalize": "^3.0.1",
     "rehype-sanitize": "^6.0.0",
     "rehype-stringify": "^10.0.1",
@@ -34,13 +34,13 @@
     "jose": "^5.9.6",
     "messages": "workspace:^",
     "prisma": "^6.1.0",
-    "sass": "^1.83.0",
-    "svelte": "^5.16.0",
+    "sass": "^1.83.1",
+    "svelte": "^5.16.1",
     "svelte-check": "^4.1.1",
     "typescript": "^5.7.2",
     "uistiti": "workspace:^",
     "unplugin-icons": "^0.22.0",
-    "vite": "^6.0.6"
+    "vite": "^6.0.7"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

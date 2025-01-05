@@ -10,6 +10,6 @@
     "dev": "paraglide-js compile --watch --project ../../project.inlang --outdir ./dist"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^1.11.3"
+    "@inlang/paraglide-js": "^1.11.7"
   }
 }
