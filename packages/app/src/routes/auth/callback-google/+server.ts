@@ -46,4 +46,13 @@ export const GET = async ({ url, cookies }) => {
   });
 
   redirect(307, `/`);
+
+  // Prototyping
+  // const auth = new google.auth.OAuth2();
+  // auth.setCredentials(tokens);
+  // const calendar = await google.calendar({ version: "v3", auth });
+  // const colors = await calendar.colors.get();
+  // console.log(colors.data);
+  // const calendars = await calendar.calendarList.list();
+  // console.log(calendars.data);
 };
