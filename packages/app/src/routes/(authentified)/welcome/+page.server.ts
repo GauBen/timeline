@@ -2,7 +2,9 @@ import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
 import { error, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
-import { formgate, formfail } from "formgator/sveltekit";
+import { formfail, formgate } from "formgator/sveltekit";
+import { availableLanguageTags } from "messages/runtime";
+import { randomUUID } from "node:crypto";
 
 const reserved = new Set([
   // @keep-sorted
@@ -63,16 +65,22 @@ export const actions = {
         ),
       displayName: fg.text({ required: true, minlength: 1, maxlength: 255 }),
       timezone: fg.select(timezones, { required: true }),
+      language: fg.select(availableLanguageTags, { required: true }),
     },
     async (data, { locals }) => {
       if (!locals.session) error(401, "Unauthorized");
 
       try {
         await prisma.user.create({
-          data: { ...data, id: locals.session.id },
+          data: {
+            ...data,
+            googleId: locals.session.id,
+            email: locals.session.email,
+            id: randomUUID(),
+          },
         });
       } catch {
-        formfail({ username: "Username already exists" });
+        formfail({ username: "Username already in use" });
       }
 
       redirect(307, "/");

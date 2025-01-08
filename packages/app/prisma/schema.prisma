@@ -11,15 +11,27 @@ datasource db {
   directUrl = env("DATABASE_DIRECT_URL")
 }
 
-view AuthUser {
-  id               String    @id @db.Uuid
-  email            String    @db.VarChar(255)
-  createdAt        DateTime  @map("created_at") @db.Timestamptz(6)
-  emailConfirmedAt DateTime? @map("email_confirmed_at") @db.Timestamptz(6)
-  lastSignInAt     DateTime? @map("last_sign_in_at") @db.Timestamptz(6)
-  user             User?
+model GoogleUser {
+  // Local id
+  id BigInt @id @default(autoincrement())
 
-  @@map("auth_users")
+  email  String @unique @db.VarChar(255)
+  tokens Json
+
+  user     User?
+  sessions Session[]
+
+  @@map("google_users")
+}
+
+model Session {
+  googleUserId BigInt   @map("google_user_id")
+  token        String   @id @db.VarChar(21)
+  expiresAt    DateTime @map("expires_at") @db.Timestamptz(0)
+
+  googleUser GoogleUser @relation(fields: [googleUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("sessions")
 }
 
 model User {
@@ -28,8 +40,12 @@ model User {
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   timezone    String   @db.VarChar(32)
+  language    String   @db.VarChar(5)
 
-  authUser      AuthUser      @relation(fields: [id], references: [id])
+  googleId BigInt @unique @map("google_id")
+  email    String @unique @db.VarChar(255)
+
+  googleUser    GoogleUser    @relation(fields: [googleId], references: [id])
   followers     Follow[]      @relation("following")
   following     Follow[]      @relation("follower")
   eventsCreated Event[]

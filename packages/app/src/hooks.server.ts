@@ -1,6 +1,6 @@
-import { fetchAndPersistSession } from "$lib/server/auth.js";
 import { isAvailableLanguageTag, sourceLanguageTag } from "$lib/i18n.svelte.js";
 import type { RequestEvent } from "@sveltejs/kit";
+import { prisma } from "$lib/server/prisma.js";
 
 const getLanguage = ({ request, cookies }: RequestEvent) => {
   const acceptLanguage =
@@ -10,7 +10,17 @@ const getLanguage = ({ request, cookies }: RequestEvent) => {
 };
 
 export const handle = async ({ event, resolve }) => {
-  event.locals.session = await fetchAndPersistSession(event);
+  // Load session if there is a session cookie
+  const token = event.cookies.get("session");
+  if (token) {
+    const session = await prisma.session.findUnique({
+      where: { token },
+      include: { googleUser: true },
+    });
+    if (session) event.locals.session = session.googleUser;
+    else event.cookies.delete("session", { path: "/" });
+  }
+
   event.locals.language = getLanguage(event);
 
   return resolve(event, {

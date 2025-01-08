@@ -1,17 +1,55 @@
 import { client } from "$lib/server/google.js";
-import { google } from "googleapis";
+import { prisma } from "$lib/server/prisma.js";
+import type { Prisma } from "@prisma/client";
+import { redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
+import { jwtDecode } from "jwt-decode";
+import { nanoid } from "nanoid";
 
-export const GET = async ({ url }) => {
+export const GET = async ({ url, cookies }) => {
   const code = url.searchParams.get("code") as string;
   const { tokens } = await client.getToken(code);
-  // Persist tokens
+
+  if (!tokens.id_token) error(400, "Invalid token");
+
+  const user = jwtDecode<{
+    // Useful fields in the token
+    email: string;
+    email_verified: boolean;
+    name: string;
+    picture: string;
+    given_name: string;
+    family_name: string;
+  }>(tokens.id_token);
+
+  const googleUser = await prisma.googleUser.upsert({
+    where: { email: user.email },
+    create: { email: user.email, tokens: tokens as Prisma.InputJsonObject },
+    update: { tokens: tokens as Prisma.InputJsonObject },
+  });
+
+  const session = await prisma.session.create({
+    data: {
+      googleUserId: googleUser.id,
+      token: nanoid(),
+      expiresAt: new Date(Date.now() + 4e10),
+    },
+  });
+
+  cookies.set("session", session.token, {
+    path: "/",
+    expires: session.expiresAt,
+  });
+
+  redirect(307, `/`);
 
   // Prototyping
-  const auth = new google.auth.OAuth2();
-  auth.setCredentials(tokens);
-  const calendar = await google.calendar({ version: "v3", auth });
-  const colors = await calendar.colors.get();
-  console.log(colors.data);
-  const calendars = await calendar.calendarList.list();
-  console.log(calendars.data);
+  // const auth = new google.auth.OAuth2();
+  // auth.setCredentials(tokens);
+  // auth.on("tokens", (tokens) => {});
+  // const calendar = google.calendar({ version: "v3", auth });
+  // const colors = await calendar.colors.get();
+  // console.log(colors.data);
+  // const calendars = await calendar.calendarList.list();
+  // console.log(calendars.data);
 };

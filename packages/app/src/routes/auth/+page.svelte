@@ -6,8 +6,7 @@
   <h1>Timeline</h1>
   <p>The social calendar</p>
   <p>
-    <a href="/auth/google" rel="external">Supabase (legacy)</a>
-    <a href={data.url} rel="external">Google (direct, current)</a>
+    <a href={data.url} rel="external">Login with Google</a>
     {#if data.devMode}
       <a href="/dev/impersonate" rel="external">Impersonate</a>
     {/if}

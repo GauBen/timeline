@@ -1,14 +1,19 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { reportValidity } from "formgator/sveltekit";
-  import { Button, Select } from "uistiti";
+  import { Button, Input, Select } from "uistiti";
 
   const { data } = $props();
 </script>
 
-<form method="POST" class="_stack-2" use:enhance={() => reportValidity()}>
-  <h1>Impersonate</h1>
-  <p>
+<form
+  action="?/login"
+  method="POST"
+  class="_stack-2"
+  use:enhance={() => reportValidity()}
+>
+  <h2>Impersonate</h2>
+  <p class="_row-2">
     <label>
       User:
       <Select name="id">
@@ -19,11 +24,24 @@
         {/each}
       </Select>
     </label>
-  </p>
-  <p class="_row-2">
     <Button type="submit" variant="outline">Impersonate</Button>
-    <a href="http://localhost:54323/project/default/auth/users">
-      Create new users
-    </a>
+  </p>
+</form>
+
+<hr style="width: 100%" />
+
+<form
+  action="?/register"
+  method="POST"
+  class="_stack-2"
+  use:enhance={() => reportValidity()}
+>
+  <h2>Create an account</h2>
+  <p class="_row-2">
+    <label>
+      Email:
+      <Input type="email" name="email" required />
+    </label>
+    <Button type="submit" variant="outline">Create</Button>
   </p>
 </form>
