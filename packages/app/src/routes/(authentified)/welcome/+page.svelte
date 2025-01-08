@@ -13,6 +13,7 @@
   import Dice6 from "~icons/ph/dice-six-duotone";
   import Dice3 from "~icons/ph/dice-three-duotone";
   import Dice2 from "~icons/ph/dice-two-duotone";
+  import Translate from "~icons/ph/translate-duotone";
 
   const dice = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
   let Die = $state(Dice6);
@@ -53,17 +54,6 @@
         {m.warm_smart_maggot_accept()}
       </a>
     </p>
-    <Select
-      value={i18n.language}
-      style="position: absolute; right: 1rem; top: 1rem"
-      onchange={({ currentTarget }) => {
-        document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
-        location.reload();
-      }}
-    >
-      <option value="en-US">English</option>
-      <option value="fr-FR">Français</option>
-    </Select>
   </header>
   <form
     method="POST"
@@ -72,6 +62,24 @@
     class="_stack-2"
   >
     <h2>{m.direct_legal_giraffe_empower()}</h2>
+    <p>
+      <label class="label">
+        <span><Translate /> {m.cuddly_weird_reindeer_express()}</span>
+        <Select
+          required
+          name="language"
+          style="flex: 1"
+          value={i18n.language}
+          onchange={({ currentTarget }) => {
+            document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
+            location.reload();
+          }}
+        >
+          <option value="en-US">English</option>
+          <option value="fr-FR">Français</option>
+        </Select>
+      </label>
+    </p>
     <p>
       <label class="label">
         <span>{m.tame_north_sheep_zap()}</span>
