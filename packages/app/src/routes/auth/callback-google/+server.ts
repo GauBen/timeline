@@ -50,7 +50,8 @@ export const GET = async ({ url, cookies }) => {
   // Prototyping
   // const auth = new google.auth.OAuth2();
   // auth.setCredentials(tokens);
-  // const calendar = await google.calendar({ version: "v3", auth });
+  // auth.on("tokens", (tokens) => {});
+  // const calendar = google.calendar({ version: "v3", auth });
   // const colors = await calendar.colors.get();
   // console.log(colors.data);
   // const calendars = await calendar.calendarList.list();
