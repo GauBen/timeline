@@ -10,7 +10,10 @@ export const GET = async ({ url, cookies }) => {
   const code = url.searchParams.get("code");
   if (!code) error(400, "Invalid code");
 
-  const { tokens } = await client.getToken(code);
+  const { tokens } = await client.getToken({
+    code,
+    redirect_uri: new URL(url.pathname, url.origin).toString(),
+  });
   if (!tokens.id_token) error(400, "Invalid token");
 
   const user = jwtDecode<{
