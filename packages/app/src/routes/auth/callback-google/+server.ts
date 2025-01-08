@@ -7,9 +7,10 @@ import { jwtDecode } from "jwt-decode";
 import { nanoid } from "nanoid";
 
 export const GET = async ({ url, cookies }) => {
-  const code = url.searchParams.get("code") as string;
-  const { tokens } = await client.getToken(code);
+  const code = url.searchParams.get("code");
+  if (!code) error(400, "Invalid code");
 
+  const { tokens } = await client.getToken(code);
   if (!tokens.id_token) error(400, "Invalid token");
 
   const user = jwtDecode<{
