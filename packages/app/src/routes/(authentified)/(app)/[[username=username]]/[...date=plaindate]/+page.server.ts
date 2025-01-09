@@ -177,7 +177,7 @@ export const actions = {
             : {
                 createMany: {
                   data: data.shared_with.map((userId) => ({
-                    userId,
+                    userId: BigInt(userId),
                     shared: true,
                   })),
                 },

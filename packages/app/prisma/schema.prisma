@@ -35,22 +35,21 @@ model Session {
 }
 
 model User {
-  id          String   @id @db.Uuid
+  id          BigInt   @id
   username    String   @unique @db.VarChar(255)
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   timezone    String   @db.VarChar(32)
   language    String   @db.VarChar(5)
 
-  googleId BigInt @unique @map("google_id")
-  email    String @unique @db.VarChar(255)
-
-  googleUser    GoogleUser    @relation(fields: [googleId], references: [id])
-  followers     Follow[]      @relation("following")
-  following     Follow[]      @relation("follower")
-  eventsCreated Event[]
-  events        EventToUser[]
-  habits        Habit[]
+  googleUser     GoogleUser     @relation(fields: [id], references: [id])
+  followers      Follow[]       @relation("following")
+  following      Follow[]       @relation("follower")
+  eventsCreated  Event[]
+  events         EventToUser[]
+  habits         Habit[]
+  journalEntries JournalEntry[]
+  journalTags    JournalTag[]
 
   timeline TimelineEvent[]
 
@@ -59,9 +58,9 @@ model User {
 
 model Follow {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  followerId  String   @map("follower_id") @db.Uuid
+  followerId  BigInt   @map("follower_id")
   follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  followingId String   @map("following_id") @db.Uuid
+  followingId BigInt   @map("following_id")
   following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([followerId, followingId])
@@ -78,7 +77,7 @@ model Event {
   duration      Int           @db.Integer // Prisma does not support `interval` type yet
   body          String        @db.VarChar(1024)
   public        Boolean       @default(true)
-  authorId      String        @map("author_id") @db.Uuid
+  authorId      BigInt        @map("author_id")
   author        User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   users         EventToUser[]
 
@@ -90,7 +89,7 @@ model Event {
 model EventToUser {
   eventId BigInt   @map("event_id")
   event   Event    @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId  String   @map("user_id") @db.Uuid
+  userId  BigInt   @map("user_id")
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   shared  Boolean  @default(false)
   added   Boolean?
@@ -107,10 +106,10 @@ view TimelineEvent {
   duration  Int      @db.Integer
   body      String   @db.VarChar(1024)
   public    Boolean  @default(true)
-  authorId  String   @map("author_id") @db.Uuid
+  authorId  BigInt   @map("author_id")
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  userId   String   @map("user_id") @db.Uuid
+  userId   BigInt   @map("user_id")
   followed Boolean
   added    Boolean?
 
@@ -120,7 +119,7 @@ view TimelineEvent {
 model Habit {
   id     BigInt @id @default(autoincrement())
   name   String @db.VarChar(255)
-  userId String @map("user_id") @db.Uuid
+  userId BigInt @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   marks HabitMark[]
@@ -130,28 +129,33 @@ model Habit {
 
 model HabitMark {
   habitId BigInt   @map("habit_id")
-  habit   Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   date    DateTime @db.Date
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([habitId, date])
   @@map("habit_marks")
 }
 
 model JournalEntry {
-  authorId String       @map("author_id") @db.Uuid
-  date     DateTime     @db.Date
-  body     String       @db.Text
-  tags     JournalTag[]
+  authorId BigInt   @map("author_id")
+  date     DateTime @db.Date
+  body     String   @db.Text
+
+  author User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tags   JournalTag[]
 
   @@id([authorId, date])
   @@map("journal_entries")
 }
 
 model JournalTag {
-  authorId String       @map("author_id") @db.Uuid
-  date     DateTime     @db.Date
-  tag      String       @db.VarChar(32)
-  entry    JournalEntry @relation(fields: [authorId, date], references: [authorId, date], onDelete: Cascade, onUpdate: Cascade)
+  authorId BigInt   @map("author_id")
+  date     DateTime @db.Date
+  tag      String   @db.VarChar(32)
+
+  author User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  entry  JournalEntry @relation(fields: [authorId, date], references: [authorId, date], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([authorId, tag, date])
   @@map("journal_tags")

@@ -4,7 +4,6 @@ import { error, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formfail, formgate } from "formgator/sveltekit";
 import { availableLanguageTags } from "messages/runtime";
-import { randomUUID } from "node:crypto";
 
 const reserved = new Set([
   // @keep-sorted
@@ -72,12 +71,7 @@ export const actions = {
 
       try {
         await prisma.user.create({
-          data: {
-            ...data,
-            googleId: locals.session.id,
-            email: locals.session.email,
-            id: randomUUID(),
-          },
+          data: { ...data, id: locals.session.id },
         });
       } catch {
         formfail({ username: "Username already in use" });

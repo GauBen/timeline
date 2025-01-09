@@ -137,14 +137,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@es-joy/jsdoccomment@npm:^0.49.0":
-  version: 0.49.0
-  resolution: "@es-joy/jsdoccomment@npm:0.49.0"
+"@es-joy/jsdoccomment@npm:^0.50.0":
+  version: 0.50.0
+  resolution: "@es-joy/jsdoccomment@npm:0.50.0"
   dependencies:
+    "@types/eslint": "npm:^9.6.1"
+    "@types/estree": "npm:^1.0.6"
+    "@typescript-eslint/types": "npm:^8.11.0"
     comment-parser: "npm:1.4.1"
     esquery: "npm:^1.6.0"
     jsdoc-type-pratt-parser: "npm:~4.1.0"
-  checksum: 10c0/16717507d557d37e7b59456fedeefbe0a3bc93aa2d9c043d5db91e24e076509b6fcb10ee6fd1dafcb0c5bbe50ae329b45de5b83541cb5994a98c9e862a45641e
+  checksum: 10c0/b0db76881d8d6ea0eb477a0ddc0331e37029c9cf3eb6458f11dfdc51224d5a2b3f14c634087d3e1593c6c2e17090e27e811ade7560f7d1748989175fdc66ed3a
   languageName: node
   linkType: hard
 
@@ -2345,7 +2348,7 @@ __metadata:
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.1"
     sass: "npm:^1.83.1"
-    svelte: "npm:^5.17.1"
+    svelte: "npm:^5.17.3"
     svelte-check: "npm:^4.1.3"
     typescript: "npm:^5.7.3"
     uistiti: "workspace:^"
@@ -2440,7 +2443,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:1.0.6, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.1, @types/estree@npm:^1.0.5, @types/estree@npm:^1.0.6":
+"@types/eslint@npm:^9.6.1":
+  version: 9.6.1
+  resolution: "@types/eslint@npm:9.6.1"
+  dependencies:
+    "@types/estree": "npm:*"
+    "@types/json-schema": "npm:*"
+  checksum: 10c0/69ba24fee600d1e4c5abe0df086c1a4d798abf13792d8cfab912d76817fe1a894359a1518557d21237fbaf6eda93c5ab9309143dee4c59ef54336d1b3570420e
+  languageName: node
+  linkType: hard
+
+"@types/estree@npm:*, @types/estree@npm:1.0.6, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.1, @types/estree@npm:^1.0.5, @types/estree@npm:^1.0.6":
   version: 1.0.6
   resolution: "@types/estree@npm:1.0.6"
   checksum: 10c0/cdfd751f6f9065442cd40957c07fd80361c962869aa853c1c2fd03e101af8b9389d8ff4955a43a6fcfa223dd387a089937f95be0f3eec21ca527039fd2d9859a
@@ -2456,7 +2469,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:^7.0.15, @types/json-schema@npm:^7.0.6":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.15, @types/json-schema@npm:^7.0.6":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
@@ -2594,7 +2607,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:8.19.1":
+"@typescript-eslint/types@npm:8.19.1, @typescript-eslint/types@npm:^8.11.0":
   version: 8.19.1
   resolution: "@typescript-eslint/types@npm:8.19.1"
   checksum: 10c0/e907bf096d5ed7a812a1e537a98dd881ab5d2d47e072225bfffaa218c1433115a148b27a15744db8374b46dac721617c6d13a1da255fdeb369cf193416533f6e
@@ -4624,14 +4637,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-command@npm:^0.2.7":
-  version: 0.2.7
-  resolution: "eslint-plugin-command@npm:0.2.7"
+"eslint-plugin-command@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "eslint-plugin-command@npm:2.1.0"
   dependencies:
-    "@es-joy/jsdoccomment": "npm:^0.49.0"
+    "@es-joy/jsdoccomment": "npm:^0.50.0"
   peerDependencies:
     eslint: "*"
-  checksum: 10c0/551c481192b49f7e738652955b285564c6df645a392a8251b2d5b6fdc250a26b073a5416ffe21d55fca93f023aaf90d9b5787758d5722b0ecc66ca54c257e397
+  checksum: 10c0/ef0e1c7e2ed467a6a7feba1cca54e820a1067301ada751fba6837ddfe120fa0c45b8b9d6234a9e62e33732a7d7b1a9753d1e9969ec73ec20559b7d9be1e613ae
   languageName: node
   linkType: hard
 
@@ -7290,14 +7303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"package-manager-detector@npm:^0.2.0, package-manager-detector@npm:^0.2.5":
-  version: 0.2.6
-  resolution: "package-manager-detector@npm:0.2.6"
-  checksum: 10c0/b9848031bafee03a1308cedecf8fecdc65378b3acd57c123f10f66dd7ea467141a44585ab26cbeb452e1da37cc217f9face129c08864fd8584164fb1f6d94533
-  languageName: node
-  linkType: hard
-
-"package-manager-detector@npm:^0.2.8":
+"package-manager-detector@npm:^0.2.0, package-manager-detector@npm:^0.2.5, package-manager-detector@npm:^0.2.8":
   version: 0.2.8
   resolution: "package-manager-detector@npm:0.2.8"
   checksum: 10c0/2d24dd6e50a196a0b1e3ce7bf6db8aff403bdbe333cf81383bec54fa441dac958ec87a7e6865cf86e614704f349c7effaf8d0c2474a6a50a164e6218689f02db
@@ -8528,9 +8534,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supabase@npm:^2.2.6":
-  version: 2.2.6
-  resolution: "supabase@npm:2.2.6"
+"supabase@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "supabase@npm:2.5.0"
   dependencies:
     bin-links: "npm:^5.0.0"
     https-proxy-agent: "npm:^7.0.2"
@@ -8538,7 +8544,7 @@ __metadata:
     tar: "npm:7.4.3"
   bin:
     supabase: bin/supabase
-  checksum: 10c0/df73a0c9f6d5efbbc495166fcaab9c5e9ecbd5b8aa7e667e8ad52670f2538cbf4a2855d37178d5728a13b7e9d09dade614cbf4bdcc0319a9864a228b4fbfa4a8
+  checksum: 10c0/3aaeaf876d19d9ceae99d4fa855f13ac39981e90b754a02ca5536bd89b8c22b960cd77f4959a01d2f973dfeafe31f02690852591b62550555a9c79ec428771c7
   languageName: node
   linkType: hard
 
@@ -8658,9 +8664,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.17.1":
-  version: 5.17.1
-  resolution: "svelte@npm:5.17.1"
+"svelte@npm:^5.17.3":
+  version: 5.17.3
+  resolution: "svelte@npm:5.17.3"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -8676,7 +8682,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10c0/b311320c10d4f61a28ddcbbc8d3bc1a1848355064e9ce1b6d3e26fe6678518cda4757514f2638cacfd826548bb06477d90542bd40a2186745a7e69ca796b7d67
+  checksum: 10c0/ca80ca7b8ef7aea07188f3c5c698b0d19ac5ea7ee1adafcb9c3f1ec210be04a69a0711ce7dfe2017ec6f7892b098fb60b07150483274de73d85b7bc7c20c5e23
   languageName: node
   linkType: hard
 
@@ -8774,19 +8780,19 @@ __metadata:
     "@eslint/js": "npm:^9.17.0"
     eslint: "npm:^9.17.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-command: "npm:^0.2.7"
+    eslint-plugin-command: "npm:^2.1.0"
     eslint-plugin-svelte: "npm:^2.46.1"
     globals: "npm:^15.14.0"
     prettier: "npm:^3.4.2"
     prettier-plugin-jsdoc: "npm:^1.3.2"
     prettier-plugin-packagejson: "npm:^2.5.6"
     prettier-plugin-svelte: "npm:^3.3.2"
-    supabase: "npm:^2.2.6"
-    svelte: "npm:^5.17.1"
+    supabase: "npm:^2.5.0"
+    svelte: "npm:^5.17.3"
     turbo: "npm:^2.3.3"
     typescript: "npm:^5.7.3"
     typescript-eslint: "npm:^8.19.1"
-    vercel: "npm:^39.2.5"
+    vercel: "npm:^39.2.6"
   languageName: unknown
   linkType: soft
 
@@ -9104,17 +9110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.9.4 || ^5.0.0":
-  version: 5.7.2
-  resolution: "typescript@npm:5.7.2"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/a873118b5201b2ef332127ef5c63fb9d9c155e6fdbe211cbd9d8e65877283797cca76546bad742eea36ed7efbe3424a30376818f79c7318512064e8625d61622
-  languageName: node
-  linkType: hard
-
-"typescript@npm:^5.7.3":
+"typescript@npm:^4.9.4 || ^5.0.0, typescript@npm:^5.7.3":
   version: 5.7.3
   resolution: "typescript@npm:5.7.3"
   bin:
@@ -9144,17 +9140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.9.4 || ^5.0.0#optional!builtin<compat/typescript>":
-  version: 5.7.2
-  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=5786d5"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/f3b8082c9d1d1629a215245c9087df56cb784f9fb6f27b5d55577a20e68afe2a889c040aacff6d27e35be165ecf9dca66e694c42eb9a50b3b2c451b36b5675cb
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^4.9.4 || ^5.0.0#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>":
   version: 5.7.3
   resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"
   bin:
@@ -9198,7 +9184,7 @@ __metadata:
     publint: "npm:^0.3.0"
     sass: "npm:^1.83.1"
     storybook: "npm:^8.4.7"
-    svelte: "npm:^5.17.1"
+    svelte: "npm:^5.17.3"
     svelte-check: "npm:^4.1.3"
     typescript: "npm:^5.7.3"
     vite: "npm:^6.0.7"
@@ -9466,9 +9452,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:^39.2.5":
-  version: 39.2.5
-  resolution: "vercel@npm:39.2.5"
+"vercel@npm:^39.2.6":
+  version: 39.2.6
+  resolution: "vercel@npm:39.2.6"
   dependencies:
     "@vercel/build-utils": "npm:9.0.1"
     "@vercel/fun": "npm:1.1.2"
@@ -9485,7 +9471,7 @@ __metadata:
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: 10c0/5ca0b4912edb5f40646a1b62d77b0658c05052247741eeea867ddd0d2e3205917d2a4efe788de9bf92ed642d9e676d5a9999589079552c8dde8a73449b14db7a
+  checksum: 10c0/5f4c648d641d9e2c3172311ee92323216774bfec714cc5705076a50892c4ec09fc003838c8debff08e96744257f09fb58524b16195427cf2c76f18be70005210
   languageName: node
   linkType: hard
 
