@@ -3,7 +3,7 @@
 </script>
 
 <main class="_stack-4">
-  <h1>Timeline</h1>
+  <h1 style="font-size: 4em">Timeline</h1>
   <p>The social calendar</p>
   <p>
     <a href={data.url} rel="external">Login with Google</a>
