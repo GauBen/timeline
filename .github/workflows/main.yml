@@ -14,7 +14,18 @@ jobs:
   build-and-deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
+    env:
+      # Disable the global Yarn cache on GitHub Actions
+      YARN_ENABLE_GLOBAL_CACHE: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: pkgxdev/dev@v0
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            .yarn/cache
+          key: cache-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            cache-${{ runner.os }}-
       - run: just deploy ${{ secrets.VERCEL_TOKEN }}
