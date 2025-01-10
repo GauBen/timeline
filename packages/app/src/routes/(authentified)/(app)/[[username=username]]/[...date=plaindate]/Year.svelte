@@ -50,7 +50,7 @@
                 })
                 .total({ unit: "week", relativeTo: date })}
             >
-              {date.toLocaleString(i18n.language, { month: "short" })}
+              {date.toLocaleString(i18n.locale, { month: "short" })}
               {#if eventInCreation?.toPlainDate().equals(date)}
                 <span bind:this={eventInCreationElement}></span>
               {/if}

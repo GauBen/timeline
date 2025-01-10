@@ -5,9 +5,9 @@
 
 <div>
   <Select
-    value={i18n.language}
+    value={i18n.locale}
     onchange={({ currentTarget }) => {
-      document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
+      document.cookie = `locale=${currentTarget.value}; path=/; max-age=31536000`;
       location.reload();
     }}
   >

@@ -49,7 +49,7 @@
   {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
     <div>
       <span>
-        {Temporal.PlainTime.from({ hour }).toLocaleString(i18n.language, {
+        {Temporal.PlainTime.from({ hour }).toLocaleString(i18n.locale, {
           hour: "numeric",
           minute: "numeric",
         })}
@@ -69,7 +69,7 @@
       @{author.username}<br />
       {body}<br />
       <a href="?event={id}">
-        {fixDate(date).toLocaleString(i18n.language, {
+        {fixDate(date).toLocaleString(i18n.locale, {
           hour: "numeric",
           minute: "numeric",
         })}

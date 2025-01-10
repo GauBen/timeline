@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setLanguageTag } from "$lib/i18n.svelte.js";
+  import { setLocale } from "$lib/i18n.svelte.js";
   import "modern-normalize/modern-normalize.css";
   import "uistiti/global.css";
   import "uistiti/reset.css";
@@ -8,9 +8,9 @@
 
   const { children, data } = $props();
 
-  // Setting the language tag must be done in the same tick as the render to
+  // Setting the locale must be done in the same tick as the render to
   // prevent server-side race conditions
-  setLanguageTag(data.language);
+  setLocale(data.locale);
 </script>
 
 <svelte:head>

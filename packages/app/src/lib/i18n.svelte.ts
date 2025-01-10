@@ -3,10 +3,11 @@ import { Temporal } from "@js-temporal/polyfill";
 import * as m from "messages";
 
 export {
-  isAvailableLanguageTag,
-  languageTag,
-  setLanguageTag,
-  sourceLanguageTag,
+  isAvailableLocale,
+  getLocale,
+  setLocale,
+  baseLocale,
+  locales,
 } from "messages/runtime";
 
 const thresholds = {
@@ -21,11 +22,11 @@ export default {
   get today() {
     return Temporal.Now.plainDateTimeISO(page.data.me?.timezone);
   },
-  get language() {
-    return page.data.language;
+  get locale() {
+    return page.data.locale;
   },
   get formatter() {
-    return new Intl.RelativeTimeFormat(this.language, {
+    return new Intl.RelativeTimeFormat(this.locale, {
       numeric: "auto",
     });
   },
@@ -47,7 +48,7 @@ export default {
     if (day.equals(today.subtract({ days: 1 }))) return m.yesterday();
     if (day.equals(today)) return m.today();
     if (day.equals(today.add({ days: 1 }))) return m.tomorrow();
-    return day.toLocaleString(this.language, {
+    return day.toLocaleString(this.locale, {
       month: "short",
       day: "numeric",
     });

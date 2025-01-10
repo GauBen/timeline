@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
-  import i18n, { sourceLanguageTag } from "$lib/i18n.svelte.js";
+  import i18n, { getLocale } from "$lib/i18n.svelte.js";
   import { Temporal } from "@js-temporal/polyfill";
   import { reportValidity } from "formgator/sveltekit";
   import { humanId } from "human-id";
@@ -30,7 +30,7 @@
     now
       .toZonedDateTimeISO(timezone)
       .toPlainTime()
-      .toLocaleString([data.language, sourceLanguageTag]),
+      .toLocaleString([data.locale, getLocale()]),
   );
 
   // Update `wallTime` every second
@@ -67,11 +67,11 @@
         <span><Translate /> {m.cuddly_weird_reindeer_express()}</span>
         <Select
           required
-          name="language"
+          name="locale"
           style="flex: 1"
-          value={i18n.language}
+          value={i18n.locale}
           onchange={({ currentTarget }) => {
-            document.cookie = `language=${currentTarget.value}; path=/; max-age=31536000`;
+            document.cookie = `locale=${currentTarget.value}; path=/; max-age=31536000`;
             location.reload();
           }}
         >

@@ -40,7 +40,7 @@ model User {
   displayName String   @map("display_name") @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   timezone    String   @db.VarChar(32)
-  language    String   @db.VarChar(5)
+  locale      String   @db.VarChar(5)
 
   googleUser     GoogleUser     @relation(fields: [id], references: [id])
   followers      Follow[]       @relation("following")
