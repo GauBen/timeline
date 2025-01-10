@@ -6,6 +6,8 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
 import * as journal from "../../journal/+page.server.js";
+import { google } from "googleapis";
+import type { Event } from "$lib/types.js";
 
 export const load = loadgate(
   {
@@ -16,7 +18,7 @@ export const load = loadgate(
     "/journal": fg.date({ required: true }).optional(),
   },
   async (searchParams, { parent, params }) => {
-    const { me } = await parent();
+    const { me, session } = await parent();
 
     let user: User | undefined;
     if (params.username) {
@@ -122,7 +124,50 @@ export const load = loadgate(
           }),
       ]);
 
-    const windows = Object.groupBy(events, (event) =>
+    const auth = new google.auth.OAuth2({ credentials: session.tokens });
+    const calendar = google.calendar({ version: "v3", auth });
+
+    const { data: calendars } = await calendar.calendarList.list();
+
+    for (const { id, selected, summary, description } of calendars.items) {
+      if (!selected) continue;
+      console.log("-", summary, description);
+    }
+
+    const events2 = await calendar.events.list({
+      calendarId: "primary",
+      timeMin: gte,
+      timeMax: lt,
+      showDeleted: false,
+      singleEvents: true,
+    });
+    const x: Event[] = [];
+    for (const { start, end, summary, description } of events2.data.items) {
+      if (start?.dateTime) {
+        x.push({
+          added: null,
+          author: {
+            createdAt: new Date(),
+            displayName: "Google Calendar",
+            id: 1n,
+            locale: "en-US",
+            timezone: "Europe/Paris",
+            username: "google-calendar",
+          },
+          createdAt: new Date(),
+          date: new Date(start.dateTime),
+          duration: 0,
+          id: 1n,
+          public: true,
+          userId: 1n,
+          body: summary ?? "unknown",
+          authorId: 1n,
+          followed: false,
+        });
+      }
+    }
+
+    const windows = Object.groupBy(x, (event) =>
       toTemporalInstant
         .call(event.date)
         .toZonedDateTimeISO(me.timezone)
