@@ -45,7 +45,7 @@
     "@types/node": "^22.10.5",
     "colorjs.io": "^0.5.2",
     "modern-normalize": "^3.0.1",
-    "publint": "^0.3.0",
+    "publint": "^0.3.1",
     "sass": "^1.83.1",
     "storybook": "^8.4.7",
     "svelte": "^5.17.3",
