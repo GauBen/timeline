@@ -7,7 +7,7 @@ export {
   getLocale,
   setLocale,
   baseLocale,
-  locales,
+  availableLocales,
 } from "messages/runtime";
 
 const thresholds = {
