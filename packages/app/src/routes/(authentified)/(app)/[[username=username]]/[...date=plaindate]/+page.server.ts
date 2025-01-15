@@ -66,17 +66,17 @@ export const load = loadgate(
       ? { userId: me.id, authorId: user.id }
       : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-    const [event, latest, events, followed, followings, habits, journal] =
+    const [event, latest, events, followed, followings, habits, journal, tags] =
       await Promise.all([
         searchParams.event
           ? prisma.timelineEvent.findUnique({
               where: { id: searchParams.event, AND: where },
-              include: { author: true },
+              include: { author: true, event: { include: { tags: true } } },
             })
           : undefined,
         prisma.timelineEvent.findMany({
           where,
-          include: { author: true },
+          include: { author: true, event: { include: { tags: true } } },
           orderBy: { createdAt: "desc" },
           take: 100,
         }),
@@ -85,7 +85,7 @@ export const load = loadgate(
             ...where,
             date: { gte, lt },
           },
-          include: { author: true },
+          include: { author: true, event: { include: { tags: true } } },
           orderBy: { date: "asc" },
           take: 100,
         }),
@@ -120,6 +120,7 @@ export const load = loadgate(
               },
             },
           }),
+        prisma.tag.findMany({ where: { ownerId: me.id } }),
       ]);
 
     const windows = Object.groupBy(events, (event) =>
@@ -138,6 +139,7 @@ export const load = loadgate(
       journal,
       latest,
       start,
+      tags,
       user,
       view,
       windows,
@@ -155,9 +157,16 @@ export const actions = {
       startTimezone: fg.select(timezones, { required: true }),
       public: fg.checkbox(),
       shared_with: fg.select(() => true, { multiple: true }),
+      tags: fg
+        .select(() => true, { multiple: true })
+        .transform((ids) => ids.map((id) => BigInt(id))),
     },
     async (data, { request, locals }) => {
       if (!locals.session) return fail(401, { error: "Unauthorized" });
+
+      const tags = await prisma.tag.findMany({
+        where: { id: { in: data.tags }, ownerId: locals.session.id },
+      });
 
       const date = data.date
         .toZonedDateTime(data.startTimezone)
@@ -182,6 +191,9 @@ export const actions = {
                   })),
                 },
               },
+          tags: {
+            connect: tags.map((tag) => ({ id: tag.id })),
+          },
         },
       });
 

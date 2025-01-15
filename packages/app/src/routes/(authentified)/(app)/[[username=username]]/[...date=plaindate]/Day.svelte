@@ -42,6 +42,17 @@
 
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
+
+  const gradient = (tags: Array<{ color: string }>) =>
+    "linear-gradient(110deg, " +
+    tags
+      .flatMap(({ color }, i) => [
+        `#${color} ${(i / tags.length) * 100 + 0.5}%`,
+        `#${color} ${((i + 1) / tags.length) * 100 - 0.5}%`,
+      ])
+      .slice(0, -1)
+      .join(", ") +
+    ")";
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
@@ -60,10 +71,16 @@
   {#if day.equals(today)}
     <hr style:top="{toRems(time)}rem" />
   {/if}
-  {#each events as { id, author, body, date, added }}
+  {#each events as { id, author, body, date, added, event }}
     <article
-      style="border: 2px solid #dcfaff"
-      style:background={added ? "#dcfaff" : "#fff"}
+      style="border: 2px solid #fff; text-shadow: 0 0 0.5rem #fff;"
+      style:background={added
+        ? event.tags.length > 1
+          ? gradient(event.tags)
+          : event.tags.length > 0
+            ? "#" + event.tags[0].color
+            : "#dcfaff"
+        : "#fff"}
       style:top="{toRems(fixDate(date).toPlainTime())}rem"
     >
       @{author.username}<br />

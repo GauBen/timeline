@@ -2,18 +2,20 @@
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import { Temporal } from "@js-temporal/polyfill";
-  import type { Follow, User } from "@prisma/client";
+  import type { Follow, Tag, User } from "@prisma/client";
   import { reportValidity } from "formgator/sveltekit";
   import { untrack } from "svelte";
   import { Button, Card, Input, Select } from "uistiti";
 
   let {
+    tags,
     timezone,
     followings,
     toggleEventCreation,
     getEventInCreationElement,
     eventInCreation,
   }: {
+    tags: Tag[];
     timezone: string;
     followings: Array<Follow & { following: User }>;
     toggleEventCreation: (
@@ -153,6 +155,17 @@
           </Select>
         </span>
       </p>
+      <p class="label">
+        <span>Tags</span>
+        <span class="_row-2" style="flex: 1">
+          {#each tags as tag}
+            <label class="tag" style:--color="#{tag.color}">
+              <input type="checkbox" name="tags" value={tag.id} />
+              {tag.name}
+            </label>
+          {/each}
+        </span>
+      </p>
       <p style="display: flex; justify-content: end; gap: .5em">
         <Button
           variant="ghost"
@@ -186,6 +199,24 @@
       min-width: 5em;
       text-align: right;
       user-select: none;
+    }
+  }
+
+  .tag {
+    padding: 0.5em;
+    border-radius: 0.25em;
+    color: #000;
+    text-shadow: 0 0 0.5rem #fff;
+    border: 2px solid var(--color);
+    cursor: pointer;
+    border-radius: 0.5;
+
+    input {
+      display: none;
+    }
+
+    &:has(:checked) {
+      background-color: var(--color);
     }
   }
 </style>
