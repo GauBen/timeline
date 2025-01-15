@@ -687,32 +687,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inlang/paraglide-js@npm:2.0.0-beta.8":
-  version: 2.0.0-beta.8
-  resolution: "@inlang/paraglide-js@npm:2.0.0-beta.8"
+"@inlang/paraglide-js@npm:2.0.0-prerelease.0":
+  version: 2.0.0-prerelease.0
+  resolution: "@inlang/paraglide-js@npm:2.0.0-prerelease.0"
   dependencies:
-    "@inlang/recommend-sherlock": "npm:0.2.1"
-    "@inlang/sdk": "npm:2.1.0"
+    "@inlang/sdk": "npm:*"
     commander: "npm:11.1.0"
-    consola: "npm:3.4.0"
+    consola: "npm:3.2.3"
+    fast-glob: "npm:^3.2.12"
     json5: "npm:2.2.3"
-    unplugin: "npm:^2.1.2"
+    prettier: "npm:^3.4.2"
+    prettier-plugin-jsdoc: "npm:^1.3.0"
   bin:
     paraglide-js: bin/run.js
-  checksum: 10c0/2ef77e5093ea1a2c657e3aafce813c56f2501e7c59271eec94c19dba981d9d9f0ca4c6da25736e3713e1843a90c4eb910447136437c1c1f2c0d16be7b9b10b81
+  checksum: 10c0/17638778ee13cf19f016994ff49a04f9965f7046c31375190ff3112f1bf8930e02d9451cc089fa7963d91a72ac0824e187e45258fb12669610ff7026a8896522
   languageName: node
   linkType: hard
 
-"@inlang/recommend-sherlock@npm:0.2.1":
-  version: 0.2.1
-  resolution: "@inlang/recommend-sherlock@npm:0.2.1"
-  dependencies:
-    comment-json: "npm:^4.2.3"
-  checksum: 10c0/2d37a3db7d9289167e2cb8e6df8c62045b6f14ac4e4988cd39d504ba6a09010f4bef0317c915980cfdd5dca4c171a6f3051452bf5522b04d5063a5f4adc4df2c
-  languageName: node
-  linkType: hard
-
-"@inlang/sdk@npm:2.1.0":
+"@inlang/sdk@npm:*":
   version: 2.1.0
   resolution: "@inlang/sdk@npm:2.1.0"
   dependencies:
@@ -2722,13 +2714,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"array-timsort@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "array-timsort@npm:1.0.3"
-  checksum: 10c0/bd3a1707b621947265c89867e67c9102b9b9f4c50f5b3974220112290d8b60d26ce60595edec5deed3325207b759d70b758bed3cd310b5ddadb835657ffb6d12
-  languageName: node
-  linkType: hard
-
 "assertion-error@npm:^2.0.1":
   version: 2.0.1
   resolution: "assertion-error@npm:2.0.1"
@@ -3182,19 +3167,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"comment-json@npm:^4.2.3":
-  version: 4.2.5
-  resolution: "comment-json@npm:4.2.5"
-  dependencies:
-    array-timsort: "npm:^1.0.3"
-    core-util-is: "npm:^1.0.3"
-    esprima: "npm:^4.0.1"
-    has-own-prop: "npm:^2.0.0"
-    repeat-string: "npm:^1.6.1"
-  checksum: 10c0/e22f13f18fcc484ac33c8bc02a3d69c3f9467ae5063fdfb3df7735f83a8d9a2cab6a32b7d4a0c53123413a9577de8e17c8cc88369c433326799558febb34ef9c
-  languageName: node
-  linkType: hard
-
 "comment-parser@npm:1.4.1, comment-parser@npm:^1.4.0":
   version: 1.4.1
   resolution: "comment-parser@npm:1.4.1"
@@ -3216,7 +3188,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"consola@npm:3.4.0, consola@npm:^3.2.3":
+"consola@npm:3.2.3":
+  version: 3.2.3
+  resolution: "consola@npm:3.2.3"
+  checksum: 10c0/c606220524ec88a05bb1baf557e9e0e04a0c08a9c35d7a08652d99de195c4ddcb6572040a7df57a18ff38bbc13ce9880ad032d56630cef27bef72768ef0ac078
+  languageName: node
+  linkType: hard
+
+"consola@npm:^3.2.3":
   version: 3.4.0
   resolution: "consola@npm:3.4.0"
   checksum: 10c0/bc7f7ad46514375109a80f3ae8330097eb1e5d89232a24eb830f3ac383e22036a62c53d33561cd73d7cda4b3691fba85e3dcf35229ef7721b324aae291ceb40c
@@ -3241,13 +3220,6 @@ __metadata:
   version: 0.6.0
   resolution: "cookie@npm:0.6.0"
   checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
-  languageName: node
-  linkType: hard
-
-"core-util-is@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "core-util-is@npm:1.0.3"
-  checksum: 10c0/90a0e40abbddfd7618f8ccd63a74d88deea94e77d0e8dbbea059fa7ebebb8fbb4e2909667fe26f3a467073de1a542ebe6ae4c73a73745ac5833786759cd906c9
   languageName: node
   linkType: hard
 
@@ -4362,7 +4334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esprima@npm:^4.0.1, esprima@npm:~4.0.0":
+"esprima@npm:~4.0.0":
   version: 4.0.1
   resolution: "esprima@npm:4.0.1"
   bin:
@@ -4492,16 +4464,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.7, fast-glob@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "fast-glob@npm:3.3.2"
+"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.7, fast-glob@npm:^3.3.2":
+  version: 3.3.3
+  resolution: "fast-glob@npm:3.3.3"
   dependencies:
     "@nodelib/fs.stat": "npm:^2.0.2"
     "@nodelib/fs.walk": "npm:^1.2.3"
     glob-parent: "npm:^5.1.2"
     merge2: "npm:^1.3.0"
-    micromatch: "npm:^4.0.4"
-  checksum: 10c0/42baad7b9cd40b63e42039132bde27ca2cb3a4950d0a0f9abe4639ea1aa9d3e3b40f98b1fe31cbc0cc17b664c9ea7447d911a152fa34ec5b72977b125a6fc845
+    micromatch: "npm:^4.0.8"
+  checksum: 10c0/f6aaa141d0d3384cf73cbcdfc52f475ed293f6d5b65bfc5def368b09163a9f7e5ec2b3014d80f733c405f58e470ee0cc451c2937685045cddcdeaa24199c43fe
   languageName: node
   linkType: hard
 
@@ -5006,13 +4978,6 @@ __metadata:
   version: 4.0.0
   resolution: "has-flag@npm:4.0.0"
   checksum: 10c0/2e789c61b7888d66993e14e8331449e525ef42aac53c627cc53d1c3334e768bcb6abdc4f5f0de1478a25beec6f0bd62c7549058b7ac53e924040d4f301f02fd1
-  languageName: node
-  linkType: hard
-
-"has-own-prop@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "has-own-prop@npm:2.0.0"
-  checksum: 10c0/2745497283d80228b5c5fbb8c63ab1029e604bce7db8d4b36255e427b3695b2153dc978b176674d0dd2a23f132809e04d7ef41fefc0ab85870a5caa918c5c0d9
   languageName: node
   linkType: hard
 
@@ -5886,7 +5851,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "messages@workspace:packages/messages"
   dependencies:
-    "@inlang/paraglide-js": "npm:2.0.0-beta.8"
+    "@inlang/paraglide-js": "npm:2.0.0-prerelease.0"
   languageName: unknown
   linkType: soft
 
@@ -6139,7 +6104,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
+"micromatch@npm:^4.0.5, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
@@ -6915,7 +6880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-jsdoc@npm:^1.3.2":
+"prettier-plugin-jsdoc@npm:^1.3.0, prettier-plugin-jsdoc@npm:^1.3.2":
   version: 1.3.2
   resolution: "prettier-plugin-jsdoc@npm:1.3.2"
   dependencies:
@@ -7241,13 +7206,6 @@ __metadata:
     unified: "npm:^11.0.0"
     vfile: "npm:^6.0.0"
   checksum: 10c0/68f986e8ee758d415e93babda2a0d89477c15b7c200edc23b8b1d914dd6e963c5fc151a11cbbbcfa7dd237367ff3ef86e302be90f31f37a17b0748668bd8c65b
-  languageName: node
-  linkType: hard
-
-"repeat-string@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "repeat-string@npm:1.6.1"
-  checksum: 10c0/87fa21bfdb2fbdedc44b9a5b118b7c1239bdd2c2c1e42742ef9119b7d412a5137a1d23f1a83dc6bb686f4f27429ac6f542e3d923090b44181bafa41e8ac0174d
   languageName: node
   linkType: hard
 
@@ -8650,7 +8608,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin@npm:^2.1.0, unplugin@npm:^2.1.2":
+"unplugin@npm:^2.1.0":
   version: 2.1.2
   resolution: "unplugin@npm:2.1.2"
   dependencies:
