@@ -51,7 +51,9 @@ model User {
   journalEntries JournalEntry[]
   journalTags    JournalTag[]
 
-  timeline TimelineEvent[]
+  timeline     TimelineEvent[]
+  tags         Tag[]
+  viewableTags Tag[]           @relation("viewers")
 
   @@map("users")
 }
@@ -69,21 +71,39 @@ model Follow {
 }
 
 model Event {
-  id            BigInt        @id @default(autoincrement())
-  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  date          DateTime      @db.Timestamptz(6)
-  startTimezone String        @map("start_timezone") @db.VarChar(32)
+  id            BigInt   @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  date          DateTime @db.Timestamptz(6)
+  startTimezone String   @map("start_timezone") @db.VarChar(32)
   // TODO: replace duration with end, add timezone
-  duration      Int           @db.Integer // Prisma does not support `interval` type yet
-  body          String        @db.VarChar(1024)
-  public        Boolean       @default(true)
-  authorId      BigInt        @map("author_id")
-  author        User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  users         EventToUser[]
+  duration      Int      @db.Integer // Prisma does not support `interval` type yet
+  body          String   @db.VarChar(1024)
+  public        Boolean  @default(true)
+  authorId      BigInt   @map("author_id")
+
+  author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  users          EventToUser[]
+  tags           Tag[]
+  timelineEvents TimelineEvent[]
 
   @@index([authorId])
   @@index([date])
   @@map("events")
+}
+
+model Tag {
+  id      BigInt @id @default(autoincrement())
+  ownerId BigInt @map("owner_id")
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  name    String @db.VarChar(64)
+  color   String @db.VarChar(6)
+
+  // Whether tagged events are public
+  public  Boolean @default(true)
+  viewers User[]  @relation("viewers")
+  events  Event[]
+
+  @@map("tags")
 }
 
 model EventToUser {
@@ -107,7 +127,9 @@ view TimelineEvent {
   body      String   @db.VarChar(1024)
   public    Boolean  @default(true)
   authorId  BigInt   @map("author_id")
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  author User  @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event  Event @relation(fields: [id], references: [id])
 
   userId   BigInt   @map("user_id")
   followed Boolean

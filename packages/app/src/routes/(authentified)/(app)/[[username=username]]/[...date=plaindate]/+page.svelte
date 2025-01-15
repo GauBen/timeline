@@ -28,6 +28,7 @@
     latest,
     me,
     start,
+    tags,
     user,
     view,
     windows,
@@ -101,6 +102,12 @@
         {/if}
         <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
       </p>
+      <p>
+        Tags:
+        {#each event.event.tags as tag}
+          {tag.name},
+        {/each}
+      </p>
     </header>
     <p>{event.body}</p>
     <footer>
@@ -113,6 +120,7 @@
   </dialog>
 {:else if eventInCreation}
   <Dialog
+    {tags}
     {followings}
     {eventInCreation}
     {toggleEventCreation}
