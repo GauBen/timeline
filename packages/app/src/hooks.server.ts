@@ -1,6 +1,6 @@
-import { isAvailableLocale, baseLocale } from "$lib/i18n.svelte.js";
-import type { RequestEvent } from "@sveltejs/kit";
 import { prisma } from "$lib/server/prisma.js";
+import type { RequestEvent } from "@sveltejs/kit";
+import { baseLocale, isAvailableLocale } from "messages/runtime";
 
 const getSession = async ({ cookies }: RequestEvent) => {
   const token = cookies.get("session");

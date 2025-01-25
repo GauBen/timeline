@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setLocale } from "$lib/i18n.svelte.js";
+  import { setLocale } from "messages/runtime";
   import "modern-normalize/modern-normalize.css";
   import "uistiti/global.css";
   import "uistiti/reset.css";

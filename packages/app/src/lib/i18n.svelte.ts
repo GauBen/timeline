@@ -2,14 +2,6 @@ import { page } from "$app/state";
 import { Temporal } from "@js-temporal/polyfill";
 import * as m from "messages";
 
-export {
-  isAvailableLocale,
-  getLocale,
-  setLocale,
-  baseLocale,
-  availableLocales,
-} from "messages/runtime";
-
 const thresholds = {
   seconds: 60,
   minutes: 60,
