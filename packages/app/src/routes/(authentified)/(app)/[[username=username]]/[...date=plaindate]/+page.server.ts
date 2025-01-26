@@ -1,11 +1,12 @@
 import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
-import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-import type { Prisma, User } from "@prisma/client";
+import { Temporal } from "@js-temporal/polyfill";
+import type { Prisma } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
 import * as journal from "../../journal/+page.server.js";
+import { setTimeout } from "node:timers/promises";
 
 export const load = loadgate(
   {
@@ -15,135 +16,45 @@ export const load = loadgate(
       .optional(),
     "/journal": fg.date({ required: true }).optional(),
   },
-  async (searchParams, { parent, params }) => {
-    const { me } = await parent();
+  async (searchParams, { parent }) => {
+    await setTimeout(1000);
 
-    let user: User | undefined;
-    if (params.username) {
-      try {
-        user = await prisma.user.findUniqueOrThrow({
-          where: { username: params.username },
-        });
-      } catch {
-        error(404, "User not found");
-      }
-    }
-
-    const matches = params.date.match(
-      /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
-    );
-
-    if (params.date && !matches) error(400, "Invalid date");
-
-    const view =
-      !matches || matches.groups?.day
-        ? "day"
-        : matches.groups?.month
-          ? "month"
-          : "year";
-
-    const start = matches
-      ? Temporal.PlainDate.from({
-          year: matches.groups?.year ? Number(matches.groups.year) : 1,
-          month: matches.groups?.month ? Number(matches.groups.month) : 1,
-          day: matches.groups?.day ? Number(matches.groups.day) : 1,
-        })
-      : Temporal.Now.plainDateISO(me.timezone);
-
-    // SQL query date boundaries
-    const gte = start.toZonedDateTime(me.timezone).toInstant().toString();
-    const lt = start
-      .add(
-        view === "day"
-          ? { days: 7 }
-          : { [view === "month" ? "months" : "years"]: 1 },
-      )
-      .toZonedDateTime(me.timezone)
-      .toInstant()
-      .toString();
+    const { me, user } = await parent();
 
     const where: Prisma.TimelineEventWhereInput = user
       ? { userId: me.id, authorId: user.id }
       : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-    const [event, latest, events, followed, followings, habits, journal, tags] =
-      await Promise.all([
-        searchParams.event
-          ? prisma.timelineEvent.findUnique({
-              where: { id: searchParams.event, AND: where },
-              include: { author: true, event: { include: { tags: true } } },
-            })
-          : undefined,
-        prisma.timelineEvent.findMany({
-          where,
-          include: { author: true, event: { include: { tags: true } } },
-          orderBy: { createdAt: "desc" },
-          take: 100,
-        }),
-        prisma.timelineEvent.findMany({
+    const [event, latest, followings, journal, tags] = await Promise.all([
+      searchParams.event
+        ? prisma.timelineEvent.findUnique({
+            where: { id: searchParams.event, AND: where },
+            include: { author: true, event: { include: { tags: true } } },
+          })
+        : undefined,
+      prisma.timelineEvent.findMany({
+        where,
+        include: { author: true, event: { include: { tags: true } } },
+        orderBy: { createdAt: "desc" },
+        take: 100,
+      }),
+      prisma.follow.findMany({
+        where: { followerId: me.id },
+        include: { following: true },
+      }),
+      searchParams["/journal"] &&
+        prisma.journalEntry.findUnique({
           where: {
-            ...where,
-            date: { gte, lt },
-          },
-          include: { author: true, event: { include: { tags: true } } },
-          orderBy: { date: "asc" },
-          take: 100,
-        }),
-        user
-          ? prisma.follow.findUnique({
-              where: {
-                followerId_followingId: {
-                  followerId: me.id,
-                  followingId: user.id,
-                },
-              },
-            })
-          : undefined,
-        prisma.follow.findMany({
-          where: { followerId: me.id },
-          include: { following: true },
-        }),
-        !user
-          ? prisma.habit.findMany({
-              where: { userId: me.id },
-              include: {
-                marks: { where: { date: { gte, lt } } },
-              },
-            })
-          : undefined,
-        searchParams["/journal"] &&
-          prisma.journalEntry.findUnique({
-            where: {
-              authorId_date: {
-                authorId: me.id,
-                date: searchParams["/journal"] + "T00:00:00Z",
-              },
+            authorId_date: {
+              authorId: me.id,
+              date: searchParams["/journal"] + "T00:00:00Z",
             },
-          }),
-        prisma.tag.findMany({ where: { ownerId: me.id } }),
-      ]);
+          },
+        }),
+      prisma.tag.findMany({ where: { ownerId: me.id } }),
+    ]);
 
-    const windows = Object.groupBy(events, (event) =>
-      toTemporalInstant
-        .call(event.date)
-        .toZonedDateTimeISO(me.timezone)
-        .toPlainDate()
-        .toString(),
-    );
-
-    return {
-      event,
-      followed,
-      followings,
-      habits,
-      journal,
-      latest,
-      start,
-      tags,
-      user,
-      view,
-      windows,
-    };
+    return { event, followings, journal, latest, tags };
   },
 );
 

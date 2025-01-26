@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "paraglide-js compile --project ../../project.inlang --outdir ./dist",
-    "dev": "paraglide-js compile --watch --project ../../project.inlang --outdir ./dist"
+    "dev": "paraglide-js compile --project ../../project.inlang --outdir ./dist"
   },
   "devDependencies": {
     "@inlang/paraglide-js": "^2.0.0-beta.13"
