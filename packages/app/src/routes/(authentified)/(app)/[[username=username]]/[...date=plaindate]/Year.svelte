@@ -1,23 +1,19 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { Event } from "$lib/types.js";
+  import type { Event, MaybePromise } from "$lib/types.js";
   import { Temporal } from "@js-temporal/polyfill";
 
   const {
     start: firstDayOfYear,
-    windows,
+    events,
     eventInCreation,
   }: {
+    events: MaybePromise<{ windows: Record<string, Event[] | undefined> }>;
     start: Temporal.PlainDate;
-    windows: Record<string, Event[] | undefined>;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
-
-  const max = $derived(
-    Math.max(...Object.values(windows).map((w) => w?.length ?? 0)),
-  );
 
   const year = $derived(firstDayOfYear.year);
   const start = $derived(
@@ -26,6 +22,22 @@
 
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
+
+  const max = $derived(
+    "then" in events
+      ? 1
+      : Math.max(...Object.values(events.windows).map((w) => w?.length ?? 0)),
+  );
+
+  let windows = $state("then" in events ? {} : events.windows);
+
+  $effect(() => {
+    if ("then" in events) {
+      events.then((events) => {
+        windows = events.windows;
+      });
+    }
+  });
 </script>
 
 <table>

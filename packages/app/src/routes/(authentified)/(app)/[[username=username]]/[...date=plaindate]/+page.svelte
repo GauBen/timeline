@@ -20,10 +20,10 @@
   const { data } = $props();
   const {
     event,
+    events,
     eventInCreation,
     followed,
     followings,
-    habits,
     journal,
     latest,
     me,
@@ -31,7 +31,6 @@
     tags,
     user,
     view,
-    windows,
   } = $derived(data);
 
   const Component = $derived({ day: Week, month: Month, year: Year }[view]);
@@ -189,8 +188,7 @@
 
   <Component
     {start}
-    {habits}
-    {windows}
+    {events}
     timezone={me.timezone}
     {eventInCreation}
     onevent={toggleEventCreation}

@@ -1,17 +1,17 @@
 <script lang="ts">
   import paths from "$lib/paths.svelte.js";
-  import type { Event } from "$lib/types.js";
+  import type { Event, MaybePromise } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
   let {
+    events,
     start,
-    windows,
     timezone,
     eventInCreation,
     onevent,
   }: {
+    events: MaybePromise<{ windows: Record<string, Event[] | undefined> }>;
     start: Temporal.PlainDate;
-    windows: Record<string, Event[] | undefined>;
     timezone: string;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
@@ -26,6 +26,16 @@
 
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
+
+  let windows = $state("then" in events ? {} : events.windows);
+
+  $effect(() => {
+    if ("then" in events) {
+      events.then((events) => {
+        windows = events.windows;
+      });
+    }
+  });
 </script>
 
 {#snippet eventInCreationMarker()}

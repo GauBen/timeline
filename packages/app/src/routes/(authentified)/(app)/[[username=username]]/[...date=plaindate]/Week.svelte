@@ -2,7 +2,7 @@
   import { enhance } from "$app/forms";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { Event } from "$lib/types.js";
+  import type { Event, MaybePromise } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Action } from "svelte/action";
   import CaretLeft from "~icons/ph/caret-left-duotone";
@@ -11,17 +11,18 @@
 
   let {
     start,
-    habits,
-    windows,
+    events,
     timezone,
     eventInCreation,
     onevent,
   }: {
     start: Temporal.PlainDate;
-    habits:
-      | Array<{ id: bigint; name: string; marks: Array<{ date: Date }> }>
-      | undefined;
-    windows: Record<string, Event[] | undefined>;
+    events: MaybePromise<{
+      habits:
+        | Array<{ id: bigint; name: string; marks: Array<{ date: Date }> }>
+        | undefined;
+      windows: Record<string, Event[] | undefined>;
+    }>;
     timezone: string;
     eventInCreation?: Temporal.PlainDateTime;
     onevent: (event: Temporal.PlainDateTime) => void;
@@ -110,23 +111,58 @@
     eventInCreation &&
     days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
 
-  const processedHabits = $derived(
-    habits &&
-      habits.length > 0 &&
-      habits.map(({ id, name, marks }) => ({
-        id,
-        name,
-        days: new Set(
-          marks.map(({ date }) =>
-            toTemporalInstant
-              .call(date)
-              .toZonedDateTimeISO(timezone)
-              .toPlainDate()
-              .toString(),
-          ),
-        ),
-      })),
+  let processedHabits = $state(
+    "then" in events
+      ? undefined
+      : events.habits &&
+          events.habits.length > 0 &&
+          events.habits.map(({ id, name, marks }) => ({
+            id,
+            name,
+            days: new Set(
+              marks.map(({ date }) =>
+                toTemporalInstant
+                  .call(date)
+                  .toZonedDateTimeISO(timezone)
+                  .toPlainDate()
+                  .toString(),
+              ),
+            ),
+          })),
   );
+
+  $effect(() => {
+    if ("then" in events) {
+      events.then(({ habits }) => {
+        processedHabits =
+          habits &&
+          habits.length > 0 &&
+          habits.map(({ id, name, marks }) => ({
+            id,
+            name,
+            days: new Set(
+              marks.map(({ date }) =>
+                toTemporalInstant
+                  .call(date)
+                  .toZonedDateTimeISO(timezone)
+                  .toPlainDate()
+                  .toString(),
+              ),
+            ),
+          }));
+      });
+    }
+  });
+
+  let windows = $state("then" in events ? {} : events.windows);
+
+  $effect(() => {
+    if ("then" in events) {
+      events.then((events) => {
+        windows = events.windows;
+      });
+    }
+  });
 </script>
 
 <svelte:window {onresize} />
