@@ -226,7 +226,7 @@
       eventInCreation,
     }}
   >
-    {#each keys.slice(0, numberOfColumns) as key}
+    {#each keys as key}
       {@const day = Temporal.PlainDate.from(key)}
       <Day
         {day}
