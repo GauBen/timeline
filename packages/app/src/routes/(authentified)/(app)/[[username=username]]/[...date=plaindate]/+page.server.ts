@@ -6,7 +6,6 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
 import * as journal from "../../journal/+page.server.js";
-import { setTimeout } from "node:timers/promises";
 
 export const load = loadgate(
   {
@@ -17,8 +16,6 @@ export const load = loadgate(
     "/journal": fg.date({ required: true }).optional(),
   },
   async (searchParams, { parent }) => {
-    await setTimeout(1000);
-
     const { me, user } = await parent();
 
     const where: Prisma.TimelineEventWhereInput = user

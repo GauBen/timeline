@@ -1,9 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
 import * as fg from "formgator";
 import { loadgate } from "formgator/sveltekit";
-import type { _load } from "./+server.ts";
+import type { Events } from "./+server.ts";
 import { unflatten } from "devalue";
 import { error } from "@sveltejs/kit";
+import { browser } from "$app/environment";
+import type { MaybePromise } from "$lib/types.js";
 
 export const load = loadgate(
   {
@@ -19,6 +21,13 @@ export const load = loadgate(
       /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
     );
 
+    const view =
+      !matches || matches.groups?.day
+        ? "day"
+        : matches.groups?.month
+          ? "month"
+          : "year";
+
     if (params.date && !matches) error(400, "Invalid date");
 
     const start = matches
@@ -29,11 +38,12 @@ export const load = loadgate(
         })
       : Temporal.Now.plainDateISO(me.timezone);
 
-    const events = await fetch("#" + params.date)
+    let events: MaybePromise<Events> = fetch("#" + params.date)
       .then((response) => response.json())
-      .then((data) => unflatten(data) as ReturnType<typeof _load>);
+      .then((data) => unflatten(data));
 
-    console.log(events);
-    return { ...data, ...events, start, eventInCreation: searchParams.new };
+    if (!browser) events = await events;
+
+    return { ...data, events, start, view, eventInCreation: searchParams.new };
   },
 );

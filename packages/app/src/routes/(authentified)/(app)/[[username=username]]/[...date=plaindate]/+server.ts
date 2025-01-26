@@ -3,11 +3,10 @@ import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "@prisma/client";
 import { error } from "@sveltejs/kit";
 import { stringify } from "devalue";
-import { setTimeout } from "timers/promises";
 
-export const _load = async (me: User, user: User | undefined, date: string) => {
-  await setTimeout(1000);
+export type Events = Awaited<ReturnType<typeof load>>;
 
+const load = async (me: User, user: User | undefined, date: string) => {
   const where: Prisma.TimelineEventWhereInput = user
     ? { userId: me.id, authorId: user.id }
     : { userId: me.id, OR: [{ added: true }, { followed: true }] };
@@ -71,7 +70,7 @@ export const _load = async (me: User, user: User | undefined, date: string) => {
       .toString(),
   );
 
-  return { habits, view, windows };
+  return { habits, windows };
 };
 
 export const GET = async ({ params, locals }) => {
@@ -90,7 +89,7 @@ export const GET = async ({ params, locals }) => {
     }
   }
 
-  return new Response(stringify(await _load(me, user, params.date)), {
+  return new Response(stringify(await load(me, user, params.date)), {
     headers: { "content-type": "application/json" },
   });
 };
