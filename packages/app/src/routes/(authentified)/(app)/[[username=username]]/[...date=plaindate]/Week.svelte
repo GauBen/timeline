@@ -174,17 +174,12 @@
               <CaretLeft />
             </a>
           {/if}
-          <!-- Only allow journaling for past days -->
-          {#if Temporal.PlainDate.compare(day, today) <= 0}
-            <a
-              style="flex: 1; text-decoration: inherit;"
-              href="?/journal={day.toString()}"
-            >
-              {i18n.formatDay(day)}
-            </a>
-          {:else}
-            <span style="flex: 1">{i18n.formatDay(day)}</span>
-          {/if}
+          <a
+            style="flex: 1; text-decoration: inherit;"
+            href="?/journal={day.toString()}"
+          >
+            {i18n.formatDay(day)}
+          </a>
           {#if i === numberOfColumns - 1}
             <a
               href={paths.resolveRoute({
