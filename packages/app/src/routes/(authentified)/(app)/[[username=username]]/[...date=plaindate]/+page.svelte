@@ -10,6 +10,7 @@
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import Back from "~icons/ph/caret-left";
   import Globe from "~icons/ph/globe-duotone";
+  import type { PageProps } from "./$types.js";
   import Dialog from "./Dialog.svelte";
   import EventActions from "./EventActions.svelte";
   import Layout from "./Layout.svelte";
@@ -17,7 +18,7 @@
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
 
-  const { data } = $props();
+  const { data }: PageProps & { _: typeof componentProps } = $props();
   const {
     event,
     events,
@@ -52,6 +53,14 @@
       { keepFocus: true, noScroll: true },
     );
   };
+
+  const componentProps = $derived({
+    start,
+    events,
+    timezone: me.timezone,
+    eventInCreation,
+    onevent: toggleEventCreation,
+  });
 </script>
 
 <svelte:window
@@ -186,14 +195,7 @@
     <a href="/settings">{me.displayName}</a>
   {/snippet}
 
-  <Component
-    {start}
-    {events}
-    timezone={me.timezone}
-    {eventInCreation}
-    onevent={toggleEventCreation}
-    bind:this={component}
-  />
+  <Component {...componentProps} bind:this={component} />
 </Layout>
 
 <style lang="scss">

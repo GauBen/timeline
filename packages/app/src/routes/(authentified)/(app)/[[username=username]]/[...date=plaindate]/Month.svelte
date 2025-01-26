@@ -1,7 +1,8 @@
 <script lang="ts">
   import paths from "$lib/paths.svelte.js";
-  import type { Event, MaybePromise } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
+  import type { ComponentProps } from "svelte";
+  import Page from "./+page.svelte";
 
   let {
     events,
@@ -9,13 +10,7 @@
     timezone,
     eventInCreation,
     onevent,
-  }: {
-    events: MaybePromise<{ windows: Record<string, Event[] | undefined> }>;
-    start: Temporal.PlainDate;
-    timezone: string;
-    eventInCreation?: Temporal.PlainDateTime;
-    onevent: (event: Temporal.PlainDateTime) => void;
-  } = $props();
+  }: ComponentProps<typeof Page>["_"] = $props();
 
   const paddingDaysStart = $derived(start.dayOfWeek - 1);
   const numberOfWeeks = $derived(

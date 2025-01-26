@@ -1,19 +1,14 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { Event, MaybePromise } from "$lib/types.js";
-  import { Temporal } from "@js-temporal/polyfill";
+  import type { ComponentProps } from "svelte";
+  import Page from "./+page.svelte";
 
   const {
     start: firstDayOfYear,
     events,
     eventInCreation,
-  }: {
-    events: MaybePromise<{ windows: Record<string, Event[] | undefined> }>;
-    start: Temporal.PlainDate;
-    eventInCreation?: Temporal.PlainDateTime;
-    onevent: (event: Temporal.PlainDateTime) => void;
-  } = $props();
+  }: ComponentProps<typeof Page>["_"] = $props();
 
   const year = $derived(firstDayOfYear.year);
   const start = $derived(

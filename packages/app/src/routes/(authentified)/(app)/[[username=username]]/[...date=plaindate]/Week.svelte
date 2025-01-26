@@ -2,12 +2,14 @@
   import { enhance } from "$app/forms";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { Event, MaybePromise } from "$lib/types.js";
+  import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Action } from "svelte/action";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
   import Day from "./Day.svelte";
+  import type Page from "./+page.svelte";
+  import type { ComponentProps } from "svelte";
 
   let {
     start,
@@ -15,18 +17,7 @@
     timezone,
     eventInCreation,
     onevent,
-  }: {
-    start: Temporal.PlainDate;
-    events: MaybePromise<{
-      habits:
-        | Array<{ id: bigint; name: string; marks: Array<{ date: Date }> }>
-        | undefined;
-      windows: Record<string, Event[] | undefined>;
-    }>;
-    timezone: string;
-    eventInCreation?: Temporal.PlainDateTime;
-    onevent: (event: Temporal.PlainDateTime) => void;
-  } = $props();
+  }: ComponentProps<typeof Page>["_"] = $props();
   const today = $derived(Temporal.Now.plainDateISO(timezone));
   const now = $derived(Temporal.Now.zonedDateTimeISO(timezone));
 
