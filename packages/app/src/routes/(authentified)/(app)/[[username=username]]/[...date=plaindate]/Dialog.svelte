@@ -73,7 +73,12 @@
   }}
 />
 
-<dialog open style:transform="translate({x}px, {y}px)" bind:this={dialog}>
+<dialog
+  open
+  style:transform="translate({x}px, {y}px)"
+  style:transition={mousedown ? "none" : undefined}
+  bind:this={dialog}
+>
   <Card
     headerProps={{
       style: "cursor: move; user-select: none",
@@ -187,6 +192,7 @@
     border: 0;
     background: none;
     max-width: 100%;
+    transition: transform 0.2s;
   }
 
   .label {
