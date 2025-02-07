@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
-    "@prisma/client": "^6.3.0",
+    "@prisma/client": "^6.3.1",
     "googleapis": "^144.0.0",
     "human-id": "^4.1.1",
     "jwt-decode": "^4.0.0",
@@ -28,20 +28,20 @@
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
-    "@sveltejs/adapter-vercel": "^5.5.3",
-    "@sveltejs/kit": "^2.16.1",
+    "@sveltejs/adapter-vercel": "^5.6.1",
+    "@sveltejs/kit": "^2.17.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/mdast": "^4.0.4",
     "formgator": "^0.1.0",
     "messages": "workspace:^",
-    "prisma": "^6.3.0",
-    "sass": "^1.83.4",
-    "svelte": "^5.19.6",
+    "prisma": "^6.3.1",
+    "sass": "^1.84.0",
+    "svelte": "^5.19.9",
     "svelte-check": "^4.1.4",
     "typescript": "^5.7.3",
     "uistiti": "workspace:^",
     "unplugin-icons": "^22.0.0",
-    "vite": "^6.0.11"
+    "vite": "^6.1.0"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

@@ -39,20 +39,20 @@
     "@storybook/svelte": "^8.5.3",
     "@storybook/sveltekit": "^8.5.3",
     "@storybook/test": "^8.5.3",
-    "@sveltejs/kit": "^2.16.1",
-    "@sveltejs/package": "^2.3.9",
+    "@sveltejs/kit": "^2.17.1",
+    "@sveltejs/package": "^2.3.10",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
-    "@types/node": "^22.13.0",
+    "@types/node": "^22.13.1",
     "colorjs.io": "^0.5.2",
     "modern-normalize": "^3.0.1",
-    "publint": "^0.3.2",
-    "sass": "^1.83.4",
+    "publint": "^0.3.4",
+    "sass": "^1.84.0",
     "storybook": "^8.5.3",
-    "svelte": "^5.19.6",
+    "svelte": "^5.19.9",
     "svelte-check": "^4.1.4",
     "typescript": "^5.7.3",
-    "vite": "^6.0.11",
-    "vite-node": "^3.0.4"
+    "vite": "^6.1.0",
+    "vite-node": "^3.0.5"
   },
   "peerDependencies": {
     "svelte": ">=5"
