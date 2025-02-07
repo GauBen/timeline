@@ -1,10 +1,16 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
+  import {
+    autoPlacement,
+    autoUpdate,
+    computePosition,
+    offset,
+    shift,
+  } from "@floating-ui/dom";
   import { Temporal } from "@js-temporal/polyfill";
   import type { Follow, Tag, User } from "@prisma/client";
   import { reportValidity } from "formgator/sveltekit";
-  import { untrack } from "svelte";
   import { Button, Card, Input, Select } from "uistiti";
 
   let {
@@ -26,9 +32,10 @@
   } = $props();
 
   let mousedown = $state(false);
+  let animate = $state(false);
   let x = $state(0);
   let y = $state(0);
-  let dialog = $state<HTMLDialogElement>();
+  let dialog: HTMLDialogElement;
 
   const moveDialog = (
     { movementX, movementY }: { movementX: number; movementY: number },
@@ -46,17 +53,32 @@
     else y += movementY;
   };
 
+  /**
+   * Keep track of the event in creation date, so that, if it changes, animate
+   * the dialog movement.
+   */
+  let previous = eventInCreation;
+
   $effect(() => {
-    const target = getEventInCreationElement?.()?.getBoundingClientRect();
+    const target = getEventInCreationElement?.();
     if (!target) return;
-    const source = dialog!.getBoundingClientRect();
-    untrack(() => {
-      // TODO: use floating-ui to position the dialog
-      const movementX = target.x - source.x - source.width - 8;
-      const movementY =
-        target.y - source.y - source.height / 2 + target.height / 2;
-      moveDialog({ movementX, movementY }, source);
-    });
+
+    if (previous !== eventInCreation) animate = true;
+    previous = eventInCreation;
+
+    return autoUpdate(target, dialog, () =>
+      computePosition(target, dialog, {
+        placement: "bottom",
+        middleware: [
+          offset(8),
+          autoPlacement(),
+          shift({ padding: 8, crossAxis: true }),
+        ],
+      }).then((position) => {
+        x = position.x;
+        y = position.y;
+      }),
+    );
   });
 
   let pub = $state("on");
@@ -75,8 +97,10 @@
 
 <dialog
   open
-  style:transform="translate({x}px, {y}px)"
-  style:transition={mousedown ? "none" : undefined}
+  style:top="{y}px"
+  style:left="{x}px"
+  style:transition={animate ? "top 0.2s, left 0.2s" : null}
+  ontransitionend={() => (animate = false)}
   bind:this={dialog}
 >
   <Card
@@ -192,7 +216,7 @@
     border: 0;
     background: none;
     max-width: 100%;
-    transition: transform 0.2s;
+    margin: 0;
   }
 
   .label {
