@@ -5,7 +5,7 @@ import type { Prisma } from "@prisma/client";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
-import * as journal from "../../journal/+page.server.js";
+import * as journal from "../../_/journal/+page.server.js";
 
 export const load = loadgate(
   {

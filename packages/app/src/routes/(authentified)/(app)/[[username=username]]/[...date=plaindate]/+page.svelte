@@ -192,7 +192,7 @@
       <option value="year">Year</option>
     </Select>
 
-    <a href="/settings">{me.displayName}</a>
+    <a href="/_">{me.displayName}</a>
   {/snippet}
 
   <Component {...componentProps} bind:this={component} />

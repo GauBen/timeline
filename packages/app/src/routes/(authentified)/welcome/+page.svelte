@@ -65,7 +65,10 @@
     <h2>{m.direct_legal_giraffe_empower()}</h2>
     <p>
       <label class="label">
-        <span><Translate /> {m.cuddly_weird_reindeer_express()}</span>
+        <span>
+          <Translate aria-hidden />
+          {m.cuddly_weird_reindeer_express()}
+        </span>
         <Select
           required
           name="locale"
@@ -105,7 +108,7 @@
               type="text"
               maxlength={20}
               name="username"
-              style="width: 100%"
+              style="flex: 1"
               bind:value={username}
               pattern={"[a-zA-Z][a-zA-Z0-9_]{2,19}"}
             />

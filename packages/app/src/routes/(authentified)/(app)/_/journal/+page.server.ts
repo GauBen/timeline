@@ -33,7 +33,7 @@ const markdownProcessor = unified()
         file.data.tags.add(tag);
         return {
           type: "link",
-          url: `/journal?tag=${tag}`,
+          url: `/_/journal?tag=${tag}`,
           children: [{ type: "text", value: match }],
         };
       },

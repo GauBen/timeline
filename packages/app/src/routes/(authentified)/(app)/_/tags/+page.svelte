@@ -5,44 +5,40 @@
   const { data } = $props();
 </script>
 
-<main style="max-width: 40rem; margin: 0 auto; padding: 1rem" class="_stack-4">
-  <h1 style="font-size: 4em">Tags</h1>
+<ul>
+  {#each data.tags as tag}
+    <li style:background-color="#{tag.color}">{tag.name}</li>
+  {/each}
+</ul>
 
-  <ul>
-    {#each data.tags as tag}
-      <li style:background-color="#{tag.color}">{tag.name}</li>
-    {/each}
-  </ul>
-
-  <form method="POST" use:enhance>
-    <Card class="_stack-4">
-      {#snippet header()}
-        New tag
-      {/snippet}
-      <p>
-        <label class="label">
-          <span>Tag name</span>
-          <Input
-            type="text"
-            name="name"
-            required
-            maxlength={64}
-            style="flex: 1"
-          />
-        </label>
-      </p>
-      <p>
-        <label class="label">
-          <span>Tag color</span>
-          <Input type="color" name="color" value="#1199AA" />
-        </label>
-      </p>
-      <p>
-        <Button type="submit" color="success">New tag</Button>
-      </p>
-    </Card>
-  </form>
-</main>
+<form method="POST" use:enhance>
+  <Card class="_stack-4">
+    {#snippet header()}
+      New tag
+    {/snippet}
+    <p>
+      <label class="label">
+        <span>Tag name</span>
+        <Input
+          type="text"
+          name="name"
+          required
+          maxlength={64}
+          style="flex: 1"
+        />
+      </label>
+    </p>
+    <p>
+      <label class="label">
+        <span>Tag color</span>
+        <Input type="color" name="color" value="#1199AA" />
+      </label>
+    </p>
+    <p>
+      <Button type="submit" color="success">New tag</Button>
+    </p>
+  </Card>
+</form>
 
 <style lang="scss">
   ul {
