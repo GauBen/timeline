@@ -36,6 +36,8 @@
 
   const Component = $derived({ day: Week, month: Month, year: Year }[view]);
   let component = $state<Week | Month | Year>();
+  const getEventInCreationElement = () =>
+    component?.getEventInCreationElement();
 
   /** Opens or closes the event creation dialog at a given datetime. */
   const toggleEventCreation = async (
@@ -133,7 +135,7 @@
     {eventInCreation}
     {toggleEventCreation}
     timezone={me.timezone}
-    getEventInCreationElement={component?.getEventInCreationElement}
+    {getEventInCreationElement}
   />
 {:else if page.url.searchParams.has("/journal")}
   {@const date = page.url.searchParams.get("/journal")!}
@@ -179,7 +181,7 @@
       onchange={({ currentTarget }) =>
         goto(
           paths.resolveRoute({
-            date: start
+            date: (eventInCreation ?? start)
               .toString()
               .slice(0, { day: 10, month: 7, year: 4 }[currentTarget.value]),
           }),

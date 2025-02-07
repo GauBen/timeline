@@ -27,7 +27,7 @@
     toggleEventCreation: (
       datetime?: Temporal.PlainDateTime | undefined,
     ) => Promise<void>;
-    getEventInCreationElement?: () => HTMLElement | undefined;
+    getEventInCreationElement: () => HTMLElement | undefined;
     eventInCreation: Temporal.PlainDateTime;
   } = $props();
 
@@ -60,7 +60,7 @@
   let previous = eventInCreation;
 
   $effect(() => {
-    const target = getEventInCreationElement?.();
+    const target = getEventInCreationElement();
     if (!target) return;
 
     if (previous !== eventInCreation) animate = true;
