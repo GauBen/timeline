@@ -45,5 +45,5 @@ export const GET = async ({ url, cookies }) => {
     expires: session.expiresAt,
   });
 
-  redirect(307, `/`);
+  redirect(307, "/");
 };
