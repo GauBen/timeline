@@ -3,15 +3,13 @@
   import CaretLeft from "~icons/ph/caret-left";
 
   const leaf = $derived(page.url.pathname.split("/").at(2) ?? "settings");
-
-  const title = $derived(
-    {
-      settings: "Settings",
-      habits: "Habit tracker",
-      journal: "Journal",
-      tags: "Tags",
-    }[leaf],
-  );
+  const leaves: Record<string, string> = {
+    settings: "Settings",
+    habits: "Habit tracker",
+    journal: "Journal",
+    tags: "Tags",
+    google: "Google calendars",
+  };
 
   const { children } = $props();
 </script>
@@ -22,20 +20,16 @@
 >
   <nav>
     <a href="/" class="_row-1"><CaretLeft aria-hidden /> Home</a>
-    <a href="/_" aria-current={leaf === "settings" ? "page" : undefined}
-      >Settings</a
-    >
-    <a href="/_/habits" aria-current={leaf === "habits" ? "page" : undefined}
-      >Habit tracker</a
-    >
-    <a href="/_/journal" aria-current={leaf === "journal" ? "page" : undefined}
-      >Journal</a
-    >
-    <a href="/_/tags" aria-current={leaf === "tags" ? "page" : undefined}
-      >Tags</a
-    >
+    {#each Object.entries(leaves) as [key, title]}
+      <a
+        href={key === "settings" ? "/_" : `/_/${key}`}
+        aria-current={key === leaf ? "page" : undefined}
+      >
+        {title}
+      </a>
+    {/each}
   </nav>
-  <h1 style="font-size: 4em">{title}</h1>
+  <h1 style="font-size: 4em">{leaves[leaf]}</h1>
 
   {@render children()}
 </main>

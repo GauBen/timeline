@@ -53,6 +53,9 @@
     else y += movementY;
   };
 
+  /** Disable the auto placement when the user moves the dialog manually. */
+  let disableAutoPlacement = $state(false);
+
   /**
    * Keep track of the event in creation date, so that, if it changes, animate
    * the dialog movement.
@@ -60,6 +63,8 @@
   let previous = eventInCreation;
 
   $effect(() => {
+    if (disableAutoPlacement) return;
+
     const target = getEventInCreationElement();
     if (!target) return;
 
@@ -85,9 +90,7 @@
 </script>
 
 <svelte:document
-  onmouseup={() => {
-    mousedown = false;
-  }}
+  onmouseup={() => (mousedown = false)}
   onmousemove={(event) => {
     if (mousedown && dialog) {
       moveDialog(event, dialog.getBoundingClientRect());
@@ -106,7 +109,10 @@
   <Card
     headerProps={{
       style: "cursor: move; user-select: none",
-      onmousedown: () => (mousedown = true),
+      onmousedown: () => {
+        mousedown = true;
+        disableAutoPlacement = true;
+      },
     }}
   >
     {#snippet header()}

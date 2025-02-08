@@ -1,9 +1,13 @@
 import { prisma } from "$lib/server/prisma.js";
 import type { Prisma } from "@prisma/client";
+import { error } from "@sveltejs/kit";
 import { google } from "googleapis";
 
 export const load = async ({ parent, url }) => {
   const { session } = await parent();
+
+  if (!session.tokens) error(401, "Account not authenticated with Google");
+
   const auth = new google.auth.OAuth2({ credentials: session.tokens as never });
 
   auth.on("tokens", async (tokens) => {
