@@ -30,6 +30,7 @@ export const load = async ({ parent, url }) => {
       timeMin: new Date().toISOString(),
       showDeleted: false,
       singleEvents: true,
+      orderBy: "startTime",
     });
     return {
       calendars: calendars.items ?? [],
