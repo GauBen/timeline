@@ -55,6 +55,8 @@ model User {
   tags         Tag[]
   viewableTags Tag[]           @relation("viewers")
 
+  googleCalendarSyncs GoogleCalendarSync[]
+
   @@map("users")
 }
 
@@ -102,6 +104,8 @@ model Tag {
   public  Boolean @default(true)
   viewers User[]  @relation("viewers")
   events  Event[]
+
+  googleCalendarSyncs GoogleCalendarSync[]
 
   @@map("tags")
 }
@@ -181,4 +185,25 @@ model JournalTag {
 
   @@id([authorId, tag, date])
   @@map("journal_tags")
+}
+
+enum SyncDirection {
+  Both
+  Pull
+  Push
+}
+
+model GoogleCalendarSync {
+  id               BigInt        @id @default(autoincrement())
+  userId           BigInt        @map("user_id")
+  tagId            BigInt        @map("tag_id")
+  googleCalendarId String        @map("calendar_id")
+  direction        SyncDirection
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, googleCalendarId])
+  @@index([tagId])
+  @@map("google_calendar_syncs")
 }
