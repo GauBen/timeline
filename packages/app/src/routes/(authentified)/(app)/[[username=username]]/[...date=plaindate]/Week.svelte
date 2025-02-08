@@ -8,16 +8,10 @@
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
   import Day from "./Day.svelte";
-  import type Page from "./+page.svelte";
-  import type { ComponentProps } from "svelte";
+  import type { ViewProps } from "./+page.svelte";
 
-  let {
-    start,
-    events,
-    timezone,
-    eventInCreation,
-    onevent,
-  }: ComponentProps<typeof Page>["_"] = $props();
+  let { start, events, timezone, eventInCreation, onevent }: ViewProps =
+    $props();
   const today = $derived(Temporal.Now.plainDateISO(timezone));
   const now = $derived(Temporal.Now.zonedDateTimeISO(timezone));
 

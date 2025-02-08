@@ -23,10 +23,10 @@ export const load = loadgate(
 
     const view =
       !matches || matches.groups?.day
-        ? "day"
+        ? ("Week" as const)
         : matches.groups?.month
-          ? "month"
-          : "year";
+          ? ("Month" as const)
+          : ("Year" as const);
 
     if (params.date && !matches) error(400, "Invalid date");
 

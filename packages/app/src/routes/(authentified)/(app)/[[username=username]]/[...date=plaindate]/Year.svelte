@@ -1,14 +1,13 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { ComponentProps } from "svelte";
-  import Page from "./+page.svelte";
+  import type { ViewProps } from "./+page.svelte";
 
   const {
     start: firstDayOfYear,
     events,
     eventInCreation,
-  }: ComponentProps<typeof Page>["_"] = $props();
+  }: ViewProps = $props();
 
   const year = $derived(firstDayOfYear.year);
   const start = $derived(
@@ -58,9 +57,6 @@
                 .total({ unit: "week", relativeTo: date })}
             >
               {date.toLocaleString(i18n.locale, { month: "short" })}
-              {#if eventInCreation?.toPlainDate().equals(date)}
-                <span bind:this={eventInCreationElement}></span>
-              {/if}
             </td>
           {/if}
         {:else}
@@ -84,6 +80,9 @@
                   : "#cce"
                 : `rgb(30% 80% 40% / ${count / max})`}
           >
+            {#if eventInCreation?.toPlainDate().equals(date)}
+              <div bind:this={eventInCreationElement}></div>
+            {/if}
             <a href={paths.resolveRoute({ date: date.toString() })}>
               {#if count !== undefined}
                 {count}

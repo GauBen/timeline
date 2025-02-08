@@ -1,16 +1,10 @@
 <script lang="ts">
   import paths from "$lib/paths.svelte.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-  import type { ComponentProps } from "svelte";
-  import Page from "./+page.svelte";
+  import type { ViewProps } from "./+page.svelte";
 
-  let {
-    events,
-    start,
-    timezone,
-    eventInCreation,
-    onevent,
-  }: ComponentProps<typeof Page>["_"] = $props();
+  let { events, start, timezone, eventInCreation, onevent }: ViewProps =
+    $props();
 
   const paddingDaysStart = $derived(start.dayOfWeek - 1);
   const numberOfWeeks = $derived(

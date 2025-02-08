@@ -1,4 +1,4 @@
-<script lang="ts">
+<script module lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
@@ -10,34 +10,13 @@
   import Calendar from "~icons/ph/calendar-dot-duotone";
   import Back from "~icons/ph/caret-left";
   import Globe from "~icons/ph/globe-duotone";
-  import type { PageProps } from "./$types.js";
+  import type { PageData } from "./$types.js";
   import Dialog from "./Dialog.svelte";
   import EventActions from "./EventActions.svelte";
   import Layout from "./Layout.svelte";
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
-
-  const { data }: PageProps & { _: typeof componentProps } = $props();
-  const {
-    event,
-    events,
-    eventInCreation,
-    followed,
-    followings,
-    journal,
-    latest,
-    me,
-    start,
-    tags,
-    user,
-    view,
-  } = $derived(data);
-
-  const Component = $derived({ day: Week, month: Month, year: Year }[view]);
-  let component = $state<Week | Month | Year>();
-  const getEventInCreationElement = () =>
-    component?.getEventInCreationElement();
 
   /** Opens or closes the event creation dialog at a given datetime. */
   const toggleEventCreation = async (
@@ -56,7 +35,38 @@
     );
   };
 
-  const componentProps = $derived({
+  export interface ViewProps {
+    start: PageData["start"];
+    timezone: PageData["me"]["timezone"];
+    events: PageData["events"];
+    eventInCreation: PageData["eventInCreation"];
+    onevent: typeof toggleEventCreation;
+  }
+</script>
+
+<script lang="ts">
+  const { data } = $props();
+  const {
+    event,
+    events,
+    eventInCreation,
+    followed,
+    followings,
+    journal,
+    latest,
+    me,
+    start,
+    tags,
+    user,
+    view,
+  } = $derived(data);
+
+  const View = $derived({ Week, Month, Year }[view]);
+  let component = $state<Week | Month | Year>();
+  const getEventInCreationElement = () =>
+    component?.getEventInCreationElement();
+
+  const viewProps: ViewProps = $derived({
     start,
     events,
     timezone: me.timezone,
@@ -183,21 +193,21 @@
           paths.resolveRoute({
             date: (eventInCreation ?? start)
               .toString()
-              .slice(0, { day: 10, month: 7, year: 4 }[currentTarget.value]),
+              .slice(0, { Week: 10, Month: 7, Year: 4 }[currentTarget.value]),
           }),
           { keepFocus: true },
         )}
       value={view}
     >
-      <option value="day">Day</option>
-      <option value="month">Month</option>
-      <option value="year">Year</option>
+      <option value="Week">Week</option>
+      <option value="Month">Month</option>
+      <option value="Year">Year</option>
     </Select>
 
     <a href="/_">{me.displayName}</a>
   {/snippet}
 
-  <Component {...componentProps} bind:this={component} />
+  <View {...viewProps} bind:this={component} />
 </Layout>
 
 <style lang="scss">
