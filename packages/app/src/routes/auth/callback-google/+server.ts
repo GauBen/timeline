@@ -45,15 +45,5 @@ export const GET = async ({ url, cookies }) => {
     expires: session.expiresAt,
   });
 
-  redirect(307, `/`);
-
-  // Prototyping
-  // const auth = new google.auth.OAuth2();
-  // auth.setCredentials(tokens);
-  // auth.on("tokens", (tokens) => {});
-  // const calendar = google.calendar({ version: "v3", auth });
-  // const colors = await calendar.colors.get();
-  // console.log(colors.data);
-  // const calendars = await calendar.calendarList.list();
-  // console.log(calendars.data);
+  redirect(307, "/");
 };
