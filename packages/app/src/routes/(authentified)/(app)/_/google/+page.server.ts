@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { prisma } from "$lib/server/prisma.js";
 import type { Prisma } from "@prisma/client";
 import { error } from "@sveltejs/kit";
@@ -8,7 +9,11 @@ export const load = async ({ parent, url }) => {
 
   if (!session.tokens) error(401, "Account not authenticated with Google");
 
-  const auth = new google.auth.OAuth2({ credentials: session.tokens as never });
+  const auth = new google.auth.OAuth2({
+    clientId: env.GOOGLE_CLIENT_ID,
+    clientSecret: env.GOOGLE_CLIENT_SECRET,
+    credentials: session.tokens as never,
+  });
 
   auth.on("tokens", async (tokens) => {
     console.log("Tokens updated");
