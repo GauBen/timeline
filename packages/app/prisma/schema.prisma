@@ -13,10 +13,11 @@ datasource db {
 
 model GoogleUser {
   // Local id
-  id BigInt @id @default(autoincrement())
+  id    BigInt @id @default(autoincrement())
+  email String @unique @db.VarChar(255)
 
-  email  String @unique @db.VarChar(255)
-  tokens Json
+  accessToken  String? @map("access_token") @db.VarChar(2048)
+  refreshToken String? @map("refresh_token") @db.VarChar(512)
 
   user     User?
   sessions Session[]

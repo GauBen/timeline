@@ -10,6 +10,7 @@ export const load = ({ request }) => {
     ],
 
     // Combination of settings to get a refresh token
+    // https://github.com/googleapis/google-api-nodejs-client/issues/750#issuecomment-368873635
     access_type: "offline",
     prompt: "consent",
   });

@@ -1,8 +1,6 @@
 import { client } from "$lib/server/google.js";
 import { prisma } from "$lib/server/prisma.js";
-import type { Prisma } from "@prisma/client";
-import { redirect } from "@sveltejs/kit";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { jwtDecode } from "jwt-decode";
 import { nanoid } from "nanoid";
 
@@ -28,8 +26,15 @@ export const GET = async ({ url, cookies }) => {
 
   const googleUser = await prisma.googleUser.upsert({
     where: { email: user.email },
-    create: { email: user.email, tokens: tokens as Prisma.InputJsonObject },
-    update: { tokens: tokens as Prisma.InputJsonObject },
+    create: {
+      email: user.email,
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+    },
+    update: {
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+    },
   });
 
   const session = await prisma.session.create({

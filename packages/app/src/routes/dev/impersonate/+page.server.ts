@@ -1,9 +1,8 @@
 import { env } from "$env/dynamic/private";
 import { prisma } from "$lib/server/prisma.js";
 import { error, redirect } from "@sveltejs/kit";
-import { formgate } from "formgator/sveltekit";
 import * as fg from "formgator";
-import { Prisma } from "@prisma/client";
+import { formgate } from "formgator/sveltekit";
 import { nanoid } from "nanoid";
 
 export const load = async () => ({
@@ -38,9 +37,7 @@ export const actions = {
     async ({ email }) => {
       if (!env.DEV_MODE) error(403, "Not allowed in production");
 
-      await prisma.googleUser.create({
-        data: { email, tokens: Prisma.JsonNull },
-      });
+      await prisma.googleUser.create({ data: { email } });
     },
   ),
 };

@@ -1,30 +1,19 @@
-import { env } from "$env/dynamic/private";
+import { createUserClient } from "$lib/server/google.js";
 import { prisma } from "$lib/server/prisma.js";
-import { SyncDirection, type Prisma } from "@prisma/client";
+import { SyncDirection } from "@prisma/client";
 import { error } from "@sveltejs/kit";
+import * as fg from "formgator";
 import { formgate } from "formgator/sveltekit";
 import { google } from "googleapis";
-import * as fg from "formgator";
 import { nanoid } from "nanoid";
 
-export const load = async ({ parent, url }) => {
+export const load = async ({ parent, url, locals }) => {
   const { session } = await parent();
 
-  if (!session.tokens) error(401, "Account not authenticated with Google");
+  if (!locals.session?.refreshToken)
+    error(401, "Account not authenticated with Google");
 
-  const auth = new google.auth.OAuth2({
-    clientId: env.GOOGLE_CLIENT_ID,
-    clientSecret: env.GOOGLE_CLIENT_SECRET,
-    credentials: session.tokens as never,
-  });
-
-  auth.on("tokens", async (tokens) => {
-    console.log("Tokens updated", tokens);
-    await prisma.googleUser.update({
-      where: { id: session.id },
-      data: { tokens: tokens as Prisma.InputJsonObject },
-    });
-  });
+  const auth = createUserClient(session);
 
   const calendar = google.calendar({ version: "v3", auth });
 
@@ -85,11 +74,7 @@ export const actions = {
         create: { userId, googleCalendarId, direction, tagId },
         update: { direction, tagId },
       });
-      const auth = new google.auth.OAuth2({
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-        credentials: locals.session.tokens as never,
-      });
+      const auth = createUserClient(locals.session);
 
       const calendar = google.calendar({ version: "v3", auth });
       const { data: response } = await calendar.events.watch({
