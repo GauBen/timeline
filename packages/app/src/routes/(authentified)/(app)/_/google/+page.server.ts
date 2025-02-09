@@ -77,7 +77,7 @@ export const actions = {
       direction: fg.select(Object.values(SyncDirection), { required: true }),
       tagId: fg.number({ required: true }).transform((id) => BigInt(id)),
     },
-    async ({ googleCalendarId, direction, tagId }, { locals }) => {
+    async ({ googleCalendarId, direction, tagId }, { locals, url }) => {
       if (!locals.session) error(401, "Unauthorized");
       const userId = locals.session.id;
       await prisma.googleCalendarSync.upsert({
@@ -97,7 +97,7 @@ export const actions = {
         requestBody: {
           id: nanoid(),
           type: "webhook",
-          address: "https://webhook.site/7ad06500-08b8-44f8-a18b-8c56bf753960",
+          address: new URL("/api/webhook/google-events-watch", url).toString(),
         },
       });
       console.log(response);

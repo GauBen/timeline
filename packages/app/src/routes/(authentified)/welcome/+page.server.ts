@@ -10,6 +10,7 @@ const reserved = new Set([
   "about",
   "account",
   "admin",
+  "api",
   "article",
   "auth",
   "blog",
