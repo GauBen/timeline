@@ -29,13 +29,13 @@
       >
         <input type="hidden" name="googleCalendarId" value={id} />
         Direction:
-        <Select name="direction" value={sync?.direction ?? "Both"}>
+        <Select name="direction" value={sync?.direction ?? "Both"} required>
           <option value="Both">Both</option>
           <option value="Pull">Pull</option>
           <option value="Push">Push</option>
         </Select>
         to
-        <Select name="tagId" value={sync?.tag?.id}>
+        <Select name="tagId" value={sync?.tag?.id} required>
           {#each data.me.tags as tag}
             <option value={tag.id}>{tag.name}</option>
           {/each}
