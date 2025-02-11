@@ -17,6 +17,6 @@
     "dev": "paraglide-js compile --project ../../project.inlang --outdir ./dist"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.0.0-beta.13"
+    "@inlang/paraglide-js": "^2.0.0-prerelease.0"
   }
 }

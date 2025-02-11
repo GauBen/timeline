@@ -37,7 +37,7 @@
     "messages": "workspace:^",
     "prisma": "^6.3.1",
     "sass": "^1.84.0",
-    "svelte": "^5.19.9",
+    "svelte": "^5.19.10",
     "svelte-check": "^4.1.4",
     "typescript": "^5.7.3",
     "uistiti": "workspace:^",
