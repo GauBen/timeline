@@ -1,6 +1,6 @@
 import { env } from "$env/dynamic/private";
-import type { GoogleUser } from "@prisma/client";
-import { type calendar_v3, google, type Auth, Common } from "googleapis";
+import type { GoogleCalendarSync, GoogleUser } from "@prisma/client";
+import { type Auth, Common, type calendar_v3, google } from "googleapis";
 import { prisma } from "./prisma.js";
 
 export const client = new google.auth.OAuth2(
@@ -29,7 +29,7 @@ export const createUserClient = (user: GoogleUser) => {
   return client;
 };
 
-export const syncCalendar = (
+export const getAllCalendarEvents = (
   auth: Auth.OAuth2Client,
   calendarId: string,
   syncToken: string | null,
@@ -69,4 +69,66 @@ export const syncCalendar = (
   };
 
   return generator(syncToken);
+};
+
+export const syncCalendar = async (
+  auth: Auth.OAuth2Client,
+  syncSettings: GoogleCalendarSync,
+) => {
+  try {
+    const generator = getAllCalendarEvents(
+      auth,
+      syncSettings.googleCalendarId,
+      syncSettings.syncToken,
+    );
+    let result = await generator.next();
+    let count = 0;
+    while (!result.done) {
+      count += result.value.length;
+      const ids = await prisma.event.createManyAndReturn({
+        select: { id: true },
+        data: result.value.map((event) => ({
+          authorId: syncSettings.userId,
+          body: event.summary ?? "",
+          date: event.start?.dateTime ?? `${event.start!.date}T00:00:00.000Z`,
+          duration: 0,
+          startTimezone: event.start?.timeZone ?? "Europe/Paris",
+          createdAt: event.created!,
+          public: true,
+        })),
+      });
+      // TODO: explicit intermediate table
+      await prisma.$executeRaw`
+      INSERT INTO "_EventToTag" ("A", "B")
+      SELECT id, ${syncSettings.tagId}
+      FROM UNNEST(${ids.map(({ id }) => id)}) id
+    `;
+      result = await generator.next();
+    }
+
+    const row = await prisma.googleCalendarSync.update({
+      where: { id: syncSettings.id },
+      data: {
+        syncToken: result.value,
+        lastSyncedAt: new Date(),
+        syncedEvents: count,
+        pullCount: { increment: 1 },
+      },
+    });
+    console.log(row);
+  } catch (error) {
+    console.error(
+      "Failed to sync calendar",
+      syncSettings.googleCalendarId,
+      error,
+    );
+    await prisma.googleCalendarSync.update({
+      where: { id: syncSettings.id },
+      data: {
+        syncError: {
+          message: (error as Error).message,
+        },
+      },
+    });
+  }
 };
