@@ -2,11 +2,24 @@ body {
   line-height: 1.25;
 }
 
-.icon {
-  vertical-align: bottom;
-}
-
 a:link,
 a:visited {
   color: inherit;
+}
+
+.icon {
+  vertical-align: text-bottom;
+}
+
+.i-spin {
+  animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

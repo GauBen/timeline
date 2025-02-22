@@ -62,7 +62,7 @@ const load = async (me: User, user: User | undefined, date: string) => {
     }),
   ]);
 
-  const windows = Object.groupBy(events, (event) =>
+  const windows = Map.groupBy(events, (event) =>
     toTemporalInstant
       .call(event.date)
       .toZonedDateTimeISO(me.timezone)
@@ -70,7 +70,15 @@ const load = async (me: User, user: User | undefined, date: string) => {
       .toString(),
   );
 
-  return { habits, windows };
+  return {
+    habits,
+    windows: Object.fromEntries(
+      Array.from({ length: 7 }, (_, days) => {
+        const key = start.add({ days }).toString();
+        return [key, windows.get(key) ?? []];
+      }),
+    ),
+  };
 };
 
 export const GET = async ({ params, locals }) => {

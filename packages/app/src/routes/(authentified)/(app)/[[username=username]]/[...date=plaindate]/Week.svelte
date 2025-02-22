@@ -7,8 +7,9 @@
   import type { Action } from "svelte/action";
   import CaretLeft from "~icons/ph/caret-left-duotone";
   import CaretRight from "~icons/ph/caret-right-duotone";
-  import Day from "./Day.svelte";
+  import Spinner from "~icons/ph/spinner";
   import type { ViewProps } from "./+page.svelte";
+  import Day from "./Day.svelte";
 
   let { start, events, timezone, eventInCreation, onevent }: ViewProps =
     $props();
@@ -167,6 +168,9 @@
             >
               <CaretLeft />
             </a>
+          {/if}
+          {#if !windows[key]}
+            <Spinner class="icon i-spin" aria-label="Loading" />
           {/if}
           <a
             style="flex: 1; text-decoration: inherit;"

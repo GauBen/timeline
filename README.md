@@ -18,11 +18,12 @@ Here is a simple roadmap of what's to come:
 - [ ] ⏳ Share events with specific people
 - [ ] Event duration
 - [x] Proper timezone support
-- [ ] ⏳ UI consistency
-- [ ] ⏳ [Sync with Google Calendar](https://github.com/GauBen/timeline/pull/2)
+- [ ] ⏳ Sync with Google Calendar
 - [ ] Publish pictures
 - [x] Habit tracker
 - [x] Journaling
+- [ ] UI consistency
+- [ ] UX consistency
 
 ## Development
 
