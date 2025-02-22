@@ -1,4 +1,4 @@
-import { createUserClient } from "$lib/server/google.js";
+import { createUserClient, syncCalendar } from "$lib/server/google.js";
 import { prisma } from "$lib/server/prisma.js";
 import { SyncDirection } from "@prisma/client";
 import { error } from "@sveltejs/kit";
@@ -38,20 +38,22 @@ export const load = async ({ parent, url, locals }) => {
 
   const id = url.searchParams.get("id");
 
-  if (id) {
-    const { data: events } = await calendar.events.list({
-      calendarId: id,
-      timeMin: new Date().toISOString(),
-      showDeleted: false,
-      singleEvents: true,
-      orderBy: "startTime",
-    });
-    return {
-      syncMap,
-      calendars: calendars.items ?? [],
-      events: events.items ?? [],
-    };
-  }
+  // if (id) {
+  //   const events = [];
+
+  //   const generator = syncCalendar(auth, id, "qsdqds", 500);
+  //   let result = await generator.next();
+  //   while (!result.done) {
+  //     events.push(...result.value);
+  //     result = await generator.next();
+  //   }
+
+  //   return {
+  //     syncMap,
+  //     calendars: calendars.items ?? [],
+  //     events,
+  //   };
+  // }
 
   return {
     syncMap,
@@ -77,15 +79,68 @@ export const actions = {
       const auth = createUserClient(locals.session);
 
       const calendar = google.calendar({ version: "v3", auth });
-      const { data: response } = await calendar.events.watch({
-        calendarId: googleCalendarId,
-        requestBody: {
-          id: nanoid(),
-          type: "webhook",
-          address: new URL("/api/webhook/google-events-watch", url).toString(),
-        },
-      });
-      console.log(response);
+
+      if (url.protocol === "https:") {
+        await calendar.events.watch({
+          calendarId: googleCalendarId,
+          requestBody: {
+            id: nanoid(),
+            type: "webhook",
+            address: new URL(
+              "/api/webhook/google-events-watch",
+              url,
+            ).toString(),
+          },
+        });
+      } else {
+        console.log(
+          "Skipping webhook registration because non-https URL will be rejected by Google",
+        );
+      }
+
+      try {
+        const generator = syncCalendar(auth, googleCalendarId, null);
+        let result = await generator.next();
+        let count = 0;
+        while (!result.done) {
+          count += result.value.length;
+          await prisma.event.createMany({
+            data: result.value.map((event) => ({
+              authorId: userId,
+              body: event.summary ?? "",
+              date:
+                event.start?.dateTime ?? `${event.start!.date}T00:00:00.000Z`,
+              duration: 0,
+              startTimezone: event.start?.timeZone ?? "Europe/Paris",
+              createdAt: event.created!,
+              public: true,
+            })),
+          });
+
+          result = await generator.next();
+        }
+
+        const row = await prisma.googleCalendarSync.update({
+          where: { userId_googleCalendarId: { userId, googleCalendarId } },
+          data: {
+            syncToken: result.value,
+            lastSyncedAt: new Date(),
+            syncedEvents: count,
+            pullCount: { increment: 1 },
+          },
+        });
+        console.log(row);
+      } catch (error) {
+        console.error("Failed to sync calendar", googleCalendarId, error);
+        await prisma.googleCalendarSync.update({
+          where: { userId_googleCalendarId: { userId, googleCalendarId } },
+          data: {
+            syncError: {
+              message: (error as Error).message,
+            },
+          },
+        });
+      }
     },
   ),
 

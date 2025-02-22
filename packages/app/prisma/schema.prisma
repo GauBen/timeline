@@ -201,6 +201,13 @@ model GoogleCalendarSync {
   googleCalendarId String        @map("calendar_id")
   direction        SyncDirection
 
+  lastSyncedAt DateTime? @map("last_synced_at") @db.Timestamptz(6)
+  syncToken    String?   @map("sync_token") @db.VarChar(128)
+  pullCount    Int       @default(0) @map("pull_count")
+  pushCount    Int       @default(0) @map("push_count")
+  syncedEvents Int       @default(0) @map("synced_events")
+  syncError    Json      @default("null") @map("sync_errors")
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 

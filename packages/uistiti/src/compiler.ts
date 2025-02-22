@@ -18,17 +18,17 @@ for (const [name, color] of Object.entries(colors)) {
 
 output += "}\n\n";
 
-output += `/* Colors */\n`;
+output += "/* Colors */\n";
 
 for (const [i, name] of Object.keys(colors).entries()) {
-  output += (i === 0 ? ":root, " : "") + `[data-color=${name}] {\n`;
+  output += `${i === 0 ? ":root, " : ""}[data-color=${name}] {\n`;
   for (const j of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
     output += `  --ui-color-${j}: var(--ui-${name}-${j});\n`;
   }
   output += "}\n\n";
 }
 
-output += `/* Variants */\n`;
+output += "/* Variants */\n";
 
 for (const [name, variant] of Object.entries(variants)) {
   output += `[data-variant=${name}] {\n`;

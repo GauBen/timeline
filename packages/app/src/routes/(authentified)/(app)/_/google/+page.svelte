@@ -1,15 +1,28 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { Button, Select } from "uistiti";
+  import { Button, Card, Select } from "uistiti";
 
   const { data } = $props();
 </script>
 
+<Card color="danger" variant="solid">
+  <p>Don't use this feature yet, it'll make your data public.</p>
+</Card>
+
+{#if data.me.tags.length === 0}
+  <Card color="danger" variant="solid">
+    <p>
+      You need to create a tag first.
+      <a href="tags">Create a tag</a>
+    </p>
+  </Card>
+{/if}
+
 <ul>
   {#each data.calendars as { id, summary, description }}
-    {@const sync = data.syncMap.get(id)}
+    {@const sync = data.syncMap.get(id!)}
     <li>
-      <a href="?id={encodeURIComponent(id)}">
+      <a href="?id={encodeURIComponent(id!)}">
         <strong>{summary}</strong>
         {description}
       </a>
