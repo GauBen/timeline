@@ -59,11 +59,13 @@ export const actions = {
   createEvent: formgate(
     {
       body: fg.text({ required: true, minlength: 1, maxlength: 1024 }),
-      date: fg
+      start: fg
         .datetimeLocal({ required: true })
         .transform(Temporal.PlainDateTime.from),
       startTimezone: fg.select(timezones, { required: true }),
-      public: fg.checkbox(),
+      shared: fg.select(["public", "private", "shared"] as const, {
+        required: true,
+      }),
       shared_with: fg.select(() => true, { multiple: true }),
       tags: fg
         .select(() => true, { multiple: true })
@@ -76,7 +78,7 @@ export const actions = {
         where: { id: { in: data.tags }, ownerId: locals.session.id },
       });
 
-      const date = data.date
+      const start = data.start
         .toZonedDateTime(data.startTimezone)
         .toInstant()
         .toString();
@@ -84,21 +86,22 @@ export const actions = {
       await prisma.event.create({
         data: {
           body: data.body,
-          date,
+          start,
           startTimezone: data.startTimezone,
-          public: data.public,
+          end: start,
+          public: data.shared === "public",
           authorId: locals.session.id,
-          duration: 0,
-          users: data.public
-            ? {}
-            : {
-                createMany: {
-                  data: data.shared_with.map((userId) => ({
-                    userId: BigInt(userId),
-                    shared: true,
-                  })),
-                },
-              },
+          users:
+            data.shared === "shared"
+              ? {
+                  createMany: {
+                    data: data.shared_with.map((userId) => ({
+                      userId: BigInt(userId),
+                      shared: true,
+                    })),
+                  },
+                }
+              : {},
           tags: {
             connect: tags.map((tag) => ({ id: tag.id })),
           },

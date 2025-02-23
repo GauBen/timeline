@@ -86,7 +86,7 @@
     );
   });
 
-  let pub = $state("on");
+  let shared = $state("public");
 </script>
 
 <svelte:document
@@ -147,7 +147,7 @@
           <span>Date</span>
           <Input
             type="datetime-local"
-            name="date"
+            name="start"
             required
             style="width: 100%"
             value={eventInCreation.toString().slice(0, 16)}
@@ -171,16 +171,38 @@
       <p class="label">
         <span>Visibility</span>
         <span class="_stack-2" style="flex: 1">
+          <span
+            style="display: grid; gap: 0.5em; grid-template-columns: 1fr 1fr"
+          >
+            <label class="_row-2">
+              <input
+                type="radio"
+                name="shared"
+                value="public"
+                bind:group={shared}
+              /> Public
+            </label>
+            <label class="_row-2">
+              <input
+                type="radio"
+                name="shared"
+                value="private"
+                bind:group={shared}
+              /> Private
+            </label>
+          </span>
           <label class="_row-2">
-            <input type="radio" name="public" value="on" bind:group={pub} /> Public
-          </label>
-          <label class="_row-2">
-            <input type="radio" name="public" bind:group={pub} />
+            <input
+              type="radio"
+              name="shared"
+              value="shared"
+              bind:group={shared}
+            />
             Only with specific people
           </label>
           <Select
             multiple
-            disabled={Boolean(pub)}
+            disabled={shared !== "shared"}
             name="shared_with"
             style="width: 100%"
           >

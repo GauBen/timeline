@@ -52,7 +52,7 @@
             <p>{event.body}</p>
             <footer>
               <Calendar />
-              {i18n.format(event.date)}
+              {i18n.format(event.start)}
               <form method="POST" use:enhance>
                 <EventActions {event} {me} />
               </form>

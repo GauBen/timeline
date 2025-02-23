@@ -48,10 +48,10 @@ const load = async (me: User, user: User | undefined, date: string) => {
     prisma.timelineEvent.findMany({
       where: {
         ...where,
-        date: { gte, lt },
+        start: { gte, lt },
       },
       include: { author: true, event: { include: { tags: true } } },
-      orderBy: { date: "asc" },
+      orderBy: { start: "asc" },
       take: 100,
     }),
     prisma.habit.findMany({
@@ -64,7 +64,7 @@ const load = async (me: User, user: User | undefined, date: string) => {
 
   const windows = Map.groupBy(events, (event) =>
     toTemporalInstant
-      .call(event.date)
+      .call(event.start)
       .toZonedDateTimeISO(me.timezone)
       .toPlainDate()
       .toString(),

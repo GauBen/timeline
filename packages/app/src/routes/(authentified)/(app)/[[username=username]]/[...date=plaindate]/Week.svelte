@@ -64,7 +64,7 @@
       const includesToday = keys.includes(today.toString());
       const [first] = keys
         .flatMap((key) => windows[key] ?? [])
-        .map(({ date }) => fixDate(date))
+        .map(({ start }) => fixDate(start))
         // If the current day is displayed, target the first upcoming event,
         // otherwise target the first event
         .filter(

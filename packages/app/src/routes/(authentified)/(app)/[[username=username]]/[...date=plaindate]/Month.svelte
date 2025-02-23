@@ -68,9 +68,9 @@
             {@const index =
               eventInCreation &&
               events.filter(
-                ({ date }) =>
+                ({ start }) =>
                   Temporal.PlainDateTime.compare(
-                    toTemporalInstant.call(date).toZonedDateTimeISO(timezone),
+                    toTemporalInstant.call(start).toZonedDateTimeISO(timezone),
                     eventInCreation!,
                   ) < 0,
               ).length}

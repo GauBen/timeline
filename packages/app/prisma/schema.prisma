@@ -74,15 +74,24 @@ model Follow {
 }
 
 model Event {
-  id            BigInt   @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  date          DateTime @db.Timestamptz(6)
-  startTimezone String   @map("start_timezone") @db.VarChar(32)
-  // TODO: replace duration with end, add timezone
-  duration      Int      @db.Integer // Prisma does not support `interval` type yet
-  body          String   @db.VarChar(1024)
-  public        Boolean  @default(true)
-  authorId      BigInt   @map("author_id")
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  /// Event start date and time
+  start DateTime @db.Timestamptz(6)
+
+  /// Set to null if relative to the user
+  startTimezone String? @map("start_timezone") @db.VarChar(32)
+
+  /// Event end date and time
+  end DateTime @db.Timestamptz(6)
+
+  /// Set to null if relative to the user
+  endTimezone String? @map("end_timezone") @db.VarChar(32)
+
+  body     String  @db.VarChar(1024)
+  public   Boolean @default(true)
+  authorId BigInt  @map("author_id")
 
   author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   users          EventToUser[]
@@ -90,7 +99,8 @@ model Event {
   timelineEvents TimelineEvent[]
 
   @@index([authorId])
-  @@index([date])
+  @@index([start])
+  @@index([end])
   @@map("events")
 }
 
@@ -125,13 +135,15 @@ model EventToUser {
 }
 
 view TimelineEvent {
-  id        BigInt   @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  date      DateTime @db.Timestamptz(6)
-  duration  Int      @db.Integer
-  body      String   @db.VarChar(1024)
-  public    Boolean  @default(true)
-  authorId  BigInt   @map("author_id")
+  id            BigInt   @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  start         DateTime @db.Timestamptz(6)
+  startTimezone String?  @map("start_timezone") @db.VarChar(32)
+  end           DateTime @db.Timestamptz(6)
+  endTimezone   String?  @map("end_timezone") @db.VarChar(32)
+  body          String   @db.VarChar(1024)
+  public        Boolean  @default(true)
+  authorId      BigInt   @map("author_id")
 
   author User  @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   event  Event @relation(fields: [id], references: [id])

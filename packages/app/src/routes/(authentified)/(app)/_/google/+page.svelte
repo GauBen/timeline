@@ -66,23 +66,3 @@
     </li>
   {/each}
 </ul>
-
-{#if data.events}
-  <h2>Next events ({data.events.length})</h2>
-  <ul>
-    {#each data.events as { summary, description, location, start, htmlLink }}
-      <li>
-        <p>
-          <a href={htmlLink}>
-            <strong>{summary}</strong>
-            {start?.dateTime ?? start?.date}
-          </a>
-        </p>
-        <p>
-          <em>{location}</em><br />
-          {description}
-        </p>
-      </li>
-    {/each}
-  </ul>
-{/if}

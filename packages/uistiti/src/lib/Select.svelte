@@ -11,6 +11,7 @@
   }: CommonProps & SvelteHTMLElements["select"] = $props();
 
   // https://github.com/sveltejs/svelte/issues/14815
+  if (props.multiple) value ??= [];
   $effect(() => {
     if (props.multiple) value ??= [];
   });

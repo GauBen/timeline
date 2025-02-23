@@ -90,9 +90,10 @@ export const syncCalendar = async (
         data: result.value.map((event) => ({
           authorId: syncSettings.userId,
           body: event.summary ?? "",
-          date: event.start?.dateTime ?? `${event.start!.date}T00:00:00.000Z`,
-          duration: 0,
+          start: event.start?.dateTime ?? `${event.start!.date}T00:00:00.000Z`,
           startTimezone: event.start?.timeZone ?? "Europe/Paris",
+          end: event.end?.dateTime ?? `${event.end!.date}T00:00:00.000Z`,
+          endTimezone: event.end?.timeZone ?? "Europe/Paris",
           createdAt: event.created!,
           public: true,
         })),
