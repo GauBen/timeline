@@ -4,7 +4,7 @@ import { SyncDirection } from "@prisma/client";
 import { error } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate } from "formgator/sveltekit";
-import { google } from "googleapis";
+import { calendar as googleCalendar } from "googleapis/build/src/apis/calendar/index.js";
 
 export const load = async ({ parent, locals }) => {
   const { session } = await parent();
@@ -14,7 +14,7 @@ export const load = async ({ parent, locals }) => {
 
   const auth = createUserClient(session);
 
-  const calendar = google.calendar({ version: "v3", auth });
+  const calendar = googleCalendar({ version: "v3", auth });
 
   const { data: calendars } = await calendar.calendarList.list();
   const sync = await prisma.googleCalendarSync.findMany({
@@ -58,7 +58,7 @@ export const actions = {
       });
       const auth = createUserClient(locals.session);
 
-      const calendar = google.calendar({ version: "v3", auth });
+      const calendar = googleCalendar({ version: "v3", auth });
 
       if (url.protocol === "https:") {
         await calendar.events.watch({

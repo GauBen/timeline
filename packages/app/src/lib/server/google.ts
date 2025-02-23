@@ -1,15 +1,20 @@
 import { env } from "$env/dynamic/private";
 import type { GoogleCalendarSync, GoogleUser } from "@prisma/client";
-import { type Auth, Common, type calendar_v3, google } from "googleapis";
+import { OAuth2Client } from "google-auth-library";
+import { GaxiosError } from "googleapis-common";
+import {
+  type calendar_v3,
+  calendar as googleCalendar,
+} from "googleapis/build/src/apis/calendar/index.js";
 import { prisma } from "./prisma.js";
 
-export const client = new google.auth.OAuth2(
+export const client = new OAuth2Client(
   env.GOOGLE_CLIENT_ID,
   env.GOOGLE_CLIENT_SECRET,
 );
 
 export const createUserClient = (user: GoogleUser) => {
-  const client = new google.auth.OAuth2(
+  const client = new OAuth2Client(
     env.GOOGLE_CLIENT_ID,
     env.GOOGLE_CLIENT_SECRET,
   );
@@ -30,12 +35,12 @@ export const createUserClient = (user: GoogleUser) => {
 };
 
 export const getAllCalendarEvents = (
-  auth: Auth.OAuth2Client,
+  auth: OAuth2Client,
   calendarId: string,
   syncToken: string | null,
   maxResults = 2500,
 ) => {
-  const calendar = google.calendar({ version: "v3", auth });
+  const calendar = googleCalendar({ version: "v3", auth });
 
   // pageToken needs to be outside the generator to please TypeScript
   let pageToken: string | undefined = undefined;
@@ -60,7 +65,7 @@ export const getAllCalendarEvents = (
       }
     } catch (error) {
       // In case of 410 error, restart the sync from scratch
-      if (error instanceof Common.GaxiosError && error.status === 410) {
+      if (error instanceof GaxiosError && error.status === 410) {
         console.log("Full sync required for calendar", calendarId);
         return yield* generator(null);
       }
@@ -72,7 +77,7 @@ export const getAllCalendarEvents = (
 };
 
 export const syncCalendar = async (
-  auth: Auth.OAuth2Client,
+  auth: OAuth2Client,
   syncSettings: GoogleCalendarSync,
 ) => {
   try {
