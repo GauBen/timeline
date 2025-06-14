@@ -155,7 +155,7 @@
 
 <div class="wrapper">
   <header bind:this={calendarHeader}>
-    {#each keys as key, i}
+    {#each keys as key, i (key)}
       {@const day = Temporal.PlainDate.from(key)}
       <div class="column">
         <h2 class="_row-2">
@@ -191,7 +191,7 @@
         </h2>
         {#if processedHabits}
           <div class="_row-2">
-            {#each processedHabits as { id, name, days }}
+            {#each processedHabits as { id, name, days } (id)}
               <form method="post" action="?/markHabit" use:enhance>
                 <input type="hidden" name="habitId" value={id} />
                 <input type="hidden" name="date" value={key} />
@@ -219,7 +219,7 @@
       eventInCreation,
     }}
   >
-    {#each keys as key}
+    {#each keys as key (key)}
       {@const day = Temporal.PlainDate.from(key)}
       <Day
         {day}

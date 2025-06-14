@@ -17,7 +17,7 @@
     <label>
       User:
       <Select name="id">
-        {#each data.users as { id, email, user }}
+        {#each data.users as { id, email, user } (id)}
           <option value={id}>
             {email} ({user?.username ?? "no account"})
           </option>

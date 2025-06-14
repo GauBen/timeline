@@ -11,7 +11,7 @@
 {:else}
   <form method="post" action="?/remove" id="remove" use:enhance>
     <ul>
-      {#each data.habits as habit}
+      {#each data.habits as habit (habit.id)}
         <li>
           {habit.name}
           <button type="submit" name="id" value={habit.id.toString()}>

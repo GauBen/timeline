@@ -124,7 +124,7 @@
       </p>
       <p>
         Tags:
-        {#each event.event.tags as tag}
+        {#each event.event.tags as tag (tag.id)}
           {tag.name},
         {/each}
       </p>

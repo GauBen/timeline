@@ -16,14 +16,14 @@
   <a href="/_/journal" aria-current={data.tag === undefined ? "page" : null}>
     All ({data.count})
   </a>
-  {#each data.tags as { tag, _count }}
+  {#each data.tags as { tag, _count } (tag)}
     <a href="?tag={tag}" aria-current={data.tag === tag ? "page" : null}>
       {tag} ({_count.tag})
     </a>
   {/each}
 </p>
 
-{#each data.entries as { date, body, html }}
+{#each data.entries as { date, body, html } (date.toISOString())}
   {@const day = date.toISOString().slice(0, 10)}
   <Card id="journal-{day}">
     <!-- <h2 class="_row-2"> -->

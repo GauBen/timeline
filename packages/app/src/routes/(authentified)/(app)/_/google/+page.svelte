@@ -19,7 +19,7 @@
 {/if}
 
 <ul>
-  {#each data.calendars as { id, summary, description }}
+  {#each data.calendars as { id, summary, description } (id)}
     {@const sync = data.syncMap.get(id!)}
     <li>
       <a href="?id={encodeURIComponent(id!)}">
@@ -49,7 +49,7 @@
         </Select>
         to
         <Select name="tagId" value={sync?.tag?.id} required>
-          {#each data.me.tags as tag}
+          {#each data.me.tags as tag (tag.id)}
             <option value={tag.id}>{tag.name}</option>
           {/each}
         </Select>

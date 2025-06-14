@@ -39,7 +39,7 @@
     <tr>
       <td></td>
       <!-- TODO: un-curse these date computations -->
-      {#each Array.from({ length: 53 }) as _, week}
+      {#each { length: 53 }, week}
         {@const date = start.add({ weeks: week })}
         {#if date.year === year}
           {#if date.day <= 7}
@@ -64,10 +64,10 @@
         {/if}
       {/each}
     </tr>
-    {#each ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as name, day}
+    {#each ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as name, day (day)}
       <tr>
         <td>{name}</td>
-        {#each Array.from({ length: 53 }) as _, week}
+        {#each { length: 53 }, week}
           {@const date = start.add({ weeks: week, days: day })}
           {@const count = windows[date.toString()]?.length}
           <td

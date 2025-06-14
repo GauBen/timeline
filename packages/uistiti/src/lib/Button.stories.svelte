@@ -34,9 +34,9 @@
 <Story name="All combinations">
   <table>
     <tbody>
-      {#each keys(variants) as variant}
+      {#each keys(variants) as variant (variant)}
         <tr>
-          {#each keys(colors) as color}
+          {#each keys(colors) as color (color)}
             <td>
               <Button {variant} {color}>
                 {variant}

@@ -206,7 +206,7 @@
             name="shared_with"
             style="width: 100%"
           >
-            {#each followings as { following }}
+            {#each followings as { following } (following.id)}
               <option value={following.id}>{following.displayName}</option>
             {/each}
           </Select>
@@ -215,7 +215,7 @@
       <p class="label">
         <span>Tags</span>
         <span class="_row-2" style="flex: 1">
-          {#each tags as tag}
+          {#each tags as tag (tag.id)}
             <label class="tag" style:--color="#{tag.color}">
               <input type="checkbox" name="tags" value={tag.id} />
               {tag.name}

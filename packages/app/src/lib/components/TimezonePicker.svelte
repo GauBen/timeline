@@ -43,7 +43,7 @@
     }
   }}
 >
-  {#each Object.keys(commonTimezones) as value}
+  {#each Object.keys(commonTimezones) as value (value)}
     <option {value} selected={value === area}>{value}</option>
   {/each}
 </Select>
@@ -55,7 +55,7 @@
       if (location) timezone = `${area}/${location}`;
     }}
   >
-    {#each commonTimezones[area] as value}
+    {#each commonTimezones[area] as value (value)}
       <option {value} selected={value === location}>
         {value.replaceAll("_", " ")}
       </option>

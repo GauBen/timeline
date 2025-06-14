@@ -52,15 +52,15 @@
   <table>
     <thead>
       <tr>
-        {#each ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as day}
+        {#each ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as day (day)}
           <th>{day}</th>
         {/each}
       </tr>
     </thead>
     <tbody>
-      {#each Array.from({ length: numberOfWeeks }, (_, i) => i) as week}
+      {#each { length: numberOfWeeks }, week}
         <tr>
-          {#each Array.from({ length: 7 }, (_, i) => i) as dayOfWeek}
+          {#each { length: 7 }, dayOfWeek}
             {@const day = start.add({
               days: dayOfWeek - paddingDaysStart + week * 7,
             })}
@@ -92,7 +92,7 @@
                 {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
                   {@render eventInCreationMarker()}
                 {/if}
-                {#each events as { id, body, added }, i}
+                {#each events as { id, body, added }, i (id)}
                   <article
                     style:background={added ? "#e8faef" : "#fff"}
                     style:opacity={day.month === start.month ? 1 : 0.75}

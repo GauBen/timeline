@@ -1,6 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import type { RequestEvent } from "@sveltejs/kit";
-import { baseLocale, isAvailableLocale } from "messages/runtime";
+import { baseLocale, isLocale } from "messages/runtime";
 
 const getSession = async ({ cookies }: RequestEvent) => {
   const token = cookies.get("session");
@@ -18,7 +18,7 @@ const getLocale = ({ request, cookies }: RequestEvent) => {
   const userLocales =
     cookies.get("locale") ?? request.headers.get("accept-language");
   const userLocale = userLocales?.split(",")[0];
-  return isAvailableLocale(userLocale) ? userLocale : baseLocale;
+  return isLocale(userLocale) ? userLocale : baseLocale;
 };
 
 export const handle = async ({ event, resolve }) => {

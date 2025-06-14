@@ -14,9 +14,9 @@
   <h2>All combinations</h2>
   <table>
     <tbody>
-      {#each keys(variants) as variant}
+      {#each keys(variants) as variant (variant)}
         <tr>
-          {#each keys(colors) as color}
+          {#each keys(colors) as color (color)}
             <td>
               <Button {variant} {color}>
                 {variant}
@@ -32,7 +32,7 @@
 
 <section>
   <h2>Inheritance</h2>
-  {#each keys(colors) as color}
+  {#each keys(colors) as color (color)}
     <Card {color}>
       <h3 style="margin-top: 0; text-transform: capitalize">{color}</h3>
       <Button>Ok</Button>

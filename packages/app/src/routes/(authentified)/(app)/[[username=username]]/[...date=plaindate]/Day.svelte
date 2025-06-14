@@ -55,13 +55,16 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
 <div class="day" onclick={placeEvent}>
-  {#each Array.from({ length: 23 }, (_, i) => i + 1) as hour}
+  {#each { length: 23 }, hour}
     <div>
       <span>
-        {Temporal.PlainTime.from({ hour }).toLocaleString(i18n.locale, {
-          hour: "numeric",
-          minute: "numeric",
-        })}
+        {Temporal.PlainTime.from({ hour: hour + 1 }).toLocaleString(
+          i18n.locale,
+          {
+            hour: "numeric",
+            minute: "numeric",
+          },
+        )}
       </span>
     </div>
   {/each}
@@ -69,7 +72,7 @@
   {#if day.equals(today)}
     <hr style:top="{toRems(time)}rem" />
   {/if}
-  {#each events as { id, author, body, start, added, event }}
+  {#each events as { id, author, body, start, added, event } (id)}
     <article
       style="border: 2px solid #fff; text-shadow: 0 0 0.5rem #fff;"
       style:background={added

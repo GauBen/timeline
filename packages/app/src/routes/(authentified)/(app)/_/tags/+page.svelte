@@ -6,7 +6,7 @@
 </script>
 
 <ul>
-  {#each data.tags as tag}
+  {#each data.tags as tag (tag.id)}
     <li style:background-color="#{tag.color}">{tag.name}</li>
   {/each}
 </ul>

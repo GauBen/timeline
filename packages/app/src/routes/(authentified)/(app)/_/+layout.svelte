@@ -20,7 +20,7 @@
 >
   <nav>
     <a href="/" class="_row-1"><CaretLeft aria-hidden /> Home</a>
-    {#each Object.entries(leaves) as [key, title]}
+    {#each Object.entries(leaves) as [key, title] (key)}
       <a
         href={key === "settings" ? "/_" : `/_/${key}`}
         aria-current={key === leaf ? "page" : undefined}
