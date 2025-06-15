@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "(test -f .env || cp .env.example .env) && prisma generate && vite build",
+    "build": "(test -f .env || cp .env.example .env) && svelte-kit sync && prisma generate && vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "dev": "vite dev",
