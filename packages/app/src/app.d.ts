@@ -1,17 +1,17 @@
-import type { AvailableLocale } from "messages/runtime";
-import type Prisma from "@prisma/client";
+import type { Locale } from "messages/runtime";
+import type { GoogleUser, User } from "$prisma";
 import "unplugin-icons/types/svelte";
 
 declare global {
   namespace App {
     interface Locals {
-      session?: Prisma.GoogleUser;
-      locale: AvailableLocale;
+      session?: GoogleUser;
+      locale: Locale;
     }
     interface PageData {
-      session?: Prisma.GoogleUser;
-      me?: Prisma.User;
-      locale: AvailableLocale;
+      session?: GoogleUser;
+      me?: User;
+      locale: Locale;
       timezones: string[];
     }
     // interface Error {}

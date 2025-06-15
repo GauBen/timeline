@@ -5,7 +5,7 @@
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
-  import type { User } from "@prisma/client";
+  import type { User } from "$prisma";
   import * as m from "messages";
   import type { Snippet } from "svelte";
   import Calendar from "~icons/ph/calendar-dot-duotone";

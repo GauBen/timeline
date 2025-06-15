@@ -1,8 +1,7 @@
 generator client {
-  provider        = "prisma-client-js"
-  // rhel (Red Hat Enterprise Linux) is for Vercel deployments
-  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
-  previewFeatures = ["views"]
+  provider        = "prisma-client"
+  output          = "./generated"
+  previewFeatures = ["views", "queryCompiler", "driverAdapters"]
 }
 
 datasource db {

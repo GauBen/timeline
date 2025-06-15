@@ -20,3 +20,5 @@ vite.config.ts.timestamp-*
 !.yarn/versions
 
 *storybook.log
+
+**/prisma/generated
