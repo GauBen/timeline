@@ -32,27 +32,27 @@
     "storybook": "vite-node --watch src/compiler.ts & storybook dev -p 6006"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.6",
+    "@chromatic-com/storybook": "^3.2.7",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/addon-interactions": "^8.6.14",
     "@storybook/addon-svelte-csf": "^5.0.3",
     "@storybook/svelte": "^8.6.14",
     "@storybook/sveltekit": "^8.6.14",
     "@storybook/test": "^8.6.14",
-    "@sveltejs/kit": "^2.21.5",
+    "@sveltejs/kit": "^2.22.0",
     "@sveltejs/package": "^2.3.11",
     "@sveltejs/vite-plugin-svelte": "^5.1.0",
-    "@types/node": "^22.15.31",
+    "@types/node": "^22.15.32",
     "colorjs.io": "^0.5.2",
     "modern-normalize": "^3.0.1",
     "publint": "^0.3.12",
     "sass": "^1.89.2",
     "storybook": "^8.6.14",
-    "svelte": "^5.34.2",
-    "svelte-check": "^4.2.1",
+    "svelte": "^5.34.7",
+    "svelte-check": "^4.2.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "vite-node": "^3.2.3"
+    "vite-node": "^3.2.4"
   },
   "peerDependencies": {
     "svelte": ">=5"
