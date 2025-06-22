@@ -1,6 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
-import type { Prisma, User } from "$prisma";
+import type { Prisma, User } from "db";
 import { error } from "@sveltejs/kit";
 import { stringify } from "devalue";
 

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "name": "timeline",
+  "main": ".svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2025-06-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".svelte-kit/cloudflare"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  }
+}

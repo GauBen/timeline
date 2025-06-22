@@ -1,0 +1,20 @@
+{
+  "name": "db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "types": "./dist/client.d.ts",
+    "default": "./dist/client.js"
+  },
+  "scripts": {
+    "build": "prisma generate && tsc"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.10.1"
+  },
+  "devDependencies": {
+    "prisma": "^6.10.1",
+    "typescript": "^5.8.3"
+  }
+}

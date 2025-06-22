@@ -1,4 +1,4 @@
-import type * as Prisma from "$prisma";
+import type * as Prisma from "db";
 
 export type Event = Prisma.TimelineEvent & {
   author: Prisma.User;

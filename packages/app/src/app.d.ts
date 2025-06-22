@@ -1,5 +1,5 @@
 import type { Locale } from "messages/runtime";
-import type { GoogleUser, User } from "$prisma";
+import type { GoogleUser, User } from "db";
 import "unplugin-icons/types/svelte";
 
 declare global {

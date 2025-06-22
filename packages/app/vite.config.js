@@ -12,5 +12,8 @@ export default defineConfig({
       scss: { api: "modern" },
     },
   },
-  ssr: { noExternal: ["formgator"] },
+  ssr: {
+    noExternal: ["formgator"],
+    external: ["db"],
+  },
 });
