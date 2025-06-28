@@ -24,8 +24,9 @@ const getLocale = ({ request, cookies }: RequestEvent) => {
   return isLocale(userLocale) ? userLocale : baseLocale;
 };
 
+const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
+
 export const handle = async ({ event, resolve }) => {
-  const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
   event.locals.prisma = new PrismaClient({ adapter });
   event.locals.session = await getSession(event);
   event.locals.locale = getLocale(event);

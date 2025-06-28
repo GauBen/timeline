@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".svelte-kit", "build", "dist"]
+      "outputs": [".svelte-kit", "build", "dist", "prisma/generated"]
     },
     "dev": {
       "cache": false,

@@ -2,7 +2,6 @@ generator client {
   provider        = "prisma-client"
   output          = "./generated"
   previewFeatures = ["views", "queryCompiler", "driverAdapters"]
-  runtime         = "workerd"
 }
 
 datasource db {
