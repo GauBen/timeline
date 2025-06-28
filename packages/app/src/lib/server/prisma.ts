@@ -1,6 +1,9 @@
-import { env } from "$env/dynamic/private";
 import { PrismaClient } from "db";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { getRequestEvent } from "$app/server";
 
-const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
-export const prisma = new PrismaClient({ adapter });
+export const prisma = new Proxy({} as PrismaClient, {
+  get: (_, prop) => {
+    const prisma = getRequestEvent().locals.prisma;
+    return prisma[prop as keyof PrismaClient];
+  },
+});

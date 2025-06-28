@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "rootDir": "prisma/generated",
-    "outDir": "dist",
     "declaration": true,
     "module": "esnext",
-    "skipLibCheck": true
+    "outDir": "dist",
+    "rootDir": "prisma/generated",
+    "skipLibCheck": true,
+    "target": "esnext"
   }
 }

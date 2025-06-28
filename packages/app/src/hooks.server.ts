@@ -1,5 +1,8 @@
+import { env } from "$env/dynamic/private";
 import { prisma } from "$lib/server/prisma.js";
+import { PrismaPg } from "@prisma/adapter-pg";
 import type { RequestEvent } from "@sveltejs/kit";
+import { PrismaClient } from "db";
 import { baseLocale, isLocale } from "messages/runtime";
 
 const getSession = async ({ cookies }: RequestEvent) => {
@@ -22,6 +25,8 @@ const getLocale = ({ request, cookies }: RequestEvent) => {
 };
 
 export const handle = async ({ event, resolve }) => {
+  const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
+  event.locals.prisma = new PrismaClient({ adapter });
   event.locals.session = await getSession(event);
   event.locals.locale = getLocale(event);
 

@@ -2211,7 +2211,7 @@ __metadata:
     messages: "workspace:^"
     modern-normalize: "npm:^3.0.1"
     nanoid: "npm:^5.1.5"
-    pg: "npm:^8.16.2"
+    pg: "npm:^8.16.3"
     rehype-sanitize: "npm:^6.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-parse: "npm:^11.0.0"
@@ -2225,7 +2225,7 @@ __metadata:
     unist-util-visit: "npm:^5.0.0"
     unplugin-icons: "npm:^22.1.0"
     vite: "npm:^6.3.5"
-    wrangler: "npm:^4.20.5"
+    wrangler: "npm:^4.22.0"
   languageName: unknown
   linkType: soft
 
@@ -6422,9 +6422,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"miniflare@npm:4.20250617.3":
-  version: 4.20250617.3
-  resolution: "miniflare@npm:4.20250617.3"
+"miniflare@npm:4.20250617.4":
+  version: 4.20250617.4
+  resolution: "miniflare@npm:4.20250617.4"
   dependencies:
     "@cspotcode/source-map-support": "npm:0.8.1"
     acorn: "npm:8.14.0"
@@ -6440,7 +6440,7 @@ __metadata:
     zod: "npm:3.22.3"
   bin:
     miniflare: bootstrap.js
-  checksum: 10c0/ed4ede8ed849819c27ed3ce4187c777cef822a6733861120db0bac5a33acce35927240babd4ca669a5d6ce56a735424e25df33af4d66d805d7ed41c3819d898e
+  checksum: 10c0/4ac2036c111b4f502a76f1cc8e463caf052bf5c754a9dc0129dc71c8088e7ff0e12f1bec6d548cbf2cd2ca73a9f89f0fe3887119cfd5295d6690b6d32ac1549a
   languageName: node
   linkType: hard
 
@@ -7043,10 +7043,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-cloudflare@npm:^1.2.6":
-  version: 1.2.6
-  resolution: "pg-cloudflare@npm:1.2.6"
-  checksum: 10c0/db339518ed763982c45a94c96cedba1b25819fe32e9d3a4df6f82cd647c716ff9b5009f3c8b90f2940b0a1889387710ef764c9e3e7ddd8397d217309d663a2c8
+"pg-cloudflare@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "pg-cloudflare@npm:1.2.7"
+  checksum: 10c0/8a52713dbdecc9d389dc4e65e3b7ede2e199ec3715f7491ee80a15db171f2d75677a102e9c2cef0cb91a2f310e91f976eaec0dd6ef5d8bf357de0b948f9d9431
   languageName: node
   linkType: hard
 
@@ -7073,10 +7073,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.10.2":
-  version: 1.10.2
-  resolution: "pg-protocol@npm:1.10.2"
-  checksum: 10c0/3f9b5aba3f356190738ea25ecded3cd033cd2218789acf9c67b75788932c4b594eeb7043481822b69eaae4d84401e00142a2ef156297a8347987a78a52afd50e
+"pg-protocol@npm:^1.10.3":
+  version: 1.10.3
+  resolution: "pg-protocol@npm:1.10.3"
+  checksum: 10c0/f7ef54708c93ee6d271e37678296fc5097e4337fca91a88a3d99359b78633dbdbf6e983f0adb34b7cdd261b7ec7266deb20c3233bf3dfdb498b3e1098e8750b9
   languageName: node
   linkType: hard
 
@@ -7093,14 +7093,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.16.2":
-  version: 8.16.2
-  resolution: "pg@npm:8.16.2"
+"pg@npm:^8.16.3":
+  version: 8.16.3
+  resolution: "pg@npm:8.16.3"
   dependencies:
-    pg-cloudflare: "npm:^1.2.6"
+    pg-cloudflare: "npm:^1.2.7"
     pg-connection-string: "npm:^2.9.1"
     pg-pool: "npm:^3.10.1"
-    pg-protocol: "npm:^1.10.2"
+    pg-protocol: "npm:^1.10.3"
     pg-types: "npm:2.2.0"
     pgpass: "npm:1.0.5"
   peerDependencies:
@@ -7111,7 +7111,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10c0/e444103fda2fa236bb7951e534bbce52d81df8f0ca43b36cdd32da2e558946ae011fa6a0fcfea2e48d935addba821868e76d3f4f670b313f639a3d24fcd420af
+  checksum: 10c0/a6a407ff0efb7599760d72ffdcda47a74c34c0fd71d896623caac45cf2cfb0f49a10973cce23110f182b9810639a1e9f6904454d7358c7001574ee0ffdcbce2a
   languageName: node
   linkType: hard
 
@@ -9497,16 +9497,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrangler@npm:^4.20.5":
-  version: 4.20.5
-  resolution: "wrangler@npm:4.20.5"
+"wrangler@npm:^4.22.0":
+  version: 4.22.0
+  resolution: "wrangler@npm:4.22.0"
   dependencies:
     "@cloudflare/kv-asset-handler": "npm:0.4.0"
     "@cloudflare/unenv-preset": "npm:2.3.3"
     blake3-wasm: "npm:2.1.5"
     esbuild: "npm:0.25.4"
     fsevents: "npm:~2.3.2"
-    miniflare: "npm:4.20250617.3"
+    miniflare: "npm:4.20250617.4"
     path-to-regexp: "npm:6.3.0"
     unenv: "npm:2.0.0-rc.17"
     workerd: "npm:1.20250617.0"
@@ -9521,7 +9521,7 @@ __metadata:
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: 10c0/8f8d397b6878b5b767abc98ed6cfcb5119aef5dcb7db25832cf1f056cf378afa79efe787668f4caf8bc6f88e88253dc1676d05e8ef2d820cd964dbde1b529a55
+  checksum: 10c0/a1d5deab6f600d1e3807c94ca5f0fbe1884a34d76ec0d2880c1fb2f9125a3b4e8607502bf8c06cc6ef960ea85d93a587f00a36b5e4e479b8daffd3f5237e053c
   languageName: node
   linkType: hard
 

@@ -1,5 +1,5 @@
 import type { Locale } from "messages/runtime";
-import type { GoogleUser, User } from "db";
+import type { GoogleUser, User, PrismaClient } from "db";
 import "unplugin-icons/types/svelte";
 
 declare global {
@@ -7,6 +7,7 @@ declare global {
     interface Locals {
       session?: GoogleUser;
       locale: Locale;
+      prisma: PrismaClient;
     }
     interface PageData {
       session?: GoogleUser;
