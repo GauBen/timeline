@@ -15,5 +15,10 @@
       "enabled": true,
       "invocation_logs": true
     }
+  },
+  "workers_dev": false,
+  "route": {
+    "pattern": "timeline.gautier.dev",
+    "custom_domain": true
   }
 }
