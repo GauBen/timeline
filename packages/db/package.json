@@ -8,7 +8,7 @@
     "default": "./dist/client.js"
   },
   "scripts": {
-    "build": "prisma generate && tsc"
+    "build": "prisma generate && tsc && cp prisma/generated/internal/*.{wasm,js} dist/internal/"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0"
