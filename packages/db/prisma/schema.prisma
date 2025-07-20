@@ -6,18 +6,17 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_DIRECT_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model GoogleUser {
   // Local id
   id    BigInt @id @default(autoincrement())
-  email String @unique @db.VarChar(255)
+  email String @unique
 
-  accessToken  String? @map("access_token") @db.VarChar(2048)
-  refreshToken String? @map("refresh_token") @db.VarChar(512)
+  accessToken  String? @map("access_token")
+  refreshToken String? @map("refresh_token")
 
   user     User?
   sessions Session[]
@@ -27,8 +26,8 @@ model GoogleUser {
 
 model Session {
   googleUserId BigInt   @map("google_user_id")
-  token        String   @id @db.VarChar(21)
-  expiresAt    DateTime @map("expires_at") @db.Timestamptz(0)
+  token        String   @id
+  expiresAt    DateTime @map("expires_at")
 
   googleUser GoogleUser @relation(fields: [googleUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -37,11 +36,11 @@ model Session {
 
 model User {
   id          BigInt   @id
-  username    String   @unique @db.VarChar(255)
-  displayName String   @map("display_name") @db.VarChar(255)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  timezone    String   @db.VarChar(32)
-  locale      String   @db.VarChar(5)
+  username    String   @unique
+  displayName String   @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  timezone    String
+  locale      String
 
   googleUser     GoogleUser     @relation(fields: [id], references: [id])
   followers      Follow[]       @relation("following")
@@ -62,7 +61,7 @@ model User {
 }
 
 model Follow {
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at")
   followerId  BigInt   @map("follower_id")
   follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   followingId BigInt   @map("following_id")
@@ -75,21 +74,21 @@ model Follow {
 
 model Event {
   id        BigInt   @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at")
 
   /// Event start date and time
-  start DateTime @db.Timestamptz(6)
+  start DateTime
 
   /// Set to null if relative to the user
-  startTimezone String? @map("start_timezone") @db.VarChar(32)
+  startTimezone String? @map("start_timezone")
 
   /// Event end date and time
-  end DateTime @db.Timestamptz(6)
+  end DateTime
 
   /// Set to null if relative to the user
-  endTimezone String? @map("end_timezone") @db.VarChar(32)
+  endTimezone String? @map("end_timezone")
 
-  body     String  @db.VarChar(1024)
+  body     String
   public   Boolean @default(true)
   authorId BigInt  @map("author_id")
 
@@ -108,8 +107,8 @@ model Tag {
   id      BigInt @id @default(autoincrement())
   ownerId BigInt @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  name    String @db.VarChar(64)
-  color   String @db.VarChar(6)
+  name    String
+  color   String
 
   // Whether tagged events are public
   public  Boolean @default(true)
@@ -136,12 +135,12 @@ model EventToUser {
 
 view TimelineEvent {
   id            BigInt   @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  start         DateTime @db.Timestamptz(6)
-  startTimezone String?  @map("start_timezone") @db.VarChar(32)
-  end           DateTime @db.Timestamptz(6)
-  endTimezone   String?  @map("end_timezone") @db.VarChar(32)
-  body          String   @db.VarChar(1024)
+  createdAt     DateTime @default(now()) @map("created_at")
+  start         DateTime
+  startTimezone String?  @map("start_timezone")
+  end           DateTime
+  endTimezone   String?  @map("end_timezone")
+  body          String
   public        Boolean  @default(true)
   authorId      BigInt   @map("author_id")
 
@@ -157,7 +156,7 @@ view TimelineEvent {
 
 model Habit {
   id     BigInt @id @default(autoincrement())
-  name   String @db.VarChar(255)
+  name   String
   userId BigInt @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -168,7 +167,7 @@ model Habit {
 
 model HabitMark {
   habitId BigInt   @map("habit_id")
-  date    DateTime @db.Date
+  date    DateTime
 
   habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -178,8 +177,8 @@ model HabitMark {
 
 model JournalEntry {
   authorId BigInt   @map("author_id")
-  date     DateTime @db.Date
-  body     String   @db.Text
+  date     DateTime
+  body     String
 
   author User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tags   JournalTag[]
@@ -190,8 +189,8 @@ model JournalEntry {
 
 model JournalTag {
   authorId BigInt   @map("author_id")
-  date     DateTime @db.Date
-  tag      String   @db.VarChar(32)
+  date     DateTime
+  tag      String
 
   author User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   entry  JournalEntry @relation(fields: [authorId, date], references: [authorId, date], onDelete: Cascade, onUpdate: Cascade)
@@ -213,8 +212,8 @@ model GoogleCalendarSync {
   googleCalendarId String        @map("calendar_id")
   direction        SyncDirection
 
-  lastSyncedAt DateTime? @map("last_synced_at") @db.Timestamptz(6)
-  syncToken    String?   @map("sync_token") @db.VarChar(128)
+  lastSyncedAt DateTime? @map("last_synced_at")
+  syncToken    String?   @map("sync_token")
   pullCount    Int       @default(0) @map("pull_count")
   pushCount    Int       @default(0) @map("push_count")
   syncedEvents Int       @default(0) @map("synced_events")
