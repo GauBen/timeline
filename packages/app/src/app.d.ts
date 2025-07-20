@@ -1,5 +1,6 @@
+import { D1Database } from "@cloudflare/workers-types";
+import type { GoogleUser, PrismaClient, User } from "db";
 import type { Locale } from "messages/runtime";
-import type { GoogleUser, User, PrismaClient } from "db";
 import "unplugin-icons/types/svelte";
 
 declare global {
@@ -16,6 +17,10 @@ declare global {
       timezones: string[];
     }
     // interface Error {}
-    // interface Platform {}
+    interface Platform {
+      env: {
+        DB: D1Database;
+      };
+    }
   }
 }

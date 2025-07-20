@@ -13,7 +13,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.7.2",
     "@js-temporal/polyfill": "^0.5.1",
-    "@prisma/adapter-pg": "^6.12.0",
+    "@prisma/adapter-d1": "^6.12.0",
     "db": "workspace:^",
     "googleapis": "^153.0.0",
     "human-id": "^4.1.1",
@@ -21,7 +21,6 @@
     "mdast-util-find-and-replace": "^3.0.2",
     "modern-normalize": "^3.0.1",
     "nanoid": "^5.1.5",
-    "pg": "^8.16.3",
     "rehype-sanitize": "^6.0.0",
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",

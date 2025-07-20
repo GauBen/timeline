@@ -20,5 +20,17 @@
   "route": {
     "pattern": "timeline.gautier.dev",
     "custom_domain": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "timeline",
+      "database_id": "eaf69d3e-eef7-48c4-a82f-d66b4d21b5b5"
+    },
+    {
+      "binding": "SHADOW_DB",
+      "database_name": "timeline_shadow",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ]
 }

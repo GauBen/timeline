@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "prisma": "yarn workspace @timeline/app prisma"
+    "prisma": "yarn workspace db prisma --config prisma.config.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
