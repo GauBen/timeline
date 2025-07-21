@@ -7,8 +7,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  // When not defined, it defaults to `<invalid>` which crashes the Prisma CLI
-  url      = "file:d1"
 }
 
 model GoogleUser {
