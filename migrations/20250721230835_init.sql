@@ -1,7 +1,6 @@
--- Migration number: 0001 	 2025-07-21T11:54:59.267Z
 -- CreateTable
 CREATE TABLE "google_users" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "email" TEXT NOT NULL,
     "access_token" TEXT,
     "refresh_token" TEXT
@@ -9,7 +8,7 @@ CREATE TABLE "google_users" (
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "google_user_id" BIGINT NOT NULL,
+    "google_user_id" INTEGER NOT NULL,
     "token" TEXT NOT NULL PRIMARY KEY,
     "expires_at" DATETIME NOT NULL,
     CONSTRAINT "sessions_google_user_id_fkey" FOREIGN KEY ("google_user_id") REFERENCES "google_users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
@@ -17,7 +16,7 @@ CREATE TABLE "sessions" (
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "username" TEXT NOT NULL,
     "display_name" TEXT NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -29,8 +28,8 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "follows" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "follower_id" BIGINT NOT NULL,
-    "following_id" BIGINT NOT NULL,
+    "follower_id" INTEGER NOT NULL,
+    "following_id" INTEGER NOT NULL,
 
     PRIMARY KEY ("follower_id", "following_id"),
     CONSTRAINT "follows_follower_id_fkey" FOREIGN KEY ("follower_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
@@ -39,7 +38,7 @@ CREATE TABLE "follows" (
 
 -- CreateTable
 CREATE TABLE "events" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "start" DATETIME NOT NULL,
     "start_timezone" TEXT,
@@ -47,14 +46,14 @@ CREATE TABLE "events" (
     "end_timezone" TEXT,
     "body" TEXT NOT NULL,
     "public" BOOLEAN NOT NULL DEFAULT true,
-    "author_id" BIGINT NOT NULL,
+    "author_id" INTEGER NOT NULL,
     CONSTRAINT "events_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "tags" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
-    "owner_id" BIGINT NOT NULL,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "owner_id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "color" TEXT NOT NULL,
     "public" BOOLEAN NOT NULL DEFAULT true,
@@ -63,8 +62,8 @@ CREATE TABLE "tags" (
 
 -- CreateTable
 CREATE TABLE "events_to_users" (
-    "event_id" BIGINT NOT NULL,
-    "user_id" BIGINT NOT NULL,
+    "event_id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
     "shared" BOOLEAN NOT NULL DEFAULT false,
     "added" BOOLEAN,
 
@@ -75,15 +74,15 @@ CREATE TABLE "events_to_users" (
 
 -- CreateTable
 CREATE TABLE "habits" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "user_id" BIGINT NOT NULL,
+    "user_id" INTEGER NOT NULL,
     CONSTRAINT "habits_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "habit_marks" (
-    "habit_id" BIGINT NOT NULL,
+    "habit_id" INTEGER NOT NULL,
     "date" DATETIME NOT NULL,
 
     PRIMARY KEY ("habit_id", "date"),
@@ -92,7 +91,7 @@ CREATE TABLE "habit_marks" (
 
 -- CreateTable
 CREATE TABLE "journal_entries" (
-    "author_id" BIGINT NOT NULL,
+    "author_id" INTEGER NOT NULL,
     "date" DATETIME NOT NULL,
     "body" TEXT NOT NULL,
 
@@ -102,7 +101,7 @@ CREATE TABLE "journal_entries" (
 
 -- CreateTable
 CREATE TABLE "journal_tags" (
-    "author_id" BIGINT NOT NULL,
+    "author_id" INTEGER NOT NULL,
     "date" DATETIME NOT NULL,
     "tag" TEXT NOT NULL,
 
@@ -113,9 +112,9 @@ CREATE TABLE "journal_tags" (
 
 -- CreateTable
 CREATE TABLE "google_calendar_syncs" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
-    "user_id" BIGINT NOT NULL,
-    "tag_id" BIGINT NOT NULL,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER NOT NULL,
+    "tag_id" INTEGER NOT NULL,
     "calendar_id" TEXT NOT NULL,
     "direction" TEXT NOT NULL,
     "last_synced_at" DATETIME,
@@ -130,16 +129,16 @@ CREATE TABLE "google_calendar_syncs" (
 
 -- CreateTable
 CREATE TABLE "_EventToTag" (
-    "A" BIGINT NOT NULL,
-    "B" BIGINT NOT NULL,
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
     CONSTRAINT "_EventToTag_A_fkey" FOREIGN KEY ("A") REFERENCES "events" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "_EventToTag_B_fkey" FOREIGN KEY ("B") REFERENCES "tags" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "_viewers" (
-    "A" BIGINT NOT NULL,
-    "B" BIGINT NOT NULL,
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
     CONSTRAINT "_viewers_A_fkey" FOREIGN KEY ("A") REFERENCES "tags" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "_viewers_B_fkey" FOREIGN KEY ("B") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -182,3 +181,49 @@ CREATE UNIQUE INDEX "_viewers_AB_unique" ON "_viewers"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_viewers_B_index" ON "_viewers"("B");
+
+CREATE VIEW "timeline" AS SELECT
+  users.id AS user_id,
+  events.id,
+  events.created_at,
+  events.start,
+  events.start_timezone,
+  events.end,
+  events.end_timezone,
+  events.body,
+  events.public,
+  events.author_id,
+  author_id = users.id OR EXISTS (
+    SELECT
+      1
+    FROM
+      follows
+    WHERE
+      follower_id = users.id
+      AND following_id = events.author_id
+  ) AS followed,
+  author_id = users.id OR (
+    SELECT
+      added
+    FROM
+      events_to_users
+    WHERE
+      event_id = events.id
+      AND user_id = users.id
+  ) AS added
+FROM
+  events
+  CROSS JOIN users
+WHERE
+  events.public
+  OR author_id = users.id
+  OR EXISTS (
+    SELECT
+      1
+    FROM
+      events_to_users
+    WHERE
+      event_id = events.id
+      AND user_id = users.id
+      AND shared
+  );

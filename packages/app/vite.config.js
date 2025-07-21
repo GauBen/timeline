@@ -1,11 +1,9 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
-import { cloudflare } from "@cloudflare/vite-plugin";
 
-export default defineConfig(({ command }) => ({
+export default defineConfig({
   plugins: [
-    command === "serve" && cloudflare(),
     sveltekit(),
     icons({ compiler: "svelte", scale: 1.25, defaultClass: "icon" }),
   ],
@@ -13,4 +11,4 @@ export default defineConfig(({ command }) => ({
     noExternal: ["formgator"],
     external: ["db"],
   },
-}));
+});

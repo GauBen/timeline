@@ -39,7 +39,7 @@
     "formgator": "^0.2.4",
     "messages": "workspace:^",
     "sass": "^1.89.2",
-    "svelte": "^5.36.10",
+    "svelte": "^5.36.13",
     "svelte-check": "^4.3.0",
     "typescript": "^5.8.3",
     "uistiti": "workspace:^",
