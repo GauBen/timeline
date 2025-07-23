@@ -46,7 +46,7 @@ export const actions = {
     {
       googleCalendarId: fg.hidden(),
       direction: fg.select(Object.values(SyncDirection), { required: true }),
-      tagId: fg.number({ required: true }).transform((id) => BigInt(id)),
+      tagId: fg.number({ required: true }).transform(Number),
     },
     async ({ googleCalendarId, direction, tagId }, { locals, url }) => {
       if (!locals.session) error(401, "Unauthorized");

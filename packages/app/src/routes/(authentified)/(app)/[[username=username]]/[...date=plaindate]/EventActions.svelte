@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Event } from "$lib/types.js";
-  import type { User } from "$prisma";
+  import type { User } from "db";
   import { Button } from "uistiti";
 
   export const { event, me }: { event: Event; me: User } = $props();

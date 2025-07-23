@@ -9,7 +9,7 @@ export const POST = async ({ request }) => {
     return new Response("Invalid channel", { status: 400 });
 
   try {
-    const id = BigInt(request.headers.get("X-Goog-Channel-ID")!);
+    const id = Number(request.headers.get("X-Goog-Channel-ID")!);
     const sync = await prisma.googleCalendarSync.findUniqueOrThrow({
       where: { id },
       include: { user: { select: { googleUser: true } } },

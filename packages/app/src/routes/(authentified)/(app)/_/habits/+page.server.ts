@@ -31,7 +31,7 @@ export const actions = {
     if (!locals.session) return fail(401, { error: "Unauthorized" });
 
     const result = fg
-      .form({ id: fg.text({ required: true }).transform(BigInt) })
+      .form({ id: fg.text({ required: true }).transform(Number) })
       .safeParse(await request.formData());
 
     if (!result.success) return fail(400, { validationErrors: result.error });

@@ -12,7 +12,7 @@ export default {
     adapter: adapter({
       platformProxy: {
         persist: {
-          path: path.join(process.env.PROJECT_CWD, ".wrangler/state/v3"),
+          path: path.join(process.env.PROJECT_CWD ?? ".", ".wrangler/state/v3"),
         },
       },
     }),

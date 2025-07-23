@@ -11,7 +11,7 @@ export const load = loadgate(
   {
     "event": fg
       .text({ required: true, pattern: /^\d+$/ })
-      .transform(BigInt)
+      .transform(Number)
       .optional(),
     "/journal": fg.date({ required: true }).optional(),
   },
@@ -67,9 +67,7 @@ export const actions = {
         required: true,
       }),
       shared_with: fg.select(() => true, { multiple: true }),
-      tags: fg
-        .select(() => true, { multiple: true })
-        .transform((ids) => ids.map((id) => BigInt(id))),
+      tags: fg.multi().map((id) => Number(id)),
     },
     async (data, { request, locals }) => {
       if (!locals.session) return fail(401, { error: "Unauthorized" });
@@ -96,7 +94,7 @@ export const actions = {
               ? {
                   createMany: {
                     data: data.shared_with.map((userId) => ({
-                      userId: BigInt(userId),
+                      userId: Number(userId),
                       shared: true,
                     })),
                   },
@@ -147,7 +145,7 @@ export const actions = {
     if (!locals.session) error(401, "Unauthorized");
     const eventId = url.searchParams.get("/addEvent");
     if (!eventId) error(400, "Invalid event");
-    const id = BigInt(eventId);
+    const id = Number(eventId);
     await prisma.eventToUser.upsert({
       where: {
         eventId_userId: { eventId: id, userId: locals.session.id },
@@ -164,7 +162,7 @@ export const actions = {
     if (!eventId) error(400, "Invalid event");
     await prisma.eventToUser.update({
       where: {
-        eventId_userId: { eventId: BigInt(eventId), userId: locals.session.id },
+        eventId_userId: { eventId: Number(eventId), userId: locals.session.id },
         OR: [{ shared: true }, { event: { public: true } }],
       },
       data: { added: null },
@@ -175,7 +173,7 @@ export const actions = {
     if (!locals.session) error(401, "Unauthorized");
     const eventId = url.searchParams.get("/deleteEvent");
     if (!eventId) error(400, "Invalid event");
-    const id = BigInt(eventId);
+    const id = Number(eventId);
     await prisma.event.delete({ where: { id, authorId: locals.session.id } });
   },
 
@@ -184,7 +182,7 @@ export const actions = {
       mark: fg
         .select(["true", "false"], { required: true })
         .transform((value) => value === "true"),
-      habitId: fg.text({ required: true }).transform(BigInt),
+      habitId: fg.text({ required: true }).transform(Number),
       date: fg.date({ required: true }).asDate(),
     },
     async (data, { locals }) => {
