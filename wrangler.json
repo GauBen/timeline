@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "account_id": "9368d871f9fd6a28d42ccf6a7511e174",
   "name": "timeline",
   "main": "packages/app/.svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2025-06-22",
