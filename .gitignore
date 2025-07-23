@@ -5,7 +5,6 @@ coverage
 dist
 .svelte-kit
 .turbo
-.vercel
 .wrangler
 .env
 .env.*
