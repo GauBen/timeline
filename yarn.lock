@@ -2004,16 +2004,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-cloudflare@npm:^7.1.1":
+"@sveltejs/adapter-cloudflare@https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f":
   version: 7.1.1
-  resolution: "@sveltejs/adapter-cloudflare@npm:7.1.1"
+  resolution: "@sveltejs/adapter-cloudflare@https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f"
   dependencies:
     "@cloudflare/workers-types": "npm:^4.20250507.0"
     worktop: "npm:0.8.0-next.18"
   peerDependencies:
     "@sveltejs/kit": ^2.0.0
     wrangler: ^4.0.0
-  checksum: 10c0/06263e3319abe6b4b2bf78ad08f91708d656d258e01538e1b2a06594aab8af9b91e8ad528c2e6d01b61a0bff51887664edcee0267b51c50b962814c4dd4b3aea
+  checksum: 10c0/8489d1be6df37415cd658054941a183f34b7097d1106ffbc67b9ae799415d3714451117ffcd3306710043d134d5acb70ecc378c68f6722beb5b830aa9ec01b6e
   languageName: node
   linkType: hard
 
@@ -2138,7 +2138,7 @@ __metadata:
     "@iconify-json/ph": "npm:^1.2.2"
     "@js-temporal/polyfill": "npm:^0.5.1"
     "@prisma/adapter-d1": "npm:^6.12.0"
-    "@sveltejs/adapter-cloudflare": "npm:^7.1.1"
+    "@sveltejs/adapter-cloudflare": "https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f"
     "@sveltejs/kit": "npm:^2.25.2"
     "@sveltejs/vite-plugin-svelte": "npm:^6.1.0"
     "@types/mdast": "npm:^4.0.4"
