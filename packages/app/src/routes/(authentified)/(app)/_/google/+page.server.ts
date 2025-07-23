@@ -1,6 +1,6 @@
 import { createUserClient, syncCalendar } from "$lib/server/google.js";
 import { prisma } from "$lib/server/prisma.js";
-import { SyncDirection } from "$prisma";
+import { SyncDirection } from "db";
 import { error } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate } from "formgator/sveltekit";

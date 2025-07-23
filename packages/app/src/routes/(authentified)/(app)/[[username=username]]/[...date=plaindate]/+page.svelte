@@ -45,7 +45,7 @@
 </script>
 
 <script lang="ts">
-  const { data } = $props();
+  const { data, params } = $props();
   const {
     event,
     events,
@@ -157,7 +157,7 @@
     >
       <h3>
         Journal: {i18n.formatDay(Temporal.PlainDate.from(date))}
-        <a href={paths.resolveRoute(page.params, { search: "" })}>Close</a>
+        <a href={paths.resolveRoute(params, { search: "" })}>Close</a>
       </h3>
       <input type="hidden" name="date" value={date} />
       <textarea name="body" cols="50" rows="8" value={journal?.body ?? ""}

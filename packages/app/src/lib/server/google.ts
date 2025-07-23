@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/private";
-import type { GoogleCalendarSync, GoogleUser } from "$prisma";
+import type { GoogleCalendarSync, GoogleUser } from "db";
 import { OAuth2Client } from "google-auth-library";
 import { GaxiosError } from "googleapis-common";
 import {

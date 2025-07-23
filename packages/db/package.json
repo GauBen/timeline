@@ -1,0 +1,23 @@
+{
+  "name": "db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "types": "./dist/client.d.ts",
+    "default": "./dist/client.js"
+  },
+  "scripts": {
+    "build": "prisma generate && tsc && cp prisma/generated/internal/*.{wasm,js} dist/internal/ || true"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.12.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250719.0",
+    "@prisma/adapter-d1": "^6.12.0",
+    "prisma": "^6.12.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.25.1"
+  }
+}

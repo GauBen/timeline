@@ -4,5 +4,4 @@ package-lock.json
 yarn.lock
 .yarn/
 src/paraglide/
-supabase/
 **/src/paraglide

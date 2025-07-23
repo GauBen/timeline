@@ -1,11 +1,5 @@
 name: Deploy
 
-env:
-  DATABASE_DIRECT_URL: ${{ secrets.DATABASE_DIRECT_URL }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
 on:
   push:
     branches: ["main"]
@@ -14,9 +8,6 @@ jobs:
   build-and-deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
-    env:
-      # Disable the global Yarn cache on GitHub Actions
-      YARN_ENABLE_GLOBAL_CACHE: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: pkgxdev/dev@v1
@@ -28,4 +19,8 @@ jobs:
           key: cache-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             cache-${{ runner.os }}-
-      - run: just deploy ${{ secrets.VERCEL_TOKEN }}
+      - run: just deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN}}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          YARN_ENABLE_GLOBAL_CACHE: "false"

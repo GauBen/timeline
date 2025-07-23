@@ -2,7 +2,7 @@
 
 A new social network??
 
-[Discover Timeline on the public alpha website](https://timeline-dev.vercel.app/auth)
+[Discover Timeline on the public alpha website](https://timeline.gautier.dev/)
 
 ## Features
 

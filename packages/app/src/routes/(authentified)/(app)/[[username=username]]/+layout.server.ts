@@ -1,5 +1,5 @@
 import { prisma } from "$lib/server/prisma.js";
-import type { User } from "$prisma";
+import type { User } from "db";
 import { error } from "@sveltejs/kit";
 
 export const load = async ({ parent, params }) => {

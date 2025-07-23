@@ -7,10 +7,8 @@ export default defineConfig({
     sveltekit(),
     icons({ compiler: "svelte", scale: 1.25, defaultClass: "icon" }),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: { api: "modern" },
-    },
+  ssr: {
+    noExternal: ["formgator"],
+    external: ["db"],
   },
-  ssr: { noExternal: ["formgator"] },
 });

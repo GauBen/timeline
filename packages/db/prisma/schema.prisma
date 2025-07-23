@@ -2,21 +2,20 @@ generator client {
   provider        = "prisma-client"
   output          = "./generated"
   previewFeatures = ["views", "queryCompiler", "driverAdapters"]
+  runtime         = "nodejs"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_DIRECT_URL")
+  provider = "sqlite"
 }
 
 model GoogleUser {
   // Local id
-  id    BigInt @id @default(autoincrement())
-  email String @unique @db.VarChar(255)
+  id    Int    @id @default(autoincrement())
+  email String @unique
 
-  accessToken  String? @map("access_token") @db.VarChar(2048)
-  refreshToken String? @map("refresh_token") @db.VarChar(512)
+  accessToken  String? @map("access_token")
+  refreshToken String? @map("refresh_token")
 
   user     User?
   sessions Session[]
@@ -25,9 +24,9 @@ model GoogleUser {
 }
 
 model Session {
-  googleUserId BigInt   @map("google_user_id")
-  token        String   @id @db.VarChar(21)
-  expiresAt    DateTime @map("expires_at") @db.Timestamptz(0)
+  googleUserId Int      @map("google_user_id")
+  token        String   @id
+  expiresAt    DateTime @map("expires_at")
 
   googleUser GoogleUser @relation(fields: [googleUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -35,12 +34,12 @@ model Session {
 }
 
 model User {
-  id          BigInt   @id
-  username    String   @unique @db.VarChar(255)
-  displayName String   @map("display_name") @db.VarChar(255)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  timezone    String   @db.VarChar(32)
-  locale      String   @db.VarChar(5)
+  id          Int      @id
+  username    String   @unique
+  displayName String   @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  timezone    String
+  locale      String
 
   googleUser     GoogleUser     @relation(fields: [id], references: [id])
   followers      Follow[]       @relation("following")
@@ -61,10 +60,10 @@ model User {
 }
 
 model Follow {
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  followerId  BigInt   @map("follower_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  followerId  Int      @map("follower_id")
   follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  followingId BigInt   @map("following_id")
+  followingId Int      @map("following_id")
   following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([followerId, followingId])
@@ -73,24 +72,24 @@ model Follow {
 }
 
 model Event {
-  id        BigInt   @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
 
   /// Event start date and time
-  start DateTime @db.Timestamptz(6)
+  start DateTime
 
   /// Set to null if relative to the user
-  startTimezone String? @map("start_timezone") @db.VarChar(32)
+  startTimezone String? @map("start_timezone")
 
   /// Event end date and time
-  end DateTime @db.Timestamptz(6)
+  end DateTime
 
   /// Set to null if relative to the user
-  endTimezone String? @map("end_timezone") @db.VarChar(32)
+  endTimezone String? @map("end_timezone")
 
-  body     String  @db.VarChar(1024)
+  body     String
   public   Boolean @default(true)
-  authorId BigInt  @map("author_id")
+  authorId Int     @map("author_id")
 
   author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   users          EventToUser[]
@@ -104,11 +103,11 @@ model Event {
 }
 
 model Tag {
-  id      BigInt @id @default(autoincrement())
-  ownerId BigInt @map("owner_id")
+  id      Int    @id @default(autoincrement())
+  ownerId Int    @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  name    String @db.VarChar(64)
-  color   String @db.VarChar(6)
+  name    String
+  color   String
 
   // Whether tagged events are public
   public  Boolean @default(true)
@@ -121,9 +120,9 @@ model Tag {
 }
 
 model EventToUser {
-  eventId BigInt   @map("event_id")
+  eventId Int      @map("event_id")
   event   Event    @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId  BigInt   @map("user_id")
+  userId  Int      @map("user_id")
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   shared  Boolean  @default(false)
   added   Boolean?
@@ -134,20 +133,20 @@ model EventToUser {
 }
 
 view TimelineEvent {
-  id            BigInt   @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  start         DateTime @db.Timestamptz(6)
-  startTimezone String?  @map("start_timezone") @db.VarChar(32)
-  end           DateTime @db.Timestamptz(6)
-  endTimezone   String?  @map("end_timezone") @db.VarChar(32)
-  body          String   @db.VarChar(1024)
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  start         DateTime
+  startTimezone String?  @map("start_timezone")
+  end           DateTime
+  endTimezone   String?  @map("end_timezone")
+  body          String
   public        Boolean  @default(true)
-  authorId      BigInt   @map("author_id")
+  authorId      Int      @map("author_id")
 
   author User  @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   event  Event @relation(fields: [id], references: [id])
 
-  userId   BigInt   @map("user_id")
+  userId   Int      @map("user_id")
   followed Boolean
   added    Boolean?
 
@@ -155,9 +154,9 @@ view TimelineEvent {
 }
 
 model Habit {
-  id     BigInt @id @default(autoincrement())
-  name   String @db.VarChar(255)
-  userId BigInt @map("user_id")
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId Int    @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   marks HabitMark[]
@@ -166,8 +165,8 @@ model Habit {
 }
 
 model HabitMark {
-  habitId BigInt   @map("habit_id")
-  date    DateTime @db.Date
+  habitId Int      @map("habit_id")
+  date    DateTime
 
   habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -176,9 +175,9 @@ model HabitMark {
 }
 
 model JournalEntry {
-  authorId BigInt   @map("author_id")
-  date     DateTime @db.Date
-  body     String   @db.Text
+  authorId Int      @map("author_id")
+  date     DateTime
+  body     String
 
   author User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tags   JournalTag[]
@@ -188,9 +187,9 @@ model JournalEntry {
 }
 
 model JournalTag {
-  authorId BigInt   @map("author_id")
-  date     DateTime @db.Date
-  tag      String   @db.VarChar(32)
+  authorId Int      @map("author_id")
+  date     DateTime
+  tag      String
 
   author User         @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   entry  JournalEntry @relation(fields: [authorId, date], references: [authorId, date], onDelete: Cascade, onUpdate: Cascade)
@@ -206,14 +205,14 @@ enum SyncDirection {
 }
 
 model GoogleCalendarSync {
-  id               BigInt        @id @default(autoincrement())
-  userId           BigInt        @map("user_id")
-  tagId            BigInt        @map("tag_id")
+  id               Int           @id @default(autoincrement())
+  userId           Int           @map("user_id")
+  tagId            Int           @map("tag_id")
   googleCalendarId String        @map("calendar_id")
   direction        SyncDirection
 
-  lastSyncedAt DateTime? @map("last_synced_at") @db.Timestamptz(6)
-  syncToken    String?   @map("sync_token") @db.VarChar(128)
+  lastSyncedAt DateTime? @map("last_synced_at")
+  syncToken    String?   @map("sync_token")
   pullCount    Int       @default(0) @map("pull_count")
   pushCount    Int       @default(0) @map("push_count")
   syncedEvents Int       @default(0) @map("synced_events")

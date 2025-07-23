@@ -1,5 +1,6 @@
-import adapter from "@sveltejs/adapter-vercel";
+import adapter from "@sveltejs/adapter-cloudflare";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import path from "node:path";
 
 /** @type {import("@sveltejs/kit").Config} */
 export default {
@@ -8,7 +9,13 @@ export default {
   preprocess: vitePreprocess(),
 
   kit: {
-    adapter: adapter({ runtime: "nodejs22.x" }),
+    adapter: adapter({
+      platformProxy: {
+        persist: {
+          path: path.join(process.env.PROJECT_CWD, ".wrangler/state/v3"),
+        },
+      },
+    }),
 
     alias: {
       $prisma: "./prisma/generated/client.ts",

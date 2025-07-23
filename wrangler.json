@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "name": "timeline",
+  "main": "packages/app/.svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2025-06-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "packages/app/.svelte-kit/cloudflare"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  },
+  "workers_dev": false,
+  "route": {
+    "pattern": "timeline.gautier.dev",
+    "custom_domain": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "timeline",
+      "database_id": "eaf69d3e-eef7-48c4-a82f-d66b4d21b5b5"
+    }
+  ]
+}

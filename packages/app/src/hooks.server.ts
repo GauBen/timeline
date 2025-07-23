@@ -1,5 +1,7 @@
 import { prisma } from "$lib/server/prisma.js";
+import { PrismaD1 } from "@prisma/adapter-d1";
 import type { RequestEvent } from "@sveltejs/kit";
+import { PrismaClient } from "db";
 import { baseLocale, isLocale } from "messages/runtime";
 
 const getSession = async ({ cookies }: RequestEvent) => {
@@ -22,6 +24,8 @@ const getLocale = ({ request, cookies }: RequestEvent) => {
 };
 
 export const handle = async ({ event, resolve }) => {
+  const adapter = new PrismaD1(event.platform!.env.DB);
+  event.locals.prisma = new PrismaClient({ adapter });
   event.locals.session = await getSession(event);
   event.locals.locale = getLocale(event);
 
