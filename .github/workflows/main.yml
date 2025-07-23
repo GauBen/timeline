@@ -22,5 +22,5 @@ jobs:
       - run: just deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN}}
-          MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           YARN_ENABLE_GLOBAL_CACHE: "false"

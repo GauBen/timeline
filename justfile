@@ -21,5 +21,6 @@ lint:
 deploy:
   sed -i 's/"nodejs"/"workerd"/g' packages/db/prisma/schema.prisma
   just build
-  yarn wrangler versions upload --message $MESSAGE
-  echo wip
+  yarn wrangler versions upload --message="$COMMIT_MESSAGE" | tee deploy.log
+  yarn wrangler d1 migrations apply timeline --remote
+  yarn wrangler versions deploy -y $(grep -oP '(?<=Worker Version ID: ).+' deploy.log)@100%
