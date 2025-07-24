@@ -31,7 +31,7 @@
   <main>
     <section id="recent">
       <h2>{m.latest_events()}</h2>
-      <div class="scroll _stack-2" style="padding: .5rem">
+      <div class="scroll _stack-2" style="flex: 1; padding: .5rem">
         {#each latest as event (event.id)}
           <article class:added={event.added}>
             <header>

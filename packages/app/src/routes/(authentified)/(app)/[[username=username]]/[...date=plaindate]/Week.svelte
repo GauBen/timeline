@@ -267,6 +267,8 @@
     grid-auto-rows: 0;
     contain: paint;
     column-gap: 1px;
+    scrollbar-gutter: stable;
+    overflow: hidden;
   }
 
   .scroll {
