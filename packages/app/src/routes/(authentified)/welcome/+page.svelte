@@ -8,17 +8,17 @@
   import * as m from "messages";
   import { getLocale } from "messages/runtime";
   import { Button, Input, Select } from "uistiti";
-  import Dice5 from "~icons/ph/dice-five-duotone";
-  import Dice4 from "~icons/ph/dice-four-duotone";
-  import Dice1 from "~icons/ph/dice-one-duotone";
-  import Dice6 from "~icons/ph/dice-six-duotone";
-  import Dice3 from "~icons/ph/dice-three-duotone";
-  import Dice2 from "~icons/ph/dice-two-duotone";
-  import Translate from "~icons/ph/translate-duotone";
 
-  const dice = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
-  let Die = $state(Dice6);
-  const cast = () => (Die = dice[Math.trunc(Math.random() * 6)]);
+  const dice = [
+    "i-ph-dice-one-duotone",
+    "i-ph-dice-two-duotone",
+    "i-ph-dice-three-duotone",
+    "i-ph-dice-four-duotone",
+    "i-ph-dice-five-duotone",
+    "i-ph-dice-six-duotone",
+  ];
+  let die = $state(dice[5]);
+  const cast = () => (die = dice[Math.trunc(Math.random() * 6)]);
 
   const { form, data } = $props();
 
@@ -66,7 +66,7 @@
     <p>
       <label class="label">
         <span>
-          <Translate aria-hidden />
+          <span class="i-ph-translate-duotone"></span>
           {m.cuddly_weird_reindeer_express()}
         </span>
         <Select
@@ -118,7 +118,7 @@
                 cast();
               }}
             >
-              <Die />
+              <span class={die}>Random</span>
             </Button>
           </span>
           <small>{m.equal_elegant_iguana_stir()}</small>

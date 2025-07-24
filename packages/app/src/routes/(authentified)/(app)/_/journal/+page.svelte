@@ -1,7 +1,5 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
-  import Pencil from "~icons/ph/pencil-duotone";
-  import X from "~icons/ph/x";
   import { Temporal } from "@js-temporal/polyfill";
   import { Button, Card, Input } from "uistiti";
   import { reportValidity } from "formgator/sveltekit";
@@ -41,7 +39,7 @@
           title="Edit"
           style="font-size: 1rem"
         >
-          <X />
+          <span class="i-ph-pencil-duotone">Close</span>
         </Button>
       {:else}
         <Button
@@ -51,7 +49,7 @@
           title="Edit"
           style="font-size: 1rem"
         >
-          <Pencil />
+          <span class="i-ph-pencil-duotone">Edit</span>
         </Button>
       {/if}
     {/snippet}

@@ -8,10 +8,6 @@
   import type { User } from "db";
   import * as m from "messages";
   import type { Snippet } from "svelte";
-  import Calendar from "~icons/ph/calendar-dot-duotone";
-  import CalendarDots from "~icons/ph/calendar-dots-duotone";
-  import ClockClockwise from "~icons/ph/clock-clockwise-duotone";
-  import Globe from "~icons/ph/globe-duotone";
   import EventActions from "./EventActions.svelte";
 
   const {
@@ -44,14 +40,14 @@
               </h3>
               <p style="font-size: .75em">
                 {#if event.public}
-                  <Globe />
+                  <span class="i-ph-globe-duotone"></span>
                 {/if}
                 <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
               </p>
             </header>
             <p>{event.body}</p>
             <footer>
-              <Calendar />
+              <span class="i-ph-calendar-dot-duotone"></span>
               {i18n.format(event.start)}
               <form method="POST" use:enhance>
                 <EventActions {event} {me} />
@@ -73,13 +69,15 @@
         ? "page"
         : undefined}
     >
-      <ClockClockwise /> {m.true_jumpy_tadpole_hush()}</a
+      <span class="i-ph-clock-clockwise"></span>
+      {m.true_jumpy_tadpole_hush()}</a
     >
     <a
       href="#calendar"
       aria-current={page.url.hash === "#calendar" ? "page" : undefined}
     >
-      <CalendarDots /> {m.weird_large_nuthatch_fall()}</a
+      <span class="i-ph-calendar-dots-duotone"></span>
+      {m.weird_large_nuthatch_fall()}</a
     >
   </nav>
 </div>

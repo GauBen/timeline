@@ -5,9 +5,6 @@
   import type { Event } from "$lib/types.js";
   import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Action } from "svelte/action";
-  import CaretLeft from "~icons/ph/caret-left-duotone";
-  import CaretRight from "~icons/ph/caret-right-duotone";
-  import Spinner from "~icons/ph/spinner";
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
 
@@ -166,11 +163,11 @@
               })}
               data-sveltekit-keepfocus
             >
-              <CaretLeft />
+              <span class="i-ph-caret-left-duotone">Previous</span>
             </a>
           {/if}
           {#if !windows[key]}
-            <Spinner class="icon i-spin" aria-label="Loading" />
+            <span class="i-ph-spinner i-spin">Loading</span>
           {/if}
           <a
             style="flex: 1; text-decoration: inherit;"
@@ -185,7 +182,7 @@
               })}
               data-sveltekit-keepfocus
             >
-              <CaretRight />
+              <span class="i-ph-caret-right-duotone">Next</span>
             </a>
           {/if}
         </h2>

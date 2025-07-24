@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import CaretLeft from "~icons/ph/caret-left";
 
   const leaf = $derived(page.url.pathname.split("/").at(2) ?? "settings");
   const leaves: Record<string, string> = {
@@ -19,7 +18,7 @@
   class="_stack-4"
 >
   <nav>
-    <a href="/" class="_row-1"><CaretLeft aria-hidden /> Home</a>
+    <a href="/" class="_row-1"><span class="i-ph-caret-left"></span> Home</a>
     {#each Object.entries(leaves) as [key, title] (key)}
       <a
         href={key === "settings" ? "/_" : `/_/${key}`}

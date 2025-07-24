@@ -1,6 +1,5 @@
 <script>
   import { Card } from "uistiti";
-  import Wrench from "~icons/ph/wrench-duotone";
 </script>
 
 <main
@@ -9,7 +8,7 @@
 >
   <Card color="warning" padding={2}>
     {#snippet header()}
-      <Wrench /> Timeline Developer Pages
+      <span class="i-ph-wrench-duotone"></span> Timeline Developer Pages
     {/snippet}
     <p>
       This page is intended for development purposes and won't be made available

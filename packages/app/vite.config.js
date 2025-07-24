@@ -1,11 +1,22 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
+import unocss from "unocss/vite";
+import { presetIcons } from "unocss";
 
 export default defineConfig({
   plugins: [
     sveltekit(),
-    icons({ compiler: "svelte", scale: 1.25, defaultClass: "icon" }),
+    unocss({
+      presets: [
+        presetIcons({
+          scale: 1.25,
+          extraProperties: {
+            "display": "inline-block",
+            "vertical-align": "text-bottom",
+          },
+        }),
+      ],
+    }),
   ],
   ssr: {
     noExternal: ["formgator"],

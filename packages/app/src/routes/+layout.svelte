@@ -5,6 +5,7 @@
   import "uistiti/reset.css";
   import "uistiti/utils.css";
   import "../app.scss";
+  import "virtual:uno.css";
 
   const { children, data } = $props();
 

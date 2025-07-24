@@ -7,9 +7,6 @@
   import { Temporal } from "@js-temporal/polyfill";
   import { reportValidity } from "formgator/sveltekit";
   import { Button, Select } from "uistiti";
-  import Calendar from "~icons/ph/calendar-dot-duotone";
-  import Back from "~icons/ph/caret-left";
-  import Globe from "~icons/ph/globe-duotone";
   import type { PageData } from "./$types.js";
   import Dialog from "./Dialog.svelte";
   import EventActions from "./EventActions.svelte";
@@ -118,7 +115,7 @@
       </h3>
       <p style="font-size: .75em">
         {#if event.public}
-          <Globe />
+          <span class="i-ph-globe-duotone">Public</span>
         {/if}
         <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
       </p>
@@ -131,7 +128,7 @@
     </header>
     <p>{event.body}</p>
     <footer>
-      <Calendar />
+      <span class="i-ph-calendar-dot-duotone">Date</span>
       {i18n.format(event.start)}
       <form method="POST" use:enhance>
         <EventActions {event} {me} />
@@ -172,7 +169,9 @@
     {#if user}
       <form method="POST" class="_row-2" use:enhance>
         <h1>
-          <a href="/" style="text-decoration: unset"><Back /></a>
+          <a href="/" style="text-decoration: unset">
+            <span class="i-ph-caret-left">Back</span>
+          </a>
           <span
             style="display: inline-block; width: 2rem; height: 2rem; background: purple; border-radius: 1rem"
           ></span>

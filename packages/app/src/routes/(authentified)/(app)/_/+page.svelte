@@ -2,12 +2,11 @@
   import i18n from "$lib/i18n.svelte.js";
   import * as m from "messages";
   import { Select } from "uistiti";
-  import Translate from "~icons/ph/translate-duotone";
 </script>
 
 <p>
   <label class="_row-2">
-    <Translate aria-hidden />
+    <span class="i-ph-translate-duotone"></span>
     {m.cuddly_weird_reindeer_express()}
     <Select
       value={i18n.locale}
