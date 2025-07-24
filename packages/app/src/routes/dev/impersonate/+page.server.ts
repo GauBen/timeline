@@ -22,7 +22,7 @@ export const actions = {
       });
 
       const token = nanoid();
-      platform!.env.SESSIONS.put(token, devalue.stringify(googleUser), {
+      await platform!.env.SESSIONS.put(token, devalue.stringify(googleUser), {
         expirationTtl: 4e7,
       });
 
