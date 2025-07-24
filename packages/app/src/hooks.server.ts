@@ -1,19 +1,17 @@
-import { prisma } from "$lib/server/prisma.js";
 import { PrismaD1 } from "@prisma/adapter-d1";
 import type { RequestEvent } from "@sveltejs/kit";
 import { PrismaClient } from "db";
+import * as devalue from "devalue";
 import { baseLocale, isLocale } from "messages/runtime";
 
-const getSession = async ({ cookies }: RequestEvent) => {
+const getSession = async ({ cookies, platform }: RequestEvent) => {
   const token = cookies.get("session");
-  if (token) {
-    const session = await prisma.session.findUnique({
-      where: { token },
-      include: { googleUser: true },
-    });
-    if (session) return session.googleUser;
-    cookies.delete("session", { path: "/" });
-  }
+  if (!token) return undefined;
+
+  const session = await platform!.env.SESSIONS.get(token);
+  if (session) return devalue.parse(session);
+
+  cookies.delete("session", { path: "/" });
 };
 
 const getLocale = ({ request, cookies }: RequestEvent) => {

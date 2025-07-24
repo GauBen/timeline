@@ -1,9 +1,12 @@
 import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
 import { error, redirect } from "@sveltejs/kit";
+import * as devalue from "devalue";
 import * as fg from "formgator";
 import { formfail, formgate } from "formgator/sveltekit";
 import { locales } from "messages/runtime";
+
+export const load = ({ locals }) => ({ email: locals.session!.email });
 
 const reserved = new Set([
   // @keep-sorted
@@ -67,13 +70,19 @@ export const actions = {
       timezone: fg.select(timezones, { required: true }),
       locale: fg.select(locales, { required: true }),
     },
-    async (data, { locals }) => {
-      if (!locals.session) error(401, "Unauthorized");
+    async (data, { locals, platform, cookies }) => {
+      const token = cookies.get("session");
+      if (!locals.session || !token) error(401, "Unauthorized");
 
       try {
-        await prisma.user.create({
+        const user = await prisma.user.create({
           data: { ...data, id: locals.session.id },
         });
+        // Update the session to include the newly created user
+        await platform?.env.SESSIONS.put(
+          token,
+          devalue.stringify({ ...locals.session, user }),
+        );
       } catch {
         formfail({ username: "Username already in use" });
       }

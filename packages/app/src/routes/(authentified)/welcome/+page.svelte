@@ -88,12 +88,7 @@
       <label class="label">
         <span>{m.tame_north_sheep_zap()}</span>
         <span class="_stack-1" style="flex: 1">
-          <Input
-            type="text"
-            value={data.session.email}
-            readonly
-            style="width: 100%"
-          />
+          <Input type="text" value={data.email} readonly style="width: 100%" />
           <small>{m.patient_next_thrush_soar()}</small>
         </span>
       </label>

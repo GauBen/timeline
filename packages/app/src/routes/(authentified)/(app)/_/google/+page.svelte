@@ -9,7 +9,7 @@
   <p>Don't use this feature yet, it'll make your data public.</p>
 </Card>
 
-{#if data.me.tags.length === 0}
+{#if data.tags.length === 0}
   <Card color="danger" variant="solid">
     <p>
       You need to create a tag first.
@@ -49,7 +49,7 @@
         </Select>
         to
         <Select name="tagId" value={sync?.tag?.id} required>
-          {#each data.me.tags as tag (tag.id)}
+          {#each data.tags as tag (tag.id)}
             <option value={tag.id}>{tag.name}</option>
           {/each}
         </Select>

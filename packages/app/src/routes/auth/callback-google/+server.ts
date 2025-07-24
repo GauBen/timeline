@@ -1,10 +1,11 @@
 import { client } from "$lib/server/google.js";
 import { prisma } from "$lib/server/prisma.js";
 import { error, redirect } from "@sveltejs/kit";
+import * as devalue from "devalue";
 import { jwtDecode } from "jwt-decode";
 import { nanoid } from "nanoid";
 
-export const GET = async ({ url, cookies }) => {
+export const GET = async ({ url, cookies, platform }) => {
   const code = url.searchParams.get("code");
   if (!code) error(400, "Invalid code");
 
@@ -35,19 +36,17 @@ export const GET = async ({ url, cookies }) => {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
     },
+    select: { id: true, email: true, user: true },
   });
 
-  const session = await prisma.session.create({
-    data: {
-      googleUserId: googleUser.id,
-      token: nanoid(),
-      expiresAt: new Date(Date.now() + 4e10),
-    },
+  const token = nanoid();
+  platform!.env.SESSIONS.put(token, devalue.stringify(googleUser), {
+    expirationTtl: 4e7,
   });
 
-  cookies.set("session", session.token, {
+  cookies.set("session", token, {
     path: "/",
-    expires: session.expiresAt,
+    expires: new Date(Date.now() + 4e10),
   });
 
   redirect(307, "/");

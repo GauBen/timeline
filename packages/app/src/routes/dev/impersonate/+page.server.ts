@@ -1,6 +1,7 @@
 import { env } from "$env/dynamic/private";
 import { prisma } from "$lib/server/prisma.js";
 import { error, redirect } from "@sveltejs/kit";
+import * as devalue from "devalue";
 import * as fg from "formgator";
 import { formgate } from "formgator/sveltekit";
 import { nanoid } from "nanoid";
@@ -12,20 +13,22 @@ export const load = async () => ({
 export const actions = {
   login: formgate(
     { id: fg.number({ required: true }) },
-    async ({ id }, { cookies }) => {
+    async ({ id }, { cookies, platform }) => {
       if (!env.DEV_MODE) error(403, "Not allowed in production");
 
-      const session = await prisma.session.create({
-        data: {
-          token: nanoid(),
-          expiresAt: new Date(Date.now() + 4e10),
-          googleUserId: id,
-        },
+      const googleUser = await prisma.googleUser.findUniqueOrThrow({
+        where: { id },
+        select: { id: true, email: true, user: true },
       });
 
-      cookies.set("session", session.token, {
+      const token = nanoid();
+      platform!.env.SESSIONS.put(token, devalue.stringify(googleUser), {
+        expirationTtl: 4e7,
+      });
+
+      cookies.set("session", token, {
         path: "/",
-        expires: session.expiresAt,
+        expires: new Date(Date.now() + 4e10),
       });
 
       redirect(307, "/");

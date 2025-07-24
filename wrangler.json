@@ -28,5 +28,11 @@
       "database_name": "timeline",
       "database_id": "eaf69d3e-eef7-48c4-a82f-d66b4d21b5b5"
     }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "SESSIONS",
+      "id": "3523c6bfe4684359a075ce72efcc259f"
+    }
   ]
 }

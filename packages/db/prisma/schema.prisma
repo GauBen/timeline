@@ -17,20 +17,9 @@ model GoogleUser {
   accessToken  String? @map("access_token")
   refreshToken String? @map("refresh_token")
 
-  user     User?
-  sessions Session[]
+  user User?
 
   @@map("google_users")
-}
-
-model Session {
-  googleUserId Int      @map("google_user_id")
-  token        String   @id
-  expiresAt    DateTime @map("expires_at")
-
-  googleUser GoogleUser @relation(fields: [googleUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@map("sessions")
 }
 
 model User {

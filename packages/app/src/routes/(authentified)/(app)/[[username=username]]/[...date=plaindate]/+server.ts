@@ -83,7 +83,7 @@ const load = async (me: User, user: User | undefined, date: string) => {
 
 export const GET = async ({ params, locals }) => {
   if (!locals.session) error(401, "Unauthorized");
-  const me = await prisma.user.findUnique({ where: { id: locals.session.id } });
+  const me = locals.session.user;
   if (!me) error(401, "Unauthorized");
 
   let user: User | undefined;
