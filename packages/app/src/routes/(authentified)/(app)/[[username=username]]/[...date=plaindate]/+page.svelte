@@ -5,7 +5,7 @@
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import { reportValidity } from "formgator/sveltekit";
-  import { Button, Select } from "uistiti";
+  import { Button, Card, Select } from "uistiti";
   import type { PageData } from "./$types.js";
   import Dialog from "./Dialog.svelte";
   import EventActions from "./EventActions.svelte";
@@ -41,6 +41,8 @@
 </script>
 
 <script lang="ts">
+  import { Textarea } from "uistiti";
+
   const { data, params } = $props();
   const {
     event,
@@ -85,6 +87,13 @@
       else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
 
       if (to) await toggleEventCreation(to);
+    } else if (page.url.searchParams.has("/journal")) {
+      if (key === "Escape") {
+        await goto(paths.resolveRoute(params, { search: "" }), {
+          keepFocus: true,
+          noScroll: true,
+        });
+      }
     } else {
       if (key === "ArrowLeft") {
         await goto(
@@ -146,20 +155,41 @@
 {:else if page.url.searchParams.has("/journal")}
   {@const date = page.url.searchParams.get("/journal")!}
   <dialog open style="z-index: 100">
-    <form
-      action="?/journal={date}"
-      method="POST"
-      use:enhance={() => reportValidity({ reset: false })}
-    >
-      <h3>
-        Journal: {i18n.formatDay(Temporal.PlainDate.from(date))}
-        <a href={paths.resolveRoute(params, { search: "" })}>Close</a>
-      </h3>
-      <input type="hidden" name="date" value={date} />
-      <textarea name="body" cols="50" rows="8" value={journal?.body ?? ""}
-      ></textarea>
-      <Button color="success">Save</Button>
-    </form>
+    <Card>
+      {#snippet header()}
+        <div style="flex: 1; user-select: none">
+          <span class="i-ph-pen-nib-duotone"></span>
+          {i18n.formatDay(Temporal.PlainDate.from(date))}
+        </div>
+        <a href={paths.resolveRoute(params, { search: "" })}>
+          <span class="i-ph-x">Close</span>
+        </a>
+      {/snippet}
+      <form
+        action="?/journal={date}"
+        method="POST"
+        use:enhance={() => reportValidity({ reset: false })}
+        class="_stack-2"
+      >
+        <input type="hidden" name="date" value={date} />
+        <label class="_stack-2">
+          {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
+            How was your day?
+          {:else}
+            Who knows what the future holds?
+          {/if}
+          <Textarea
+            name="body"
+            cols={50}
+            rows={8}
+            value={journal?.body ?? ""}
+          />
+        </label>
+        <p style="text-align: end">
+          <Button color="success">Save</Button>
+        </p>
+      </form>
+    </Card>
   </dialog>
 {/if}
 
@@ -210,6 +240,14 @@
 
 <style lang="scss">
   dialog {
+    z-index: 100;
+    padding: 0;
+    border: 0;
+    background: none;
     min-width: 20rem;
+    max-width: 100%;
+    margin: 0 auto;
+    box-shadow: 0 0 1em var(--ui-neutral-9);
+    border-radius: 0.25em;
   }
 </style>
