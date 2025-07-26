@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import command from "eslint-plugin-command/config";
+import storybook from "eslint-plugin-storybook";
 import svelte from "eslint-plugin-svelte";
 import globals from "globals";
 import ts from "typescript-eslint";
@@ -39,4 +40,5 @@ export default ts.config(
       "**/src/paraglide",
     ],
   },
+  storybook.configs["flat/recommended"],
 );

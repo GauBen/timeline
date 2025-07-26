@@ -13,10 +13,8 @@ function getAbsolutePath(value: string): string {
 export default {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|ts|svelte)"],
   addons: [
-    "@storybook/addon-svelte-csf",
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("@chromatic-com/storybook"),
-    getAbsolutePath("@storybook/addon-interactions"),
+    getAbsolutePath("@storybook/addon-svelte-csf"),
+    getAbsolutePath("@storybook/addon-docs"),
   ],
   framework: {
     name: getAbsolutePath("@storybook/sveltekit"),

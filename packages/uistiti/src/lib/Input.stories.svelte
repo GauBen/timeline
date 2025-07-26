@@ -2,7 +2,6 @@
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import Input from "./Input.svelte";
   import { colors, variants } from "./definitions.js";
-  import { createRawSnippet } from "svelte";
 
   const keys = Object.keys as <T>(o: T) => Array<keyof T>;
 
@@ -21,26 +20,25 @@
         options: keys(variants),
       },
     },
-    args: {
-      children: createRawSnippet(() => ({ render: () => "Click me" })),
-    },
   });
 </script>
 
 <Story name="Default" />
 
 <Story name="All combinations">
-  <table>
-    <tbody>
-      {#each keys(variants) as variant (variant)}
-        <tr>
-          {#each keys(colors) as color (color)}
-            <td>
-              <Input {variant} {color} />
-            </td>
-          {/each}
-        </tr>
-      {/each}
-    </tbody>
-  </table>
+  {#snippet template()}
+    <table>
+      <tbody>
+        {#each keys(variants) as variant (variant)}
+          <tr>
+            {#each keys(colors) as color (color)}
+              <td>
+                <Input {variant} {color} />
+              </td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {/snippet}
 </Story>

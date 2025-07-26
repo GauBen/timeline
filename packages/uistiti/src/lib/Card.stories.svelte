@@ -26,17 +26,19 @@
 </script>
 
 <Story name="Default">
-  {#snippet children(args: CommonProps)}
+  {#snippet template(args: CommonProps)}
     <Card {...args} class="_stack-2">
       <h2>Card sample</h2>
       <p>Card content</p>
-      <Button>Button</Button>
+      <p>
+        <Button>Button</Button>
+      </p>
     </Card>
   {/snippet}
 </Story>
 
 <Story name="New event">
-  {#snippet children(args: CommonProps)}
+  {#snippet template(args: CommonProps)}
     <Card {...args} class="_stack-2">
       {#snippet header()}
         Create new event

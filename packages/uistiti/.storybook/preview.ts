@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/svelte";
+import type { Preview } from "@storybook/sveltekit";
 
 import "modern-normalize/modern-normalize.css";
 import "uistiti/global.css";
