@@ -1,5 +1,4 @@
 import { prisma } from "$lib/server/prisma.js";
-import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 import type { Prisma, User } from "db";
 import { error } from "@sveltejs/kit";
 import { stringify } from "devalue";
@@ -63,8 +62,8 @@ const load = async (me: User, user: User | undefined, date: string) => {
   ]);
 
   const windows = Map.groupBy(events, (event) =>
-    toTemporalInstant
-      .call(event.start)
+    event.start
+      .toTemporalInstant()
       .toZonedDateTimeISO(me.timezone)
       .toPlainDate()
       .toString(),

@@ -1,11 +1,11 @@
-import { Temporal } from "@js-temporal/polyfill";
-import * as fg from "formgator";
-import { loadgate } from "formgator/sveltekit";
-import type { Events } from "./+server.ts";
-import { unflatten } from "devalue";
-import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import type { MaybePromise } from "$lib/types.js";
+import { error } from "@sveltejs/kit";
+import { unflatten } from "devalue";
+import * as fg from "formgator";
+import { loadgate } from "formgator/sveltekit";
+import { Temporal } from "temporal-polyfill";
+import type { Events } from "./+server.ts";
 
 export const load = loadgate(
   {

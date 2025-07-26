@@ -1,6 +1,5 @@
 <script lang="ts">
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
-  import { Temporal } from "@js-temporal/polyfill";
 
   let timezone = $state(Intl.DateTimeFormat().resolvedOptions().timeZone);
   let now = $state.raw(Temporal.Now.instant());

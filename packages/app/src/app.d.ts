@@ -1,7 +1,7 @@
 import { D1Database, KVNamespace } from "@cloudflare/workers-types";
 import type { Prisma, PrismaClient, User } from "db";
 import type { Locale } from "messages/runtime";
-import "unplugin-icons/types/svelte";
+import "temporal-polyfill/global";
 
 declare global {
   namespace App {

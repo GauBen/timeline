@@ -8,7 +8,6 @@
     offset,
     shift,
   } from "@floating-ui/dom";
-  import { Temporal } from "@js-temporal/polyfill";
   import type { Follow, Tag, User } from "db";
   import { reportValidity } from "formgator/sveltekit";
   import { Button, Card, Input, Select } from "uistiti";

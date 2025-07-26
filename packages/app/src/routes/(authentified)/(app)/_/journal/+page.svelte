@@ -1,6 +1,5 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
-  import { Temporal } from "@js-temporal/polyfill";
   import { Button, Card, Input } from "uistiti";
   import { reportValidity } from "formgator/sveltekit";
   import { enhance } from "$app/forms";

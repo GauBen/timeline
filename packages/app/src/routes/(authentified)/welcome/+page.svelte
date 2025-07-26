@@ -2,7 +2,6 @@
   import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import i18n from "$lib/i18n.svelte.js";
-  import { Temporal } from "@js-temporal/polyfill";
   import { reportValidity } from "formgator/sveltekit";
   import { humanId } from "human-id";
   import * as m from "messages";

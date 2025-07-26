@@ -1,6 +1,6 @@
 import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
-import { Temporal } from "@js-temporal/polyfill";
+import { Temporal } from "temporal-polyfill";
 import type { Prisma } from "db";
 import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";

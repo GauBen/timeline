@@ -3,7 +3,6 @@
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
-  import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { Action } from "svelte/action";
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
@@ -28,7 +27,7 @@
   };
 
   const fixDate = (date: Date) =>
-    toTemporalInstant.call(date).toZonedDateTimeISO(timezone);
+    date.toTemporalInstant().toZonedDateTimeISO(timezone);
 
   const toRems = (date: Temporal.PlainTime) =>
     // We can't just use `date.since` because of DST!
@@ -104,8 +103,8 @@
             name,
             days: new Set(
               marks.map(({ date }) =>
-                toTemporalInstant
-                  .call(date)
+                date
+                  .toTemporalInstant()
                   .toZonedDateTimeISO(timezone)
                   .toPlainDate()
                   .toString(),
@@ -125,8 +124,8 @@
             name,
             days: new Set(
               marks.map(({ date }) =>
-                toTemporalInstant
-                  .call(date)
+                date
+                  .toTemporalInstant()
                   .toZonedDateTimeISO(timezone)
                   .toPlainDate()
                   .toString(),

@@ -1,7 +1,6 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
   import type { Event } from "$lib/types.js";
-  import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
 
   let {
     events,
@@ -20,7 +19,7 @@
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
   const fixDate = (date: Date) =>
-    toTemporalInstant.call(date).toZonedDateTimeISO(timezone);
+    date.toTemporalInstant().toZonedDateTimeISO(timezone);
 
   const time = $derived(Temporal.Now.plainTimeISO(timezone));
   const toRems = (date: Temporal.PlainTime) =>

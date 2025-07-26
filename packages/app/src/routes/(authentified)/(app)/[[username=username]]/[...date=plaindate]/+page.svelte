@@ -4,7 +4,6 @@
   import { page } from "$app/state";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import { Temporal } from "@js-temporal/polyfill";
   import { reportValidity } from "formgator/sveltekit";
   import { Button, Select } from "uistiti";
   import type { PageData } from "./$types.js";

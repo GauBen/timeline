@@ -1,5 +1,4 @@
 import { page } from "$app/state";
-import { Temporal } from "@js-temporal/polyfill";
 import * as m from "messages";
 
 const thresholds = {

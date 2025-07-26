@@ -1,5 +1,5 @@
-import { Temporal } from "@js-temporal/polyfill";
 import type { Transport, Transporter } from "@sveltejs/kit";
+import "temporal-polyfill/global";
 
 export const transport: Transport = {
   PlainDate: {

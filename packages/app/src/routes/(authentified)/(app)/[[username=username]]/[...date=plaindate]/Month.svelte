@@ -1,6 +1,5 @@
 <script lang="ts">
   import paths from "$lib/paths.svelte.js";
-  import { Temporal, toTemporalInstant } from "@js-temporal/polyfill";
   import type { ViewProps } from "./+page.svelte";
 
   let { events, start, timezone, eventInCreation, onevent }: ViewProps =
@@ -70,7 +69,7 @@
               events.filter(
                 ({ start }) =>
                   Temporal.PlainDateTime.compare(
-                    toTemporalInstant.call(start).toZonedDateTimeISO(timezone),
+                    start.toTemporalInstant().toZonedDateTimeISO(timezone),
                     eventInCreation!,
                   ) < 0,
               ).length}

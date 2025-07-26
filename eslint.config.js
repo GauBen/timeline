@@ -15,7 +15,7 @@ export default ts.config(
   svelte.configs["flat/prettier"],
   {
     languageOptions: {
-      globals: { ...globals.node, ...globals.browser },
+      globals: { ...globals.node, ...globals.browser, Temporal: "readonly" },
       parserOptions: { parser: ts.parser },
     },
     rules: {

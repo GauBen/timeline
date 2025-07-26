@@ -1,5 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
-
 export const match = (param) => {
   if (param.length === 0) return true;
   const matches = param.match(
