@@ -33,7 +33,7 @@
       box-shadow: inset 0 0 0 var(--ui-border-hover);
 
       &:hover {
-        box-shadow: inset 0 -0.125em 0 var(--ui-border-hover);
+        box-shadow: inset 0 calc(-1em / 16) 0 var(--ui-border-hover);
         border-color: var(--ui-border-hover);
       }
 

@@ -37,7 +37,7 @@
           <tr>
             {#each keys(colors) as color (color)}
               <td>
-                <Button {variant} {color}>
+                <Button {variant} {color} style="width:100%">
                   {variant}
                   {color}
                 </Button>

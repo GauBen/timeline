@@ -46,8 +46,8 @@
       <p><label>Event <Input type="text" /></label></p>
       <p><label>Date <Input type="date" /></label></p>
       <p>
-        <Button color="success">Save</Button>
-        <Button color="danger" variant="outline">Cancel</Button>
+        <Button color="success" variant="solid">Save</Button>
+        <Button color="danger" variant="ghost">Cancel</Button>
       </p>
     </Card>
   {/snippet}

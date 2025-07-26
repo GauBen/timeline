@@ -151,7 +151,7 @@
       {m.tense_loved_jan_thrive()}
     </p>
     <p>
-      <Button type="submit" color="success" style="width: 100%; font-size: 3em">
+      <Button type="submit" color="success" style="width: 100%; font-size: 2em">
         {m.early_dark_bobcat_hack()}
       </Button>
     </p>

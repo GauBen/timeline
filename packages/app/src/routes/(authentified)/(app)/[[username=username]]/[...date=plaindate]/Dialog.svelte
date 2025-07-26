@@ -245,6 +245,8 @@
     background: none;
     max-width: 100%;
     margin: 0;
+    box-shadow: 0 0 1em var(--ui-neutral-9);
+    border-radius: 0.25em;
   }
 
   .label {
