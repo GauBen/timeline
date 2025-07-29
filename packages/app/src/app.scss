@@ -1,5 +1,6 @@
 body {
   line-height: 1.25;
+  font-family: figtree, system-ui;
 }
 
 a:link,
@@ -22,4 +23,14 @@ a:visited {
   to {
     transform: rotate(360deg);
   }
+}
+
+h1 {
+  font-family: "Hepta Slab", serif;
+  font-weight: 750;
+}
+
+h2 {
+  font-weight: 500;
+  font-family: "outfit", sans-serif;
 }

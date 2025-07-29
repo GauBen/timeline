@@ -153,6 +153,7 @@
   <header bind:this={calendarHeader}>
     {#each keys as key, i (key)}
       {@const day = Temporal.PlainDate.from(key)}
+      {@const { number, weekday } = i18n.dayParts(day)}
       <div class="column">
         <h2 class="_row-2">
           {#if i === 0}
@@ -169,10 +170,29 @@
             <span class="i-ph-spinner i-spin">Loading</span>
           {/if}
           <a
-            style="flex: 1; text-decoration: inherit;"
+            class="_stack-0"
             href="?/journal={day.toString()}"
+            style="flex: 1; text-decoration: inherit; align-items: center"
           >
-            {i18n.formatDay(day)}
+            <span
+              style="font-size: .75em; font-weight: 700;  opacity: .5; {day.equals(
+                today,
+              )
+                ? 'color: #f00'
+                : ''}"
+            >
+              {weekday}
+            </span>
+            <span
+              style="line-height: 1; display: flex;
+  align-items: center; padding: .5rem; aspect-ratio: 1; font-size: 1.5em; font-family: 'Hepta Slab'; font-weight: 400; {day.equals(
+                today,
+              )
+                ? 'background: #fcc; border-radius: 99px'
+                : ''}"
+            >
+              {number}
+            </span>
           </a>
           {#if i === numberOfColumns - 1}
             <a
@@ -215,12 +235,13 @@
       eventInCreation,
     }}
   >
-    {#each keys as key (key)}
+    {#each keys as key, i (key)}
       {@const day = Temporal.PlainDate.from(key)}
       <Day
         {day}
         {onevent}
         {timezone}
+        withTime={i === 0}
         {eventInCreation}
         bind:this={days[key]}
         events={windows[key] ?? []}

@@ -7,12 +7,14 @@
     day,
     eventInCreation,
     timezone,
+    withTime,
     onevent,
   }: {
     events: Event[];
     day: Temporal.PlainDate;
     eventInCreation?: Temporal.PlainDateTime;
     timezone: string;
+    withTime: boolean;
     onevent: (event: Temporal.PlainDateTime) => void;
   } = $props();
 
@@ -56,15 +58,17 @@
 <div class="day" onclick={placeEvent}>
   {#each { length: 23 }, hour}
     <div>
-      <span>
-        {Temporal.PlainTime.from({ hour: hour + 1 }).toLocaleString(
-          i18n.locale,
-          {
-            hour: "numeric",
-            minute: "numeric",
-          },
-        )}
-      </span>
+      {#if withTime}
+        <span>
+          {Temporal.PlainTime.from({ hour: hour + 1 }).toLocaleString(
+            i18n.locale,
+            {
+              hour: "numeric",
+              minute: "numeric",
+            },
+          )}
+        </span>
+      {/if}
     </div>
   {/each}
   <div style="border: 0"></div>

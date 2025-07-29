@@ -44,4 +44,10 @@ export default {
       day: "numeric",
     });
   },
+  dayParts(day: Temporal.PlainDate) {
+    return {
+      number: day.toLocaleString(this.locale, { day: "numeric" }),
+      weekday: day.toLocaleString(this.locale, { weekday: "short" }),
+    };
+  },
 };
