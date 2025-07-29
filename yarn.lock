@@ -603,6 +603,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource-variable/figtree@npm:^5.2.8":
+  version: 5.2.8
+  resolution: "@fontsource-variable/figtree@npm:5.2.8"
+  checksum: 10c0/ae2c0324918e2e41d2050b895ef220fcff1d64d723951891c9408769f1b348688c15b17c85402bf880c44cfe20396efb4822f2c431b2bbe35234144a2defda01
+  languageName: node
+  linkType: hard
+
+"@fontsource-variable/hepta-slab@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "@fontsource-variable/hepta-slab@npm:5.2.6"
+  checksum: 10c0/009ace31bc4f6c2c262c609146e1d798a9e64b36357a9a7c6cbab7d76471897dbf03f5c146a5f6d0a1a5ebb2851e7033be91c024e1bf64945c370fb4046f8882
+  languageName: node
+  linkType: hard
+
+"@fontsource-variable/montserrat@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "@fontsource-variable/montserrat@npm:5.2.6"
+  checksum: 10c0/6ddc7fe5c388558b89606a232488b4c5a63da5bc322635cf69e449b9c8d2627b040a3af8fbc79a1ea267051820011f9976d9e8a5104412d51bd3103739b6e943
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -1782,6 +1803,9 @@ __metadata:
   resolution: "@timeline/app@workspace:packages/app"
   dependencies:
     "@floating-ui/dom": "npm:^1.7.2"
+    "@fontsource-variable/figtree": "npm:^5.2.8"
+    "@fontsource-variable/hepta-slab": "npm:^5.2.6"
+    "@fontsource-variable/montserrat": "npm:^5.2.6"
     "@iconify-json/ph": "npm:^1.2.2"
     "@prisma/adapter-d1": "npm:^6.12.0"
     "@sveltejs/adapter-cloudflare": "https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f"

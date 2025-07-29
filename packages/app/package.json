@@ -29,6 +29,9 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "@fontsource-variable/figtree": "^5.2.8",
+    "@fontsource-variable/hepta-slab": "^5.2.6",
+    "@fontsource-variable/montserrat": "^5.2.6",
     "@iconify-json/ph": "^1.2.2",
     "@sveltejs/adapter-cloudflare": "https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f",
     "@sveltejs/kit": "^2.26.0",

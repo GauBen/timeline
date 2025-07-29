@@ -257,4 +257,8 @@
     box-shadow: 0 0 1em var(--ui-neutral-9);
     border-radius: 0.25em;
   }
+
+  h1 {
+    font-weight: 800;
+  }
 </style>

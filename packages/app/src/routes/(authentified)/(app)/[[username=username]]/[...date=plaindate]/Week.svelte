@@ -185,7 +185,7 @@
             </span>
             <span
               style="line-height: 1; display: flex;
-  align-items: center; padding: .5rem; aspect-ratio: 1; font-size: 1.5em; font-family: 'Hepta Slab'; font-weight: 400; {day.equals(
+  align-items: center; padding: .5rem; aspect-ratio: 1; font-size: 1.5em; font-family: 'Hepta Slab Variable'; font-weight: 400; {day.equals(
                 today,
               )
                 ? 'background: #fcc; border-radius: 99px'

@@ -1,6 +1,10 @@
+@forward "@fontsource-variable/figtree";
+@forward "@fontsource-variable/montserrat";
+@forward "@fontsource-variable/hepta-slab";
+
 body {
   line-height: 1.25;
-  font-family: figtree, system-ui;
+  font-family: "Figtree Variable", system-ui;
 }
 
 a:link,
@@ -26,11 +30,17 @@ a:visited {
 }
 
 h1 {
-  font-family: "Hepta Slab", serif;
-  font-weight: 750;
+  font-family: "Hepta Slab Variable", serif;
+  font-weight: 700;
 }
 
-h2 {
+h2,
+h3 {
+  font-weight: 600;
+  font-family: "Montserrat Variable", system-ui;
+}
+
+button {
   font-weight: 500;
-  font-family: "outfit", sans-serif;
+  letter-spacing: 0.01em;
 }
