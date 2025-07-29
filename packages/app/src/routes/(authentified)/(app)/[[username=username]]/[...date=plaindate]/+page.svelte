@@ -114,34 +114,41 @@
 
 {#if event}
   <dialog open style="z-index: 1">
-    <a href={page.url.pathname}>Close</a>
-    <header>
-      <h3>
-        <a href={paths.resolveRoute({ username: event.author.username })}>
-          @{event.author.username}
+    <Card>
+      {#snippet header()}
+        <span style="flex: 1; user-select: none"> Event details </span>
+        <a href={paths.resolveRoute(params, { search: "" })}>
+          <span class="i-ph-x">Close</span>
         </a>
-      </h3>
-      <p style="font-size: .75em">
-        {#if event.public}
-          <span class="i-ph-globe-duotone">Public</span>
-        {/if}
-        <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
-      </p>
-      <p>
-        Tags:
-        {#each event.event.tags as tag (tag.id)}
-          {tag.name},
-        {/each}
-      </p>
-    </header>
-    <p>{event.body}</p>
-    <footer>
-      <span class="i-ph-calendar-dot-duotone">Date</span>
-      {i18n.format(event.start)}
-      <form method="POST" use:enhance>
-        <EventActions {event} {me} />
-      </form>
-    </footer>
+      {/snippet}
+      <header>
+        <h3>
+          <a href={paths.resolveRoute({ username: event.author.username })}>
+            @{event.author.username}
+          </a>
+        </h3>
+        <p style="font-size: .75em">
+          {#if event.public}
+            <span class="i-ph-globe-duotone">Public</span>
+          {/if}
+          <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
+        </p>
+        <p>
+          Tags:
+          {#each event.event.tags as tag (tag.id)}
+            {tag.name},
+          {/each}
+        </p>
+      </header>
+      <p>{event.body}</p>
+      <footer>
+        <span class="i-ph-calendar-dot-duotone">Date</span>
+        {i18n.format(event.start)}
+        <form method="POST" use:enhance>
+          <EventActions {event} {me} />
+        </form>
+      </footer>
+    </Card>
   </dialog>
 {:else if eventInCreation}
   <Dialog
