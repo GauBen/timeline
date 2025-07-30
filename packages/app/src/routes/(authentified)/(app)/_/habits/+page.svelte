@@ -18,10 +18,11 @@
             type="submit"
             name="id"
             value={habit.id.toString()}
-            variant="outline"
+            variant="ghost"
             color="danger"
+            square
           >
-            Remove
+            <span class="i-ph-trash-duotone">Remove</span>
           </Button>
         </li>
       {/each}
