@@ -34,7 +34,11 @@ for (const [name, variant] of Object.entries(variants)) {
   output += "}\n\n";
 }
 
-writeFileSync(new URL("../dist/global.css", import.meta.url), output, "utf-8");
+writeFileSync(
+  new URL("../dist/variables.css", import.meta.url),
+  output,
+  "utf-8",
+);
 
 output = "";
 

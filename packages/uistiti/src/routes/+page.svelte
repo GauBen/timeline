@@ -2,10 +2,7 @@
   import Button from "$lib/Button.svelte";
   import Card from "$lib/Card.svelte";
   import { colors, variants } from "$lib/definitions.js";
-  import "modern-normalize/modern-normalize.css";
-  import "uistiti/global.css";
-  import "uistiti/reset.css";
-  import "uistiti/utils.css";
+  import "uistiti/css";
 
   const keys = Object.keys as <T>(o: T) => Array<keyof T>;
 </script>
@@ -30,12 +27,14 @@
   </table>
 </section>
 
-<section>
+<section class="_stack-2">
   <h2>Inheritance</h2>
   {#each keys(colors) as color (color)}
-    <Card {color}>
-      <h3 style="margin-top: 0; text-transform: capitalize">{color}</h3>
-      <Button>Ok</Button>
+    <Card {color} class="_stack-4">
+      <h3 style="text-transform: capitalize">{color}</h3>
+      <p>
+        <Button>Ok</Button>
+      </p>
     </Card>
   {/each}
 </section>
@@ -43,7 +42,7 @@
 <style lang="scss">
   section {
     max-width: 80rem;
-    margin: 1rem auto;
     padding-inline: 1rem;
+    margin: 1rem auto;
   }
 </style>

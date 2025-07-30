@@ -1,0 +1,19 @@
+:where(*) {
+  margin-block: 0;
+}
+
+:root {
+  font-family: "Figtree Variable", system-ui;
+  line-height: 1.25;
+}
+
+h1 {
+  font-family: "Hepta Slab Variable", serif;
+  font-weight: 700;
+}
+
+h2,
+h3 {
+  font-family: "Montserrat Variable", system-ui;
+  font-weight: 600;
+}
