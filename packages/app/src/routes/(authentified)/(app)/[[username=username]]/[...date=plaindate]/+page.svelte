@@ -248,17 +248,25 @@
 <style lang="scss">
   dialog {
     z-index: 100;
-    padding: 0;
-    border: 0;
-    background: none;
     min-width: 20rem;
     max-width: 100%;
+    padding: 0;
     margin: 0 auto;
-    box-shadow: 0 0 1em var(--ui-neutral-9);
+    background: none;
+    border: 0;
     border-radius: 0.25em;
+    box-shadow: 0 0 1em var(--ui-neutral-9);
   }
 
-  h1 {
+  h1 a {
     font-weight: 800;
+    transition:
+      font-weight 150ms,
+      letter-spacing 150ms;
+
+    &:hover {
+      font-weight: 850;
+      letter-spacing: 0.05em;
+    }
   }
 </style>

@@ -5,4 +5,7 @@ export default {
     "stylelint-config-recess-order",
     "stylelint-config-html/svelte",
   ],
+  rules: {
+    "custom-property-empty-line-before": false,
+  },
 };
