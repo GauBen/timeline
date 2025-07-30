@@ -199,8 +199,13 @@
                   name="mark"
                   value={(!days.has(key)).toString()}
                   variant="ghost"
+                  square
                 >
-                  {days.has(key) ? "☑️" : "⬜"}
+                  <span
+                    class={days.has(key)
+                      ? "i-ph-check-circle-duotone"
+                      : "i-ph-circle"}
+                  ></span>
                   {name}
                 </Button>
               </form>
