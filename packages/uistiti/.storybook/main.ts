@@ -1,5 +1,6 @@
 import type { StorybookConfig } from "@storybook/sveltekit";
-import { join, dirname } from "node:path";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { mergeConfig } from "vite";
 
 /**
@@ -7,7 +8,9 @@ import { mergeConfig } from "vite";
  * in projects that use Yarn PnP or are set up within a monorepo.
  */
 function getAbsolutePath(value: string): string {
-  return dirname(require.resolve(join(value, "package.json")));
+  return fileURLToPath(
+    new URL(".", import.meta.resolve(join(value, "package.json"))),
+  );
 }
 
 export default {

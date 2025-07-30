@@ -4,6 +4,7 @@
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import type { Action } from "svelte/action";
+  import { DayBlock } from "uistiti";
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
 
@@ -172,27 +173,9 @@
           <a
             class="_stack-0"
             href="?/journal={day.toString()}"
-            style="flex: 1; text-decoration: inherit; align-items: center"
+            style="flex: 1; text-decoration: inherit"
           >
-            <span
-              style="font-size: .75em; font-weight: 700;  opacity: .5; {day.equals(
-                today,
-              )
-                ? 'color: #f00'
-                : ''}"
-            >
-              {weekday}
-            </span>
-            <span
-              style="line-height: 1; display: flex;
-  align-items: center; padding: .5rem; aspect-ratio: 1; font-size: 1.5em; font-family: 'Hepta Slab Variable'; font-weight: 400; {day.equals(
-                today,
-              )
-                ? 'background: #fcc; border-radius: 99px'
-                : ''}"
-            >
-              {number}
-            </span>
+            <DayBlock {number} {weekday} selected={day.equals(today)} />
           </a>
           {#if i === numberOfColumns - 1}
             <a
@@ -258,39 +241,39 @@
   }
 
   header {
-    box-shadow: 0 0 0.5rem #19191a10;
     z-index: 1;
+    box-shadow: 0 0 0.5rem #19191a10;
 
     .column {
-      background: #fff;
-      padding: 0.5rem;
-      contain: paint;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      padding: 0.5rem;
+      contain: paint;
+      background: #fff;
     }
 
     h2 {
-      background: #fff;
       display: flex;
+      background: #fff;
     }
   }
 
   header,
   .scroll {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     grid-template-rows: auto;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     grid-auto-rows: 0;
-    contain: paint;
     column-gap: 1px;
-    scrollbar-gutter: stable;
+    contain: paint;
     overflow: hidden;
+    scrollbar-gutter: stable;
   }
 
   .scroll {
-    overflow-y: scroll;
     min-height: 0;
+    overflow-y: scroll;
 
     > :global(*) {
       background: #fff;
