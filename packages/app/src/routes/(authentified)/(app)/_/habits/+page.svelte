@@ -14,9 +14,15 @@
       {#each data.habits as habit (habit.id)}
         <li>
           {habit.name}
-          <button type="submit" name="id" value={habit.id.toString()}>
+          <Button
+            type="submit"
+            name="id"
+            value={habit.id.toString()}
+            variant="outline"
+            color="danger"
+          >
             Remove
-          </button>
+          </Button>
         </li>
       {/each}
     </ul>

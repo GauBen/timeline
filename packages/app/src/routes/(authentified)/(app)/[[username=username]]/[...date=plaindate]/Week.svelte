@@ -4,7 +4,7 @@
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import type { Action } from "svelte/action";
-  import { DayBlock } from "uistiti";
+  import { Button, DayBlock } from "uistiti";
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
 
@@ -194,14 +194,15 @@
               <form method="post" action="?/markHabit" use:enhance>
                 <input type="hidden" name="habitId" value={id} />
                 <input type="hidden" name="date" value={key} />
-                <button
+                <Button
                   type="submit"
                   name="mark"
                   value={(!days.has(key)).toString()}
+                  variant="ghost"
                 >
                   {days.has(key) ? "☑️" : "⬜"}
                   {name}
-                </button>
+                </Button>
               </form>
             {/each}
           </div>
