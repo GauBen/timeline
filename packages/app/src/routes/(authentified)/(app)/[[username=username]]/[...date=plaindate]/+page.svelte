@@ -5,9 +5,9 @@
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import { reportValidity } from "formgator/sveltekit";
-  import { Button, Card, Select } from "uistiti";
+  import { Button, Select } from "uistiti";
   import type { PageData } from "./$types.js";
-  import Dialog from "./Dialog.svelte";
+  import EventCreationDialog from "./EventCreationDialog.svelte";
   import EventActions from "./EventActions.svelte";
   import Layout from "./Layout.svelte";
   import Month from "./Month.svelte";
@@ -41,6 +41,7 @@
 </script>
 
 <script lang="ts">
+  import Dialog from "$lib/components/Dialog.svelte";
   import { Textarea } from "uistiti";
 
   const { data, params } = $props();
@@ -113,45 +114,43 @@
 />
 
 {#if event}
-  <dialog open style="z-index: 1">
-    <Card>
-      {#snippet header()}
-        <span style="flex: 1; user-select: none"> Event details </span>
-        <a href={paths.resolveRoute(params, { search: "" })}>
-          <span class="i-ph-x">Close</span>
+  <Dialog open>
+    {#snippet header()}
+      <span style="flex: 1">Event details</span>
+      <a href={paths.resolveRoute(params, { search: "" })}>
+        <span class="i-ph-x">Close</span>
+      </a>
+    {/snippet}
+    <header>
+      <h3>
+        <a href={paths.resolveRoute({ username: event.author.username })}>
+          @{event.author.username}
         </a>
-      {/snippet}
-      <header>
-        <h3>
-          <a href={paths.resolveRoute({ username: event.author.username })}>
-            @{event.author.username}
-          </a>
-        </h3>
-        <p style="font-size: .75em">
-          {#if event.public}
-            <span class="i-ph-globe-duotone">Public</span>
-          {/if}
-          <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
-        </p>
-        <p>
-          Tags:
-          {#each event.event.tags as tag (tag.id)}
-            {tag.name},
-          {/each}
-        </p>
-      </header>
-      <p>{event.body}</p>
-      <footer>
-        <span class="i-ph-calendar-dot-duotone">Date</span>
-        {i18n.format(event.start)}
-        <form method="POST" use:enhance>
-          <EventActions {event} {me} />
-        </form>
-      </footer>
-    </Card>
-  </dialog>
+      </h3>
+      <p style="font-size: .75em">
+        {#if event.public}
+          <span class="i-ph-globe-duotone">Public</span>
+        {/if}
+        <a href="?event={event.id}">{i18n.format(event.createdAt)}</a>
+      </p>
+      <p>
+        Tags:
+        {#each event.event.tags as tag (tag.id)}
+          {tag.name},
+        {/each}
+      </p>
+    </header>
+    <p>{event.body}</p>
+    <footer>
+      <span class="i-ph-calendar-dot-duotone">Date</span>
+      {i18n.format(event.start)}
+      <form method="POST" use:enhance>
+        <EventActions {event} {me} />
+      </form>
+    </footer>
+  </Dialog>
 {:else if eventInCreation}
-  <Dialog
+  <EventCreationDialog
     {tags}
     {followings}
     {eventInCreation}
@@ -161,43 +160,36 @@
   />
 {:else if page.url.searchParams.has("/journal")}
   {@const date = page.url.searchParams.get("/journal")!}
-  <dialog open style="z-index: 100">
-    <Card>
-      {#snippet header()}
-        <div style="flex: 1; user-select: none">
-          <span class="i-ph-pen-nib-duotone"></span>
-          {i18n.formatDay(Temporal.PlainDate.from(date))}
-        </div>
-        <a href={paths.resolveRoute(params, { search: "" })}>
-          <span class="i-ph-x">Close</span>
-        </a>
-      {/snippet}
-      <form
-        action="?/journal={date}"
-        method="POST"
-        use:enhance={() => reportValidity({ reset: false })}
-        class="_stack-2"
-      >
-        <input type="hidden" name="date" value={date} />
-        <label class="_stack-2">
-          {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
-            How was your day?
-          {:else}
-            Who knows what the future holds?
-          {/if}
-          <Textarea
-            name="body"
-            cols={50}
-            rows={8}
-            value={journal?.body ?? ""}
-          />
-        </label>
-        <p style="text-align: end">
-          <Button color="success">Save</Button>
-        </p>
-      </form>
-    </Card>
-  </dialog>
+  <Dialog open>
+    {#snippet header()}
+      <div style="flex: 1">
+        <span class="i-ph-pen-nib-duotone"></span>
+        {i18n.formatDay(Temporal.PlainDate.from(date))}
+      </div>
+      <a href={paths.resolveRoute(params, { search: "" })}>
+        <span class="i-ph-x">Close</span>
+      </a>
+    {/snippet}
+    <form
+      action="?/journal={date}"
+      method="POST"
+      use:enhance={() => reportValidity({ reset: false })}
+      class="_stack-2"
+    >
+      <input type="hidden" name="date" value={date} />
+      <label class="_stack-2">
+        {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
+          How was your day?
+        {:else}
+          Who knows what the future holds?
+        {/if}
+        <Textarea name="body" cols={50} rows={8} value={journal?.body ?? ""} />
+      </label>
+      <p style="text-align: end">
+        <Button color="success">Save</Button>
+      </p>
+    </form>
+  </Dialog>
 {/if}
 
 <Layout {me} {latest}>
@@ -246,18 +238,6 @@
 </Layout>
 
 <style lang="scss">
-  dialog {
-    z-index: 100;
-    min-width: 20rem;
-    max-width: 100%;
-    padding: 0;
-    margin: 0 auto;
-    background: none;
-    border: 0;
-    border-radius: 0.25em;
-    box-shadow: 0 0 1em var(--ui-neutral-9);
-  }
-
   h1 a {
     font-weight: 800;
     transition:

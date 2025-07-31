@@ -6,6 +6,6 @@ export default {
     "stylelint-config-html/svelte",
   ],
   rules: {
-    "custom-property-empty-line-before": false,
+    "custom-property-empty-line-before": null,
   },
 };

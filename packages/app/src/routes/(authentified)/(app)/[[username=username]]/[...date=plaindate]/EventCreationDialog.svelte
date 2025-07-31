@@ -10,6 +10,7 @@
   } from "@floating-ui/dom";
   import type { Follow, Tag, User } from "db";
   import { reportValidity } from "formgator/sveltekit";
+  import { fade } from "svelte/transition";
   import { Button, Card, Input, Select } from "uistiti";
 
   let {
@@ -99,9 +100,8 @@
 
 <dialog
   open
-  style:top="{y}px"
-  style:left="{x}px"
-  style:transition={animate ? "top 0.2s, left 0.2s" : null}
+  style:transform="translate({x}px, {y}px)"
+  style:transition={animate ? "transform 0.2s" : null}
   ontransitionend={() => (animate = false)}
   bind:this={dialog}
 >
@@ -115,7 +115,25 @@
     }}
   >
     {#snippet header()}
-      Create a new event
+      <div style="flex: 1">Create a new event</div>
+      {#if disableAutoPlacement}
+        <div
+          transition:fade={{ duration: 150 }}
+          style="display: flex; font-size: .6667rem"
+        >
+          <Button
+            square
+            variant="soft"
+            onmousedown={(event) => event.stopPropagation()}
+            onclick={() => {
+              animate = true;
+              disableAutoPlacement = false;
+            }}
+          >
+            <span class="i-ph-push-pin-slash-duotone">Unpin</span>
+          </Button>
+        </div>
+      {/if}
     {/snippet}
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <form
@@ -171,7 +189,7 @@
         <span>Visibility</span>
         <span class="_stack-2" style="flex: 1">
           <span
-            style="display: grid; gap: 0.5em; grid-template-columns: 1fr 1fr"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em"
           >
             <label class="_row-2">
               <input
@@ -222,7 +240,7 @@
           {/each}
         </span>
       </p>
-      <p style="display: flex; justify-content: end; gap: .5em">
+      <p style="display: flex; gap: .5em; justify-content: end">
         <Button
           variant="ghost"
           onclick={() => toggleEventCreation()}
@@ -239,13 +257,13 @@
 <style lang="scss">
   dialog {
     z-index: 100;
-    padding: 0;
-    border: 0;
-    background: none;
     max-width: 100%;
+    padding: 0;
     margin: 0;
-    box-shadow: 0 0 1em var(--ui-neutral-9);
+    background: none;
+    border: 0;
     border-radius: 0.25em;
+    box-shadow: 0 0 1em var(--ui-neutral-9);
   }
 
   .label {
@@ -254,8 +272,8 @@
     align-items: center;
 
     > :first-child {
-      font-weight: bold;
       min-width: 5em;
+      font-weight: bold;
       text-align: right;
       user-select: none;
     }
@@ -263,11 +281,11 @@
 
   .tag {
     padding: 0.5em;
-    border-radius: 0.25em;
     color: #000;
     text-shadow: 0 0 0.5rem #fff;
-    border: 2px solid var(--color);
     cursor: pointer;
+    border: 2px solid var(--color);
+    border-radius: 0.25em;
     border-radius: 0.5;
 
     input {
