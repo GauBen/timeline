@@ -83,30 +83,14 @@
 </div>
 
 <style lang="scss">
-  .layout {
-    height: 100dvh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    background: #19191a10;
-    gap: 1px;
-  }
-
-  .layout > header {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    padding: 0.5rem;
-    background: #fff;
-    align-items: center;
-  }
-
   main {
     display: grid;
     grid-template-columns: 100vw 100vw;
-    overflow: hidden;
     gap: 1px;
     min-height: 0;
-    scroll-behavior: smooth;
+    overflow: hidden;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
 
     @media (width > 40rem) {
       grid-template-columns: 20rem 1fr;
@@ -118,23 +102,23 @@
   }
 
   section {
-    background: #fff;
     display: flex;
     flex-direction: column;
     contain: strict;
     scroll-snap-align: start;
+    background: #fff;
 
     h2 {
+      z-index: 1;
       padding: 0.5rem;
       box-shadow: 0 0 0.5rem #19191a10;
-      z-index: 1;
     }
   }
 
   article {
     padding: 0.5rem;
-    border-radius: 0.25rem;
     border: 2px solid #e8faef;
+    border-radius: 0.25rem;
 
     > header {
       display: flex;
@@ -147,28 +131,43 @@
     }
   }
 
+  .layout {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1px;
+    height: 100dvh;
+    background: #19191a10;
+  }
+
+  .layout > header {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    background: #fff;
+  }
+
   .scroll {
     overflow-y: scroll;
   }
 
   .calendar {
-    contain: paint;
     grid-column: 2 / -1;
+    contain: paint;
     scroll-snap-align: start;
   }
 
   nav {
     display: flex;
     justify-content: space-evenly;
-    background-color: #fff;
     padding: 0.25rem;
+    background-color: #fff;
 
     a {
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 0.75rem;
       padding: 0.25rem 1rem;
+      font-size: 0.75rem;
       border-radius: 0.5rem;
       transition: background 0.5s;
 

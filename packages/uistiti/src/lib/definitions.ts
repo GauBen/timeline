@@ -1,5 +1,8 @@
 // Generated using https://colorcurves.app/
-export const colors: Record<string, string[]> = {
+export const colors: Record<
+  "neutral" | "success" | "warning" | "danger",
+  string[]
+> = {
   neutral: [
     "#0b0c0e",
     "#202528",

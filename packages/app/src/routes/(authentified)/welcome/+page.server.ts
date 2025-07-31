@@ -79,7 +79,7 @@ export const actions = {
           data: { ...data, id: locals.session.id },
         });
         // Update the session to include the newly created user
-        await platform?.env.SESSIONS.put(
+        await platform!.env.SESSIONS.put(
           token,
           devalue.stringify({ ...locals.session, user }),
         );

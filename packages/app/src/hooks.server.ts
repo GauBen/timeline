@@ -14,9 +14,9 @@ const getSession = async ({ cookies, platform }: RequestEvent) => {
   cookies.delete("session", { path: "/" });
 };
 
-const getLocale = ({ request, cookies }: RequestEvent) => {
+const getLocale = ({ request, cookies }: RequestEvent, stored?: string) => {
   const userLocales =
-    cookies.get("locale") ?? request.headers.get("accept-language");
+    cookies.get("locale") ?? stored ?? request.headers.get("accept-language");
   const userLocale = userLocales?.split(",")[0];
   return isLocale(userLocale) ? userLocale : baseLocale;
 };
@@ -25,7 +25,7 @@ export const handle = async ({ event, resolve }) => {
   const adapter = new PrismaD1(event.platform!.env.DB);
   event.locals.prisma = new PrismaClient({ adapter });
   event.locals.session = await getSession(event);
-  event.locals.locale = getLocale(event);
+  event.locals.locale = getLocale(event, event.locals.session?.user?.locale);
 
   return resolve(event, {
     transformPageChunk: ({ html }) =>

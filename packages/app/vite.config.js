@@ -12,7 +12,7 @@ export default defineConfig({
           scale: 1.25,
           extraProperties: {
             "display": "inline-block",
-            "vertical-align": "text-bottom",
+            "vertical-align": "bottom",
           },
         }),
       ],

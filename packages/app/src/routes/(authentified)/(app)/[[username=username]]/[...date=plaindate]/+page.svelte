@@ -43,6 +43,7 @@
 <script lang="ts">
   import Dialog from "$lib/components/Dialog.svelte";
   import { Textarea } from "uistiti";
+  import { m } from "messages";
 
   const { data, params } = $props();
   const {
@@ -233,8 +234,8 @@
         <option value="Year">Year</option>
       </Select>
 
-      <a href="/_">
-        <span class="i-ph-gear-duotone">Settings</span>
+      <a href="/_" style="padding: .5rem; font-size: 1.5em" class="">
+        <span class="i-ph-gear-duotone">{m.cozy_moving_zebra_approve()}</span>
       </a>
     </div>
   {/snippet}
@@ -244,6 +245,8 @@
 
 <style lang="scss">
   h1 a {
+    display: inline-block;
+    padding: 0.5rem;
     font-weight: 800;
     transition:
       font-weight 150ms,
@@ -252,6 +255,14 @@
     &:hover {
       font-weight: 850;
       letter-spacing: 0.05em;
+    }
+  }
+
+  .i-ph-gear-duotone {
+    transition: transform 150ms;
+
+    a:hover & {
+      transform: rotate(180deg);
     }
   }
 </style>

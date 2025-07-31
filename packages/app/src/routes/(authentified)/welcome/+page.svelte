@@ -43,7 +43,7 @@
 </script>
 
 <main
-  style="margin-inline: auto; padding: 1rem; max-width: 40rem"
+  style="max-width: 40rem; padding: 1rem;margin-inline: auto"
   class="_stack-8"
 >
   <header style="contain: paint">
@@ -164,8 +164,8 @@
     align-items: center;
 
     > :first-child {
-      font-weight: bold;
       min-width: 7em;
+      font-weight: bold;
       text-align: right;
       user-select: none;
     }
