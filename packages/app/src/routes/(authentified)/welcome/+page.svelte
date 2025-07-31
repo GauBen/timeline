@@ -4,7 +4,7 @@
   import i18n from "$lib/i18n.svelte.js";
   import { reportValidity } from "formgator/sveltekit";
   import { humanId } from "human-id";
-  import * as m from "messages";
+  import { m } from "messages";
   import { getLocale } from "messages/runtime";
   import { Button, Input, Select } from "uistiti";
 

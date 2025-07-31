@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setLocale } from "messages/runtime";
+  import { overwriteGetLocale } from "messages/runtime";
   import "uistiti/css";
   import "../app.scss";
   import "virtual:uno.css";
@@ -8,7 +8,7 @@
 
   // Setting the locale must be done in the same tick as the render to
   // prevent server-side race conditions
-  setLocale(data.locale);
+  overwriteGetLocale(() => data.locale);
 </script>
 
 <svelte:head>

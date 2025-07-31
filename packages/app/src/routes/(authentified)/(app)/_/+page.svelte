@@ -1,6 +1,6 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
-  import * as m from "messages";
+  import { m } from "messages";
   import { Select } from "uistiti";
 </script>
 

@@ -1,5 +1,5 @@
 import { page } from "$app/state";
-import * as m from "messages";
+import { m } from "messages";
 
 const thresholds = {
   seconds: 60,

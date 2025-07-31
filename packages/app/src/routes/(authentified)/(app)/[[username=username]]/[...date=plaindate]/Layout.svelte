@@ -6,7 +6,7 @@
   import paths from "$lib/paths.svelte.js";
   import type { Event } from "$lib/types.js";
   import type { User } from "db";
-  import * as m from "messages";
+  import { m } from "messages";
   import type { Snippet } from "svelte";
   import EventActions from "./EventActions.svelte";
 
