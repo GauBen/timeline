@@ -1865,43 +1865,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@timeline/app@workspace:packages/app":
-  version: 0.0.0-use.local
-  resolution: "@timeline/app@workspace:packages/app"
-  dependencies:
-    "@floating-ui/dom": "npm:^1.7.2"
-    "@iconify-json/ph": "npm:^1.2.2"
-    "@prisma/adapter-d1": "npm:^6.12.0"
-    "@sveltejs/adapter-cloudflare": "https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f"
-    "@sveltejs/kit": "npm:^2.26.0"
-    "@sveltejs/vite-plugin-svelte": "npm:^6.1.0"
-    "@types/mdast": "npm:^4.0.4"
-    db: "workspace:^"
-    formgator: "npm:^0.2.4"
-    googleapis: "npm:^154.0.0"
-    human-id: "npm:^4.1.1"
-    jwt-decode: "npm:^4.0.0"
-    mdast-util-find-and-replace: "npm:^3.0.2"
-    messages: "workspace:^"
-    nanoid: "npm:^5.1.5"
-    rehype-sanitize: "npm:^6.0.0"
-    rehype-stringify: "npm:^10.0.1"
-    remark-parse: "npm:^11.0.0"
-    remark-rehype: "npm:^11.1.2"
-    sass: "npm:^1.89.2"
-    svelte: "npm:^5.36.16"
-    svelte-check: "npm:^4.3.0"
-    temporal-polyfill: "npm:^0.3.0"
-    typescript: "npm:^5.8.3"
-    uistiti: "workspace:^"
-    unified: "npm:^11.0.5"
-    unist-util-visit: "npm:^5.0.0"
-    unocss: "npm:^66.3.3"
-    vite: "npm:^7.0.6"
-    wrangler: "npm:^4.26.0"
-  languageName: unknown
-  linkType: soft
-
 "@types/chai@npm:^5.2.2":
   version: 5.2.2
   resolution: "@types/chai@npm:5.2.2"
@@ -2565,6 +2528,43 @@ __metadata:
   checksum: 10c0/57b06ae984bc32a0d22592c87384cd88fe4511b1dd7581497831c56d41939c8a001b28e7b853e1450f2bf61992dfcaa8ae2d0d161a0a90c4fb631ef07098fbac
   languageName: node
   linkType: hard
+
+"app@workspace:packages/app":
+  version: 0.0.0-use.local
+  resolution: "app@workspace:packages/app"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.7.2"
+    "@iconify-json/ph": "npm:^1.2.2"
+    "@prisma/adapter-d1": "npm:^6.12.0"
+    "@sveltejs/adapter-cloudflare": "https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f"
+    "@sveltejs/kit": "npm:^2.26.0"
+    "@sveltejs/vite-plugin-svelte": "npm:^6.1.0"
+    "@types/mdast": "npm:^4.0.4"
+    db: "workspace:^"
+    formgator: "npm:^0.2.4"
+    googleapis: "npm:^154.0.0"
+    human-id: "npm:^4.1.1"
+    jwt-decode: "npm:^4.0.0"
+    mdast-util-find-and-replace: "npm:^3.0.2"
+    messages: "workspace:^"
+    nanoid: "npm:^5.1.5"
+    rehype-sanitize: "npm:^6.0.0"
+    rehype-stringify: "npm:^10.0.1"
+    remark-parse: "npm:^11.0.0"
+    remark-rehype: "npm:^11.1.2"
+    sass: "npm:^1.89.2"
+    svelte: "npm:^5.36.16"
+    svelte-check: "npm:^4.3.0"
+    temporal-polyfill: "npm:^0.3.0"
+    typescript: "npm:^5.8.3"
+    uistiti: "workspace:^"
+    unified: "npm:^11.0.5"
+    unist-util-visit: "npm:^5.0.0"
+    unocss: "npm:^66.3.3"
+    vite: "npm:^7.0.6"
+    wrangler: "npm:^4.26.0"
+  languageName: unknown
+  linkType: soft
 
 "argparse@npm:^2.0.1":
   version: 2.0.1
