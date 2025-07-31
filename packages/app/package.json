@@ -11,10 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.7.2",
-    "@prisma/adapter-d1": "^6.12.0",
+    "@floating-ui/dom": "^1.7.3",
+    "@prisma/adapter-d1": "~6.12.0",
     "db": "workspace:^",
-    "googleapis": "^154.0.0",
+    "googleapis": "^154.1.0",
     "human-id": "^4.1.1",
     "jwt-decode": "^4.0.0",
     "mdast-util-find-and-replace": "^3.0.2",
@@ -30,18 +30,18 @@
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
     "@sveltejs/adapter-cloudflare": "https://pkg.pr.new/sveltejs/kit/@sveltejs/adapter-cloudflare@d923a6f",
-    "@sveltejs/kit": "^2.26.0",
+    "@sveltejs/kit": "^2.26.1",
     "@sveltejs/vite-plugin-svelte": "^6.1.0",
     "@types/mdast": "^4.0.4",
-    "formgator": "^0.2.4",
+    "formgator": "^0.2.5",
     "messages": "workspace:^",
     "sass": "^1.89.2",
-    "svelte": "^5.36.16",
+    "svelte": "^5.37.1",
     "svelte-check": "^4.3.0",
     "typescript": "^5.8.3",
     "uistiti": "workspace:^",
     "unocss": "^66.3.3",
     "vite": "^7.0.6",
-    "wrangler": "^4.26.0"
+    "wrangler": "^4.27.0"
   }
 }

@@ -10,13 +10,13 @@
     "build": "prisma generate && tsc && cp prisma/generated/internal/*.{wasm,js} dist/internal/ || true"
   },
   "dependencies": {
-    "@prisma/client": "^6.12.0"
+    "@prisma/client": "~6.12.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250724.0",
-    "@prisma/adapter-d1": "^6.12.0",
-    "prisma": "^6.12.0",
+    "@cloudflare/workers-types": "^4.20250731.0",
+    "@prisma/adapter-d1": "~6.12.0",
+    "prisma": "~6.12.0",
     "typescript": "^5.8.3",
-    "wrangler": "^4.26.0"
+    "wrangler": "^4.27.0"
   }
 }
