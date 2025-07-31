@@ -214,24 +214,29 @@
     {:else}
       <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
     {/if}
-    <Select
-      onchange={({ currentTarget }) =>
-        goto(
-          paths.resolveRoute({
-            date: (eventInCreation ?? start)
-              .toString()
-              .slice(0, { Week: 10, Month: 7, Year: 4 }[currentTarget.value]),
-          }),
-          { keepFocus: true },
-        )}
-      value={view}
-    >
-      <option value="Week">Week</option>
-      <option value="Month">Month</option>
-      <option value="Year">Year</option>
-    </Select>
+    <div class="_row-2">
+      <Select
+        onchange={({ currentTarget }) =>
+          goto(
+            paths.resolveRoute({
+              date: (eventInCreation ?? start)
+                .toString()
+                .slice(0, { Week: 10, Month: 7, Year: 4 }[currentTarget.value]),
+            }),
+            { keepFocus: true },
+          )}
+        value={view}
+        variant="ghost"
+      >
+        <option value="Week">Week</option>
+        <option value="Month">Month</option>
+        <option value="Year">Year</option>
+      </Select>
 
-    <a href="/_">{me.displayName}</a>
+      <a href="/_">
+        <span class="i-ph-gear-duotone">Settings</span>
+      </a>
+    </div>
   {/snippet}
 
   <View {...viewProps} bind:this={component} />
