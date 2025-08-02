@@ -1,40 +1,65 @@
 <script lang="ts">
+  import i18n from "$lib/i18n.svelte.js";
   import type { Attachment } from "svelte/attachments";
   import { on } from "svelte/events";
+  import { DayBlock } from "uistiti";
 
   let x = $state(0);
+  let start = $state(
+    Temporal.Now.zonedDateTimeISO("Europe/Paris")
+      .toPlainDate()
+      .subtract({ days: 8 }),
+  );
 
-  const scroll: Attachment = (wrapper) => {
+  const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
     wrapper.scrollLeft = wrapper.clientWidth * 2;
 
     let lastScrollLeft = wrapper.scrollLeft;
+    let timeout: number | undefined;
     on(
       wrapper,
       "scroll",
       () => {
+        if (timeout) window.clearTimeout(timeout);
         const delta = wrapper.scrollLeft - lastScrollLeft;
         x += delta;
         if (wrapper.scrollLeft < wrapper.clientWidth) {
           wrapper.scrollLeft += wrapper.clientWidth;
+          start = start.subtract({ days: 4 });
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
+          start = start.add({ days: 4 });
         }
         lastScrollLeft = wrapper.scrollLeft;
+
+        wrapper.style.setProperty("scroll-snap-type", "none");
+        timeout = window.setTimeout(() => {
+          wrapper.style.setProperty("scroll-snap-type", "x");
+          wrapper.style.setProperty("scroll-behavior", "smooth");
+          on(
+            wrapper,
+            "scroll",
+            () => wrapper.style.setProperty("scroll-behavior", "auto"),
+            { once: true },
+          );
+          timeout = undefined;
+        }, 200);
       },
       { passive: true },
     );
   };
 </script>
 
-<div class="coords">{x}px</div>
+<div class="coords">{Math.round(x)}px</div>
 <div class="wrapper loading" {@attach scroll}>
   {#each { length: 20 }, i}
+    {@const { number, weekday } = i18n.dayParts(start.add({ days: i }))}
     <div class="column">
       <h2
-        style="position: sticky; top: 0; right: 0; left: 0; z-index: 1; background: #fff8;"
+        style="position: sticky; top: 0; right: 0; left: 0; z-index: 1; text-align: center; background: #fff8"
       >
-        Day {i}
+        <DayBlock {number} {weekday} selected={false} />
       </h2>
     </div>
   {/each}
@@ -43,15 +68,16 @@
 <style lang="scss">
   .wrapper {
     height: 100%;
-    overflow-x: scroll;
+    container-type: inline-size;
+    overflow: scroll;
     overscroll-behavior: none;
     text-wrap: nowrap;
-    scroll-snap-type: x;
+    scrollbar-width: none;
   }
 
   .column {
     display: inline-block;
-    width: 25%;
+    width: 25cqw;
     height: 200%;
     scroll-snap-align: start;
     background: linear-gradient(45deg, #fcc, #ccf);
