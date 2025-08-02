@@ -27,24 +27,37 @@
   };
 </script>
 
+<div class="coords">{x}px</div>
 <div class="wrapper loading" {@attach scroll}>
-  <div class="coords">{x}px</div>
-  <div class="board"></div>
+  {#each { length: 20 }, i}
+    <div class="column">
+      <h2
+        style="position: sticky; top: 0; right: 0; left: 0; z-index: 1; background: #fff8;"
+      >
+        Day {i}
+      </h2>
+    </div>
+  {/each}
 </div>
 
 <style lang="scss">
   .wrapper {
     height: 100%;
     overflow-x: scroll;
+    overscroll-behavior: none;
+    text-wrap: nowrap;
+    scroll-snap-type: x;
   }
 
-  .board {
-    width: 500%;
-    height: 100%;
-    background: linear-gradient(to right, #fcc, #ccf);
+  .column {
+    display: inline-block;
+    width: 25%;
+    height: 200%;
+    scroll-snap-align: start;
+    background: linear-gradient(45deg, #fcc, #ccf);
   }
 
-  .loading .board {
+  .loading .column:first-of-type {
     margin-left: -200%;
   }
 
