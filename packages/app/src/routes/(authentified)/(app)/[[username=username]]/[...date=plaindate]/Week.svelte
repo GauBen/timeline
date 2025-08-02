@@ -1,288 +1,61 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
-  import i18n from "$lib/i18n.svelte.js";
-  import paths from "$lib/paths.svelte.js";
-  import type { Event } from "$lib/types.js";
-  import type { Action } from "svelte/action";
-  import { Button, DayBlock } from "uistiti";
-  import type { ViewProps } from "./+page.svelte";
-  import Day from "./Day.svelte";
+  import type { Attachment } from "svelte/attachments";
+  import { on } from "svelte/events";
 
-  let { start, events, timezone, eventInCreation, onevent }: ViewProps =
-    $props();
-  const today = $derived(Temporal.Now.plainDateISO(timezone));
-  const now = $derived(Temporal.Now.zonedDateTimeISO(timezone));
+  let x = $state(0);
 
-  const keys = $derived(
-    Array.from({ length: 7 }, (_, days) => start.add({ days }).toString()),
-  );
+  const scroll: Attachment = (wrapper) => {
+    wrapper.classList.remove("loading");
+    wrapper.scrollLeft = wrapper.clientWidth * 2;
 
-  let calendarHeader = $state<HTMLElement>();
-  let numberOfColumns = $state(1);
-
-  const onresize = () => {
-    if (!calendarHeader) return;
-    numberOfColumns = window
-      .getComputedStyle(calendarHeader)
-      .gridTemplateColumns.split(" ").length;
+    let lastScrollLeft = wrapper.scrollLeft;
+    on(
+      wrapper,
+      "scroll",
+      () => {
+        const delta = wrapper.scrollLeft - lastScrollLeft;
+        x += delta;
+        if (wrapper.scrollLeft < wrapper.clientWidth) {
+          wrapper.scrollLeft += wrapper.clientWidth;
+        } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
+          wrapper.scrollLeft -= wrapper.clientWidth;
+        }
+        lastScrollLeft = wrapper.scrollLeft;
+      },
+      { passive: true },
+    );
   };
-
-  const fixDate = (date: Date) =>
-    date.toTemporalInstant().toZonedDateTimeISO(timezone);
-
-  const toRems = (date: Temporal.PlainTime) =>
-    // We can't just use `date.since` because of DST!
-    date.since(new Temporal.PlainTime()).total({ unit: "hours" }) * 4;
-
-  const scrollToRelevant: Action<
-    HTMLElement,
-    {
-      start: Temporal.PlainDate;
-      numberOfColumns: number;
-      windows: Record<string, Array<Event> | undefined>;
-      eventInCreation?: Temporal.PlainDateTime;
-    }
-  > = (node, params) => {
-    const update = ({ start, numberOfColumns, windows }: typeof params) => {
-      const keys = Array.from({ length: numberOfColumns }, (_, days) =>
-        start.add({ days }).toString(),
-      );
-
-      if (
-        eventInCreation &&
-        keys.includes(eventInCreation.toPlainDate().toString())
-      ) {
-        const top = toRems(eventInCreation.toPlainTime()) * 16;
-        if (node.scrollTop + node.offsetHeight < top || node.scrollTop > top)
-          node.scrollTo({ top });
-        return;
-      }
-
-      const includesToday = keys.includes(today.toString());
-      const [first] = keys
-        .flatMap((key) => windows[key] ?? [])
-        .map(({ start }) => fixDate(start))
-        // If the current day is displayed, target the first upcoming event,
-        // otherwise target the first event
-        .filter(
-          (date) =>
-            !includesToday || Temporal.ZonedDateTime.compare(date, now) > 0,
-        );
-
-      if (first) {
-        const top = toRems(first.toPlainTime()) * 16;
-        if (node.scrollTop + node.offsetHeight < top || node.scrollTop > top)
-          node.scrollTo({ top });
-        return;
-      }
-
-      node.scrollTo({
-        top:
-          toRems(
-            includesToday ? now.toPlainTime() : new Temporal.PlainTime(7, 30),
-          ) * 16,
-      });
-    };
-    update(params);
-    return { update };
-  };
-
-  $effect(onresize);
-
-  let days = $state<Record<string, ReturnType<typeof Day>>>({});
-  export const getEventInCreationElement = () =>
-    eventInCreation &&
-    days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
-
-  let processedHabits = $state(
-    "then" in events
-      ? undefined
-      : events.habits &&
-          events.habits.length > 0 &&
-          events.habits.map(({ id, name, marks }) => ({
-            id,
-            name,
-            days: new Set(
-              marks.map(({ date }) =>
-                date
-                  .toTemporalInstant()
-                  .toZonedDateTimeISO(timezone)
-                  .toPlainDate()
-                  .toString(),
-              ),
-            ),
-          })),
-  );
-
-  $effect(() => {
-    if ("then" in events) {
-      events.then(({ habits }) => {
-        processedHabits =
-          habits &&
-          habits.length > 0 &&
-          habits.map(({ id, name, marks }) => ({
-            id,
-            name,
-            days: new Set(
-              marks.map(({ date }) =>
-                date
-                  .toTemporalInstant()
-                  .toZonedDateTimeISO(timezone)
-                  .toPlainDate()
-                  .toString(),
-              ),
-            ),
-          }));
-      });
-    }
-  });
-
-  let windows = $state("then" in events ? {} : events.windows);
-
-  $effect(() => {
-    if ("then" in events) {
-      events.then((events) => {
-        windows = events.windows;
-      });
-    }
-  });
 </script>
 
-<svelte:window {onresize} />
-
-<div class="wrapper">
-  <header bind:this={calendarHeader}>
-    {#each keys as key, i (key)}
-      {@const day = Temporal.PlainDate.from(key)}
-      {@const { number, weekday } = i18n.dayParts(day)}
-      <div class="column">
-        <h2 class="_row-2">
-          {#if i === 0}
-            <a
-              href={paths.resolveRoute({
-                date: start.subtract({ days: 1 }).toString(),
-              })}
-              data-sveltekit-keepfocus
-            >
-              <span class="i-ph-caret-left-duotone">Previous</span>
-            </a>
-          {/if}
-          {#if !windows[key]}
-            <span class="i-ph-spinner i-spin">Loading</span>
-          {/if}
-          <a
-            class="_stack-0"
-            href="?/journal={day.toString()}"
-            style="flex: 1; text-decoration: inherit"
-          >
-            <DayBlock {number} {weekday} selected={day.equals(today)} />
-          </a>
-          {#if i === numberOfColumns - 1}
-            <a
-              href={paths.resolveRoute({
-                date: start.add({ days: 1 }).toString(),
-              })}
-              data-sveltekit-keepfocus
-            >
-              <span class="i-ph-caret-right-duotone">Next</span>
-            </a>
-          {/if}
-        </h2>
-        {#if processedHabits}
-          <div class="_row-2">
-            {#each processedHabits as { id, name, days } (id)}
-              <form method="post" action="?/markHabit" use:enhance>
-                <input type="hidden" name="habitId" value={id} />
-                <input type="hidden" name="date" value={key} />
-                <Button
-                  type="submit"
-                  name="mark"
-                  value={(!days.has(key)).toString()}
-                  variant="ghost"
-                  square
-                >
-                  <span
-                    class={days.has(key)
-                      ? "i-ph-check-circle-duotone"
-                      : "i-ph-circle"}
-                  ></span>
-                  {name}
-                </Button>
-              </form>
-            {/each}
-          </div>
-        {/if}
-      </div>
-    {/each}
-  </header>
-  <div
-    class="scroll"
-    use:scrollToRelevant={{
-      start,
-      numberOfColumns,
-      windows,
-      eventInCreation,
-    }}
-  >
-    {#each keys as key, i (key)}
-      {@const day = Temporal.PlainDate.from(key)}
-      <Day
-        {day}
-        {onevent}
-        {timezone}
-        withTime={i === 0}
-        {eventInCreation}
-        bind:this={days[key]}
-        events={windows[key] ?? []}
-      />
-    {/each}
-  </div>
+<div class="wrapper loading" {@attach scroll}>
+  <div class="coords">{x}px</div>
+  <div class="board"></div>
 </div>
 
 <style lang="scss">
   .wrapper {
-    display: grid;
-    grid-template-rows: auto 1fr;
     height: 100%;
+    overflow-x: scroll;
   }
 
-  header {
-    z-index: 1;
-    box-shadow: 0 0 0.5rem #19191a10;
-
-    .column {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      padding: 0.5rem;
-      contain: paint;
-      background: #fff;
-    }
-
-    h2 {
-      display: flex;
-      background: #fff;
-    }
+  .board {
+    width: 500%;
+    height: 100%;
+    background: linear-gradient(to right, #fcc, #ccf);
   }
 
-  header,
-  .scroll {
-    display: grid;
-    grid-template-rows: auto;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    grid-auto-rows: 0;
-    column-gap: 1px;
-    contain: paint;
-    overflow: hidden;
-    scrollbar-gutter: stable;
+  .loading .board {
+    margin-left: -200%;
   }
 
-  .scroll {
-    min-height: 0;
-    overflow-y: scroll;
-
-    > :global(*) {
-      background: #fff;
-    }
+  .coords {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 14px;
+    background: rgb(255 255 255 / 80%);
   }
 </style>
