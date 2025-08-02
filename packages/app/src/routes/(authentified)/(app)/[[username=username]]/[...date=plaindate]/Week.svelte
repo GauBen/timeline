@@ -1,15 +1,17 @@
 <script lang="ts">
   import i18n from "$lib/i18n.svelte.js";
+  import paths from "$lib/paths.svelte.js";
   import type { Attachment } from "svelte/attachments";
   import { on } from "svelte/events";
   import { DayBlock } from "uistiti";
+  import type { ViewProps } from "./+page.svelte";
+
+  const { start: middle }: ViewProps = $props();
+
+  const today = Temporal.Now.plainDateISO("Europe/Paris");
 
   let x = $state(0);
-  let start = $state(
-    Temporal.Now.zonedDateTimeISO("Europe/Paris")
-      .toPlainDate()
-      .subtract({ days: 8 }),
-  );
+  let start = $state(middle.subtract({ days: 8 }));
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
@@ -25,11 +27,11 @@
         const delta = wrapper.scrollLeft - lastScrollLeft;
         x += delta;
         if (wrapper.scrollLeft < wrapper.clientWidth) {
-          //wrapper.scrollLeft += wrapper.clientWidth;
-          //start = start.subtract({ days: 4 });
+          wrapper.scrollLeft += wrapper.clientWidth;
+          start = start.subtract({ days: 4 });
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
-          //wrapper.scrollLeft -= wrapper.clientWidth;
-          //start = start.add({ days: 4 });
+          wrapper.scrollLeft -= wrapper.clientWidth;
+          start = start.add({ days: 4 });
         }
         lastScrollLeft = wrapper.scrollLeft;
 
@@ -49,24 +51,89 @@
       { passive: true },
     );
   };
+
+  const months = $derived.by(() => {
+    let a = start;
+    let days = 0;
+    const months: Array<{
+      month: number;
+      href: string;
+      end: number;
+      start: number;
+    }> = [];
+    while (days < 20) {
+      const month = a.month;
+      const daysLeft = a.daysInMonth - a.day + 1;
+      months.push({
+        month,
+        href: a.toString().slice(0, 7),
+        end: days + daysLeft + 1,
+        start: days + 1,
+      });
+      days += daysLeft;
+      a = a.add({ days: daysLeft });
+    }
+    return months;
+  });
+
+  const years = $derived.by(() => {
+    let a = start;
+    const years: Array<{ year: number; start: number; end: number }> = [];
+    let days = 0;
+    while (days < 20) {
+      const year = a.year;
+      const daysInYear = a.daysInYear - a.dayOfYear + 1;
+      years.push({
+        year,
+        start: days + 1,
+        end: days + daysInYear + 1,
+      });
+      days += daysInYear;
+      a = a.add({ days: daysInYear });
+    }
+    return years;
+  });
 </script>
 
 <div class="coords">{Math.round(x)}px</div>
 <div class="wrapper loading" {@attach scroll}>
-  <div style="position: sticky; top: 0; grid-column: 1/8; background: white;">
-    <div style="position: sticky; left: 0; width: 25cqw">July</div>
-  </div>
-  <div style="position: sticky; top: 0; grid-column: 8/21; background: white;">
-    <div style="position: sticky; left: 0; width: 25cqw">August</div>
-  </div>
+  {#each months as { month, href, end, start } (month)}
+    <div
+      style="position: sticky; top: 0; grid-row: 1; grid-column: {start}/{end}; background: white;"
+    >
+      <h2 style="position: sticky; left: 0; width: 25cqw">
+        <a {href}>
+          {i18n.formatMonth(month)}
+        </a>
+      </h2>
+    </div>
+  {/each}
+  {#each years as { year, start, end } (year)}
+    <div
+      style="position: sticky; top: 0; display:flex; grid-row: 1; grid-column: {start}/{end}; justify-content: end; pointer-events: none"
+    >
+      <h2 style="position: sticky; right: 0; width: 25cqw;text-align: right">
+        <a
+          style="pointer-events: all; background: white"
+          href={paths.resolveRoute({ date: year.toString() })}
+        >
+          {year}
+        </a>
+      </h2>
+    </div>
+  {/each}
   {#each { length: 20 }, i}
     {@const { number, weekday } = i18n.dayParts(start.add({ days: i }))}
     <div class="column">
-      <h2
+      <h3
         style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff8"
       >
-        <DayBlock {number} {weekday} selected={false} />
-      </h2>
+        <DayBlock
+          {number}
+          {weekday}
+          selected={start.add({ days: i }).equals(today)}
+        />
+      </h3>
     </div>
   {/each}
 </div>
@@ -82,7 +149,7 @@
     overflow: scroll;
     overscroll-behavior: none;
     text-wrap: nowrap;
-    scrollbar-width: auto;
+    scrollbar-width: none;
   }
 
   .column {

@@ -50,4 +50,9 @@ export default {
       weekday: day.toLocaleString(this.locale, { weekday: "short" }),
     };
   },
+  formatMonth(month: number) {
+    return new Temporal.PlainDate(2025, month, 1).toLocaleString(this.locale, {
+      month: "long",
+    });
+  },
 };
