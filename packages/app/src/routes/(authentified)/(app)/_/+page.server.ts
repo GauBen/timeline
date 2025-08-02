@@ -20,6 +20,7 @@ export const actions = {
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 365,
         path: "/",
+        httpOnly: false,
       });
 
       const user = await prisma.user.update({

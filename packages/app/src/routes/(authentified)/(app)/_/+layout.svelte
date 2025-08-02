@@ -3,13 +3,13 @@
   import { m } from "messages";
 
   const leaf = $derived(page.url.pathname.split("/").at(2) ?? "settings");
-  const leaves: Record<string, string> = {
+  const leaves = $derived<Record<string, string>>({
     settings: m.cozy_moving_zebra_approve(),
     habits: m.key_misty_sloth_assure(),
     journal: m.solid_ok_javelina_leap(),
     tags: m.teal_inclusive_capybara_treat(),
     google: m.bold_mean_husky_devour(),
-  };
+  });
 
   const { children } = $props();
 </script>
