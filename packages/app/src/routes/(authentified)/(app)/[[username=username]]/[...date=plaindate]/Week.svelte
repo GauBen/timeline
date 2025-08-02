@@ -41,7 +41,7 @@
             wrapper,
             "scroll",
             () => wrapper.style.setProperty("scroll-behavior", "auto"),
-            { once: true },
+            { passive: true, once: true },
           );
           timeout = undefined;
         }, 200);
