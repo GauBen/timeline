@@ -101,17 +101,17 @@
     border-collapse: collapse;
 
     td {
-      border: 1px solid #000;
-      height: 1rem;
       width: 1rem;
-      line-height: 1;
+      height: 1rem;
       contain: paint;
+      line-height: 1;
+      border: 1px solid #000;
     }
   }
 
   a::before {
-    content: "";
     position: absolute;
     inset: 0;
+    content: "";
   }
 </style>
