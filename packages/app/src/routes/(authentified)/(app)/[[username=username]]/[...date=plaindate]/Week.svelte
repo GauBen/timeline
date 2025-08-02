@@ -5,10 +5,17 @@
   import { on } from "svelte/events";
   import { DayBlock } from "uistiti";
   import type { ViewProps } from "./+page.svelte";
+  import Day from "./Day.svelte";
 
-  const { start: middle }: ViewProps = $props();
+  const {
+    start: middle,
+    eventInCreation,
+    events,
+    onevent,
+    timezone,
+  }: ViewProps = $props();
 
-  const today = Temporal.Now.plainDateISO("Europe/Paris");
+  const today = $derived(Temporal.Now.plainDateISO(timezone));
 
   let x = $state(0);
   let start = $state(middle.subtract({ days: 8 }));
@@ -93,6 +100,21 @@
     }
     return years;
   });
+
+  let windows = $state("then" in events ? {} : events.windows);
+
+  $effect(() => {
+    if ("then" in events) {
+      events.then((events) => {
+        windows = events.windows;
+      });
+    }
+  });
+
+  let days = $state<Record<string, ReturnType<typeof Day>>>({});
+  export const getEventInCreationElement = () =>
+    eventInCreation &&
+    days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
 </script>
 
 <div class="coords">{Math.round(x)}px</div>
@@ -123,17 +145,25 @@
     </div>
   {/each}
   {#each { length: 20 }, i}
-    {@const { number, weekday } = i18n.dayParts(start.add({ days: i }))}
+    {@const day = start.add({ days: i })}
+    {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3
-        style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff8"
+        style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff; box-shadow: 0 0 0.5rem #fff;"
       >
-        <DayBlock
-          {number}
-          {weekday}
-          selected={start.add({ days: i }).equals(today)}
-        />
+        <a href="?/journal={day.toString()}">
+          <DayBlock {number} {weekday} selected={day.equals(today)} />
+        </a>
       </h3>
+      <Day
+        bind:this={days[day.toString()]}
+        {day}
+        withTime
+        {eventInCreation}
+        events={windows[day.toString()] ?? []}
+        {onevent}
+        {timezone}
+      />
     </div>
   {/each}
 </div>
@@ -155,12 +185,11 @@
   .column {
     display: inline-block;
     width: 25cqw;
-    height: 200%;
     scroll-snap-align: start;
-    background: linear-gradient(45deg, #fcc, #ccf);
+    background: #fff;
   }
 
-  .loading .column:first-of-type {
+  .loading .column {
     margin-left: -200%;
   }
 
