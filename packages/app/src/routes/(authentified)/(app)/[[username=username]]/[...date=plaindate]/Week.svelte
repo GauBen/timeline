@@ -53,19 +53,17 @@
 
 <div class="coords">{Math.round(x)}px</div>
 <div class="wrapper loading" {@attach scroll}>
-  <div style=" position:sticky; left: 0;grid-column: 1; background: white;">
-    July
+  <div style="position: sticky; top: 0; grid-column: 1/8; background: white;">
+    <div style="position: sticky; left: 0; width: 25cqw">July</div>
   </div>
-  <div style="grid-column: 2/8"></div>
-  <div style=" position:sticky; left: 0;grid-column: 8; background: white;">
-    August
+  <div style="position: sticky; top: 0; grid-column: 8/21; background: white;">
+    <div style="position: sticky; left: 0; width: 25cqw">August</div>
   </div>
-  <div style="grid-column: 9/21"></div>
   {#each { length: 20 }, i}
     {@const { number, weekday } = i18n.dayParts(start.add({ days: i }))}
     <div class="column">
       <h2
-        style="position: sticky; top: 0; right: 0; left: 0; z-index: 1; text-align: center; background: #fff8"
+        style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff8"
       >
         <DayBlock {number} {weekday} selected={false} />
       </h2>
@@ -75,9 +73,10 @@
 
 <style lang="scss">
   .wrapper {
-    display: grid;
-    grid-template-rows: auto 1fr;
+    display: inline-grid;
+    grid-template-rows: 2rem 1fr;
     grid-template-columns: repeat(20, 1fr);
+    width: 100%;
     height: 100%;
     container-type: inline-size;
     overflow: scroll;
