@@ -145,7 +145,7 @@
     <div
       style="position: sticky; top: 0; display:flex; grid-row: 1; grid-column: {start}/{end}; justify-content: end; pointer-events: none"
     >
-      <h2 style="position: sticky; right: 0; width: 25cqw;text-align: right">
+      <h2 style="position: sticky; right: 0; width: 25cqw; text-align: right">
         <a
           style="pointer-events: all; background: white"
           href={paths.resolveRoute({ date: year.toString() })}
@@ -159,7 +159,7 @@
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3
-        style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff; box-shadow: 0 0 0.5rem #fff;"
+        style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff; box-shadow: 0 .25rem 0.5rem -0.5rem  #888;"
       >
         <a href="?/journal={day.toString()}">
           <DayBlock {number} {weekday} selected={day.equals(today)} />
