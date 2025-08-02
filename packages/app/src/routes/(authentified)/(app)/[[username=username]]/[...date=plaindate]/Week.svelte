@@ -6,6 +6,7 @@
   import { DayBlock } from "uistiti";
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
+  import { goto } from "$app/navigation";
 
   const {
     start: middle,
@@ -18,7 +19,7 @@
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
   let x = $state(0);
-  let start = $state(middle.subtract({ days: 8 }));
+  let start = $derived(middle.subtract({ days: 8 }));
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
@@ -35,10 +36,20 @@
         x += delta;
         if (wrapper.scrollLeft < wrapper.clientWidth) {
           wrapper.scrollLeft += wrapper.clientWidth;
-          start = start.subtract({ days: 4 });
+          goto(
+            paths.resolveRoute({
+              date: middle.subtract({ days: 4 }).toString(),
+            }),
+            { noScroll: true, keepFocus: true },
+          );
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
-          start = start.add({ days: 4 });
+          goto(
+            paths.resolveRoute({
+              date: middle.add({ days: 4 }).toString(),
+            }),
+            { noScroll: true, keepFocus: true },
+          );
         }
         lastScrollLeft = wrapper.scrollLeft;
 
@@ -144,8 +155,7 @@
       </h2>
     </div>
   {/each}
-  {#each { length: 20 }, i}
-    {@const day = start.add({ days: i })}
+  {#each Array.from( { length: 20 }, (_, i) => start.add( { days: i }, ), ) as day (day.toString())}
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3
