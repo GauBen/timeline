@@ -6,7 +6,8 @@
   import { DayBlock } from "uistiti";
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
-  import { goto } from "$app/navigation";
+  import { replaceState } from "$app/navigation";
+  //import { load } from "./week.remote.js";
 
   const {
     start: middle,
@@ -18,6 +19,7 @@
 
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
+  let urlNow = middle;
   let start = $derived(middle.subtract({ days: 8 }));
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
@@ -30,24 +32,29 @@
       "scroll",
       async () => {
         if (timeout) window.clearTimeout(timeout);
+
+        const now = start.add({
+          days: Math.round((wrapper.scrollLeft * 4) / wrapper.clientWidth),
+        });
+        if (!now.equals(urlNow)) {
+          urlNow = now;
+          replaceState(paths.resolveRoute({ date: now.toString() }), {});
+        }
+
         if (wrapper.scrollLeft < wrapper.clientWidth) {
           wrapper.scrollLeft += wrapper.clientWidth;
           start = start.subtract({ days: 4 });
-          goto(
-            paths.resolveRoute({
-              date: middle.subtract({ days: 4 }).toString(),
-            }),
-            { noScroll: true, keepFocus: true },
-          );
+          // load({
+          //   from: start.toString(),
+          //   to: start.add({ days: 20 }).toString(),
+          // })
+          //   .then((e) => console.log(e))
+          //   .catch((e) => {
+          //     console.error("Failed to load events", e);
+          //   });
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
           start = start.add({ days: 4 });
-          goto(
-            paths.resolveRoute({
-              date: middle.add({ days: 4 }).toString(),
-            }),
-            { noScroll: true, keepFocus: true },
-          );
         }
 
         wrapper.style.setProperty("scroll-snap-type", "none");

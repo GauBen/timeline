@@ -25,7 +25,8 @@
     "remark-rehype": "^11.1.2",
     "temporal-polyfill": "^0.3.0",
     "unified": "^11.0.5",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
