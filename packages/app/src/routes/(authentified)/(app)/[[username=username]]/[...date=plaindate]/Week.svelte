@@ -18,24 +18,21 @@
 
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
-  let x = $state(0);
   let start = $derived(middle.subtract({ days: 8 }));
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
     wrapper.scrollLeft = wrapper.clientWidth * 2;
 
-    let lastScrollLeft = wrapper.scrollLeft;
     let timeout: number | undefined;
     on(
       wrapper,
       "scroll",
-      () => {
+      async () => {
         if (timeout) window.clearTimeout(timeout);
-        const delta = wrapper.scrollLeft - lastScrollLeft;
-        x += delta;
         if (wrapper.scrollLeft < wrapper.clientWidth) {
           wrapper.scrollLeft += wrapper.clientWidth;
+          start = start.subtract({ days: 4 });
           goto(
             paths.resolveRoute({
               date: middle.subtract({ days: 4 }).toString(),
@@ -44,6 +41,7 @@
           );
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
+          start = start.add({ days: 4 });
           goto(
             paths.resolveRoute({
               date: middle.add({ days: 4 }).toString(),
@@ -51,7 +49,6 @@
             { noScroll: true, keepFocus: true },
           );
         }
-        lastScrollLeft = wrapper.scrollLeft;
 
         wrapper.style.setProperty("scroll-snap-type", "none");
         timeout = window.setTimeout(() => {
@@ -128,7 +125,6 @@
     days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
 </script>
 
-<div class="coords">{Math.round(x)}px</div>
 <div class="wrapper loading" {@attach scroll}>
   {#each months as { month, href, end, start } (month)}
     <div
@@ -201,16 +197,5 @@
 
   .loading .column {
     margin-left: -200%;
-  }
-
-  .coords {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    z-index: 1000;
-    padding: 10px;
-    font-family: monospace;
-    font-size: 14px;
-    background: rgb(255 255 255 / 80%);
   }
 </style>
