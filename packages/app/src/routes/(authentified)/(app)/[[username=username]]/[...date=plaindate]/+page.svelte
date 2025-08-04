@@ -75,45 +75,6 @@
   });
 </script>
 
-<svelte:window
-  onkeydown={async ({ key }) => {
-    if (eventInCreation) {
-      let to: Temporal.PlainDateTime | undefined;
-
-      if (key === "Escape")
-        await goto(page.url.pathname, { keepFocus: true, noScroll: true });
-      else if (key === "ArrowDown") to = eventInCreation.add({ minutes: 15 });
-      else if (key === "ArrowUp")
-        to = eventInCreation.subtract({ minutes: 15 });
-      else if (key === "ArrowLeft") to = eventInCreation.subtract({ days: 1 });
-      else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
-
-      if (to) await toggleEventCreation(to);
-    } else if (page.url.searchParams.has("/journal")) {
-      if (key === "Escape") {
-        await goto(paths.resolveRoute(params, { search: "" }), {
-          keepFocus: true,
-          noScroll: true,
-        });
-      }
-    } else {
-      if (key === "ArrowLeft") {
-        await goto(
-          paths.resolveRoute({ date: start.subtract({ days: 1 }).toString() }),
-          { keepFocus: true },
-        );
-      } else if (key === "ArrowRight") {
-        await goto(
-          paths.resolveRoute({ date: start.add({ days: 1 }).toString() }),
-          {
-            keepFocus: true,
-          },
-        );
-      }
-    }
-  }}
-/>
-
 {#if event}
   <Dialog open>
     {#snippet header()}

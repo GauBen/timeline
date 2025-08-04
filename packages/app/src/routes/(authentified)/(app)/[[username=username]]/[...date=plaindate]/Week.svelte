@@ -7,7 +7,9 @@
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
   import { replaceState } from "$app/navigation";
-  //import { load } from "./week.remote.js";
+  import { getEvents } from "./events.remote.js";
+  import { page } from "$app/state";
+  import { SvelteMap } from "svelte/reactivity";
 
   const {
     start: middle,
@@ -44,17 +46,21 @@
         if (wrapper.scrollLeft < wrapper.clientWidth) {
           wrapper.scrollLeft += wrapper.clientWidth;
           start = start.subtract({ days: 4 });
-          // load({
-          //   from: start.toString(),
-          //   to: start.add({ days: 20 }).toString(),
-          // })
-          //   .then((e) => console.log(e))
-          //   .catch((e) => {
-          //     console.error("Failed to load events", e);
-          //   });
+          getEvents({
+            date: now.subtract({ days: 7 }).toString(),
+            username: page.params.username,
+          }).then((events) => {
+            for (const [day, list] of events) windows.set(day, list);
+          });
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
           start = start.add({ days: 4 });
+          getEvents({
+            date: now.add({ days: 7 }).toString(),
+            username: page.params.username,
+          }).then((events) => {
+            for (const [day, list] of events) windows.set(day, list);
+          });
         }
 
         wrapper.style.setProperty("scroll-snap-type", "none");
@@ -116,12 +122,14 @@
     return years;
   });
 
-  let windows = $state("then" in events ? {} : events.windows);
+  let windows = $state(
+    "then" in events ? new SvelteMap<never, never>() : new SvelteMap(events),
+  );
 
   $effect(() => {
     if ("then" in events) {
       events.then((events) => {
-        windows = events.windows;
+        windows = new SvelteMap(events);
       });
     }
   });
@@ -173,7 +181,7 @@
         {day}
         withTime
         {eventInCreation}
-        events={windows[day.toString()] ?? []}
+        events={windows.get(day.toString()) ?? []}
         {onevent}
         {timezone}
       />

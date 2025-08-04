@@ -15,12 +15,12 @@
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
 
-  let windows = $state("then" in events ? {} : events.windows);
+  let windows = $state("then" in events ? new Map<never, never>() : events);
 
   $effect(() => {
     if ("then" in events) {
       events.then((events) => {
-        windows = events.windows;
+        windows = events;
       });
     }
   });
@@ -28,7 +28,7 @@
 
 {#snippet eventInCreationMarker()}
   <article
-    style="border: 2px solid #ffdcf9; background: #fff0f680"
+    style="background: #fff0f680; border: 2px solid #ffdcf9"
     bind:this={eventInCreationElement}
   >
     &nbsp;
@@ -63,7 +63,7 @@
             {@const day = start.add({
               days: dayOfWeek - paddingDaysStart + week * 7,
             })}
-            {@const events = windows[day.toString()] ?? []}
+            {@const events = windows.get(day.toString()) ?? []}
             {@const index =
               eventInCreation &&
               events.filter(
@@ -117,24 +117,24 @@
 
 <style lang="scss">
   .wrapper {
-    background: #fff;
-    overflow-y: scroll;
-    min-height: 0;
     height: 100%;
+    min-height: 0;
+    overflow-y: scroll;
+    background: #fff;
   }
 
   table {
-    min-height: 100%;
     width: 100%;
-    border-collapse: collapse;
+    min-height: 100%;
     table-layout: fixed;
+    border-collapse: collapse;
   }
 
   thead {
     position: sticky;
-    top: 0px;
-    backdrop-filter: blur(2px);
+    top: 0;
     background: #fff8;
+    backdrop-filter: blur(2px);
   }
 
   thead tr {
@@ -142,10 +142,10 @@
   }
 
   td {
-    contain: content;
-    border: 1px solid #ccc;
     padding: 0.5em;
+    contain: content;
     vertical-align: top;
+    border: 1px solid #ccc;
   }
 
   tbody tr {
@@ -154,15 +154,15 @@
 
   td > a {
     position: absolute;
-    color: #888;
     font-size: 0.8em;
+    color: #888;
     user-select: none;
   }
 
   article {
+    padding: 0.25rem;
     background: #e8faef;
     border: 2px solid #e8faef;
     border-radius: 0.5rem;
-    padding: 0.25rem;
   }
 </style>
