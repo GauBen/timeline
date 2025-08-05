@@ -1,5 +1,6 @@
 import { page } from "$app/state";
 import { m } from "messages";
+import reactive from "./reactive.js";
 
 const thresholds = {
   seconds: 60,
@@ -22,7 +23,7 @@ export default {
     });
   },
   format(date: Date) {
-    let diff = (date.getTime() - Date.now()) / 1000;
+    let diff = (date.getTime() - reactive.now) / 1000;
     for (const [unit, threshold] of Object.entries(thresholds)) {
       if (Math.abs(diff) < threshold) {
         return this.formatter.format(
