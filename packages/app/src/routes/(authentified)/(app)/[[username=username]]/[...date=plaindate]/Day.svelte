@@ -130,6 +130,8 @@
       border-bottom: 1px solid #ccc;
 
       > span {
+        position: sticky;
+        left: 0;
         display: inline-block;
         padding: 0.25em;
         font-size: 0.8em;
