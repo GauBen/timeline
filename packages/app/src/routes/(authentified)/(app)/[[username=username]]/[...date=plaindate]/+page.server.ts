@@ -1,19 +1,17 @@
 import { prisma } from "$lib/server/prisma.js";
-import { timezones } from "$lib/server/tz.js";
-import { Temporal } from "temporal-polyfill";
+import { error } from "@sveltejs/kit";
 import type { Prisma } from "db";
-import { error, fail, redirect } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
-import * as journal from "../../_/journal/+page.server.js";
+//import * as journal from "../../_/journal/+page.server.js";
 
 export const load = loadgate(
   {
-    "event": fg
+    event: fg
       .text({ required: true, pattern: /^\d+$/ })
       .transform(Number)
       .optional(),
-    "/journal": fg.date({ required: true }).optional(),
+    //"/journal": fg.date({ required: true }).optional(),
   },
   async (searchParams, { parent }) => {
     const { me, user } = await parent();
@@ -39,15 +37,16 @@ export const load = loadgate(
         where: { followerId: me.id },
         include: { following: true },
       }),
-      searchParams["/journal"] &&
-        prisma.journalEntry.findUnique({
-          where: {
-            authorId_date: {
-              authorId: me.id,
-              date: searchParams["/journal"] + "T00:00:00Z",
-            },
-          },
-        }),
+      ,
+      // searchParams["/journal"] &&
+      //   prisma.journalEntry.findUnique({
+      //     where: {
+      //       authorId_date: {
+      //         authorId: me.id,
+      //         date: searchParams["/journal"] + "T00:00:00Z",
+      //       },
+      //     },
+      //   }),
       prisma.tag.findMany({ where: { ownerId: me.id } }),
     ]);
 
@@ -56,61 +55,6 @@ export const load = loadgate(
 );
 
 export const actions = {
-  createEvent: formgate(
-    {
-      body: fg.text({ required: true, minlength: 1, maxlength: 1024 }),
-      start: fg
-        .datetimeLocal({ required: true })
-        .transform(Temporal.PlainDateTime.from),
-      startTimezone: fg.select(timezones, { required: true }),
-      shared: fg.select(["public", "private", "shared"] as const, {
-        required: true,
-      }),
-      shared_with: fg.select(() => true, { multiple: true }),
-      tags: fg.multi().map((id) => Number(id)),
-    },
-    async (data, { request, locals }) => {
-      if (!locals.session) return fail(401, { error: "Unauthorized" });
-
-      const tags = await prisma.tag.findMany({
-        where: { id: { in: data.tags }, ownerId: locals.session.id },
-      });
-
-      const start = data.start
-        .toZonedDateTime(data.startTimezone)
-        .toInstant()
-        .toString();
-
-      await prisma.event.create({
-        data: {
-          body: data.body,
-          start,
-          startTimezone: data.startTimezone,
-          end: start,
-          public: data.shared === "public",
-          authorId: locals.session.id,
-          users:
-            data.shared === "shared"
-              ? {
-                  createMany: {
-                    data: data.shared_with.map((userId) => ({
-                      userId: Number(userId),
-                      shared: true,
-                    })),
-                  },
-                }
-              : {},
-          tags: {
-            connect: tags.map((tag) => ({ id: tag.id })),
-          },
-        },
-      });
-
-      redirect(303, new URL(request.url).pathname);
-    },
-    { id: "createEvent" },
-  ),
-
   follow: async ({ locals, params }) => {
     if (!locals.session) error(401, "Unauthorized");
     const { username } = params;
@@ -201,5 +145,5 @@ export const actions = {
     { id: "markHabit" },
   ),
 
-  journal: journal.actions.default,
+  //journal: journal.actions.default,
 };

@@ -17,8 +17,8 @@ export default {
       },
     }),
 
-    alias: {
-      $prisma: "./prisma/generated/client.ts",
+    experimental: {
+      remoteFunctions: true,
     },
   },
 };

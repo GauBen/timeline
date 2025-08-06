@@ -17,12 +17,14 @@ declare global {
       locale: Locale;
       timezones: string[];
     }
-    // interface Error {}
     interface Platform {
       env: {
         DB: D1Database;
         SESSIONS: KVNamespace;
       };
+    }
+    interface PageState {
+      start: Temporal.PlainDate;
     }
   }
 }

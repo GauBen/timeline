@@ -20,18 +20,8 @@
   const max = $derived(
     "then" in events
       ? 1
-      : Math.max(...Object.values(events.windows).map((w) => w?.length ?? 0)),
+      : Math.max(...Object.values(events).map((w) => w?.length ?? 0)),
   );
-
-  let windows = $state("then" in events ? {} : events.windows);
-
-  $effect(() => {
-    if ("then" in events) {
-      events.then((events) => {
-        windows = events.windows;
-      });
-    }
-  });
 </script>
 
 <table>
@@ -69,7 +59,7 @@
         <td>{name}</td>
         {#each { length: 53 }, week}
           {@const date = start.add({ weeks: week, days: day })}
-          {@const count = windows[date.toString()]?.length}
+          {@const count = events.get(date.toString())?.length}
           <td
             title={date.toString()}
             style:background={eventInCreation?.toPlainDate().equals(date)
@@ -101,17 +91,17 @@
     border-collapse: collapse;
 
     td {
-      border: 1px solid #000;
-      height: 1rem;
       width: 1rem;
-      line-height: 1;
+      height: 1rem;
       contain: paint;
+      line-height: 1;
+      border: 1px solid #000;
     }
   }
 
   a::before {
-    content: "";
     position: absolute;
     inset: 0;
+    content: "";
   }
 </style>
