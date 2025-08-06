@@ -14,16 +14,6 @@
 
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
-
-  let windows = $state("then" in events ? new Map<never, never>() : events);
-
-  $effect(() => {
-    if ("then" in events) {
-      events.then((events) => {
-        windows = events;
-      });
-    }
-  });
 </script>
 
 {#snippet eventInCreationMarker()}
@@ -63,10 +53,10 @@
             {@const day = start.add({
               days: dayOfWeek - paddingDaysStart + week * 7,
             })}
-            {@const events = windows.get(day.toString()) ?? []}
+            {@const e = events.get(day.toString()) ?? []}
             {@const index =
               eventInCreation &&
-              events.filter(
+              e.filter(
                 ({ start }) =>
                   Temporal.PlainDateTime.compare(
                     start.toTemporalInstant().toZonedDateTimeISO(timezone),
@@ -91,7 +81,7 @@
                 {#if eventInCreation?.toPlainDate().equals(day) && index === 0}
                   {@render eventInCreationMarker()}
                 {/if}
-                {#each events as { id, body, added }, i (id)}
+                {#each e as { id, body, added }, i (id)}
                   <article
                     style:background={added ? "#e8faef" : "#fff"}
                     style:opacity={day.month === start.month ? 1 : 0.75}

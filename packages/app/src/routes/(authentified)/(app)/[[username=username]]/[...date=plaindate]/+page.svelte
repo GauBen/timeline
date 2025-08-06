@@ -1,10 +1,10 @@
 <script module lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  import { page } from "$app/state";
+  // import { page } from "$app/state";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import { reportValidity } from "formgator/sveltekit";
+  // import { reportValidity } from "formgator/sveltekit";
   import { Button, Select } from "uistiti";
   import type { PageData } from "./$types.js";
   import EventCreationDialog from "./EventCreationDialog.svelte";
@@ -34,7 +34,7 @@
   export interface ViewProps {
     start: PageData["start"];
     timezone: PageData["me"]["timezone"];
-    events: PageData["events"];
+    events: Awaited<PageData["events"]>;
     eventInCreation: PageData["eventInCreation"];
     onevent: typeof toggleEventCreation;
   }
@@ -42,24 +42,39 @@
 
 <script lang="ts">
   import Dialog from "$lib/components/Dialog.svelte";
-  import { Textarea } from "uistiti";
+  //import { Textarea } from "uistiti";
   import { m } from "messages";
+  import { page } from "$app/state";
+  import { SvelteMap } from "svelte/reactivity";
+  import type { Event } from "$lib/types.js";
 
   const { data, params } = $props();
   const {
     event,
-    events,
     eventInCreation,
     followed,
     followings,
-    journal,
+    //journal,
     latest,
     me,
-    start,
     tags,
     user,
     view,
   } = $derived(data);
+
+  const start = $derived(page.state.start ?? data.start);
+  const events = new SvelteMap<string, Array<Event>>(
+    "then" in data.events ? [] : data.events,
+  );
+
+  $effect(() => {
+    if ("then" in data.events) {
+      data.events.then((e) => {
+        console.log(e);
+        for (const [day, list] of e) events.set(day, list);
+      });
+    }
+  });
 
   const View = $derived({ Week, Month, Year }[view]);
   let component = $state<Week | Month | Year>();
@@ -120,7 +135,7 @@
     timezone={me.timezone}
     {getEventInCreationElement}
   />
-{:else if page.url.searchParams.has("/journal")}
+  <!-- {:else if page.url.searchParams.has("/journal")}
   {@const date = page.url.searchParams.get("/journal")!}
   <Dialog open>
     {#snippet header()}
@@ -151,7 +166,7 @@
         <Button color="success">Save</Button>
       </p>
     </form>
-  </Dialog>
+  </Dialog> -->
 {/if}
 
 <Layout {me} {latest}>

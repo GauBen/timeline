@@ -40,7 +40,7 @@ export const load = loadgate(
     let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> =
       getEvents(params);
 
-    if (browser) events = await events;
+    if (!browser) events = await events;
 
     return { ...data, events, start, view, eventInCreation: searchParams.new };
   },

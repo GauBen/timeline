@@ -9,20 +9,13 @@
   import { replaceState } from "$app/navigation";
   import { getEvents } from "./events.remote.js";
   import { page } from "$app/state";
-  import { SvelteMap } from "svelte/reactivity";
 
-  const {
-    start: middle,
-    eventInCreation,
-    events,
-    onevent,
-    timezone,
-  }: ViewProps = $props();
+  const { start, eventInCreation, events, onevent, timezone }: ViewProps =
+    $props();
 
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
-  let urlNow = middle;
-  let start = $derived(middle.subtract({ days: 8 }));
+  let bufferStart = $state(start.subtract({ days: 8 }));
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
@@ -35,31 +28,32 @@
       async () => {
         if (timeout) window.clearTimeout(timeout);
 
-        const now = start.add({
+        const now = bufferStart.add({
           days: Math.round((wrapper.scrollLeft * 4) / wrapper.clientWidth),
         });
-        if (!now.equals(urlNow)) {
-          urlNow = now;
-          replaceState(paths.resolveRoute({ date: now.toString() }), {});
+        if (!now.equals(start)) {
+          replaceState(paths.resolveRoute({ date: now.toString() }), {
+            start: now,
+          });
         }
 
         if (wrapper.scrollLeft < wrapper.clientWidth) {
           wrapper.scrollLeft += wrapper.clientWidth;
-          start = start.subtract({ days: 4 });
+          bufferStart = bufferStart.subtract({ days: 4 });
           getEvents({
             date: now.subtract({ days: 7 }).toString(),
             username: page.params.username,
           }).then((events) => {
-            for (const [day, list] of events) windows.set(day, list);
+            for (const [day, list] of events) events.set(day, list);
           });
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
-          start = start.add({ days: 4 });
+          bufferStart = bufferStart.add({ days: 4 });
           getEvents({
             date: now.add({ days: 7 }).toString(),
             username: page.params.username,
           }).then((events) => {
-            for (const [day, list] of events) windows.set(day, list);
+            for (const [day, list] of events) events.set(day, list);
           });
         }
 
@@ -81,7 +75,7 @@
   };
 
   const months = $derived.by(() => {
-    let a = start;
+    let a = bufferStart;
     let days = 0;
     const months: Array<{
       month: number;
@@ -105,7 +99,7 @@
   });
 
   const years = $derived.by(() => {
-    let a = start;
+    let a = bufferStart;
     const years: Array<{ year: number; start: number; end: number }> = [];
     let days = 0;
     while (days < 20) {
@@ -120,18 +114,6 @@
       a = a.add({ days: daysInYear });
     }
     return years;
-  });
-
-  let windows = $state(
-    "then" in events ? new SvelteMap<never, never>() : new SvelteMap(events),
-  );
-
-  $effect(() => {
-    if ("then" in events) {
-      events.then((events) => {
-        windows = new SvelteMap(events);
-      });
-    }
   });
 
   let days = $state<Record<string, ReturnType<typeof Day>>>({});
@@ -166,22 +148,22 @@
       </h2>
     </div>
   {/each}
-  {#each Array.from( { length: 20 }, (_, i) => start.add( { days: i }, ), ) as day (day.toString())}
+  {#each Array.from( { length: 20 }, (_, i) => bufferStart.add( { days: i }, ), ) as day (day.toString())}
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3
         style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff; box-shadow: 0 .25rem 0.5rem -0.5rem  #888;"
       >
-        <a href="?/journal={day.toString()}">
-          <DayBlock {number} {weekday} selected={day.equals(today)} />
-        </a>
+        <!-- <a href="?/journal={day.toString()}"> -->
+        <DayBlock {number} {weekday} selected={day.equals(today)} />
+        <!-- </a> -->
       </h3>
       <Day
         bind:this={days[day.toString()]}
         {day}
         withTime
         {eventInCreation}
-        events={windows.get(day.toString()) ?? []}
+        events={events.get(day.toString()) ?? []}
         {onevent}
         {timezone}
       />

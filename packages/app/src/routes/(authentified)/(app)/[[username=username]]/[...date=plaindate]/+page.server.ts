@@ -3,15 +3,15 @@ import { error } from "@sveltejs/kit";
 import type { Prisma } from "db";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
-import * as journal from "../../_/journal/+page.server.js";
+//import * as journal from "../../_/journal/+page.server.js";
 
 export const load = loadgate(
   {
-    "event": fg
+    event: fg
       .text({ required: true, pattern: /^\d+$/ })
       .transform(Number)
       .optional(),
-    "/journal": fg.date({ required: true }).optional(),
+    //"/journal": fg.date({ required: true }).optional(),
   },
   async (searchParams, { parent }) => {
     const { me, user } = await parent();
@@ -37,15 +37,16 @@ export const load = loadgate(
         where: { followerId: me.id },
         include: { following: true },
       }),
-      searchParams["/journal"] &&
-        prisma.journalEntry.findUnique({
-          where: {
-            authorId_date: {
-              authorId: me.id,
-              date: searchParams["/journal"] + "T00:00:00Z",
-            },
-          },
-        }),
+      ,
+      // searchParams["/journal"] &&
+      //   prisma.journalEntry.findUnique({
+      //     where: {
+      //       authorId_date: {
+      //         authorId: me.id,
+      //         date: searchParams["/journal"] + "T00:00:00Z",
+      //       },
+      //     },
+      //   }),
       prisma.tag.findMany({ where: { ownerId: me.id } }),
     ]);
 
@@ -144,5 +145,5 @@ export const actions = {
     { id: "markHabit" },
   ),
 
-  journal: journal.actions.default,
+  //journal: journal.actions.default,
 };
