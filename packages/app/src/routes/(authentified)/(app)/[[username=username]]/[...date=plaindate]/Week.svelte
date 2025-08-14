@@ -50,8 +50,8 @@
             start: bufferStart,
             end: bufferStart.add({ days: 20 }),
             username: page.params.username,
-          }).then((events) => {
-            for (const [day, list] of events) events.set(day, list);
+          }).then((e) => {
+            for (const [day, list] of e) events.set(day, list);
           });
         } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
           wrapper.scrollLeft -= wrapper.clientWidth;
@@ -60,8 +60,8 @@
             start: bufferStart,
             end: bufferStart.add({ days: 20 }),
             username: page.params.username,
-          }).then((events) => {
-            for (const [day, list] of events) events.set(day, list);
+          }).then((e) => {
+            for (const [day, list] of e) events.set(day, list);
           });
         }
 

@@ -41,7 +41,12 @@ export const load = loadgate(
     });
 
     let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> = getEvents(
-      { start, end, username: params.username },
+      {
+        // TODO: find a better way to buffer a few events
+        start: start.subtract({ days: 7 }),
+        end,
+        username: params.username,
+      },
     );
 
     if (!browser) events = await events;
