@@ -23,13 +23,13 @@
 
 <style lang="scss">
   select {
-    font-size: 1em;
     padding: calc(7em / 16);
-    border-radius: 0.25em;
-    border: calc(1em / 16) solid var(--ui-border);
+    font-size: 1em;
+    color: var(--ui-color);
     outline: 0.125em solid transparent;
     outline-offset: 0.125em;
-    color: var(--ui-color);
+    border: calc(1em / 16) solid var(--ui-border);
+    border-radius: 0.25em;
     transition:
       100ms background-color,
       100ms box-shadow,
@@ -41,8 +41,8 @@
       box-shadow: inset 0 0 0 var(--ui-border-hover);
 
       &:hover {
-        box-shadow: inset 0 calc(-1em / 16) 0 var(--ui-border-hover);
         border-color: var(--ui-border-hover);
+        box-shadow: inset 0 calc(-1em / 16) 0 var(--ui-border-hover);
       }
 
       &:focus-visible {

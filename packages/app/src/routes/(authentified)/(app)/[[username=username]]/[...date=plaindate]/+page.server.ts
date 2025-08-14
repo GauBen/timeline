@@ -20,7 +20,7 @@ export const load = loadgate(
       ? { userId: me.id, authorId: user.id }
       : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-    const [event, latest, followings, journal, tags] = await Promise.all([
+    const [event, latest, followings, tags] = await Promise.all([
       searchParams.event
         ? prisma.timelineEvent.findUnique({
             where: { id: searchParams.event, AND: where },
@@ -37,7 +37,6 @@ export const load = loadgate(
         where: { followerId: me.id },
         include: { following: true },
       }),
-      ,
       // searchParams["/journal"] &&
       //   prisma.journalEntry.findUnique({
       //     where: {
@@ -50,7 +49,7 @@ export const load = loadgate(
       prisma.tag.findMany({ where: { ownerId: me.id } }),
     ]);
 
-    return { event, followings, journal, latest, tags };
+    return { event, followings, journal: undefined, latest, tags };
   },
 );
 

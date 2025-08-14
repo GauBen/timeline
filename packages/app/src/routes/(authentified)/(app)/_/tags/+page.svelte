@@ -42,16 +42,16 @@
 
 <style lang="scss">
   ul {
-    list-style: none;
-    padding: 0;
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
+    padding: 0;
+    list-style: none;
 
     li {
       padding: 0.5em;
-      border-radius: 0.25em;
       text-shadow: 0 0 0.5rem #fff;
+      border-radius: 0.25em;
     }
   }
 
@@ -61,8 +61,8 @@
     align-items: center;
 
     > :first-child {
-      font-weight: bold;
       min-width: 5em;
+      font-weight: bold;
       text-align: right;
       user-select: none;
     }
