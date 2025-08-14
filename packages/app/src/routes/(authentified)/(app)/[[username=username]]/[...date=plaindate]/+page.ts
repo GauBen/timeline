@@ -36,9 +36,13 @@ export const load = loadgate(
           day: matches.groups?.day ? Number(matches.groups.day) : 1,
         })
       : Temporal.Now.plainDateISO(me.timezone);
+    const end = start.add({
+      days: view === "Week" ? 7 : view === "Month" ? 31 : 365,
+    });
 
-    let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> =
-      getEvents(params);
+    let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> = getEvents(
+      { start, end, username: params.username },
+    );
 
     if (!browser) events = await events;
 

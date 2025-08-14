@@ -24,7 +24,7 @@ declare global {
       };
     }
     interface PageState {
-      start: Temporal.PlainDate;
+      start?: Temporal.PlainDate;
     }
   }
 }

@@ -17,6 +17,12 @@
 
   let bufferStart = $state(start.subtract({ days: 8 }));
 
+  /**
+   * Keep a local copy of start, updated separately, to know if start changes
+   * from the outside.
+   */
+  let now = start;
+
   const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
     wrapper.scrollLeft = wrapper.clientWidth * 2;
@@ -28,7 +34,7 @@
       async () => {
         if (timeout) window.clearTimeout(timeout);
 
-        const now = bufferStart.add({
+        now = bufferStart.add({
           days: Math.round((wrapper.scrollLeft * 4) / wrapper.clientWidth),
         });
         if (!now.equals(start)) {
@@ -41,7 +47,8 @@
           wrapper.scrollLeft += wrapper.clientWidth;
           bufferStart = bufferStart.subtract({ days: 4 });
           getEvents({
-            date: now.subtract({ days: 7 }).toString(),
+            start: bufferStart,
+            end: bufferStart.add({ days: 20 }),
             username: page.params.username,
           }).then((events) => {
             for (const [day, list] of events) events.set(day, list);
@@ -50,7 +57,8 @@
           wrapper.scrollLeft -= wrapper.clientWidth;
           bufferStart = bufferStart.add({ days: 4 });
           getEvents({
-            date: now.add({ days: 7 }).toString(),
+            start: bufferStart,
+            end: bufferStart.add({ days: 20 }),
             username: page.params.username,
           }).then((events) => {
             for (const [day, list] of events) events.set(day, list);
@@ -122,13 +130,23 @@
     days[eventInCreation.toPlainDate().toString()]?.getEventInCreationElement();
 </script>
 
-<div class="wrapper loading" {@attach scroll}>
+<div
+  class="wrapper loading"
+  {@attach scroll}
+  {@attach (wrapper) => {
+    // Reset the scroll position when start changes externally
+    if (!start.equals(now)) {
+      bufferStart = start.subtract({ days: 8 });
+      wrapper.scrollTo({ left: wrapper.clientWidth * 2, behavior: "instant" });
+    }
+  }}
+>
   {#each months as { month, href, end, start } (month)}
     <div
       style="position: sticky; top: 0; z-index:1; grid-row: 1; grid-column: {start}/{end}; background: white;"
     >
       <h2 style="position: sticky; left: 0; width: 25cqw">
-        <a {href}>
+        <a {href} style="padding: .25rem">
           {i18n.formatMonth(month)}
         </a>
       </h2>
@@ -140,7 +158,7 @@
     >
       <h2 style="position: sticky; right: 0; width: 25cqw; text-align: right">
         <a
-          style="pointer-events: all; background: white"
+          style=" padding: .25rem;pointer-events: all; background: white"
           href={paths.resolveRoute({ date: year.toString() })}
         >
           {year}

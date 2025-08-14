@@ -5,13 +5,15 @@ import { form, getRequestEvent, query } from "$app/server";
 import z from "zod";
 import * as fg from "formgator";
 import { timezones } from "$lib/server/tz.js";
+import "temporal-polyfill/global";
 
 export const getEvents = query(
   z.object({
     username: z.string().optional(),
-    date: z.string(),
+    start: z.instanceof(Temporal.PlainDate),
+    end: z.instanceof(Temporal.PlainDate),
   }),
-  async ({ date, username }) => {
+  async ({ start, end, username }) => {
     const { locals } = getRequestEvent();
 
     if (!locals.session) error(401, "Unauthorized");
@@ -33,42 +35,9 @@ export const getEvents = query(
       ? { userId: me.id, authorId: user.id }
       : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-    const matches = date.match(
-      /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
-    );
-
-    if (date && !matches) error(400, "Invalid date");
-
-    const view =
-      !matches || matches.groups?.day
-        ? "day"
-        : matches.groups?.month
-          ? "month"
-          : "year";
-
-    const start = matches
-      ? Temporal.PlainDate.from({
-          year: matches.groups?.year ? Number(matches.groups.year) : 1,
-          month: matches.groups?.month ? Number(matches.groups.month) : 1,
-          day: matches.groups?.day ? Number(matches.groups.day) : 1,
-        })
-      : Temporal.Now.plainDateISO(me.timezone);
-
     // SQL query date boundaries
-    const gte = start
-      .subtract({ days: view === "day" ? 7 : 0 })
-      .toZonedDateTime(me.timezone)
-      .toInstant()
-      .toString();
-    const lt = start
-      .add(
-        view === "day"
-          ? { days: 7 }
-          : { [view === "month" ? "months" : "years"]: 1 },
-      )
-      .toZonedDateTime(me.timezone)
-      .toInstant()
-      .toString();
+    const gte = start.toZonedDateTime(me.timezone).toInstant().toString();
+    const lt = end.toZonedDateTime(me.timezone).toInstant().toString();
 
     const events = await prisma.timelineEvent.findMany({
       where: {

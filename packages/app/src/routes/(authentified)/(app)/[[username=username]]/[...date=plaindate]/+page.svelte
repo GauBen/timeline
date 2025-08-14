@@ -20,14 +20,14 @@
   ) => {
     await goto(
       paths.resolveRoute(
-        {},
+        { date: page.state.start?.toString() || page.params.date },
         {
           search: datetime
             ? `?${new URLSearchParams({ new: datetime.toString() })}`
             : "",
         },
       ),
-      { keepFocus: true, noScroll: true },
+      { keepFocus: true, noScroll: true, state: page.state },
     );
   };
 
@@ -70,7 +70,6 @@
   $effect(() => {
     if ("then" in data.events) {
       data.events.then((e) => {
-        console.log(e);
         for (const [day, list] of e) events.set(day, list);
       });
     }
