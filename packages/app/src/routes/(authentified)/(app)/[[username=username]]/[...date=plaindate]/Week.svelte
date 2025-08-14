@@ -170,9 +170,9 @@
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3>
-        <!-- <a href="?/journal={day.toString()}"> -->
-        <DayBlock {number} {weekday} selected={day.equals(today)} />
-        <!-- </a> -->
+        <a href="?/journal={day.toString()}">
+          <DayBlock {number} {weekday} selected={day.equals(today)} />
+        </a>
       </h3>
       <Day
         bind:this={days[day.toString()]}

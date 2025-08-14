@@ -3,15 +3,15 @@ import { error } from "@sveltejs/kit";
 import type { Prisma } from "db";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
-//import * as journal from "../../_/journal/+page.server.js";
+import * as journal from "../../_/journal/+page.server.js";
 
 export const load = loadgate(
   {
-    event: fg
+    "event": fg
       .text({ required: true, pattern: /^\d+$/ })
       .transform(Number)
       .optional(),
-    //"/journal": fg.date({ required: true }).optional(),
+    "/journal": fg.date({ required: true }).optional(),
   },
   async (searchParams, { parent }) => {
     const { me, user } = await parent();
@@ -20,36 +20,46 @@ export const load = loadgate(
       ? { userId: me.id, authorId: user.id }
       : { userId: me.id, OR: [{ added: true }, { followed: true }] };
 
-    const [event, latest, followings, tags] = await Promise.all([
-      searchParams.event
-        ? prisma.timelineEvent.findUnique({
-            where: { id: searchParams.event, AND: where },
-            include: { author: true, event: { include: { tags: true } } },
-          })
-        : undefined,
-      prisma.timelineEvent.findMany({
-        where,
-        include: { author: true, event: { include: { tags: true } } },
-        orderBy: { createdAt: "desc" },
-        take: 100,
-      }),
-      prisma.follow.findMany({
-        where: { followerId: me.id },
-        include: { following: true },
-      }),
-      // searchParams["/journal"] &&
-      //   prisma.journalEntry.findUnique({
-      //     where: {
-      //       authorId_date: {
-      //         authorId: me.id,
-      //         date: searchParams["/journal"] + "T00:00:00Z",
-      //       },
-      //     },
-      //   }),
-      prisma.tag.findMany({ where: { ownerId: me.id } }),
-    ]);
+    const [event, latest, followings, journal, habits, tags] =
+      await Promise.all([
+        searchParams.event
+          ? prisma.timelineEvent.findUnique({
+              where: { id: searchParams.event, AND: where },
+              include: { author: true, event: { include: { tags: true } } },
+            })
+          : undefined,
+        prisma.timelineEvent.findMany({
+          where,
+          include: { author: true, event: { include: { tags: true } } },
+          orderBy: { createdAt: "desc" },
+          take: 100,
+        }),
+        prisma.follow.findMany({
+          where: { followerId: me.id },
+          include: { following: true },
+        }),
+        searchParams["/journal"] &&
+          prisma.journalEntry.findUnique({
+            where: {
+              authorId_date: {
+                authorId: me.id,
+                date: searchParams["/journal"] + "T00:00:00Z",
+              },
+            },
+          }),
+        searchParams["/journal"] &&
+          prisma.habit.findMany({
+            where: { userId: me.id },
+            include: {
+              marks: {
+                where: { date: searchParams["/journal"] + "T00:00:00Z" },
+              },
+            },
+          }),
+        prisma.tag.findMany({ where: { ownerId: me.id } }),
+      ]);
 
-    return { event, followings, journal: undefined, latest, tags };
+    return { event, followings, journal, latest, habits, tags };
   },
 );
 
@@ -144,5 +154,5 @@ export const actions = {
     { id: "markHabit" },
   ),
 
-  //journal: journal.actions.default,
+  journal: journal.actions.default,
 };

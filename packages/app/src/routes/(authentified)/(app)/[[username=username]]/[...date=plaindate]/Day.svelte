@@ -62,10 +62,7 @@
         <span>
           {Temporal.PlainTime.from({ hour: hour + 1 }).toLocaleString(
             i18n.locale,
-            {
-              hour: "numeric",
-              minute: "numeric",
-            },
+            { hour: "numeric", minute: "numeric" },
           )}
         </span>
       {/if}
@@ -77,7 +74,7 @@
   {/if}
   {#each events as { id, author, body, start, added, event } (id)}
     <article
-      style=" text-shadow: 0 0 0.5rem #fff;border: 2px solid #fff;"
+      style="text-shadow: 0 0 0.5rem #fff; border: 2px solid #fff;"
       style:background={added
         ? event.tags.length > 1
           ? gradient(event.tags)

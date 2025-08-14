@@ -1,14 +1,18 @@
 <script module lang="ts">
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
-  // import { page } from "$app/state";
+  import { page } from "$app/state";
+  import Dialog from "$lib/components/Dialog.svelte";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  // import { reportValidity } from "formgator/sveltekit";
-  import { Button, Select } from "uistiti";
+  import type { Event } from "$lib/types.js";
+  import { reportValidity } from "formgator/sveltekit";
+  import { m } from "messages";
+  import { SvelteMap } from "svelte/reactivity";
+  import { Button, Select, Textarea } from "uistiti";
   import type { PageData } from "./$types.js";
-  import EventCreationDialog from "./EventCreationDialog.svelte";
   import EventActions from "./EventActions.svelte";
+  import EventCreationDialog from "./EventCreationDialog.svelte";
   import Layout from "./Layout.svelte";
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
@@ -41,20 +45,14 @@
 </script>
 
 <script lang="ts">
-  import Dialog from "$lib/components/Dialog.svelte";
-  //import { Textarea } from "uistiti";
-  import { m } from "messages";
-  import { page } from "$app/state";
-  import { SvelteMap } from "svelte/reactivity";
-  import type { Event } from "$lib/types.js";
-
   const { data, params } = $props();
   const {
     event,
     eventInCreation,
     followed,
     followings,
-    //journal,
+    journal,
+    habits,
     latest,
     me,
     tags,
@@ -134,7 +132,7 @@
     timezone={me.timezone}
     {getEventInCreationElement}
   />
-  <!-- {:else if page.url.searchParams.has("/journal")}
+{:else if page.url.searchParams.has("/journal")}
   {@const date = page.url.searchParams.get("/journal")!}
   <Dialog open>
     {#snippet header()}
@@ -146,26 +144,66 @@
         <span class="i-ph-x">Close</span>
       </a>
     {/snippet}
-    <form
-      action="?/journal={date}"
-      method="POST"
-      use:enhance={() => reportValidity({ reset: false })}
-      class="_stack-2"
-    >
-      <input type="hidden" name="date" value={date} />
-      <label class="_stack-2">
-        {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
-          How was your day?
-        {:else}
-          Who knows what the future holds?
-        {/if}
-        <Textarea name="body" cols={50} rows={8} value={journal?.body ?? ""} />
-      </label>
-      <p style="text-align: end">
-        <Button color="success">Save</Button>
-      </p>
-    </form>
-  </Dialog> -->
+    <div class="_stack-4">
+      <form
+        action="?/journal={date}"
+        method="POST"
+        use:enhance={() => reportValidity({ reset: false })}
+        class="_stack-2"
+      >
+        <input type="hidden" name="date" value={date} />
+        <label class="_stack-2">
+          {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
+            How was your day?
+          {:else}
+            Who knows what the future holds?
+          {/if}
+          <Textarea
+            name="body"
+            cols={50}
+            rows={8}
+            value={journal?.body ?? ""}
+          />
+        </label>
+        <p style="text-align: end">
+          <Button color="success">Save</Button>
+        </p>
+      </form>
+
+      <hr />
+
+      {#if habits && habits.length > 0}
+        <div class="_row-2">
+          {#each habits as { id, name, marks } (id)}
+            <form method="post" action="?/markHabit" use:enhance>
+              <input type="hidden" name="habitId" value={id} />
+              <input type="hidden" name="date" value={date} />
+              <Button
+                type="submit"
+                name="mark"
+                value={String(marks.length === 0)}
+                variant="ghost"
+                square
+              >
+                <span
+                  class={marks.length > 0
+                    ? "i-ph-check-circle-duotone"
+                    : "i-ph-circle"}
+                ></span>
+                {name}
+              </Button>
+            </form>
+          {/each}
+        </div>
+      {:else}
+        <p>
+          You don't have any habits set up yet. <a href="/_/habits">
+            Set some up!
+          </a>
+        </p>
+      {/if}
+    </div>
+  </Dialog>
 {/if}
 
 <Layout {me} {latest}>
