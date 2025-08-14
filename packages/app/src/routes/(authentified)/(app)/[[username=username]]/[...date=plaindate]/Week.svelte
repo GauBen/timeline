@@ -125,7 +125,7 @@
 <div class="wrapper loading" {@attach scroll}>
   {#each months as { month, href, end, start } (month)}
     <div
-      style="position: sticky; top: 0; grid-row: 1; grid-column: {start}/{end}; background: white;"
+      style="position: sticky; top: 0; z-index:1; grid-row: 1; grid-column: {start}/{end}; background: white;"
     >
       <h2 style="position: sticky; left: 0; width: 25cqw">
         <a {href}>
@@ -136,7 +136,7 @@
   {/each}
   {#each years as { year, start, end } (year)}
     <div
-      style="position: sticky; top: 0; display:flex; grid-row: 1; grid-column: {start}/{end}; justify-content: end; pointer-events: none"
+      style="position: sticky; top: 0; z-index: 2; display:flex; grid-row: 1; grid-column: {start}/{end}; justify-content: end; pointer-events: none;"
     >
       <h2 style="position: sticky; right: 0; width: 25cqw; text-align: right">
         <a
