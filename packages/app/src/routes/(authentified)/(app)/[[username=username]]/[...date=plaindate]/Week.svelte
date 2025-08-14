@@ -151,9 +151,7 @@
   {#each Array.from( { length: 20 }, (_, i) => bufferStart.add( { days: i }, ), ) as day (day.toString())}
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
-      <h3
-        style="position: sticky; top: 2rem; right: 0; left: 0; z-index: 1; text-align: center; background: #fff; box-shadow: 0 .25rem 0.5rem -0.5rem  #888;"
-      >
+      <h3>
         <!-- <a href="?/journal={day.toString()}"> -->
         <DayBlock {number} {weekday} selected={day.equals(today)} />
         <!-- </a> -->
@@ -172,6 +170,26 @@
 </div>
 
 <style lang="scss">
+  h3 {
+    position: sticky;
+    top: 2rem;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    text-align: center;
+    background: #fff;
+  }
+
+  h3::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.5rem;
+    left: 0;
+    height: 0.5rem;
+    content: "";
+    background: linear-gradient(to top, transparent, #ccc4);
+  }
+
   .wrapper {
     display: inline-grid;
     grid-template-rows: 2rem 1fr;
