@@ -1,11 +1,10 @@
-import { browser } from "$app/environment";
-import type { MaybePromise } from "$lib/types.js";
 import { error } from "@sveltejs/kit";
-import { unflatten } from "devalue";
 import * as fg from "formgator";
 import { loadgate } from "formgator/sveltekit";
 import { Temporal } from "temporal-polyfill";
-import type { Events } from "./+server.ts";
+import { getEvents } from "./events.remote.js";
+import { browser } from "$app/environment";
+import type { MaybePromise } from "$lib/types.js";
 
 export const load = loadgate(
   {
@@ -14,14 +13,14 @@ export const load = loadgate(
       .transform(Temporal.PlainDateTime.from)
       .optional(),
   },
-  async (searchParams, { data, fetch, params, parent }) => {
+  async (searchParams, { data, params, parent }) => {
     const { me } = await parent();
 
     const matches = params.date.match(
       /^(?<year>\d{4})(?:-(?<month>\d\d)(?:-(?<day>\d\d))?)?$/,
     );
 
-    const view =
+    const view: "Week" | "Month" | "Year" =
       !matches || matches.groups?.day
         ? "Week"
         : matches.groups?.month
@@ -37,10 +36,18 @@ export const load = loadgate(
           day: matches.groups?.day ? Number(matches.groups.day) : 1,
         })
       : Temporal.Now.plainDateISO(me.timezone);
+    const end = start.add({
+      days: view === "Week" ? 7 : view === "Month" ? 31 : 365,
+    });
 
-    let events: MaybePromise<Events> = fetch("#" + params.date)
-      .then((response) => response.json())
-      .then((data) => unflatten(data));
+    let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> = getEvents(
+      {
+        // TODO: find a better way to buffer a few events
+        start: start.subtract({ days: 7 }),
+        end,
+        username: params.username,
+      },
+    );
 
     if (!browser) events = await events;
 

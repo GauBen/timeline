@@ -3,7 +3,7 @@
 </script>
 
 <main
-  style="margin-inline: auto; max-width: 60rem; padding: 1rem"
+  style=" max-width: 60rem; padding: 1rem;margin-inline: auto"
   class="_stack-4"
 >
   <Card color="warning" padding={2}>

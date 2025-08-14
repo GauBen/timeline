@@ -16,6 +16,7 @@ dev: build
 lint:
   yarn eslint --fix .
   yarn prettier --write --list-different .
+  yarn stylelint "**/src/**/*.{css,scss,svelte}" --fix
 
 # Deploy the app to Cloudflare
 deploy:

@@ -2,13 +2,17 @@
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
+  import Dialog from "$lib/components/Dialog.svelte";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
+  import type { Event } from "$lib/types.js";
   import { reportValidity } from "formgator/sveltekit";
-  import { Button, Select } from "uistiti";
+  import { m } from "messages";
+  import { SvelteMap } from "svelte/reactivity";
+  import { Button, Select, Textarea } from "uistiti";
   import type { PageData } from "./$types.js";
-  import EventCreationDialog from "./EventCreationDialog.svelte";
   import EventActions from "./EventActions.svelte";
+  import EventCreationDialog from "./EventCreationDialog.svelte";
   import Layout from "./Layout.svelte";
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
@@ -20,46 +24,54 @@
   ) => {
     await goto(
       paths.resolveRoute(
-        {},
+        { date: page.state.start?.toString() || page.params.date },
         {
           search: datetime
             ? `?${new URLSearchParams({ new: datetime.toString() })}`
             : "",
         },
       ),
-      { keepFocus: true, noScroll: true },
+      { keepFocus: true, noScroll: true, state: page.state },
     );
   };
 
   export interface ViewProps {
     start: PageData["start"];
     timezone: PageData["me"]["timezone"];
-    events: PageData["events"];
+    events: Awaited<PageData["events"]>;
     eventInCreation: PageData["eventInCreation"];
     onevent: typeof toggleEventCreation;
   }
 </script>
 
 <script lang="ts">
-  import Dialog from "$lib/components/Dialog.svelte";
-  import { Textarea } from "uistiti";
-  import { m } from "messages";
-
   const { data, params } = $props();
   const {
     event,
-    events,
     eventInCreation,
     followed,
     followings,
     journal,
+    habits,
     latest,
     me,
-    start,
     tags,
     user,
     view,
   } = $derived(data);
+
+  const start = $derived(page.state.start ?? data.start);
+  const events = new SvelteMap<string, Array<Event>>(
+    "then" in data.events ? [] : data.events,
+  );
+
+  $effect(() => {
+    if ("then" in data.events) {
+      data.events.then((e) => {
+        for (const [day, list] of e) events.set(day, list);
+      });
+    }
+  });
 
   const View = $derived({ Week, Month, Year }[view]);
   let component = $state<Week | Month | Year>();
@@ -74,45 +86,6 @@
     onevent: toggleEventCreation,
   });
 </script>
-
-<svelte:window
-  onkeydown={async ({ key }) => {
-    if (eventInCreation) {
-      let to: Temporal.PlainDateTime | undefined;
-
-      if (key === "Escape")
-        await goto(page.url.pathname, { keepFocus: true, noScroll: true });
-      else if (key === "ArrowDown") to = eventInCreation.add({ minutes: 15 });
-      else if (key === "ArrowUp")
-        to = eventInCreation.subtract({ minutes: 15 });
-      else if (key === "ArrowLeft") to = eventInCreation.subtract({ days: 1 });
-      else if (key === "ArrowRight") to = eventInCreation.add({ days: 1 });
-
-      if (to) await toggleEventCreation(to);
-    } else if (page.url.searchParams.has("/journal")) {
-      if (key === "Escape") {
-        await goto(paths.resolveRoute(params, { search: "" }), {
-          keepFocus: true,
-          noScroll: true,
-        });
-      }
-    } else {
-      if (key === "ArrowLeft") {
-        await goto(
-          paths.resolveRoute({ date: start.subtract({ days: 1 }).toString() }),
-          { keepFocus: true },
-        );
-      } else if (key === "ArrowRight") {
-        await goto(
-          paths.resolveRoute({ date: start.add({ days: 1 }).toString() }),
-          {
-            keepFocus: true,
-          },
-        );
-      }
-    }
-  }}
-/>
 
 {#if event}
   <Dialog open>
@@ -171,25 +144,65 @@
         <span class="i-ph-x">Close</span>
       </a>
     {/snippet}
-    <form
-      action="?/journal={date}"
-      method="POST"
-      use:enhance={() => reportValidity({ reset: false })}
-      class="_stack-2"
-    >
-      <input type="hidden" name="date" value={date} />
-      <label class="_stack-2">
-        {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
-          How was your day?
-        {:else}
-          Who knows what the future holds?
-        {/if}
-        <Textarea name="body" cols={50} rows={8} value={journal?.body ?? ""} />
-      </label>
-      <p style="text-align: end">
-        <Button color="success">Save</Button>
-      </p>
-    </form>
+    <div class="_stack-4">
+      <form
+        action="?/journal={date}"
+        method="POST"
+        use:enhance={() => reportValidity({ reset: false })}
+        class="_stack-2"
+      >
+        <input type="hidden" name="date" value={date} />
+        <label class="_stack-2">
+          {#if Temporal.PlainDate.compare(date, Temporal.Now.plainDateISO()) <= 0}
+            How was your day?
+          {:else}
+            Who knows what the future holds?
+          {/if}
+          <Textarea
+            name="body"
+            cols={50}
+            rows={8}
+            value={journal?.body ?? ""}
+          />
+        </label>
+        <p style="text-align: end">
+          <Button color="success">Save</Button>
+        </p>
+      </form>
+
+      <hr />
+
+      {#if habits && habits.length > 0}
+        <div class="_row-2">
+          {#each habits as { id, name, marks } (id)}
+            <form method="post" action="?/markHabit" use:enhance>
+              <input type="hidden" name="habitId" value={id} />
+              <input type="hidden" name="date" value={date} />
+              <Button
+                type="submit"
+                name="mark"
+                value={String(marks.length === 0)}
+                variant="ghost"
+                square
+              >
+                <span
+                  class={marks.length > 0
+                    ? "i-ph-check-circle-duotone"
+                    : "i-ph-circle"}
+                ></span>
+                {name}
+              </Button>
+            </form>
+          {/each}
+        </div>
+      {:else}
+        <p>
+          You don't have any habits set up yet. <a href="/_/habits">
+            Set some up!
+          </a>
+        </p>
+      {/if}
+    </div>
   </Dialog>
 {/if}
 

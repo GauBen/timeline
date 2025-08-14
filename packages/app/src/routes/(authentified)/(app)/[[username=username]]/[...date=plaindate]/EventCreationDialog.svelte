@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import TimezonePicker from "$lib/components/TimezonePicker.svelte";
   import {
     autoPlacement,
@@ -9,9 +8,9 @@
     shift,
   } from "@floating-ui/dom";
   import type { Follow, Tag, User } from "db";
-  import { reportValidity } from "formgator/sveltekit";
   import { fade } from "svelte/transition";
   import { Button, Card, Input, Select } from "uistiti";
+  import { createEvent } from "./events.remote.js";
 
   let {
     tags,
@@ -137,9 +136,7 @@
     {/snippet}
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <form
-      use:enhance={() => reportValidity()}
-      method="POST"
-      action="?/createEvent"
+      {...createEvent}
       class="_stack-2"
       style="width: 30rem; max-width: 100%"
       onkeydown={(event) => {

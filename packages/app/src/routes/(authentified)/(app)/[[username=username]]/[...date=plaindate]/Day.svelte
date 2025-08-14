@@ -62,10 +62,7 @@
         <span>
           {Temporal.PlainTime.from({ hour: hour + 1 }).toLocaleString(
             i18n.locale,
-            {
-              hour: "numeric",
-              minute: "numeric",
-            },
+            { hour: "numeric", minute: "numeric" },
           )}
         </span>
       {/if}
@@ -77,7 +74,7 @@
   {/if}
   {#each events as { id, author, body, start, added, event } (id)}
     <article
-      style="border: 2px solid #fff; text-shadow: 0 0 0.5rem #fff;"
+      style="text-shadow: 0 0 0.5rem #fff; border: 2px solid #fff;"
       style:background={added
         ? event.tags.length > 1
           ? gradient(event.tags)
@@ -101,7 +98,7 @@
     <article
       bind:this={eventInCreationElement}
       style:top="{toRems(eventInCreation.toPlainTime())}rem"
-      style="border: 2px solid #ffdcf9; background: #fff0f680; right: 0"
+      style=" right: 0; background: #fff0f680;border: 2px solid #ffdcf9"
     >
       &nbsp;
     </article>
@@ -113,54 +110,54 @@
     contain: content;
 
     &::before {
-      content: "";
       position: absolute;
       inset: 0;
+      content: "";
     }
 
     > div {
       width: 100%;
-      border: 0;
-      border-top-width: 0px;
-      border-top-style: none;
-      border-top-color: currentcolor;
-      border-bottom: 1px solid #ccc;
+      height: 4rem;
       line-height: 0;
       color: #888;
-      user-select: none;
       pointer-events: none;
-      height: 4rem;
+      user-select: none;
+      border: 0;
+      border-top: 0 none currentcolor;
+      border-bottom: 1px solid #ccc;
 
       > span {
-        background: #fff;
-        font-size: 0.8em;
-        padding: 0.25em;
-        transform: translateY(calc(4rem - 100%));
+        position: sticky;
+        left: 0;
         display: inline-block;
+        padding: 0.25em;
+        font-size: 0.8em;
+        background: #fff;
+        transform: translateY(calc(4rem - 100%));
       }
     }
 
     > article {
       position: absolute;
-      padding: 0.5em;
-      border-radius: 0.5em;
       left: 1em;
+      padding: 0.5em;
       margin-right: 1em;
       contain: paint;
+      border-radius: 0.5em;
 
       a::before {
-        content: "";
         position: absolute;
         inset: 0;
+        content: "";
       }
     }
 
     > hr {
       position: absolute;
-      border: 0;
       width: 100%;
       height: 2px;
       background: red;
+      border: 0;
     }
   }
 </style>
