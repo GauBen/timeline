@@ -122,7 +122,7 @@ model EventToUser {
 }
 
 view TimelineEvent {
-  id            Int      @id @default(autoincrement())
+  id            Int      @unique @default(autoincrement())
   createdAt     DateTime @default(now()) @map("created_at")
   start         DateTime
   startTimezone String?  @map("start_timezone")

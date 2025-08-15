@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.3",
-    "@prisma/adapter-d1": "~6.12.0",
+    "@prisma/adapter-d1": "^6.14.0",
     "db": "workspace:^",
     "googleapis": "^156.0.0",
     "human-id": "^4.1.1",

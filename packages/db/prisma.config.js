@@ -2,21 +2,30 @@ import { getPlatformProxy } from "wrangler";
 import { PrismaD1 } from "@prisma/adapter-d1";
 import path from "node:path";
 
-const platform = await getPlatformProxy({
-  persist: {
-    path: path.join(process.env.PROJECT_CWD, ".wrangler/state/v3"),
-  },
-});
-const d1 = new PrismaD1(platform.env.DB);
+const adapter = async () => {
+  const platform = await getPlatformProxy({
+    persist: {
+      path: path.join(process.env.PROJECT_CWD, ".wrangler/state/v3"),
+    },
+  });
+  return new PrismaD1(
+    /** @type {import("@cloudflare/workers-types").D1Database} */ (
+      platform.env.DB
+    ),
+  );
+};
 
 /** @type {import("prisma").PrismaConfig} */
 export default {
-  earlyAccess: true,
+  experimental: {
+    adapter: true,
+    studio: true,
+  },
 
-  adapter: () => d1,
+  adapter,
 
   studio: {
     // The studio requires its own adapter for now
-    adapter: () => d1,
+    adapter,
   },
 };
