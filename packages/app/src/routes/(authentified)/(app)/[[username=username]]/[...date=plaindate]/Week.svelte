@@ -10,12 +10,54 @@
   import { getEvents } from "./events.remote.js";
   import { page } from "$app/state";
 
+  /** Number of days to display. */
+  const numberOfDays = 4;
+  const numberOfBufferedDays = 1;
+  const numberOfPaddingDays = 10;
+
   const { start, eventInCreation, events, onevent, timezone }: ViewProps =
     $props();
 
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
-  let bufferStart = $state(start.subtract({ days: 8 }));
+  let bufferStart = $state(
+    start.subtract({ days: numberOfPaddingDays + numberOfBufferedDays }),
+  );
+
+  let eventBufferStart = start.subtract({ days: 7 });
+  let eventBufferEnd = start.add({ days: 7 });
+
+  $effect(() => {
+    if (
+      Temporal.PlainDate.compare(
+        start.subtract({ days: 6 }),
+        eventBufferStart,
+      ) < 0
+    ) {
+      getEvents({
+        end: eventBufferStart,
+        start: (eventBufferStart = start.subtract({ days: 10 })),
+        username: page.params.username,
+      }).then((e) => {
+        for (const [day, list] of e) events.set(day, list);
+      });
+    }
+
+    if (
+      Temporal.PlainDate.compare(
+        start.add({ days: numberOfDays + 6 }),
+        eventBufferEnd,
+      ) > 0
+    ) {
+      getEvents({
+        start: eventBufferEnd,
+        end: (eventBufferEnd = start.add({ days: 10 + numberOfDays })),
+        username: page.params.username,
+      }).then((e) => {
+        for (const [day, list] of e) events.set(day, list);
+      });
+    }
+  });
 
   /**
    * Keep a local copy of start, updated separately, to know if start changes
@@ -25,7 +67,9 @@
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
     wrapper.classList.remove("loading");
-    wrapper.scrollLeft = wrapper.clientWidth * 2;
+    wrapper.scrollLeft =
+      (wrapper.clientWidth / numberOfDays) *
+      (numberOfPaddingDays + numberOfBufferedDays);
 
     let timeout: number | undefined;
     on(
@@ -34,8 +78,10 @@
       async () => {
         if (timeout) window.clearTimeout(timeout);
 
+        const dayWidth = wrapper.clientWidth / numberOfDays;
+
         now = bufferStart.add({
-          days: Math.round((wrapper.scrollLeft * 4) / wrapper.clientWidth),
+          days: Math.round(wrapper.scrollLeft / dayWidth),
         });
         if (!now.equals(start)) {
           replaceState(paths.resolveRoute({ date: now.toString() }), {
@@ -43,26 +89,16 @@
           });
         }
 
-        if (wrapper.scrollLeft < wrapper.clientWidth) {
-          wrapper.scrollLeft += wrapper.clientWidth;
-          bufferStart = bufferStart.subtract({ days: 4 });
-          getEvents({
-            start: bufferStart,
-            end: bufferStart.add({ days: 20 }),
-            username: page.params.username,
-          }).then((e) => {
-            for (const [day, list] of e) events.set(day, list);
-          });
-        } else if (wrapper.scrollLeft > wrapper.clientWidth * 3) {
-          wrapper.scrollLeft -= wrapper.clientWidth;
-          bufferStart = bufferStart.add({ days: 4 });
-          getEvents({
-            start: bufferStart,
-            end: bufferStart.add({ days: 20 }),
-            username: page.params.username,
-          }).then((e) => {
-            for (const [day, list] of e) events.set(day, list);
-          });
+        if (wrapper.scrollLeft < dayWidth * numberOfPaddingDays) {
+          wrapper.scrollLeft += dayWidth * numberOfBufferedDays;
+          bufferStart = bufferStart.subtract({ days: numberOfBufferedDays });
+        } else if (
+          wrapper.scrollLeft >
+          (numberOfDays + numberOfPaddingDays + numberOfBufferedDays * 2) *
+            dayWidth
+        ) {
+          wrapper.scrollLeft -= dayWidth * numberOfBufferedDays;
+          bufferStart = bufferStart.add({ days: numberOfBufferedDays });
         }
 
         wrapper.style.setProperty("scroll-snap-type", "none");
@@ -136,8 +172,15 @@
   {@attach (wrapper) => {
     // Reset the scroll position when start changes externally
     if (!start.equals(now)) {
-      bufferStart = start.subtract({ days: 8 });
-      wrapper.scrollTo({ left: wrapper.clientWidth * 2, behavior: "instant" });
+      bufferStart = start.subtract({
+        days: numberOfPaddingDays + numberOfBufferedDays,
+      });
+      wrapper.scrollTo({
+        left:
+          (wrapper.clientWidth / numberOfDays) *
+          (numberOfPaddingDays + numberOfBufferedDays),
+        behavior: "instant",
+      });
     }
   }}
 >
@@ -166,7 +209,7 @@
       </h2>
     </div>
   {/each}
-  {#each Array.from( { length: 20 }, (_, i) => bufferStart.add( { days: i }, ), ) as day (day.toString())}
+  {#each Array.from( { length: numberOfDays + numberOfBufferedDays * 2 + numberOfPaddingDays * 2 }, (_, i) => bufferStart.add( { days: i }, ), ) as day (day.toString())}
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3>
