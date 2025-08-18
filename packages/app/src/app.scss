@@ -1,4 +1,7 @@
+:root,
 body {
+  // For reasons that are foreign to me, this is required on both html and body
+  // to prevent a weird white space around the page on mobile only
   overflow: hidden;
 }
 
