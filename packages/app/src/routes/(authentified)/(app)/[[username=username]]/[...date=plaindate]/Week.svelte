@@ -9,11 +9,12 @@
   import { replaceState } from "$app/navigation";
   import { getEvents } from "./events.remote.js";
   import { page } from "$app/state";
+  import { innerWidth } from "svelte/reactivity/window";
 
   /** Number of days to display. */
-  const numberOfDays = 4;
+  const numberOfDays = $derived(Math.floor((innerWidth.current ?? 300) / 300));
   const numberOfBufferedDays = 1;
-  const numberOfPaddingDays = 10;
+  const numberOfPaddingDays = 7;
 
   const { start, eventInCreation, events, onevent, timezone }: ViewProps =
     $props();
@@ -168,6 +169,7 @@
 
 <div
   class="wrapper loading"
+  style:--width="{100 / numberOfDays}cqw"
   {@attach scroll}
   {@attach (wrapper) => {
     // Reset the scroll position when start changes externally
@@ -266,7 +268,7 @@
 
   .column {
     display: inline-block;
-    width: 25cqw;
+    width: var(--width);
     scroll-snap-align: start;
     background: #fff;
   }
