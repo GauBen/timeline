@@ -1,4 +1,4 @@
-import { resolveRoute as nativeResolveRoute } from "$app/paths";
+import { resolve } from "$app/paths";
 import { page } from "$app/state";
 import type { RouteParams } from "../routes/(authentified)/(app)/[[username=username]]/[...date=plaindate]/$types.js";
 
@@ -14,9 +14,8 @@ export default {
       if (!page.route.id)
         throw new Error("Cannot call resolveRoute outside of a page");
       return (
-        nativeResolveRoute(page.route.id, { ...page.params, ...params }) +
-        search +
-        hash
+        // @ts-expect-error This is correct
+        resolve(page.route.id, { ...page.params, ...params }) + search + hash
       );
     };
   },

@@ -19,9 +19,7 @@ export default ts.config(
       parserOptions: { parser: ts.parser },
     },
     rules: {
-      // Still unstable
-      "svelte/no-unused-svelte-ignore": "off",
-      "svelte/valid-compile": "off",
+      "svelte/no-navigation-without-resolve": "warn",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_" },

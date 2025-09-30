@@ -1,12 +1,13 @@
 generator client {
   provider        = "prisma-client"
   output          = "./generated"
-  previewFeatures = ["views", "queryCompiler", "driverAdapters"]
+  previewFeatures = ["views"]
   runtime         = "nodejs"
 }
 
 datasource db {
   provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model GoogleUser {

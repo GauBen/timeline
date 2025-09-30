@@ -134,7 +134,6 @@
         </div>
       {/if}
     {/snippet}
-    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <form
       {...createEvent}
       class="_stack-2"

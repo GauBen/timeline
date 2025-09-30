@@ -14,6 +14,7 @@ dev: build
 
 # Lint and auto-fix the code
 lint:
+  yarn workspaces foreach --all run check
   yarn eslint --fix .
   yarn prettier --write --list-different .
   yarn stylelint "**/src/**/*.{css,scss,svelte}" --fix

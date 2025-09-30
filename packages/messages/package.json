@@ -16,6 +16,6 @@
     "build": "paraglide-js compile --project ../../project.inlang --outdir ./dist"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.2.0"
+    "@inlang/paraglide-js": "^2.4.0"
   }
 }
