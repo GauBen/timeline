@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>Timeline</title>
+  <title>whenbanana</title>
 </svelte:head>
 
 {@render children()}

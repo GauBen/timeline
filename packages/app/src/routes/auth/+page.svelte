@@ -3,7 +3,10 @@
 </script>
 
 <main class="_stack-4">
-  <h1 style="font-size: 4em">Timeline</h1>
+  <h1 style="font-size: 4em" class="_row-2">
+    <img src="/logo.svg" alt="" style="height: 1.25em" />
+    whenbanana
+  </h1>
   <p>The social calendar</p>
   <p>
     <a href={data.url} rel="external">Login with Google</a>
@@ -11,9 +14,9 @@
       <a href="/dev/impersonate" rel="external">Impersonate</a>
     {/if}
   </p>
-  <h2>What is Timeline?</h2>
+  <h2>What is whenbanana?</h2>
   <p>
-    Timeline allows people to share what they did and what they plan to do,
+    whenbanana allows people to share what they did and what they plan to do,
     using
     <em>Events</em>. Share your holiday photos with your family, plan vacations
     with your friends, follow your favorite band's tour, or just share your
@@ -26,10 +29,10 @@
     need one per group of people you share things with, or you invite them by
     email for all events, which is a terribly cumbersome.
   </p>
-  <p>Timeline is the missing social calendar.</p>
+  <p>whenbanana is the missing social calendar.</p>
   <footer style="font-size: .8em; text-align: center">
     <p>
-      ⚠️ Timeline is in not production ready. Please don't use it for anything
+      ⚠️ whenbanana is in not production ready. Please don't use it for anything
       important. ⚠️
     </p>
   </footer>

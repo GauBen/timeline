@@ -226,7 +226,12 @@
         {/if}
       </form>
     {:else}
-      <h1><a href="/" style="text-decoration: unset">Timeline</a></h1>
+      <h1>
+        <a href="/" style="text-decoration: unset">
+          <img src="/logo.svg" alt="" style="height: 1.25em" />
+          whenbanana
+        </a>
+      </h1>
     {/if}
     <div class="_row-2">
       <Select
@@ -258,7 +263,9 @@
 
 <style lang="scss">
   h1 a {
-    display: inline-block;
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
     padding: 0.5rem;
     font-weight: 800;
     transition:
