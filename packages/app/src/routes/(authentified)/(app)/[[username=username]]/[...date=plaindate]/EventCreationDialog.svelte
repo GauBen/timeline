@@ -85,7 +85,13 @@
     );
   });
 
-  let shared = $state("public");
+  $effect(() => {
+    createEvent.fields.start.set(eventInCreation.toString().slice(0, 16));
+  });
+
+  $effect(() => {
+    createEvent.fields.shared.set("public");
+  });
 </script>
 
 <svelte:document
@@ -147,8 +153,7 @@
         <label class="label">
           <span>Event</span>
           <Input
-            type="text"
-            name="body"
+            {...createEvent.fields.body.as("text")}
             required
             maxlength={1024}
             style="width: 100%"
@@ -159,11 +164,9 @@
         <label class="label">
           <span>Date</span>
           <Input
-            type="datetime-local"
-            name="start"
+            {...createEvent.fields.start.as("datetime-local")}
             required
             style="width: 100%"
-            value={eventInCreation.toString().slice(0, 16)}
             oninput={async ({ currentTarget }) => {
               try {
                 toggleEventCreation(
@@ -179,7 +182,7 @@
       <p class="label">
         <span>Timezone</span>
         <TimezonePicker bind:timezone />
-        <input type="hidden" name="startTimezone" value={timezone} />
+        <input {...createEvent.fields.startTimezone.as("hidden", timezone)} />
       </p>
       <p class="label">
         <span>Visibility</span>
@@ -188,35 +191,21 @@
             style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em"
           >
             <label class="_row-2">
-              <input
-                type="radio"
-                name="shared"
-                value="public"
-                bind:group={shared}
-              /> Public
+              <input {...createEvent.fields.shared.as("radio", "public")} /> Public
             </label>
             <label class="_row-2">
-              <input
-                type="radio"
-                name="shared"
-                value="private"
-                bind:group={shared}
-              /> Private
+              <input {...createEvent.fields.shared.as("radio", "private")} /> Private
             </label>
           </span>
           <label class="_row-2">
-            <input
-              type="radio"
-              name="shared"
-              value="shared"
-              bind:group={shared}
-            />
+            <input {...createEvent.fields.shared.as("radio", "shared")} />
             Only with specific people
           </label>
           <Select
-            multiple
-            disabled={shared !== "shared"}
-            name="shared_with"
+            {...createEvent.fields.shared_with.as("select multiple")}
+            onchange={() => {
+              createEvent.fields.shared.set("shared");
+            }}
             style="width: 100%"
           >
             {#each followings as { following } (following.id)}
@@ -230,7 +219,9 @@
         <span class="_row-2" style="flex: 1">
           {#each tags as tag (tag.id)}
             <label class="tag" style:--color="#{tag.color}">
-              <input type="checkbox" name="tags[]" value={tag.id} />
+              <input
+                {...createEvent.fields.tags.as("checkbox", String(tag.id))}
+              />
               {tag.name}
             </label>
           {/each}
@@ -277,6 +268,7 @@
 
   .tag {
     padding: 0.5em;
+    contain: paint;
     color: #000;
     text-shadow: 0 0 0.5rem #fff;
     cursor: pointer;
@@ -285,11 +277,17 @@
     border-radius: 0.5;
 
     input {
-      display: none;
+      position: absolute;
+      opacity: 0;
     }
 
     &:has(:checked) {
       background-color: var(--color);
+    }
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--ui-border-hover);
+      outline-offset: 2px;
     }
   }
 </style>

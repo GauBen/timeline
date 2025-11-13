@@ -1863,9 +1863,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@656ff32":
-  version: 2.43.5
-  resolution: "@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@656ff32"
+"@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@4dea768":
+  version: 2.48.4
+  resolution: "@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@4dea768"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
@@ -1890,7 +1890,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/9e9f18d6d2341722a08100474a305b8a7a6644fb39d8cdaa61398696852aef09db911792270ba66a5472e92896148a0fa7822bd3080c04360e0ea267e4f9a031
+  checksum: 10c0/9e35c276101ff42a50418c9e3e0d20ca5306776c2f1bac99322ead6c7a55f32209e7e9a0e31f1f6326dc1f8598573a28f097483bcbe7a3e4d8bd6c3aec3afea5
   languageName: node
   linkType: hard
 
