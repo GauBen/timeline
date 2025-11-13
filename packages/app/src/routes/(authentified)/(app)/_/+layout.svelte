@@ -31,7 +31,7 @@
       </a>
     {/each}
   </nav>
-  <h1 style="font-size: 3em">{leaves[leaf]}</h1>
+  <h1>{leaves[leaf]}</h1>
 
   {@render children()}
 </main>

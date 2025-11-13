@@ -1,7 +1,7 @@
 @import "modern-normalize/modern-normalize.css";
 @import "@fontsource-variable/figtree";
 @import "@fontsource-variable/montserrat";
-@import "@fontsource-variable/hepta-slab";
+@import "@fontsource/cookie";
 @import "./global.css";
 @import "./variables.css";
 @import "./utils.css";

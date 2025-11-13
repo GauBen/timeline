@@ -8,14 +8,23 @@
 }
 
 h1 {
-  font-family: "Hepta Slab Variable", serif;
-  font-weight: 700;
+  font-family: Cookie, serif;
+  font-size: 4em;
+  font-weight: 400;
 }
 
 h2,
 h3 {
   font-family: "Montserrat Variable", system-ui;
   font-weight: 600;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.25em;
 }
 
 hr {

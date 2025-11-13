@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.2.10",
-    "@fontsource-variable/hepta-slab": "^5.2.8",
     "@fontsource-variable/montserrat": "^5.2.8",
+    "@fontsource/cookie": "^5.2.7",
     "modern-normalize": "^3.0.1"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@
 </script>
 
 <main class="_stack-4">
-  <h1 style="font-size: 4em" class="_row-2">
+  <h1 class="_row-2">
     <img src="/logo.svg" alt="" style="height: 1.25em" />
     whenbanana
   </h1>

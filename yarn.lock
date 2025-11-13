@@ -738,17 +738,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource-variable/hepta-slab@npm:^5.2.8":
-  version: 5.2.8
-  resolution: "@fontsource-variable/hepta-slab@npm:5.2.8"
-  checksum: 10c0/3121394b7fe9c4e2066d9846676716c7a70d374d4b65e42ce6d3ada2e8172ceae9ac2d4f5af211ec9826af67c6f156342f8875b551bcca2a0f6644a40c47505f
-  languageName: node
-  linkType: hard
-
 "@fontsource-variable/montserrat@npm:^5.2.8":
   version: 5.2.8
   resolution: "@fontsource-variable/montserrat@npm:5.2.8"
   checksum: 10c0/b37baacec7e2030b2058525f33de093f253f4248e8a539f4b7161005c6bff967bf2edecd93055f3767e44a6943051e831afbdb873d3924474fd502aa237d0abc
+  languageName: node
+  linkType: hard
+
+"@fontsource/cookie@npm:^5.2.7":
+  version: 5.2.7
+  resolution: "@fontsource/cookie@npm:5.2.7"
+  checksum: 10c0/c5258249efc17ac5dd25baa1bfdf989084e87897e965a31b41585db65eb3083e87d3faeb1f1f1da44ae2782b647b07b3de077d8778c53536a3baebfcb6043c8f
   languageName: node
   linkType: hard
 
@@ -7601,8 +7601,8 @@ __metadata:
   resolution: "uistiti@workspace:packages/uistiti"
   dependencies:
     "@fontsource-variable/figtree": "npm:^5.2.10"
-    "@fontsource-variable/hepta-slab": "npm:^5.2.8"
     "@fontsource-variable/montserrat": "npm:^5.2.8"
+    "@fontsource/cookie": "npm:^5.2.7"
     "@storybook/addon-docs": "npm:^9.1.9"
     "@storybook/addon-svelte-csf": "npm:^5.0.8"
     "@storybook/sveltekit": "npm:^9.1.9"

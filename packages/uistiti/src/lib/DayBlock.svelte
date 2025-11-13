@@ -28,10 +28,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(5em / 3);
-    height: calc(5em / 3);
-    font-family: "Hepta Slab Variable", serif;
-    font-size: 1.5em;
+    width: calc(4em / 3);
+    height: calc(4em / 3);
+    font-family: Cookie, serif;
+    font-size: 2em;
     font-weight: 400;
     border-radius: 99px;
   }

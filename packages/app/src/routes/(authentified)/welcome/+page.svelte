@@ -47,7 +47,7 @@
   class="_stack-8"
 >
   <header style="contain: paint">
-    <h1 style="font-size: 4em">{m.lower_super_gopher_flow()}</h1>
+    <h1>{m.lower_super_gopher_flow()}</h1>
     <p>
       {m.sweet_next_lizard_zoom()}
       <a href="https://github.com/GauBen/timeline">

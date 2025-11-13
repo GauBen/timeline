@@ -1,4 +1,5 @@
 <script module lang="ts">
+  import { resolve } from "$app/paths";
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
@@ -197,7 +198,7 @@
         </div>
       {:else}
         <p>
-          You don't have any habits set up yet. <a href="/_/habits">
+          You don't have any habits set up yet. <a href={resolve("/_/habits")}>
             Set some up!
           </a>
         </p>
@@ -210,15 +211,15 @@
   {#snippet header()}
     {#if user}
       <form method="POST" class="_row-2" use:enhance>
-        <h1>
-          <a href="/" style="text-decoration: unset">
+        <div class="_row-2" style="padding: .5rem; font-size: 2em">
+          <a href={resolve("/")}>
             <span class="i-ph-caret-left">Back</span>
           </a>
           <span
             style="display: inline-block; width: 2rem; height: 2rem; background: purple; border-radius: 1rem"
           ></span>
           {user.displayName}
-        </h1>
+        </div>
         {#if followed}
           <Button color="danger" formaction="?/unfollow">Unfollow</Button>
         {:else}
@@ -226,12 +227,16 @@
         {/if}
       </form>
     {:else}
-      <h1>
-        <a href="/" style="text-decoration: unset">
+      <div class="_row-2">
+        <a
+          href={resolve("/")}
+          class="_row-2"
+          style="padding: .5rem; font-family: Cookie, serif; font-size: 2em; text-decoration: none"
+        >
           <img src="/logo.svg" alt="" style="height: 1.25em" />
           whenbanana
         </a>
-      </h1>
+      </div>
     {/if}
     <div class="_row-2">
       <Select
@@ -252,7 +257,7 @@
         <option value="Year">Year</option>
       </Select>
 
-      <a href="/_" style="padding: .5rem; font-size: 1.5em" class="">
+      <a href={resolve("/_")} style="padding: .5rem; font-size: 1.5em" class="">
         <span class="i-ph-gear-duotone">{m.cozy_moving_zebra_approve()}</span>
       </a>
     </div>
@@ -262,22 +267,6 @@
 </Layout>
 
 <style lang="scss">
-  h1 a {
-    display: inline-flex;
-    gap: 0.5rem;
-    align-items: center;
-    padding: 0.5rem;
-    font-weight: 800;
-    transition:
-      font-weight 150ms,
-      letter-spacing 150ms;
-
-    &:hover {
-      font-weight: 850;
-      letter-spacing: 0.05em;
-    }
-  }
-
   .i-ph-gear-duotone {
     transition: transform 150ms;
 
