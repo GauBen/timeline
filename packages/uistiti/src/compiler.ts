@@ -1,5 +1,5 @@
 import { writeFileSync } from "node:fs";
-import { colors, variants } from "./lib/definitions.js";
+import { colors, variants } from "./lib/definitions.ts";
 
 console.time("Compiled");
 
