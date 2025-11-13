@@ -1863,16 +1863,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@d55c91e":
-  version: 2.31.1
-  resolution: "@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@d55c91e"
+"@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@656ff32":
+  version: 2.43.5
+  resolution: "@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@656ff32"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/cookie": "npm:^0.6.0"
     acorn: "npm:^8.14.1"
     cookie: "npm:^0.6.0"
-    devalue: "npm:^5.1.0"
+    devalue: "npm:^5.3.2"
     esm-env: "npm:^1.2.2"
     kleur: "npm:^4.1.5"
     magic-string: "npm:^0.30.5"
@@ -1890,7 +1890,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/d2bb05633fcb1e870c7564bbac7461d9df89eb00766b8dcf5cb329250753e88fc8f2f9b5fedf1f1af8ccc39bac58ce3069494e554a9b3c056b263f5019bdcbe4
+  checksum: 10c0/9e9f18d6d2341722a08100474a305b8a7a6644fb39d8cdaa61398696852aef09db911792270ba66a5472e92896148a0fa7822bd3080c04360e0ea267e4f9a031
   languageName: node
   linkType: hard
 
@@ -3384,10 +3384,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"devalue@npm:^5.1.0":
-  version: 5.3.2
-  resolution: "devalue@npm:5.3.2"
-  checksum: 10c0/2dab403779233224285afe4b30eaded038df10cb89b8f2c1e41dd855a8e6b634aa24175b87f64df665204bb9a6a6e7758d172682719b9c5cf3cef336ff9fa507
+"devalue@npm:^5.3.2":
+  version: 5.5.0
+  resolution: "devalue@npm:5.5.0"
+  checksum: 10c0/7604b11f2afc83e006922a211b1e975109e260c58fba740a5706f148be7345bafdf3ece1012a78bc9dab68f7d88da53e6d6e403e06358932a86f2cd3541e4297
   languageName: node
   linkType: hard
 

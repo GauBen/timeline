@@ -1,6 +1,8 @@
-import { getPlatformProxy } from "wrangler";
+/// @ts-check
 import { PrismaD1 } from "@prisma/adapter-d1";
 import path from "node:path";
+import { defineConfig } from "prisma/config";
+import { getPlatformProxy } from "wrangler";
 
 const adapter = async () => {
   const platform = await getPlatformProxy({
@@ -15,8 +17,8 @@ const adapter = async () => {
   );
 };
 
-/** @type {import("prisma").PrismaConfig} */
-export default {
+export default defineConfig({
+  engine: "js",
   experimental: {
     adapter: true,
     studio: true,
@@ -28,4 +30,4 @@ export default {
     // The studio requires its own adapter for now
     adapter,
   },
-};
+});

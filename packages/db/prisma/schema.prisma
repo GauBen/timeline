@@ -3,6 +3,7 @@ generator client {
   output          = "./generated"
   previewFeatures = ["views"]
   runtime         = "nodejs"
+  engineType      = "client"
 }
 
 datasource db {

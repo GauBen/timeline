@@ -230,7 +230,7 @@
         <span class="_row-2" style="flex: 1">
           {#each tags as tag (tag.id)}
             <label class="tag" style:--color="#{tag.color}">
-              <input type="checkbox" name="tags" value={tag.id} />
+              <input type="checkbox" name="tags[]" value={tag.id} />
               {tag.name}
             </label>
           {/each}
