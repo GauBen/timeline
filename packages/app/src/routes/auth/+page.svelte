@@ -4,8 +4,7 @@
 
 <main class="_stack-4">
   <h1 class="_row-2">
-    <img src="/logo.svg" alt="" style="height: 1.25em" />
-    whenbanana
+    <img src="/whenbanana.svg" alt="whenbanana" style="height: 1.25em" />
   </h1>
   <p>The social calendar</p>
   <p>
