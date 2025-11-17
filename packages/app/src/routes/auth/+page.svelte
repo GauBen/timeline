@@ -4,7 +4,11 @@
 
 <main class="_stack-4">
   <h1 class="_row-2">
-    <img src="/whenbanana.svg" alt="whenbanana" style="height: 1.25em" />
+    <img
+      src="/whenbanana.svg"
+      alt="whenbanana"
+      style="max-width: 100%; height: 1em"
+    />
   </h1>
   <p>The social calendar</p>
   <p>
