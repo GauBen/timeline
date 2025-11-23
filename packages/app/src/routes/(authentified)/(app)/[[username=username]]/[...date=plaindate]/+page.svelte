@@ -228,13 +228,8 @@
       </form>
     {:else}
       <div class="_row-2">
-        <a
-          href={resolve("/")}
-          class="_row-2"
-          style="padding: .5rem; font-family: Cookie, serif; font-size: 2em; text-decoration: none"
-        >
-          <img src="/logo.svg" alt="" style="height: 1.25em" />
-          whenbanana
+        <a href={resolve("/")} style="padding: .5rem; text-decoration: none">
+          <img src="/wordmark.svg" alt="whenbanana" style="height: 2.5em" />
         </a>
       </div>
     {/if}
