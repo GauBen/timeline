@@ -26,3 +26,16 @@ deploy:
   yarn wrangler versions upload --message="$COMMIT_MESSAGE" | tee deploy.log
   yarn wrangler d1 migrations apply timeline --remote
   yarn wrangler versions deploy -y $(grep -oP '(?<=Worker Version ID: ).+' deploy.log)@100%
+
+# Open Prisma Studio on the local database
+studio:
+  yarn prisma studio
+
+# Create a new Prisma migration
+create-migration name:
+  yarn prisma migrate diff --from-config-datasource --to-schema="$(realpath packages/db/prisma/schema.prisma)" --script \
+    --output=$(realpath migrations)/$(date +%Y%m%d%H%M%S)_{{name}}.sql
+
+# Apply migrations to the local database
+apply-migrations:
+  yarn wrangler d1 migrations apply timeline

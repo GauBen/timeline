@@ -10,13 +10,14 @@
     "build": "prisma generate && tsgo && cp prisma/generated/internal/*.{wasm,js} dist/internal/ || true"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.0"
+    "@prisma/client": "^7.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20251113.0",
-    "@prisma/adapter-d1": "^6.19.0",
-    "@typescript/native-preview": "^7.0.0-dev.20251113.1",
-    "prisma": "^6.19.0",
-    "wrangler": "^4.48.0"
+    "@cloudflare/workers-types": "^4.20251121.0",
+    "@prisma/adapter-d1": "^7.0.0",
+    "@typescript/native-preview": "^7.0.0-dev.20251123.1",
+    "better-sqlite3": "^12.4.6",
+    "prisma": "^7.0.0",
+    "wrangler": "^4.50.0"
   }
 }

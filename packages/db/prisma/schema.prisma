@@ -3,12 +3,10 @@ generator client {
   output          = "./generated"
   previewFeatures = ["views"]
   runtime         = "nodejs"
-  engineType      = "client"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
 }
 
 model GoogleUser {
