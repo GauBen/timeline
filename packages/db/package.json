@@ -15,8 +15,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251121.0",
     "@prisma/adapter-d1": "^7.0.0",
-    "@typescript/native-preview": "^7.0.0-dev.20251123.1",
-    "better-sqlite3": "^12.4.6",
+    "@typescript/native-preview": "^7.0.0-dev.20251124.1",
     "prisma": "^7.0.0",
     "wrangler": "^4.50.0"
   }

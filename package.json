@@ -5,9 +5,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {
-    "prisma": "yarn workspace db prisma"
-  },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "eslint": "^9.39.1",
@@ -29,8 +26,8 @@
     "svelte": "^5.43.14",
     "turbo": "^2.6.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.47.0",
+    "typescript-eslint": "^8.48.0",
     "wrangler": "^4.50.0"
   },
-  "packageManager": "yarn@4.11.0"
+  "packageManager": "yarn@4.12.0"
 }

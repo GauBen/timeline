@@ -13,9 +13,11 @@
     }
   },
   "scripts": {
-    "build": "paraglide-js compile --project ../../project.inlang --outdir ./dist"
+    "build": "paraglide-js compile --project ../../project.inlang --outdir ./dist",
+    "dev": "chokidar '*.json' -c 'yarn build'"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.5.0"
+    "@inlang/paraglide-js": "^2.5.0",
+    "chokidar-cli": "^3.0.0"
   }
 }
