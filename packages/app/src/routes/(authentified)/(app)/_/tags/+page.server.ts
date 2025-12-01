@@ -1,12 +1,11 @@
-import { prisma } from "$lib/server/prisma.js";
 import { formgate } from "formgator/sveltekit";
 import * as fg from "formgator";
 import { error } from "@sveltejs/kit";
 
-export const load = async ({ parent }) => {
+export const load = async ({ parent, locals }) => {
   const { me } = await parent();
 
-  const tags = await prisma.tag.findMany({ where: { ownerId: me.id } });
+  const tags = await locals.prisma.tag.findMany({ where: { ownerId: me.id } });
   return { tags };
 };
 
@@ -19,7 +18,7 @@ export const actions = {
     async ({ name, color }, { locals }) => {
       if (!locals.session) error(401, "Unauthorized");
 
-      await prisma.tag.create({
+      await locals.prisma.tag.create({
         data: { name, color, ownerId: locals.session.id },
       });
     },

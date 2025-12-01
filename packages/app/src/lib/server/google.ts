@@ -1,19 +1,18 @@
 import { env } from "$env/dynamic/private";
-import type { GoogleCalendarSync, GoogleUser } from "db";
+import type { GoogleCalendarSync, GoogleUser, PrismaClient } from "db";
 import { OAuth2Client } from "google-auth-library";
 import { GaxiosError } from "googleapis-common";
 import {
   type calendar_v3,
   calendar as googleCalendar,
 } from "googleapis/build/src/apis/calendar/index.js";
-import { prisma } from "./prisma.js";
 
 export const client = new OAuth2Client(
   env.GOOGLE_CLIENT_ID,
   env.GOOGLE_CLIENT_SECRET,
 );
 
-export const createUserClient = (user: GoogleUser) => {
+export const createUserClient = (prisma: PrismaClient, user: GoogleUser) => {
   const client = new OAuth2Client(
     env.GOOGLE_CLIENT_ID,
     env.GOOGLE_CLIENT_SECRET,
@@ -77,6 +76,7 @@ export const getAllCalendarEvents = (
 };
 
 export const syncCalendar = async (
+  prisma: PrismaClient,
   auth: OAuth2Client,
   syncSettings: GoogleCalendarSync,
 ) => {

@@ -1,4 +1,3 @@
-import { prisma } from "$lib/server/prisma.js";
 import { error } from "@sveltejs/kit";
 import * as fg from "formgator";
 import { formgate, loadgate } from "formgator/sveltekit";
@@ -47,20 +46,20 @@ export const load = loadgate(
   {
     tag: fg.text({ required: true, pattern: /^\w{1,32}$/ }).optional(),
   },
-  async ({ tag }, { parent }) => {
+  async ({ tag }, { parent, locals }) => {
     const { me } = await parent();
     const [rawEntries, tags, count] = await Promise.all([
-      prisma.journalEntry.findMany({
+      locals.prisma.journalEntry.findMany({
         where: { authorId: me.id, tags: tag ? { some: { tag } } : {} },
         orderBy: { date: "asc" },
       }),
-      prisma.journalTag.groupBy({
+      locals.prisma.journalTag.groupBy({
         by: ["tag"],
         where: { authorId: me.id },
         _count: { tag: true },
         orderBy: { _count: { tag: "desc" } },
       }),
-      prisma.journalEntry.count({ where: { authorId: me.id } }),
+      locals.prisma.journalEntry.count({ where: { authorId: me.id } }),
     ]);
     const entries = rawEntries.map(({ body, ...data }) => ({
       ...data,
@@ -85,7 +84,7 @@ export const actions = {
       if (body) {
         const tags = markdownProcessor.processSync(body).data.tags ?? [];
 
-        await prisma.journalEntry.upsert({
+        await locals.prisma.journalEntry.upsert({
           where: { authorId_date: { authorId: locals.session.id, date } },
           create: {
             authorId: locals.session.id,
@@ -103,7 +102,7 @@ export const actions = {
           },
         });
       } else {
-        await prisma.journalEntry.deleteMany({
+        await locals.prisma.journalEntry.deleteMany({
           where: { authorId: locals.session.id, date },
         });
       }

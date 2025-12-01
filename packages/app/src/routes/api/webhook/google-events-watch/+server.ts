@@ -1,7 +1,6 @@
 import { createUserClient, syncCalendar } from "$lib/server/google.js";
-import { prisma } from "$lib/server/prisma.js";
 
-export const POST = async ({ request }) => {
+export const POST = async ({ request, locals }) => {
   if (request.headers.get("X-Goog-Resource-State") !== "exists")
     return new Response("OK");
 
@@ -10,13 +9,13 @@ export const POST = async ({ request }) => {
 
   try {
     const id = Number(request.headers.get("X-Goog-Channel-ID")!);
-    const sync = await prisma.googleCalendarSync.findUniqueOrThrow({
+    const sync = await locals.prisma.googleCalendarSync.findUniqueOrThrow({
       where: { id },
       include: { user: { select: { googleUser: true } } },
     });
 
-    const auth = createUserClient(sync.user.googleUser);
-    await syncCalendar(auth, sync);
+    const auth = createUserClient(locals.prisma, sync.user.googleUser);
+    await syncCalendar(locals.prisma, auth, sync);
 
     return new Response("OK");
   } catch (error) {

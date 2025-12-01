@@ -1,4 +1,3 @@
-import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
 import { error, redirect } from "@sveltejs/kit";
 import * as devalue from "devalue";
@@ -75,7 +74,7 @@ export const actions = {
       if (!locals.session || !token) error(401, "Unauthorized");
 
       try {
-        const user = await prisma.user.create({
+        const user = await locals.prisma.user.create({
           data: { ...data, id: locals.session.id },
         });
         // Update the session to include the newly created user

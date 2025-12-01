@@ -1,4 +1,3 @@
-import { prisma } from "$lib/server/prisma.js";
 import { error } from "@sveltejs/kit";
 import type { Prisma } from "db";
 import * as fg from "formgator";
@@ -13,7 +12,7 @@ export const load = loadgate(
       .optional(),
     "/journal": fg.date({ required: true }).optional(),
   },
-  async (searchParams, { parent }) => {
+  async (searchParams, { parent, locals }) => {
     const { me, user } = await parent();
 
     const where: Prisma.TimelineEventWhereInput = user
@@ -23,23 +22,23 @@ export const load = loadgate(
     const [event, latest, followings, journal, habits, tags] =
       await Promise.all([
         searchParams.event
-          ? prisma.timelineEvent.findUnique({
+          ? locals.prisma.timelineEvent.findUnique({
               where: { id: searchParams.event, AND: where },
               include: { author: true, event: { include: { tags: true } } },
             })
           : undefined,
-        prisma.timelineEvent.findMany({
+        locals.prisma.timelineEvent.findMany({
           where,
           include: { author: true, event: { include: { tags: true } } },
           orderBy: { createdAt: "desc" },
           take: 100,
         }),
-        prisma.follow.findMany({
+        locals.prisma.follow.findMany({
           where: { followerId: me.id },
           include: { following: true },
         }),
         searchParams["/journal"] &&
-          prisma.journalEntry.findUnique({
+          locals.prisma.journalEntry.findUnique({
             where: {
               authorId_date: {
                 authorId: me.id,
@@ -48,7 +47,7 @@ export const load = loadgate(
             },
           }),
         searchParams["/journal"] &&
-          prisma.habit.findMany({
+          locals.prisma.habit.findMany({
             where: { userId: me.id },
             include: {
               marks: {
@@ -56,7 +55,7 @@ export const load = loadgate(
               },
             },
           }),
-        prisma.tag.findMany({ where: { ownerId: me.id } }),
+        locals.prisma.tag.findMany({ where: { ownerId: me.id } }),
       ]);
 
     return { event, followings, journal, latest, habits, tags };
@@ -70,7 +69,7 @@ export const actions = {
     if (!username) error(400, "Invalid username");
 
     try {
-      await prisma.follow.create({
+      await locals.prisma.follow.create({
         data: {
           follower: { connect: { id: locals.session.id } },
           following: { connect: { username } },
@@ -86,7 +85,7 @@ export const actions = {
     const { username } = params;
     if (!username) error(400, "Invalid username");
 
-    await prisma.follow.deleteMany({
+    await locals.prisma.follow.deleteMany({
       where: {
         followerId: locals.session.id,
         following: { username },
@@ -99,7 +98,7 @@ export const actions = {
     const eventId = url.searchParams.get("/addEvent");
     if (!eventId) error(400, "Invalid event");
     const id = Number(eventId);
-    await prisma.eventToUser.upsert({
+    await locals.prisma.eventToUser.upsert({
       where: {
         eventId_userId: { eventId: id, userId: locals.session.id },
         OR: [{ shared: true }, { event: { public: true } }],
@@ -113,7 +112,7 @@ export const actions = {
     if (!locals.session) error(401, "Unauthorized");
     const eventId = url.searchParams.get("/unAddEvent");
     if (!eventId) error(400, "Invalid event");
-    await prisma.eventToUser.update({
+    await locals.prisma.eventToUser.update({
       where: {
         eventId_userId: { eventId: Number(eventId), userId: locals.session.id },
         OR: [{ shared: true }, { event: { public: true } }],
@@ -127,7 +126,9 @@ export const actions = {
     const eventId = url.searchParams.get("/deleteEvent");
     if (!eventId) error(400, "Invalid event");
     const id = Number(eventId);
-    await prisma.event.delete({ where: { id, authorId: locals.session.id } });
+    await locals.prisma.event.delete({
+      where: { id, authorId: locals.session.id },
+    });
   },
 
   markHabit: formgate(
@@ -142,11 +143,11 @@ export const actions = {
       if (!locals.session) error(401, "Unauthorized");
 
       if (data.mark) {
-        await prisma.habitMark.createMany({
+        await locals.prisma.habitMark.createMany({
           data: { habitId: data.habitId, date: data.date },
         });
       } else {
-        await prisma.habitMark.deleteMany({
+        await locals.prisma.habitMark.deleteMany({
           where: { habitId: data.habitId, date: data.date },
         });
       }

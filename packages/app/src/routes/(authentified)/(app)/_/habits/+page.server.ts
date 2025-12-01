@@ -1,11 +1,10 @@
-import { prisma } from "$lib/server/prisma.js";
 import { fail } from "@sveltejs/kit";
 import * as fg from "formgator";
 
-export const load = async ({ parent }) => {
+export const load = async ({ parent, locals }) => {
   const { me } = await parent();
   return {
-    habits: await prisma.habit.findMany({ where: { userId: me.id } }),
+    habits: await locals.prisma.habit.findMany({ where: { userId: me.id } }),
   };
 };
 
@@ -19,7 +18,7 @@ export const actions = {
 
     if (!result.success) return fail(400, { error: result.error });
 
-    await prisma.habit.create({
+    await locals.prisma.habit.create({
       data: {
         name: result.data.name,
         userId: locals.session.id,
@@ -36,7 +35,7 @@ export const actions = {
 
     if (!result.success) return fail(400, { validationErrors: result.error });
 
-    await prisma.habit.delete({
+    await locals.prisma.habit.delete({
       where: { id: result.data.id, userId: locals.session.id },
     });
   },

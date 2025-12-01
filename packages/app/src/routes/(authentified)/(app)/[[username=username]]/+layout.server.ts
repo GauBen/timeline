@@ -1,14 +1,13 @@
-import { prisma } from "$lib/server/prisma.js";
 import type { User } from "db";
 import { error } from "@sveltejs/kit";
 
-export const load = async ({ parent, params }) => {
+export const load = async ({ parent, params, locals }) => {
   const { me } = await parent();
 
   let user: User | undefined;
   if (params.username) {
     try {
-      user = await prisma.user.findUniqueOrThrow({
+      user = await locals.prisma.user.findUniqueOrThrow({
         where: { username: params.username },
       });
     } catch {
@@ -17,7 +16,7 @@ export const load = async ({ parent, params }) => {
   }
 
   const followed = user
-    ? await prisma.follow.findUnique({
+    ? await locals.prisma.follow.findUnique({
         where: {
           followerId_followingId: {
             followerId: me.id,

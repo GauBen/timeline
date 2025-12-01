@@ -1,11 +1,10 @@
 import { client } from "$lib/server/google.js";
-import { prisma } from "$lib/server/prisma.js";
 import { error, redirect } from "@sveltejs/kit";
 import * as devalue from "devalue";
 import { jwtDecode } from "jwt-decode";
 import { nanoid } from "nanoid";
 
-export const GET = async ({ url, cookies, platform }) => {
+export const GET = async ({ url, cookies, platform, locals }) => {
   const code = url.searchParams.get("code");
   if (!code) error(400, "Invalid code");
 
@@ -25,7 +24,7 @@ export const GET = async ({ url, cookies, platform }) => {
     family_name: string;
   }>(tokens.id_token);
 
-  const googleUser = await prisma.googleUser.upsert({
+  const googleUser = await locals.prisma.googleUser.upsert({
     where: { email: user.email },
     create: {
       email: user.email,

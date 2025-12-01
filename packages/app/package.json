@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.4",
-    "@prisma/adapter-d1": "^7.0.0",
+    "@prisma/adapter-d1": "^7.0.1",
     "db": "workspace:^",
     "googleapis": "^166.0.0",
     "human-id": "^4.1.2",
@@ -34,7 +34,7 @@
     "formgator": "^0.2.5",
     "messages": "workspace:^",
     "sass": "^1.94.2",
-    "svelte": "^5.43.14",
+    "svelte": "^5.45.3",
     "svelte-check": "^4.3.4",
     "typescript": "^5.9.3",
     "uistiti": "workspace:^",

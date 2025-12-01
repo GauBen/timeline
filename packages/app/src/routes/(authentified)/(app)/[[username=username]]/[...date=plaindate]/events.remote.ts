@@ -1,4 +1,3 @@
-import { prisma } from "$lib/server/prisma.js";
 import type { Prisma, User } from "db";
 import { error, redirect } from "@sveltejs/kit";
 import { form, getRequestEvent, query } from "$app/server";
@@ -22,7 +21,7 @@ export const getEvents = query(
     let user: User | undefined;
     if (username) {
       try {
-        user = await prisma.user.findUniqueOrThrow({
+        user = await locals.prisma.user.findUniqueOrThrow({
           where: { username },
         });
       } catch {
@@ -38,7 +37,7 @@ export const getEvents = query(
     const gte = start.toZonedDateTime(me.timezone).toInstant().toString();
     const lt = end.toZonedDateTime(me.timezone).toInstant().toString();
 
-    const events = await prisma.timelineEvent.findMany({
+    const events = await locals.prisma.timelineEvent.findMany({
       where: {
         ...where,
         start: { gte, lt },
@@ -80,7 +79,7 @@ export const createEvent = form(
     const { locals } = getRequestEvent();
     if (!locals.session) error(401);
 
-    const tags = await prisma.tag.findMany({
+    const tags = await locals.prisma.tag.findMany({
       where: { id: { in: data.tags }, ownerId: locals.session.id },
     });
 
@@ -89,7 +88,7 @@ export const createEvent = form(
       .toInstant()
       .toString();
 
-    const { id } = await prisma.event.create({
+    const { id } = await locals.prisma.event.create({
       data: {
         body: data.body,
         start,

@@ -1,5 +1,4 @@
 import { createUserClient, syncCalendar } from "$lib/server/google.js";
-import { prisma } from "$lib/server/prisma.js";
 import { SyncDirection } from "db";
 import { error } from "@sveltejs/kit";
 import * as fg from "formgator";
@@ -9,19 +8,19 @@ import { calendar as googleCalendar } from "googleapis/build/src/apis/calendar/i
 export const load = async ({ locals }) => {
   if (!locals.session) error(401, "Unauthorized");
 
-  const googleUser = await prisma.googleUser.findUniqueOrThrow({
+  const googleUser = await locals.prisma.googleUser.findUniqueOrThrow({
     where: { id: locals.session.id },
   });
   if (!googleUser?.refreshToken)
     error(401, "Account not authenticated with Google");
 
-  const auth = createUserClient(googleUser);
+  const auth = createUserClient(locals.prisma, googleUser);
 
   const calendar = googleCalendar({ version: "v3", auth });
 
   const [{ data: calendars }, sync, tags] = await Promise.all([
     calendar.calendarList.list(),
-    prisma.googleCalendarSync.findMany({
+    locals.prisma.googleCalendarSync.findMany({
       where: { userId: googleUser.id },
       select: {
         googleCalendarId: true,
@@ -35,7 +34,7 @@ export const load = async ({ locals }) => {
         },
       },
     }),
-    prisma.tag.findMany({ where: { ownerId: googleUser.id } }),
+    locals.prisma.tag.findMany({ where: { ownerId: googleUser.id } }),
   ]);
 
   const syncMap = new Map(
@@ -58,19 +57,19 @@ export const actions = {
     },
     async ({ googleCalendarId, direction, tagId }, { locals, url }) => {
       if (!locals.session) error(401, "Unauthorized");
-      const googleUser = await prisma.googleUser.findUniqueOrThrow({
+      const googleUser = await locals.prisma.googleUser.findUniqueOrThrow({
         where: { id: locals.session.id },
       });
       if (!googleUser?.refreshToken)
         error(401, "Account not authenticated with Google");
 
       const userId = locals.session.id;
-      const sync = await prisma.googleCalendarSync.upsert({
+      const sync = await locals.prisma.googleCalendarSync.upsert({
         where: { userId_googleCalendarId: { userId, googleCalendarId } },
         create: { userId, googleCalendarId, direction, tagId },
         update: { direction, tagId },
       });
-      const auth = createUserClient(googleUser);
+      const auth = createUserClient(locals.prisma, googleUser);
 
       const calendar = googleCalendar({ version: "v3", auth });
 
@@ -92,7 +91,7 @@ export const actions = {
         );
       }
 
-      await syncCalendar(auth, sync);
+      await syncCalendar(locals.prisma, auth, sync);
     },
   ),
 
@@ -101,7 +100,7 @@ export const actions = {
     async ({ googleCalendarId }, { locals }) => {
       if (!locals.session) error(401, "Unauthorized");
       const userId = locals.session.id;
-      await prisma.googleCalendarSync.deleteMany({
+      await locals.prisma.googleCalendarSync.deleteMany({
         where: { userId, googleCalendarId },
       });
     },

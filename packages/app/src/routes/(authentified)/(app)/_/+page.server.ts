@@ -1,4 +1,3 @@
-import { prisma } from "$lib/server/prisma.js";
 import { timezones } from "$lib/server/tz.js";
 import { error } from "@sveltejs/kit";
 import * as devalue from "devalue";
@@ -23,7 +22,7 @@ export const actions = {
         httpOnly: false,
       });
 
-      const user = await prisma.user.update({
+      const user = await locals.prisma.user.update({
         where: { id: locals.session.user.id },
         data,
       });
