@@ -10,7 +10,6 @@
   const { Story } = defineMeta({
     title: "Button",
     component: Button,
-    tags: ["autodocs"],
     argTypes: {
       color: {
         control: { type: "select" },

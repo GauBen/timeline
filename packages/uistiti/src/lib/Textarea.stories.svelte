@@ -8,7 +8,6 @@
   const { Story } = defineMeta({
     title: "Textarea",
     component: Textarea,
-    tags: ["autodocs"],
     argTypes: {
       color: {
         control: { type: "select" },

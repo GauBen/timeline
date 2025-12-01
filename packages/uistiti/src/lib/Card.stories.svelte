@@ -1,7 +1,7 @@
 <script module lang="ts">
   import Card from "./Card.svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { colors, variants, type CommonProps } from "./definitions.js";
+  import { colors, variants } from "./definitions.js";
   import Button from "./Button.svelte";
   import Input from "./Input.svelte";
 
@@ -11,7 +11,6 @@
   const { Story } = defineMeta({
     title: "Card",
     component: Card,
-    tags: ["autodocs"],
     argTypes: {
       color: {
         control: { type: "select" },
@@ -26,7 +25,7 @@
 </script>
 
 <Story name="Default">
-  {#snippet template(args: CommonProps)}
+  {#snippet template(args)}
     <Card {...args} class="_stack-2">
       <h2>Card sample</h2>
       <p>Card content</p>
@@ -38,7 +37,7 @@
 </Story>
 
 <Story name="New event">
-  {#snippet template(args: CommonProps)}
+  {#snippet template(args)}
     <Card {...args} class="_stack-2">
       {#snippet header()}
         Create new event

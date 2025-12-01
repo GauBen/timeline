@@ -5,7 +5,6 @@
   const { Story } = defineMeta({
     title: "DayBlock",
     component: DayBlock,
-    tags: ["autodocs"],
     args: {
       number: "27",
       weekday: "Mon",
