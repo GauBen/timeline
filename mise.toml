@@ -1,6 +1,6 @@
 [tools]
-node = "latest"
-yarn = "latest"
+node = "24"
+yarn = "4"
 
 # MARK: Dev tasks
 [tasks.dev]
