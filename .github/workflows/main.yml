@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: pkgxdev/dev@v1
+      - uses: jdx/mise-action@v3
       - uses: actions/cache@v4
         with:
           path: |
@@ -19,7 +19,7 @@ jobs:
           key: cache-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             cache-${{ runner.os }}-
-      - run: just deploy
+      - run: mise deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN}}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}

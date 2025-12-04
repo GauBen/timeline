@@ -1,0 +1,64 @@
+[tools]
+node = "latest"
+yarn = "latest"
+
+# MARK: Dev tasks
+[tasks.dev]
+description = "Get the development environment up and running"
+depends = ["build"]
+run = [
+  "yarn wrangler d1 migrations apply timeline",
+  "yarn turbo run dev"
+]
+
+[tasks.lint]
+description = "Lint and auto-fix the code"
+run = [
+  "yarn eslint --fix .",
+  "yarn prettier --write --list-different .",
+  "yarn stylelint '**/src/**/*.{css,scss,svelte}' --fix"
+]
+
+[tasks.storybook]
+description = "Open the storybook for Uistiti"
+run = "yarn workspace uistiti storybook dev -p 6006"
+
+# MARK: Deployment tasks
+[tasks.build]
+description = "Install dependencies and build the monorepo"
+run = [
+  "yarn install --immutable",
+  "yarn turbo run build"
+]
+
+[tasks.deploy]
+description = "Deploy the app to Cloudflare"
+run = '''
+sed -i 's/"nodejs"/"workerd"/g' packages/db/prisma/schema.prisma
+mise run build
+yarn wrangler versions upload --message="$COMMIT_MESSAGE" | tee deploy.log
+yarn wrangler d1 migrations apply timeline --remote
+yarn wrangler versions deploy -y $(grep -oP '(?<=Worker Version ID: ).+' deploy.log)@100%
+'''
+
+# MARK: Database tasks
+[tasks.studio]
+description = "Open Prisma Studio on the local database"
+run = "yarn workspace db prisma studio"
+
+[tasks.create-migration]
+description = "Create a new Prisma migration"
+usage = '''
+arg "<name>" help="Name of the migration (e.g., add_users_table)"
+'''
+run = '''
+migration=$(date +%Y%m%d%H%M%S)_$usage_name.sql
+yarn workspace db prisma migrate diff \
+  --from-config-datasource --to-schema="$(realpath packages/db/prisma/schema.prisma)" --script \
+  --output=$(realpath migrations)/$migration
+echo "Migration $migration created, run 'mise apply-migrations' to apply the new migration."
+'''
+
+[tasks.apply-migrations]
+description = "Apply migrations to the local database"
+run = "yarn wrangler d1 migrations apply timeline"

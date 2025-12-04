@@ -27,17 +27,17 @@ Here is a simple roadmap of what's to come:
 
 ## Development
 
-To develop Timeline, you'll need a working Node+Yarn environment, as well as a Docker-compatible container runtime. It is recommended using [pkgx](https://pkgx.sh/): the [`dev` command](https://docs.pkgx.sh/using-dev/dev) will set up the development environment for you, in seconds.
+To develop Timeline, you'll need a working Node+Yarn environment, as well as a Docker-compatible container runtime. It is recommended using [mise](https://mise.jdx.dev/): the [`mise install` command](https://mise.jdx.dev/cli/install.html) will set up the development environment for you, in seconds.
 
 ```bash
 # Clone the repository
 gh repo clone GauBen/timeline
 
-# Install and cache dev tools with pkgx
-dev
+# Install and cache dev tools with mise
+mise install
 
 # Start the application in dev mode
-just dev
+mise dev
 ```
 
-You can run `just` to get a list of available commands.
+You can run `mise run` to get a list of available commands.
