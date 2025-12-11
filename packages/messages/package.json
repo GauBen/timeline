@@ -17,7 +17,7 @@
     "dev": "chokidar '*.json' -c 'yarn build'"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.5.0",
+    "@inlang/paraglide-js": "^2.7.0",
     "chokidar-cli": "^3.0.0"
   }
 }

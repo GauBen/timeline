@@ -13,10 +13,10 @@
     "@prisma/client": "^7.1.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20251202.0",
+    "@cloudflare/workers-types": "^4.20251211.0",
     "@prisma/adapter-d1": "^7.1.0",
-    "@typescript/native-preview": "^7.0.0-dev.20251204.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251211.1",
     "prisma": "^7.1.0",
-    "wrangler": "^4.53.0"
+    "wrangler": "^4.54.0"
   }
 }
