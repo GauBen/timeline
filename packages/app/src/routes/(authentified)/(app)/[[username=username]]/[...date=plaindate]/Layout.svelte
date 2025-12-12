@@ -4,19 +4,19 @@
   import { page } from "$app/state";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { Event } from "$lib/types.js";
   import type { User } from "db";
   import { m } from "messages";
   import type { Snippet } from "svelte";
   import EventActions from "./EventActions.svelte";
+  import { getLatest } from "./wip.remote.js";
 
   const {
     me,
     children,
     header,
-    latest,
-  }: { me: User; children: Snippet; header: Snippet; latest: Event[] } =
-    $props();
+  }: { me: User; children: Snippet; header: Snippet } = $props();
+
+  const latest = $derived(await getLatest(page.data.user?.id));
 </script>
 
 <div class="layout">

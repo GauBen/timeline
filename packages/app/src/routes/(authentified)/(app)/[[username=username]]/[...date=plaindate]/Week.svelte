@@ -7,8 +7,6 @@
   import type { ViewProps } from "./+page.svelte";
   import Day from "./Day.svelte";
   import { replaceState } from "$app/navigation";
-  import { getEvents } from "./events.remote.js";
-  import { page } from "$app/state";
   import { innerWidth } from "svelte/reactivity/window";
 
   /** Number of days to display. */
@@ -16,49 +14,13 @@
   const numberOfBufferedDays = 1;
   const numberOfPaddingDays = 7;
 
-  const { start, eventInCreation, events, onevent, timezone }: ViewProps =
-    $props();
+  const { start, eventInCreation, onevent, timezone }: ViewProps = $props();
 
   const today = $derived(Temporal.Now.plainDateISO(timezone));
 
   let bufferStart = $state(
     start.subtract({ days: numberOfPaddingDays + numberOfBufferedDays }),
   );
-
-  let eventBufferStart = start.subtract({ days: 7 });
-  let eventBufferEnd = start.add({ days: 7 });
-
-  $effect(() => {
-    if (
-      Temporal.PlainDate.compare(
-        start.subtract({ days: 6 }),
-        eventBufferStart,
-      ) < 0
-    ) {
-      getEvents({
-        end: eventBufferStart,
-        start: (eventBufferStart = start.subtract({ days: 10 })),
-        username: page.params.username,
-      }).then((e) => {
-        for (const [day, list] of e) events.set(day, list);
-      });
-    }
-
-    if (
-      Temporal.PlainDate.compare(
-        start.add({ days: numberOfDays + 6 }),
-        eventBufferEnd,
-      ) > 0
-    ) {
-      getEvents({
-        start: eventBufferEnd,
-        end: (eventBufferEnd = start.add({ days: 10 + numberOfDays })),
-        username: page.params.username,
-      }).then((e) => {
-        for (const [day, list] of e) events.set(day, list);
-      });
-    }
-  });
 
   /**
    * Keep a local copy of start, updated separately, to know if start changes
@@ -73,7 +35,7 @@
       (numberOfPaddingDays + numberOfBufferedDays);
 
     let timeout: number | undefined;
-    on(
+    return on(
       wrapper,
       "scroll",
       async () => {
@@ -224,7 +186,6 @@
         {day}
         withTime
         {eventInCreation}
-        events={events.get(day.toString()) ?? []}
         {onevent}
         {timezone}
       />

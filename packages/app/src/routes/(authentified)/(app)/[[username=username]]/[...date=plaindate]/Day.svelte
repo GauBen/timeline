@@ -1,16 +1,15 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import i18n from "$lib/i18n.svelte.js";
-  import type { Event } from "$lib/types.js";
+  import { getEventsForDate } from "./events.remote.js";
 
   let {
-    events,
     day,
     eventInCreation,
     timezone,
     withTime,
     onevent,
   }: {
-    events: Event[];
     day: Temporal.PlainDate;
     eventInCreation?: Temporal.PlainDateTime;
     timezone: string;
@@ -52,6 +51,13 @@
       ])
       .slice(0, -1)
       .join(", ")})`;
+
+  const events = $derived(
+    await getEventsForDate({
+      date: day.toString(),
+      username: page.params.username,
+    }),
+  );
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->

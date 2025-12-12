@@ -2062,9 +2062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@4dea768":
-  version: 2.48.4
-  resolution: "@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@4dea768"
+"@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@5464cfe":
+  version: 2.49.2
+  resolution: "@sveltejs/kit@https://pkg.pr.new/sveltejs/kit/@sveltejs/kit@5464cfe"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
@@ -2089,7 +2089,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/9e35c276101ff42a50418c9e3e0d20ca5306776c2f1bac99322ead6c7a55f32209e7e9a0e31f1f6326dc1f8598573a28f097483bcbe7a3e4d8bd6c3aec3afea5
+  checksum: 10c0/e46fdeb7a130cdddd1ef6f731e28a43d29dc42ad64701f1d9a5c0a0f82049ba198e61fa1a3f83c4d058b55b7a8dceab2fc018c2eab004beb3082df4823bd5e30
   languageName: node
   linkType: hard
 
@@ -8741,9 +8741,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:rolldown-vite@7.2.10":
-  version: 7.2.10
-  resolution: "rolldown-vite@npm:7.2.10"
+"vite@npm:vite@8.0.0-beta.1":
+  version: 8.0.0-beta.1
+  resolution: "vite@npm:8.0.0-beta.1"
   dependencies:
     "@oxc-project/runtime": "npm:0.101.0"
     fdir: "npm:^6.5.0"
@@ -8793,7 +8793,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/de59be841afd3b21e3e0b9ab22b221a0f5cc0f251ed3441f7ea91cbbe0766f637d656dd112d2c178135ec0766c707f12082100d352128a5a9707a6eb51247b4e
+  checksum: 10c0/a56365a67b8418fdb429c411ded7bdf7f105c087a70f3a95c5ab43ffb29a9f639287696da34dc7e86d8f374863f20299db161e392f1d90ee4f6776995f387635
   languageName: node
   linkType: hard
 

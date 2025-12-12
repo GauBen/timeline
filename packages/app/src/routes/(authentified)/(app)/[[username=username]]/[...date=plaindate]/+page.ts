@@ -13,7 +13,7 @@ export const load = loadgate(
       .transform(Temporal.PlainDateTime.from)
       .optional(),
   },
-  async (searchParams, { data, params, parent }) => {
+  async (searchParams, { params, parent }) => {
     const { me } = await parent();
 
     const matches = params.date.match(
@@ -40,17 +40,17 @@ export const load = loadgate(
       days: view === "Week" ? 7 : view === "Month" ? 31 : 365,
     });
 
-    let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> = getEvents(
-      {
-        // TODO: find a better way to buffer a few events
-        start: start.subtract({ days: 7 }),
-        end,
-        username: params.username,
-      },
-    );
+    // let events: MaybePromise<Awaited<ReturnType<typeof getEvents>>> = getEvents(
+    //   {
+    //     // TODO: find a better way to buffer a few events
+    //     start: start.subtract({ days: 7 }),
+    //     end,
+    //     username: params.username,
+    //   },
+    // );
 
-    if (!browser) events = await events;
+    // if (!browser) events = await events;
 
-    return { ...data, events, start, view, eventInCreation: searchParams.new };
+    return { start, view, eventInCreation: searchParams.new };
   },
 );

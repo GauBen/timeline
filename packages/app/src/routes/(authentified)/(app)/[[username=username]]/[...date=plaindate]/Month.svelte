@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import paths from "$lib/paths.svelte.js";
   import type { ViewProps } from "./+page.svelte";
+  import { getEvents } from "./events.remote.js";
 
-  let { events, start, timezone, eventInCreation, onevent }: ViewProps =
-    $props();
+  let { start, timezone, eventInCreation, onevent }: ViewProps = $props();
 
   const paddingDaysStart = $derived(start.dayOfWeek - 1);
   const numberOfWeeks = $derived(
@@ -14,6 +15,14 @@
 
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
+
+  const events = $derived(
+    await getEvents({
+      start,
+      end: start.add({ days: numberOfWeeks * 7 }),
+      username: page.params.username,
+    }),
+  );
 </script>
 
 {#snippet eventInCreationMarker()}

@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
   import type { ViewProps } from "./+page.svelte";
+  import { getEvents } from "./events.remote.js";
 
   const {
     start: firstDayOfYear,
-    events,
+    // events,
     eventInCreation,
   }: ViewProps = $props();
 
@@ -17,10 +19,16 @@
   let eventInCreationElement = $state<HTMLElement>();
   export const getEventInCreationElement = () => eventInCreationElement;
 
+  const events = $derived(
+    await getEvents({
+      start,
+      end: start.add({ weeks: 53 }),
+      username: page.params.username,
+    }),
+  );
+
   const max = $derived(
-    "then" in events
-      ? 1
-      : Math.max(...Object.values(events).map((w) => w?.length ?? 0)),
+    Math.max(...Object.values(events).map((w) => w?.length ?? 0)),
   );
 </script>
 

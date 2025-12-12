@@ -6,10 +6,8 @@
   import Dialog from "$lib/components/Dialog.svelte";
   import i18n from "$lib/i18n.svelte.js";
   import paths from "$lib/paths.svelte.js";
-  import type { Event } from "$lib/types.js";
   import { reportValidity } from "formgator/sveltekit";
   import { m } from "messages";
-  import { SvelteMap } from "svelte/reactivity";
   import { Button, Select, Textarea } from "uistiti";
   import type { PageData } from "./$types.js";
   import EventActions from "./EventActions.svelte";
@@ -18,6 +16,13 @@
   import Month from "./Month.svelte";
   import Week from "./Week.svelte";
   import Year from "./Year.svelte";
+  import {
+    getEvent,
+    getFollowings,
+    getHabits,
+    getJournalEntry,
+    getTags,
+  } from "./wip.remote.js";
 
   /** Opens or closes the event creation dialog at a given datetime. */
   const toggleEventCreation = async (
@@ -39,7 +44,7 @@
   export interface ViewProps {
     start: PageData["start"];
     timezone: PageData["me"]["timezone"];
-    events: Awaited<PageData["events"]>;
+    // events: Awaited<PageData["events"]>;
     eventInCreation: PageData["eventInCreation"];
     onevent: typeof toggleEventCreation;
   }
@@ -47,32 +52,18 @@
 
 <script lang="ts">
   const { data, params } = $props();
-  const {
-    event,
-    eventInCreation,
-    followed,
-    followings,
-    journal,
-    habits,
-    latest,
-    me,
-    tags,
-    user,
-    view,
-  } = $derived(data);
+  const { eventInCreation, followed, me, user, view } = $derived(data);
 
-  const start = $derived(page.state.start ?? data.start);
-  const events = new SvelteMap<string, Array<Event>>(
-    "then" in data.events ? [] : data.events,
+  const event = $derived(
+    page.url.searchParams.has("event")
+      ? await getEvent({
+          id: page.url.searchParams.get("event"),
+          authorId: user?.id,
+        })
+      : null,
   );
 
-  $effect(() => {
-    if ("then" in data.events) {
-      data.events.then((e) => {
-        for (const [day, list] of e) events.set(day, list);
-      });
-    }
-  });
+  const start = $derived(page.state.start ?? data.start);
 
   const View = $derived({ Week, Month, Year }[view]);
   let component = $state<Week | Month | Year>();
@@ -81,7 +72,6 @@
 
   const viewProps: ViewProps = $derived({
     start,
-    events,
     timezone: me.timezone,
     eventInCreation,
     onevent: toggleEventCreation,
@@ -126,8 +116,8 @@
   </Dialog>
 {:else if eventInCreation}
   <EventCreationDialog
-    {tags}
-    {followings}
+    tags={await getTags()}
+    followings={await getFollowings()}
     {eventInCreation}
     {toggleEventCreation}
     timezone={me.timezone}
@@ -163,7 +153,7 @@
             name="body"
             cols={50}
             rows={8}
-            value={journal?.body ?? ""}
+            value={(await getJournalEntry(date))?.body ?? ""}
           />
         </label>
         <p style="text-align: end">
@@ -173,9 +163,9 @@
 
       <hr />
 
-      {#if habits && habits.length > 0}
+      {#if (await getHabits(date)) && (await getHabits(date)).length > 0}
         <div class="_row-2">
-          {#each habits as { id, name, marks } (id)}
+          {#each await getHabits(date) as { id, name, marks } (id)}
             <form method="post" action="?/markHabit" use:enhance>
               <input type="hidden" name="habitId" value={id} />
               <input type="hidden" name="date" value={date} />
@@ -207,7 +197,7 @@
   </Dialog>
 {/if}
 
-<Layout {me} {latest}>
+<Layout {me}>
   {#snippet header()}
     {#if user}
       <form method="POST" class="_row-2" use:enhance>

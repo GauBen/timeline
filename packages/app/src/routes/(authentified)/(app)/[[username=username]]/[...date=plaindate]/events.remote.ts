@@ -57,6 +57,71 @@ export const getEvents = query(
   },
 );
 
+export const getEventsForDate = query.batch(
+  z.object({
+    username: z.string().optional(),
+    date: z.string(),
+  }),
+  async (inputs) => {
+    const { locals } = getRequestEvent();
+
+    if (!locals.session) error(401, "Unauthorized");
+    const me = locals.session.user;
+    if (!me) error(401, "Unauthorized");
+
+    // Assume all inputs have the same username
+    const username = inputs[0].username;
+
+    let user: User | undefined;
+    if (username) {
+      try {
+        user = await locals.prisma.user.findUniqueOrThrow({
+          where: { username },
+        });
+      } catch {
+        error(404, "User not found");
+      }
+    }
+
+    const where: Prisma.TimelineEventWhereInput = user
+      ? { userId: me.id, authorId: user.id }
+      : { userId: me.id, OR: [{ added: true }, { followed: true }] };
+
+    const events = await locals.prisma.timelineEvent.findMany({
+      where: {
+        ...where,
+        OR: inputs.map(({ date }) => {
+          const gte = Temporal.PlainDate.from(date)
+            .toZonedDateTime(me.timezone)
+            .toInstant()
+            .toString();
+          const lt = Temporal.PlainDate.from(date)
+            .toZonedDateTime(me.timezone)
+            .add({ days: 1 })
+            .toInstant()
+            .toString();
+          return {
+            start: { gte, lt },
+          };
+        }),
+      },
+      include: { author: true, event: { include: { tags: true } } },
+      orderBy: { start: "asc" },
+      take: 100,
+    });
+
+    const map = Map.groupBy(events, (event) =>
+      event.start
+        .toTemporalInstant()
+        .toZonedDateTimeISO(me.timezone)
+        .toPlainDate()
+        .toString(),
+    );
+
+    return ({ date }) => map.get(date) ?? [];
+  },
+);
+
 export const createEvent = form(
   z.object({
     body: z.string().min(1).max(1024),
