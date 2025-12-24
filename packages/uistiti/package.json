@@ -40,8 +40,8 @@
     "publint": "^0.3.16",
     "sass": "^1.96.0",
     "storybook": "^10.1.7",
-    "svelte": "^5.45.9",
-    "svelte-check": "^4.3.4",
+    "svelte": "^5.46.0",
+    "svelte-check": "^4.3.5",
     "typescript": "^5.9.3",
     "vite": "catalog:"
   },

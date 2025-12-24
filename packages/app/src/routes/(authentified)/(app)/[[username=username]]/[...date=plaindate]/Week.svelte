@@ -16,7 +16,7 @@
 
   const { start, eventInCreation, onevent, timezone }: ViewProps = $props();
 
-  const today = $derived(Temporal.Now.plainDateISO(timezone));
+  const today = $derived(Temporal.Now.plainDateISO(timezone).toString());
 
   let bufferStart = $state(
     start.subtract({ days: numberOfPaddingDays + numberOfBufferedDays }),
@@ -29,7 +29,6 @@
   let now = start;
 
   const scroll: Attachment<HTMLElement> = (wrapper) => {
-    wrapper.classList.remove("loading");
     wrapper.scrollLeft =
       (wrapper.clientWidth / numberOfDays) *
       (numberOfPaddingDays + numberOfBufferedDays);
@@ -57,8 +56,7 @@
           bufferStart = bufferStart.subtract({ days: numberOfBufferedDays });
         } else if (
           wrapper.scrollLeft >
-          (numberOfDays + numberOfPaddingDays + numberOfBufferedDays * 2) *
-            dayWidth
+          (numberOfPaddingDays + numberOfBufferedDays * 2) * dayWidth
         ) {
           wrapper.scrollLeft -= dayWidth * numberOfBufferedDays;
           bufferStart = bufferStart.add({ days: numberOfBufferedDays });
@@ -130,7 +128,7 @@
 </script>
 
 <div
-  class="wrapper loading"
+  class="wrapper"
   style:--width="{100 / numberOfDays}cqw"
   {@attach scroll}
   {@attach (wrapper) => {
@@ -139,6 +137,8 @@
       bufferStart = start.subtract({
         days: numberOfPaddingDays + numberOfBufferedDays,
       });
+      wrapper.style.setProperty("scroll-behavior", "instant");
+      wrapper.style.setProperty("scroll-snap-type", "none");
       wrapper.scrollTo({
         left:
           (wrapper.clientWidth / numberOfDays) *
@@ -173,16 +173,19 @@
       </h2>
     </div>
   {/each}
-  {#each Array.from( { length: numberOfDays + numberOfBufferedDays * 2 + numberOfPaddingDays * 2 }, (_, i) => bufferStart.add( { days: i }, ), ) as day (day.toString())}
+  {#each Array.from( { length: numberOfDays + numberOfBufferedDays * 2 + numberOfPaddingDays * 2 }, (_, i) => bufferStart
+        .add({ days: i })
+        .toString(), ) as strDay (strDay)}
+    {@const day = Temporal.PlainDate.from(strDay)}
     {@const { number, weekday } = i18n.dayParts(day)}
     <div class="column">
       <h3>
-        <a href="?/journal={day.toString()}">
-          <DayBlock {number} {weekday} selected={day.equals(today)} />
+        <a href="?/journal={strDay}">
+          <DayBlock {number} {weekday} selected={strDay === today} />
         </a>
       </h3>
       <Day
-        bind:this={days[day.toString()]}
+        bind:this={days[strDay]}
         {day}
         withTime
         {eventInCreation}
@@ -224,7 +227,8 @@
     overflow: scroll;
     overscroll-behavior: none;
     text-wrap: nowrap;
-    scrollbar-width: none;
+
+    // scrollbar-width: none;
   }
 
   .column {
@@ -232,9 +236,5 @@
     width: var(--width);
     scroll-snap-align: start;
     background: #fff;
-  }
-
-  .loading .column {
-    margin-left: -200%;
   }
 </style>

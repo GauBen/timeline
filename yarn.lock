@@ -2975,8 +2975,8 @@ __metadata:
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.2"
     sass: "npm:^1.96.0"
-    svelte: "npm:^5.45.9"
-    svelte-check: "npm:^4.3.4"
+    svelte: "https://pkg.pr.new/svelte@31ac74f"
+    svelte-check: "npm:^4.3.5"
     temporal-polyfill: "npm:^0.3.0"
     typescript: "npm:^5.9.3"
     uistiti: "workspace:^"
@@ -8063,9 +8063,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^4.3.4":
-  version: 4.3.4
-  resolution: "svelte-check@npm:4.3.4"
+"svelte-check@npm:^4.3.5":
+  version: 4.3.5
+  resolution: "svelte-check@npm:4.3.5"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     chokidar: "npm:^4.0.1"
@@ -8077,7 +8077,7 @@ __metadata:
     typescript: ">=5.0.0"
   bin:
     svelte-check: bin/svelte-check
-  checksum: 10c0/c84a054daa2bdd377357082eb317ae86dabfc935a8b67867588c8a4e98ad644b67d3aa0f8572bf37cec3a2c37cae0b60632b430dc9d98faff9981efe74e0ca95
+  checksum: 10c0/a9196c61b9aea4dd597f268362452189df81db08332477727037d5270fad4de733addf6954b57aeeb6825df34f9b20a282ec16f964186c82f39f8456bc4a533c
   languageName: node
   linkType: hard
 
@@ -8113,9 +8113,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.45.9":
-  version: 5.45.9
-  resolution: "svelte@npm:5.45.9"
+"svelte@https://pkg.pr.new/svelte@31ac74f":
+  version: 5.46.0
+  resolution: "svelte@https://pkg.pr.new/svelte@31ac74f"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -8132,7 +8132,30 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10c0/3b4b0e9f4ca325bf2b7b6143121cfe1fdd8b6dc63775ab3ee0a4b8876d31143e1f44612c53bf95a15d76bddd3a13ead587800fc742f64104596baab776f731d9
+  checksum: 10c0/1e8082e7a5383ff45192589fbfc0d1c919dd754cae8cd16b93c0b323f2da8a1b35e3d5a80694e65745be743d3fbd4cba943bd42be29c4f9d19797f1063a03e5a
+  languageName: node
+  linkType: hard
+
+"svelte@npm:^5.46.0":
+  version: 5.46.0
+  resolution: "svelte@npm:5.46.0"
+  dependencies:
+    "@jridgewell/remapping": "npm:^2.3.4"
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+    "@sveltejs/acorn-typescript": "npm:^1.0.5"
+    "@types/estree": "npm:^1.0.5"
+    acorn: "npm:^8.12.1"
+    aria-query: "npm:^5.3.1"
+    axobject-query: "npm:^4.1.0"
+    clsx: "npm:^2.1.1"
+    devalue: "npm:^5.5.0"
+    esm-env: "npm:^1.2.1"
+    esrap: "npm:^2.2.1"
+    is-reference: "npm:^3.0.3"
+    locate-character: "npm:^3.0.0"
+    magic-string: "npm:^0.30.11"
+    zimmerframe: "npm:^1.1.2"
+  checksum: 10c0/c54e551562a4522a507f346d9048158c7ad529b93f1f22e5752612960f94962fffde66bf17c80cdc35177352632bd8a35a553b460df00f37387aae7d5fa5b2b8
   languageName: node
   linkType: hard
 
@@ -8215,7 +8238,7 @@ __metadata:
     stylelint-config-recess-order: "npm:^7.4.0"
     stylelint-config-standard-scss: "npm:^16.0.0"
     stylelint-order: "npm:^7.0.0"
-    svelte: "npm:^5.45.9"
+    svelte: "npm:^5.46.0"
     turbo: "npm:^2.6.3"
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.49.0"
@@ -8468,8 +8491,8 @@ __metadata:
     publint: "npm:^0.3.16"
     sass: "npm:^1.96.0"
     storybook: "npm:^10.1.7"
-    svelte: "npm:^5.45.9"
-    svelte-check: "npm:^4.3.4"
+    svelte: "npm:^5.46.0"
+    svelte-check: "npm:^4.3.5"
     typescript: "npm:^5.9.3"
     vite: "catalog:"
   peerDependencies:
